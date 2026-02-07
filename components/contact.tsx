@@ -57,7 +57,7 @@ export function Contact() {
               <div className="space-y-3 me-6">
                 {/* WhatsApp - Primary CTA */}
                 <a
-                  href="https://wa.me/972000000000"
+                  href="https://wa.me/972504401760"
                   target="_blank"
                   rel="noreferrer"
                   className="flex items-center gap-3 p-3 rounded-lg border border-[#27ca40]/30 bg-[#27ca40]/5 hover:border-[#27ca40]/50 hover:bg-[#27ca40]/10 transition-all group"
@@ -81,7 +81,9 @@ export function Contact() {
                 </a>
 
                 <a
-                  href="#"
+                  href="https://m.me/nadav.cohen.167"
+                  target="_blank"
+                  rel="noreferrer"
                   className="flex items-center gap-3 p-3 rounded-lg border border-[hsl(215,28%,14%)] bg-[hsl(222,47%,4%)] hover:border-[#e84393]/30 transition-all group"
                 >
                   <MessageSquare className="w-5 h-5 text-[#e84393]" />
@@ -106,7 +108,7 @@ export function Contact() {
           <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
             <Magnetic strength={0.2}>
               <a
-                href="https://wa.me/972000000000"
+                href="https://wa.me/972504401760"
                 target="_blank"
                 rel="noreferrer"
                 className="group relative inline-flex items-center gap-3 px-10 py-5 rounded-xl text-lg font-bold text-[hsl(222,47%,4%)] bg-gradient-to-l from-[#27ca40] to-[#22a838] hover:shadow-[0_0_50px_hsl(135,65%,45%,0.4)] transition-all duration-500"

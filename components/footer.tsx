@@ -25,8 +25,7 @@ const footerLinks = [
     title: "סושיאל",
     links: [
       { label: "GitHub", href: "https://github.com/Nadav011" },
-      { label: "Facebook", href: "#" },
-      { label: "YouTube", href: "#" },
+      { label: "Facebook", href: "https://www.facebook.com/nadav.cohen.167" },
     ],
   },
 ]
