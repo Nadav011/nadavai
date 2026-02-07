@@ -315,6 +315,36 @@
     background-size: 60px 60px;
   }
 
+  .grid-3d {
+    position: relative;
+  }
+  .grid-3d::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(hsl(187 92% 55% / 0.04) 1px, transparent 1px),
+      linear-gradient(90deg, hsl(187 92% 55% / 0.04) 1px, transparent 1px);
+    background-size: 80px 80px;
+    mask-image: radial-gradient(ellipse 80% 60% at 50% 50%, black 20%, transparent 70%);
+    -webkit-mask-image: radial-gradient(ellipse 80% 60% at 50% 50%, black 20%, transparent 70%);
+    transform: perspective(600px) rotateX(35deg);
+    transform-origin: center center;
+    pointer-events: none;
+  }
+
+  .depth-glow {
+    position: relative;
+  }
+  .depth-glow::after {
+    content: '';
+    position: absolute;
+    inset: -40px;
+    background: radial-gradient(ellipse at center, hsl(187 92% 55% / 0.02), transparent 60%);
+    pointer-events: none;
+    z-index: -1;
+  }
+
   .noise-bg {
     position: relative;
   }
