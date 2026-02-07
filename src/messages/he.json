@@ -1,0 +1,173 @@
+{
+  "Metadata": {
+    "title": "NADAVAI | מפתח Full-Stack עם AI",
+    "description": "נדב כהן - מפתח Full-Stack שבונה הכל עם AI. אפליקציות, ייעוץ, סדנאות ומשאבים חינמיים.",
+    "keywords": "מפתח AI, פיתוח אפליקציות, בינה מלאכותית, Full-Stack, ישראל"
+  },
+  "Nav": {
+    "about": "אודות",
+    "projects": "פרויקטים",
+    "blog": "בלוג",
+    "services": "שירותים",
+    "contact": "צור קשר",
+    "search": "חיפוש",
+    "toggleTheme": "החלף ערכת נושא",
+    "toggleLocale": "EN",
+    "menu": "תפריט",
+    "navigation": "ניווט ראשי"
+  },
+  "Hero": {
+    "greeting": "שלום, אני",
+    "name": "נדב כהן",
+    "role": "מפתח AI-First Full-Stack",
+    "tagline": "בונה הכל עם AI",
+    "cta": "שיחת אסטרטגיית AI חינם",
+    "secondary": "הפרויקטים שלי",
+    "projects": "פרויקטים",
+    "years": "שנות ניסיון",
+    "clients": "לקוחות מרוצים"
+  },
+  "Companies": {
+    "title": "נבנה עבור",
+    "subtitle": "חברות שסמכו עליי לבנות את הפתרונות שלהן עם AI"
+  },
+  "Projects": {
+    "title": "הפרויקטים שלי",
+    "subtitle": "אפליקציות שנבנו עם AI מקצה לקצה",
+    "viewLive": "צפה באתר",
+    "viewCode": "קוד מקור",
+    "techStack": "טכנולוגיות",
+    "featured": "מומלץ"
+  },
+  "Blog": {
+    "title": "בלוג",
+    "subtitle": "תובנות, טיפים ועדכונים מעולם ה-AI",
+    "readMore": "קרא עוד",
+    "viewAll": "כל הפוסטים",
+    "minRead": "דק׳ קריאה",
+    "categories": {
+      "all": "הכל",
+      "ai": "בינה מלאכותית",
+      "development": "פיתוח",
+      "tutorials": "מדריכים",
+      "news": "חדשות"
+    }
+  },
+  "Guides": {
+    "title": "מדריכים",
+    "subtitle": "למד לבנות עם AI — צעד אחר צעד",
+    "difficulty": {
+      "beginner": "מתחילים",
+      "intermediate": "בינוני",
+      "advanced": "מתקדם"
+    },
+    "readGuide": "קרא את המדריך",
+    "minRead": "דק׳ קריאה"
+  },
+  "Resources": {
+    "title": "משאבים חינמיים",
+    "subtitle": "קוד פתוח לקהילה",
+    "stars": "כוכבים",
+    "forks": "פורקים",
+    "viewRepo": "צפה ב-GitHub"
+  },
+  "Services": {
+    "title": "שירותים",
+    "subtitle": "בואו נבנה משהו מדהים עם AI",
+    "startingAt": "החל מ-",
+    "popular": "הכי פופולרי",
+    "bookCall": "קבע שיחה",
+    "contactUs": "צור קשר",
+    "free": "חינם",
+    "tiers": {
+      "discovery": {
+        "title": "שיחת היכרות",
+        "description": "נדבר על הצרכים שלך ונבין איך AI יכול לעזור לעסק שלך",
+        "features": ["ניתוח צרכים", "הצעת פתרון", "תוכנית פעולה", "ללא התחייבות"]
+      },
+      "consultation": {
+        "title": "ייעוץ AI",
+        "description": "ניתוח מעמיק של העסק שלך עם המלצות AI מותאמות אישית",
+        "features": ["ביקורת טכנית", "מפת דרכים AI", "תעדוף פרויקטים", "דוח מפורט"]
+      },
+      "fullBuild": {
+        "title": "בנייה מלאה עם AI",
+        "description": "פיתוח אפליקציה מקצה לקצה עם אינטגרציית AI",
+        "features": ["עיצוב UI/UX", "פיתוח Full-Stack", "אינטגרציית AI", "תמיכה שוטפת"]
+      },
+      "enterprise": {
+        "title": "ארגוני",
+        "description": "פתרונות AI מותאמים לארגונים גדולים",
+        "features": ["צוות ייעודי", "SLA מובטח", "אינטגרציה מלאה", "תמיכה 24/7"]
+      }
+    }
+  },
+  "YouTube": {
+    "title": "סרטונים",
+    "subtitle": "מדריכי AI ופיתוח בעברית",
+    "watchNow": "צפה עכשיו",
+    "subscribe": "הרשם לערוץ"
+  },
+  "News": {
+    "title": "חדשות טכנולוגיה",
+    "subtitle": "העדכונים האחרונים מעולם ה-AI והטכנולוגיה",
+    "readMore": "קרא עוד"
+  },
+  "Testimonials": {
+    "title": "מה הלקוחות אומרים",
+    "subtitle": "תוצאות אמיתיות מלקוחות אמיתיים"
+  },
+  "Contact": {
+    "title": "בואו נבנה משהו עם AI",
+    "subtitle": "מוכנים להתחיל? דברו איתי",
+    "whatsapp": "שלח הודעה בוואטסאפ",
+    "schedule": "קבע שיחה",
+    "email": "שלח אימייל",
+    "newsletter": {
+      "title": "הישאר מעודכן",
+      "placeholder": "האימייל שלך",
+      "subscribe": "הרשם",
+      "success": "תודה! נרשמת בהצלחה"
+    }
+  },
+  "Footer": {
+    "tagline": "הכל עם AI",
+    "builtWith": "נבנה עם AI בישראל",
+    "rights": "כל הזכויות שמורות",
+    "sections": {
+      "navigation": "ניווט",
+      "resources": "משאבים",
+      "social": "רשתות חברתיות",
+      "legal": "משפטי"
+    },
+    "links": {
+      "privacy": "מדיניות פרטיות",
+      "terms": "תנאי שימוש"
+    }
+  },
+  "CommandPalette": {
+    "placeholder": "חפש דף, פרויקט או פעולה...",
+    "noResults": "לא נמצאו תוצאות",
+    "groups": {
+      "pages": "דפים",
+      "projects": "פרויקטים",
+      "actions": "פעולות"
+    },
+    "actions": {
+      "toggleTheme": "החלף ערכת נושא",
+      "switchLanguage": "Switch to English",
+      "goToTop": "חזרה למעלה"
+    }
+  },
+  "Common": {
+    "loading": "טוען...",
+    "error": "אירעה שגיאה",
+    "retry": "נסה שוב",
+    "close": "סגור",
+    "back": "חזרה",
+    "next": "הבא",
+    "previous": "הקודם",
+    "learnMore": "למד עוד",
+    "viewAll": "צפה בהכל"
+  }
+}
