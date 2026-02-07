@@ -2,6 +2,8 @@
 
 import { useTranslations } from "next-intl";
 import { motion } from "motion/react";
+import { Spotlight } from "@/components/ui/spotlight";
+import { TextGenerateEffect } from "@/components/ui/text-generate-effect";
 
 const STATS = [
   { key: "projects", value: "10+" },
@@ -17,11 +19,15 @@ export function Hero() {
       id="about"
       className="relative flex min-h-screen items-center overflow-hidden pt-24 pb-16"
     >
-      {/* Spotlight gradient background */}
-      <div className="pointer-events-none absolute inset-0">
-        <div className="absolute top-1/4 start-1/2 h-[600px] w-[600px] -translate-x-1/2 rtl:translate-x-1/2 rounded-full bg-primary/10 blur-[120px]" />
-        <div className="absolute bottom-1/4 end-0 h-[400px] w-[400px] rounded-full bg-accent/10 blur-[100px]" />
-      </div>
+      {/* Aceternity Spotlight effect */}
+      <Spotlight
+        className="-top-40 start-0 md:-top-20 md:start-60"
+        fill="#00D68F"
+      />
+      <Spotlight
+        className="top-10 start-full"
+        fill="#7B61FF"
+      />
 
       <div className="relative mx-auto grid max-w-6xl gap-8 px-6 lg:grid-cols-2 lg:gap-12">
         {/* Text content */}
@@ -36,7 +42,13 @@ export function Hero() {
             {t("name")}
           </h1>
           <p className="mt-3 text-xl text-muted sm:text-2xl">{t("role")}</p>
-          <p className="mt-4 max-w-md text-lg text-muted/80">{t("tagline")}</p>
+
+          {/* TextGenerateEffect for tagline */}
+          <TextGenerateEffect
+            words={t("tagline")}
+            className="mt-4 max-w-md text-lg text-muted/80"
+            duration={0.4}
+          />
 
           <div className="mt-8 flex flex-wrap gap-4">
             <a

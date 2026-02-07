@@ -2,6 +2,7 @@
 
 import { useTranslations } from "next-intl";
 import { motion } from "motion/react";
+import { BackgroundBeams } from "@/components/ui/background-beams";
 
 const GUIDES = [
   {
@@ -34,8 +35,11 @@ export function Guides() {
   const t = useTranslations("Guides");
 
   return (
-    <section className="bg-surface/30 py-24">
-      <div className="mx-auto max-w-6xl px-6">
+    <section className="relative overflow-hidden bg-surface/30 py-24">
+      {/* Aceternity BackgroundBeams decoration */}
+      <BackgroundBeams className="opacity-30" />
+
+      <div className="relative mx-auto max-w-6xl px-6">
         <motion.div
           className="mb-12 text-center"
           initial={{ opacity: 0, y: 20 }}
@@ -49,11 +53,11 @@ export function Guides() {
           <p className="mt-3 text-muted">{t("subtitle")}</p>
         </motion.div>
 
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="relative grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {GUIDES.map((guide, i) => (
             <motion.article
               key={guide.id}
-              className="group rounded-2xl border border-border/50 bg-background/50 p-6 transition-colors hover:border-primary/30"
+              className="group rounded-2xl border border-border/50 bg-background/50 p-6 backdrop-blur-sm transition-colors hover:border-primary/30"
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, amount: 0.2 }}
