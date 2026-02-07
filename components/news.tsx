@@ -51,7 +51,7 @@ export function News() {
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {news.map((item, i) => (
-            <ScrollReveal key={i} delay={i * 100}>
+            <ScrollReveal key={i} delay={i * 100} direction={i === 1 ? "up" : i === 0 ? "right" : "left"}>
               <CodeCard
                 title={item.title}
                 filename={item.filename}

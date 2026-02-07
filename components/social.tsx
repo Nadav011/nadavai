@@ -81,7 +81,7 @@ export function Social() {
           </ScrollReveal>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {facebookPosts.map((post, i) => (
-              <ScrollReveal key={i} delay={i * 100}>
+              <ScrollReveal key={i} delay={i * 100} direction={i % 2 === 0 ? "right" : "left"}>
                 <CodeCard
                   title={post.title}
                   filename={post.filename}
@@ -134,7 +134,7 @@ export function Social() {
           </ScrollReveal>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {youtubeVideos.map((video, i) => (
-              <ScrollReveal key={i} delay={i * 100}>
+              <ScrollReveal key={i} delay={i * 100} direction={i % 2 === 0 ? "left" : "right"}>
                 <CodeCard
                   title={video.title}
                   filename={video.filename}

@@ -84,8 +84,11 @@ export function Hero() {
               <span className="text-gradient-animated">{"העתיד"}</span>
               {" עם "}
               <span className="relative inline-block">
-                AI
+                <span className="relative z-10 animate-ai-glow">AI</span>
+                {/* Glow ring behind AI */}
+                <span className="absolute inset-0 -m-2 rounded-lg bg-[#06d6e0]/10 blur-xl animate-pulse-glow" />
                 <Sparkles className="absolute -top-3 -start-3 w-5 h-5 text-[#06d6e0] animate-pulse" />
+                <Sparkles className="absolute -bottom-2 -end-3 w-4 h-4 text-[#e84393] animate-pulse" style={{ animationDelay: "1s" }} />
               </span>
             </h1>
           </div>

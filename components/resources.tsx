@@ -66,7 +66,7 @@ export function Resources() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {repos.map((repo, i) => (
-            <ScrollReveal key={i} delay={i * 100}>
+            <ScrollReveal key={i} delay={i * 100} direction={i % 2 === 0 ? "left" : "right"}>
               <CodeCard
                 title={repo.title}
                 filename={repo.filename}

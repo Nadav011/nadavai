@@ -86,7 +86,7 @@ export function Projects() {
         {/* Bento Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
           {projects.map((project, i) => (
-            <ScrollReveal key={i} delay={i * 80}>
+            <ScrollReveal key={i} delay={i * 80} direction={i % 2 === 0 ? "right" : "left"}>
               <TiltCard className={project.featured ? "md:row-span-1" : ""}>
                 <div
                   className="group relative h-full rounded-2xl border border-[hsl(215,28%,16%)] bg-[hsl(222,47%,5%)] overflow-hidden transition-all duration-700 hover:border-opacity-50"

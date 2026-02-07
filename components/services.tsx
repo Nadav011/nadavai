@@ -108,7 +108,7 @@ export function Services() {
         {/* Main service cards */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-16">
           {services.map((service, i) => (
-            <ScrollReveal key={i} delay={i * 120}>
+            <ScrollReveal key={i} delay={i * 120} direction={i === 1 ? "up" : i === 0 ? "right" : "left"}>
               <div
                 className="relative h-full"
                 onMouseEnter={() => setHoveredIdx(i)}
@@ -220,7 +220,7 @@ export function Services() {
         </div>
 
         {/* Additional services - compact row */}
-        <ScrollReveal delay={200}>
+        <ScrollReveal delay={200} direction="left">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {additionalServices.map((service, i) => (
               <a

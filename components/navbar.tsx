@@ -1,8 +1,9 @@
 "use client"
 
 import { useState, useEffect, useRef } from "react"
-import { Menu, X, Zap, ChevronDown, ExternalLink } from "lucide-react"
+import { Menu, X, Zap, ChevronDown, ExternalLink, Terminal } from "lucide-react"
 import { Magnetic } from "./magnetic"
+import { CommandPalette } from "./command-palette"
 
 const navLinks = [
   { label: "פרויקטים", href: "#projects", badge: "4" },
@@ -138,6 +139,7 @@ export function Navbar() {
 
           {/* CTA - Enhanced */}
           <div className="hidden lg:flex items-center gap-3">
+            <CommandPalette />
             <a href="https://github.com/Nadav011" target="_blank" rel="noreferrer" className="p-2.5 rounded-lg text-[hsl(215,20%,50%)] hover:text-[hsl(210,40%,98%)] hover:bg-[hsl(215,28%,12%)] transition-all" aria-label="GitHub">
               <ExternalLink className="w-4 h-4" />
             </a>

@@ -180,6 +180,22 @@
   100% { transform: scaleX(1); }
 }
 
+@keyframes ai-glow {
+  0%, 100% {
+    text-shadow: 0 0 10px hsl(187 92% 55% / 0.4), 0 0 30px hsl(187 92% 55% / 0.2), 0 0 60px hsl(187 92% 55% / 0.1);
+    filter: brightness(1);
+  }
+  50% {
+    text-shadow: 0 0 20px hsl(187 92% 55% / 0.6), 0 0 50px hsl(187 92% 55% / 0.4), 0 0 100px hsl(187 92% 55% / 0.2), 0 0 150px hsl(330 85% 60% / 0.1);
+    filter: brightness(1.2);
+  }
+}
+
+@keyframes matrix-fall {
+  0% { transform: translateY(-100%); opacity: 1; }
+  100% { transform: translateY(100vh); opacity: 0; }
+}
+
 /* =================== UTILITY CLASSES =================== */
 @layer utilities {
   .text-balance { text-wrap: balance; }
@@ -279,6 +295,8 @@
   .animate-spin-slow { animation: spin-slow 4s linear infinite; }
   .animate-breathe { animation: breathe 3s ease-in-out infinite; }
   .animate-line-grow { animation: line-grow 0.8s ease-out forwards; }
+  .animate-ai-glow { animation: ai-glow 3s ease-in-out infinite; }
+  .animate-matrix-fall { animation: matrix-fall 4s linear infinite; }
 
   .dot-grid {
     background-image: radial-gradient(hsl(215 28% 20% / 0.5) 1px, transparent 1px);

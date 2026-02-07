@@ -16,13 +16,18 @@ import { Footer } from "@/components/footer"
 import { Particles } from "@/components/particles"
 import { CustomCursor } from "@/components/custom-cursor"
 import { ScrollProgress } from "@/components/scroll-progress"
+import { WhatsAppButton } from "@/components/whatsapp-button"
+import { SmoothScroll } from "@/components/smooth-scroll"
+import { EasterEgg } from "@/components/easter-egg"
 
 export default function Page() {
   return (
-    <>
+    <SmoothScroll>
       <ScrollProgress />
       <CustomCursor />
       <Particles />
+      <WhatsAppButton />
+      <EasterEgg />
       <div className="relative z-10">
         <Navbar />
         <main>
@@ -40,6 +45,6 @@ export default function Page() {
         </main>
         <Footer />
       </div>
-    </>
+    </SmoothScroll>
   )
 }

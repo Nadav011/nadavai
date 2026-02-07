@@ -65,7 +65,7 @@ export function Guides() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {guides.map((guide, i) => (
-            <ScrollReveal key={i} delay={i * 100}>
+            <ScrollReveal key={i} delay={i * 100} direction={i % 2 === 0 ? "right" : "left"}>
               <CodeCard
                 title={guide.title}
                 filename={guide.filename}
