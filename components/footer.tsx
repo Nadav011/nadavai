@@ -1,6 +1,7 @@
 "use client"
 
-import { Zap } from "lucide-react"
+import { useState } from "react"
+import { Zap, Send } from "lucide-react"
 
 const footerLinks = [
   {
@@ -29,6 +30,56 @@ const footerLinks = [
     ],
   },
 ]
+
+function NewsletterForm() {
+  const [email, setEmail] = useState("")
+  const [status, setStatus] = useState<"idle" | "success" | "error">("idle")
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!email) return
+    setStatus("success")
+    setEmail("")
+  }
+
+  return (
+    <div className="py-8 border-t border-[hsl(215,28%,14%)]">
+      <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+        <div>
+          <h4 className="text-sm font-semibold text-[hsl(210,40%,98%)] mb-1">
+            {"הישארו מעודכנים"}
+          </h4>
+          <p className="text-xs text-[hsl(215,20%,45%)]">
+            {"טיפים, מדריכים וחדשות AI ישירות למייל"}
+          </p>
+        </div>
+        <form onSubmit={handleSubmit} className="flex items-center gap-2 w-full md:w-auto">
+          <div className="relative flex-1 md:w-64">
+            <input
+              type="email"
+              dir="ltr"
+              value={email}
+              onChange={(e) => { setEmail(e.target.value); setStatus("idle") }}
+              placeholder="your@email.com"
+              className="w-full h-11 px-4 rounded-lg bg-[hsl(222,47%,6%)] border border-[hsl(215,28%,16%)] text-sm text-[hsl(210,40%,98%)] placeholder:text-[hsl(215,20%,35%)] focus:outline-none focus:border-[#06d6e0]/50 transition-colors"
+              required
+            />
+          </div>
+          <button
+            type="submit"
+            className="h-11 px-5 rounded-lg bg-gradient-to-l from-[#06d6e0] to-[#0abfca] text-[hsl(222,47%,4%)] text-sm font-bold flex items-center gap-2 hover:shadow-[0_0_20px_hsl(187,92%,55%,0.3)] transition-shadow"
+          >
+            <Send className="w-3.5 h-3.5" />
+            <span>{"הרשמה"}</span>
+          </button>
+        </form>
+      </div>
+      {status === "success" && (
+        <p className="mt-3 text-xs text-[#06d6e0]">{"תודה! נוסף/ה בהצלחה לרשימת התפוצה"}</p>
+      )}
+    </div>
+  )
+}
 
 export function Footer() {
   return (
@@ -74,6 +125,9 @@ export function Footer() {
             </div>
           ))}
         </div>
+
+        {/* Newsletter */}
+        <NewsletterForm />
 
         {/* Bottom bar */}
         <div className="py-6 border-t border-[hsl(215,28%,14%)] flex flex-col md:flex-row items-center justify-between gap-4">

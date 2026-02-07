@@ -3,6 +3,7 @@ import type { Metadata, Viewport } from "next"
 import { Space_Grotesk, JetBrains_Mono, Heebo } from "next/font/google"
 import { Analytics } from "@vercel/analytics/react"
 import { SpeedInsights } from "@vercel/speed-insights/next"
+import { ThemeProvider } from "@/components/theme-provider"
 import "./globals.css"
 
 const spaceGrotesk = Space_Grotesk({
@@ -42,14 +43,7 @@ export const metadata: Metadata = {
     siteName: "NADAV.AI",
     locale: "he_IL",
     type: "website",
-    images: [
-      {
-        url: "/og-image.png",
-        width: 1200,
-        height: 630,
-        alt: "NADAV.AI - Full-Stack AI Developer",
-      },
-    ],
+    images: [{ url: "/opengraph-image", width: 1200, height: 630, alt: "NADAV.AI - Full-Stack AI Developer" }],
   },
   twitter: {
     card: "summary_large_image",
@@ -85,39 +79,41 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="he" dir="rtl" className="dark">
+    <html lang="he" dir="rtl" className="dark" suppressHydrationWarning>
       <body
         className={`${spaceGrotesk.variable} ${jetbrainsMono.variable} ${heebo.variable} font-sans antialiased overflow-x-hidden`}
       >
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              "@context": "https://schema.org",
-              "@type": "Person",
-              name: "Nadav Cohen",
-              alternateName: "נדב כהן",
-              url: "https://nadavc.ai",
-              jobTitle: "Full-Stack AI Developer",
-              description: "Full-Stack Developer who builds everything with AI. 8+ production apps, 80 AI Skills, 38+ agents.",
-              knowsAbout: [
-                "Artificial Intelligence", "Full-Stack Development", "React", "Next.js",
-                "TypeScript", "Supabase", "Flutter", "Claude Code", "AI Agents",
-              ],
-              sameAs: [
-                "https://github.com/Nadav011",
-                "https://www.facebook.com/nadav.cohen.167",
-              ],
-            }),
-          }}
-        />
-        <a
-          href="#main-content"
-          className="sr-only focus:not-sr-only focus:absolute focus:z-[100] focus:top-4 focus:start-4 focus:px-4 focus:py-2 focus:rounded-lg focus:bg-[#06d6e0] focus:text-[hsl(222,47%,4%)] focus:font-bold focus:text-sm"
-        >
-          {"דלג לתוכן הראשי"}
-        </a>
-        {children}
+        <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false}>
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{
+              __html: JSON.stringify({
+                "@context": "https://schema.org",
+                "@type": "Person",
+                name: "Nadav Cohen",
+                alternateName: "נדב כהן",
+                url: "https://nadavc.ai",
+                jobTitle: "Full-Stack AI Developer",
+                description: "Full-Stack Developer who builds everything with AI. 8+ production apps, 80 AI Skills, 38+ agents.",
+                knowsAbout: [
+                  "Artificial Intelligence", "Full-Stack Development", "React", "Next.js",
+                  "TypeScript", "Supabase", "Flutter", "Claude Code", "AI Agents",
+                ],
+                sameAs: [
+                  "https://github.com/Nadav011",
+                  "https://www.facebook.com/nadav.cohen.167",
+                ],
+              }),
+            }}
+          />
+          <a
+            href="#main-content"
+            className="sr-only focus:not-sr-only focus:absolute focus:z-[100] focus:top-4 focus:start-4 focus:px-4 focus:py-2 focus:rounded-lg focus:bg-[#06d6e0] focus:text-[hsl(222,47%,4%)] focus:font-bold focus:text-sm"
+          >
+            {"דלג לתוכן הראשי"}
+          </a>
+          {children}
+        </ThemeProvider>
         <Analytics />
         <SpeedInsights />
       </body>
