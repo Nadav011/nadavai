@@ -36,9 +36,9 @@ export function Hero() {
   }, [charIndex, isDeleting, roleIndex])
 
   const stats = [
-    { value: 50, suffix: "+", label: "פרויקטים" },
-    { value: 100, suffix: "%", label: "AI Powered" },
-    { value: 24, suffix: "/7", label: "זמינות" },
+    { value: 7, suffix: "+", label: "אפליקציות" },
+    { value: 80, suffix: "", label: "AI Skills" },
+    { value: 38, suffix: "+", label: "סוכנים" },
   ]
 
   return (

@@ -4,54 +4,48 @@ import React from "react"
 
 import { ScrollReveal } from "./scroll-reveal"
 import { SectionHeader } from "./section-header"
-import { CodeCard } from "./code-card"
-import { ExternalLink, Heart, MessageCircle, Share2, ThumbsUp, Users } from "lucide-react"
+import { ExternalLink, Github, MessageSquare, Users } from "lucide-react"
 
-const facebookPosts = [
+const socialLinks = [
   {
-    title: "5 כלי AI שישנו לכם את 2026",
-    filename: "ai-tools-2026",
-    lang: "post",
-    preview: "סיכמתי את 5 הכלים שהכי שינו לי את העבודה השנה. כולם חינמיים או עם free tier מטורף...",
-    likes: 342,
-    comments: 89,
-    shares: 156,
-    badge: "viral",
-    badgeColor: "pink" as const,
+    platform: "Facebook",
+    icon: (
+      <svg className="w-5 h-5 text-[#1877F2]" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+      </svg>
+    ),
+    description: "פוסטים על AI, פיתוח, וטכנולוגיה בקבוצות המקצועיות הכי גדולות בישראל.",
+    href: "https://www.facebook.com/nadav.cohen.167",
+    color: "#1877F2",
+    label: "הפרופיל שלי",
   },
   {
-    title: "בניתי אפליקציה ב-3 שעות",
-    filename: "3hr-app",
-    lang: "post",
-    preview: "אתמול קיבלתי רעיון, היום יש לי אפליקציה עובדת עם 200 משתמשים. ככה עשיתי את זה...",
-    likes: 567,
-    comments: 134,
-    shares: 210,
-    badge: "popular",
-    badgeColor: "cyan" as const,
-  },
-]
-
-const youtubeVideos = [
-  {
-    title: "Live Coding: בונים דשבורד עם AI",
-    filename: "live-dashboard",
-    lang: "stream",
-    preview: "סשן live שלם - מאפס ל-dashboard מלא עם גרפים, טבלאות, ו-real-time data.",
-    views: "12K",
-    duration: "1:45:00",
-    badge: "live",
-    badgeColor: "green" as const,
+    platform: "Full Stack Developers Israel",
+    icon: <Users className="w-5 h-5 text-[#1877F2]" />,
+    description: "פעיל בקבוצת Full Stack Developers Israel - שיתוף ידע, טיפים, ופרויקטים.",
+    href: "https://www.facebook.com/groups/1684554685829832",
+    color: "#1877F2",
+    label: "הקבוצה",
   },
   {
-    title: "Cursor Tips & Tricks",
-    filename: "cursor-tips",
-    lang: "tutorial",
-    preview: "25 טיפים ל-Cursor שרוב האנשים לא מכירים. קיצורי דרך, prompts, ו-workflows.",
-    views: "8.5K",
-    duration: "32:15",
-    badge: "tutorial",
-    badgeColor: "yellow" as const,
+    platform: "GitHub",
+    icon: <Github className="w-5 h-5 text-[hsl(210,40%,98%)]" />,
+    description: "ריפוזיטוריז פתוחים - Singularity Forge, VibeCoder, ועוד. קוד אמיתי, בפרודקשן.",
+    href: "https://github.com/Nadav011",
+    color: "#f0f6fc",
+    label: "Open Source",
+  },
+  {
+    platform: "WhatsApp",
+    icon: (
+      <svg className="w-5 h-5 text-[#27ca40]" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+      </svg>
+    ),
+    description: "הדרך הכי מהירה ליצור קשר. שאלות, רעיונות, או סתם להגיד שלום.",
+    href: "https://wa.me/972504401760",
+    color: "#27ca40",
+    label: "כתוב לי",
   },
 ]
 
@@ -64,123 +58,52 @@ export function Social() {
           badge="social"
           title="עקבו"
           highlight="אחריי"
-          description="תוכן שווה כל יום - טיפים, מדריכים, live coding, ועדכונים מהעולם של AI."
+          description="פעיל בקהילות המפתחים הכי גדולות בישראל. בואו נתחבר."
         />
 
-        {/* Facebook */}
-        <div className="mb-12">
-          <ScrollReveal>
-            <div className="flex items-center gap-3 mb-6">
-              <div className="w-8 h-8 rounded-lg bg-[#1877F2]/15 border border-[#1877F2]/30 flex items-center justify-center">
-                <svg className="w-4 h-4 text-[#1877F2]" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
-                </svg>
-              </div>
-              <span className="text-sm font-mono text-[hsl(215,20%,55%)]">facebook.posts</span>
-            </div>
-          </ScrollReveal>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {facebookPosts.map((post, i) => (
-              <ScrollReveal key={i} delay={i * 100} direction={i % 2 === 0 ? "right" : "left"}>
-                <CodeCard
-                  title={post.title}
-                  filename={post.filename}
-                  lang={post.lang}
-                  badge={post.badge}
-                  badgeColor={post.badgeColor}
-                >
-                  <div className="space-y-3">
-                    <div className="flex items-start gap-3">
-                      <span className="text-xs font-mono text-[hsl(215,20%,35%)] select-none leading-5">02</span>
-                      <p className="text-sm text-[hsl(215,20%,60%)] leading-relaxed">{post.preview}</p>
-                    </div>
-                    <div className="flex items-center justify-between pt-3 border-t border-[hsl(215,28%,14%)]">
-                      <div className="flex items-center gap-4">
-                        <div className="flex items-center gap-1.5 text-[hsl(215,20%,45%)]">
-                          <ThumbsUp className="w-3.5 h-3.5 text-[#1877F2]" />
-                          <span className="text-xs font-mono">{post.likes}</span>
-                        </div>
-                        <div className="flex items-center gap-1.5 text-[hsl(215,20%,45%)]">
-                          <MessageCircle className="w-3.5 h-3.5" />
-                          <span className="text-xs font-mono">{post.comments}</span>
-                        </div>
-                        <div className="flex items-center gap-1.5 text-[hsl(215,20%,45%)]">
-                          <Share2 className="w-3.5 h-3.5" />
-                          <span className="text-xs font-mono">{post.shares}</span>
-                        </div>
-                      </div>
-                      <button className="text-xs font-mono text-[#1877F2] hover:text-[#06d6e0] transition-colors">
-                        {">> view"}
-                      </button>
-                    </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {socialLinks.map((link, i) => (
+            <ScrollReveal key={i} delay={i * 100} direction={i % 2 === 0 ? "right" : "left"}>
+              <a
+                href={link.href}
+                target="_blank"
+                rel="noreferrer"
+                className="group relative block h-full p-6 rounded-xl border border-[hsl(215,28%,16%)] bg-[hsl(222,47%,5%)] hover:border-opacity-50 transition-all duration-500"
+                style={{
+                  borderColor: undefined,
+                }}
+                onMouseEnter={(e) => { e.currentTarget.style.borderColor = `${link.color}30` }}
+                onMouseLeave={(e) => { e.currentTarget.style.borderColor = "" }}
+              >
+                {/* Header */}
+                <div className="flex items-center gap-3 mb-4">
+                  <div
+                    className="w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-500"
+                    style={{ background: `${link.color}10`, border: `1px solid ${link.color}20` }}
+                  >
+                    {link.icon}
                   </div>
-                </CodeCard>
-              </ScrollReveal>
-            ))}
-          </div>
-        </div>
+                  <div>
+                    <div className="text-sm font-semibold text-[hsl(210,40%,98%)]">{link.platform}</div>
+                    <div className="text-[10px] font-mono text-[hsl(215,20%,45%)]">{link.label}</div>
+                  </div>
+                </div>
 
-        {/* YouTube */}
-        <div>
-          <ScrollReveal>
-            <div className="flex items-center gap-3 mb-6">
-              <div className="w-8 h-8 rounded-lg bg-[#FF0000]/15 border border-[#FF0000]/30 flex items-center justify-center">
-                <svg className="w-4 h-4 text-[#FF0000]" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
-                </svg>
-              </div>
-              <span className="text-sm font-mono text-[hsl(215,20%,55%)]">youtube.videos</span>
-            </div>
-          </ScrollReveal>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {youtubeVideos.map((video, i) => (
-              <ScrollReveal key={i} delay={i * 100} direction={i % 2 === 0 ? "left" : "right"}>
-                <CodeCard
-                  title={video.title}
-                  filename={video.filename}
-                  lang={video.lang}
-                  badge={video.badge}
-                  badgeColor={video.badgeColor}
-                >
-                  <div className="space-y-3">
-                    <div className="flex items-start gap-3">
-                      <span className="text-xs font-mono text-[hsl(215,20%,35%)] select-none leading-5">02</span>
-                      <p className="text-sm text-[hsl(215,20%,60%)] leading-relaxed">{video.preview}</p>
-                    </div>
-                    <div className="flex items-center justify-between pt-3 border-t border-[hsl(215,28%,14%)]">
-                      <div className="flex items-center gap-4">
-                        <div className="flex items-center gap-1.5 text-[hsl(215,20%,45%)]">
-                          <Eye className="w-3.5 h-3.5 text-[#FF0000]" />
-                          <span className="text-xs font-mono">{video.views}</span>
-                        </div>
-                        <div className="flex items-center gap-1.5 text-[hsl(215,20%,45%)]">
-                          <Clock className="w-3.5 h-3.5" />
-                          <span className="text-xs font-mono">{video.duration}</span>
-                        </div>
-                      </div>
-                      <button className="text-xs font-mono text-[#FF0000] hover:text-[#06d6e0] transition-colors">
-                        {">> watch"}
-                      </button>
-                    </div>
-                  </div>
-                </CodeCard>
-              </ScrollReveal>
-            ))}
-          </div>
+                {/* Description */}
+                <p className="text-sm text-[hsl(215,20%,60%)] leading-relaxed mb-4">{link.description}</p>
+
+                {/* Footer */}
+                <div className="flex items-center justify-end pt-3 border-t border-[hsl(215,28%,14%)]">
+                  <span className="inline-flex items-center gap-1.5 text-xs font-mono transition-colors" style={{ color: link.color }}>
+                    <ExternalLink className="w-3 h-3" />
+                    {">> open"}
+                  </span>
+                </div>
+              </a>
+            </ScrollReveal>
+          ))}
         </div>
       </div>
     </section>
-  )
-}
-
-function Eye(props: React.SVGProps<SVGSVGElement> & { className?: string }) {
-  return (
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0"/><circle cx="12" cy="12" r="3"/></svg>
-  )
-}
-
-function Clock(props: React.SVGProps<SVGSVGElement> & { className?: string }) {
-  return (
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
   )
 }

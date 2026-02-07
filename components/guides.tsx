@@ -1,53 +1,49 @@
 "use client"
 
-import { BookOpen, Play, Clock, Eye } from "lucide-react"
+import { BookOpen, Play, Clock } from "lucide-react"
 import { ScrollReveal } from "./scroll-reveal"
 import { SectionHeader } from "./section-header"
 import { CodeCard } from "./code-card"
 
 const guides = [
   {
-    title: "איך לבנות SaaS מלא עם AI",
-    filename: "build-saas",
+    title: "איך בניתי מערכת 149 עמודים עם AI",
+    filename: "mexicani-case",
     type: "guide",
-    lang: "md",
-    description: "מדריך צעד-אחר-צעד: מרעיון ל-SaaS עובד עם AI - כולל auth, payments, ו-dashboard.",
-    readTime: "25 דק'",
-    views: "3.2K",
-    badge: "popular",
+    lang: "tsx",
+    description: "Case Study: מערכת Mexicani - 149 עמודים, 111 טבלאות, 38 Edge Functions. איך AI שינה את תהליך הבנייה.",
+    readTime: "בקרוב",
+    badge: "case study",
     badgeColor: "pink" as const,
   },
   {
-    title: "Prompt Engineering למתקדמים",
-    filename: "prompt-eng",
+    title: "PWA עם תמיכת Offline מלאה",
+    filename: "pwa-offline",
     type: "guide",
-    lang: "txt",
-    description: "הסודות מאחורי prompts שעובדים. טכניקות chain-of-thought, few-shot, ו-system prompts.",
-    readTime: "18 דק'",
-    views: "5.1K",
-    badge: "featured",
+    lang: "ts",
+    description: "איך בניתי אפליקציית PWA עם IndexedDB, סנכרון חכם, ותור פעולות - שעובדת גם בלי אינטרנט.",
+    readTime: "בקרוב",
+    badge: "technical",
     badgeColor: "cyan" as const,
   },
   {
-    title: "Next.js + AI SDK - המדריך המלא",
-    filename: "nextjs-ai",
-    type: "video",
-    lang: "tsx",
-    description: "סרטון מלא: בניית אפליקציית AI עם Next.js, AI SDK, streaming, ו-tool calling.",
-    readTime: "45 דק'",
-    views: "8.7K",
-    badge: "video",
+    title: "Claude Code Skills - מדריך מלא",
+    filename: "skills-guide",
+    type: "guide",
+    lang: "ts",
+    description: "איך בניתי 73 סקילים ל-Claude Code: ארכיטקטורה, 70-Gate Matrix, auto-heal, ו-research workflows.",
+    readTime: "בקרוב",
+    badge: "ecosystem",
     badgeColor: "green" as const,
   },
   {
-    title: "מ-0 ל-Deploy בשעה",
-    filename: "zero-deploy",
+    title: "מ-Flutter ל-Production",
+    filename: "flutter-prod",
     type: "guide",
-    lang: "sh",
-    description: "איך לקחת רעיון ולהפוך אותו לאפליקציה חיה תוך שעה אחת עם v0, Cursor, ו-Vercel.",
-    readTime: "15 דק'",
-    views: "4.5K",
-    badge: "new",
+    lang: "dart",
+    description: "הדרך מרעיון לאפליקציה חיה ב-Flutter: Clean Architecture, Riverpod, Firebase, ו-Capacitor.",
+    readTime: "בקרוב",
+    badge: "mobile",
     badgeColor: "yellow" as const,
   },
 ]
@@ -84,10 +80,6 @@ export function Guides() {
                       <div className="flex items-center gap-1.5 text-[hsl(215,20%,45%)]">
                         <Clock className="w-3.5 h-3.5" />
                         <span className="text-xs font-mono">{guide.readTime}</span>
-                      </div>
-                      <div className="flex items-center gap-1.5 text-[hsl(215,20%,45%)]">
-                        <Eye className="w-3.5 h-3.5" />
-                        <span className="text-xs font-mono">{guide.views}</span>
                       </div>
                     </div>
                     <button className="text-xs font-mono text-[#06d6e0] hover:text-[#e84393] transition-colors">

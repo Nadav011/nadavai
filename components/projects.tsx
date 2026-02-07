@@ -19,6 +19,8 @@ const projects = [
     featured: true,
     color: "#06d6e0",
     metrics: { pages: "149", tables: "111" },
+    github: "https://github.com/Nadav011/Mexicani",
+    demo: "",
   },
   {
     title: "Cash",
@@ -32,6 +34,8 @@ const projects = [
     featured: true,
     color: "#e84393",
     metrics: { offline: "100%", sync: "Real-time" },
+    github: "https://github.com/Nadav011/cash",
+    demo: "https://cash-ashy-zeta.vercel.app",
   },
   {
     title: "Shifts",
@@ -45,6 +49,8 @@ const projects = [
     featured: false,
     color: "#4f46e5",
     metrics: { components: "154", hooks: "25" },
+    github: "https://github.com/Nadav011/mexicani-shifts",
+    demo: "",
   },
   {
     title: "hatumdigital",
@@ -58,6 +64,53 @@ const projects = [
     featured: false,
     color: "#06d6e0",
     metrics: { platform: "iOS", patterns: "Clean" },
+    github: "https://github.com/Nadav011/hatumdigital",
+    demo: "",
+  },
+  {
+    title: "Z",
+    description: "מערכת ניהול קופות - סגירת קופה, הפקדות, ניהול סניפים. PWA עם Offline-first, IndexedDB, ותמיכה מלאה בעברית.",
+    tech: ["React", "TypeScript", "Supabase", "PWA", "Workbox"],
+    category: "PWA",
+    icon: Cpu,
+    status: "production",
+    statusColor: "#27ca40",
+    stars: 0,
+    featured: false,
+    color: "#e84393",
+    metrics: { offline: "100%", currency: "ILS" },
+    github: "https://github.com/Nadav011/Z",
+    demo: "",
+  },
+  {
+    title: "SportChat",
+    description: "אפליקציית צ'אט ספורט מובייל - Flutter עם 28 מודולים: צ'אטים, חדרי קול, מסיבות צפייה, תחזיות ומשחקים.",
+    tech: ["Flutter", "Dart", "Supabase", "Riverpod"],
+    category: "Mobile",
+    icon: Globe,
+    status: "beta",
+    statusColor: "#ffbd2e",
+    stars: 0,
+    featured: false,
+    color: "#4f46e5",
+    metrics: { modules: "28", arch: "Clean" },
+    github: "",
+    demo: "",
+  },
+  {
+    title: "FinanceApp",
+    description: "אפליקציית פיננסים ישראלית עם תמיכה מלאה בעברית RTL. ניהול הוצאות, תקציבים, וגרפים אינטראקטיביים.",
+    tech: ["React Native", "Expo", "TypeScript", "Tamagui"],
+    category: "Finance",
+    icon: Cpu,
+    status: "beta",
+    statusColor: "#ffbd2e",
+    stars: 0,
+    featured: false,
+    color: "#06d6e0",
+    metrics: { platform: "iOS/Android", lang: "Hebrew" },
+    github: "https://github.com/Nadav011/israeli-finance-app",
+    demo: "",
   },
 ]
 
@@ -84,7 +137,7 @@ export function Projects() {
         />
 
         {/* Bento Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
           {projects.map((project, i) => (
             <ScrollReveal key={i} delay={i * 80} direction={i % 2 === 0 ? "right" : "left"}>
               <TiltCard className={project.featured ? "md:row-span-1" : ""}>
@@ -169,23 +222,29 @@ export function Projects() {
                         <span className="text-sm font-mono font-semibold text-[hsl(210,40%,98%)]">AI Built</span>
                       </div>
                       <div className="flex items-center gap-2">
-                        <button className="p-2 rounded-lg hover:bg-[hsl(215,28%,12%)] text-[hsl(215,20%,45%)] hover:text-[hsl(210,40%,98%)] transition-all" aria-label="GitHub">
-                          <Github className="w-4 h-4" />
-                        </button>
-                        <button
-                          className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all duration-300"
-                          style={{
-                            background: `${project.color}10`,
-                            color: project.color,
-                            border: `1px solid ${project.color}20`,
-                          }}
-                          onMouseEnter={(e) => { e.currentTarget.style.background = `${project.color}20` }}
-                          onMouseLeave={(e) => { e.currentTarget.style.background = `${project.color}10` }}
-                          aria-label="Live demo"
-                        >
-                          <ExternalLink className="w-3.5 h-3.5" />
-                          Demo
-                        </button>
+                        {project.github && (
+                          <a href={project.github} target="_blank" rel="noreferrer" className="p-2 rounded-lg hover:bg-[hsl(215,28%,12%)] text-[hsl(215,20%,45%)] hover:text-[hsl(210,40%,98%)] transition-all" aria-label="GitHub">
+                            <Github className="w-4 h-4" />
+                          </a>
+                        )}
+                        {project.demo && (
+                          <a
+                            href={project.demo}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all duration-300"
+                            style={{
+                              background: `${project.color}10`,
+                              color: project.color,
+                              border: `1px solid ${project.color}20`,
+                            }}
+                            onMouseEnter={(e) => { e.currentTarget.style.background = `${project.color}20` }}
+                            onMouseLeave={(e) => { e.currentTarget.style.background = `${project.color}10` }}
+                          >
+                            <ExternalLink className="w-3.5 h-3.5" />
+                            Demo
+                          </a>
+                        )}
                       </div>
                     </div>
                   </div>

@@ -6,7 +6,7 @@ import { Magnetic } from "./magnetic"
 import { CommandPalette } from "./command-palette"
 
 const navLinks = [
-  { label: "פרויקטים", href: "#projects", badge: "4" },
+  { label: "פרויקטים", href: "#projects", badge: "7" },
   { label: "שירותים", href: "#services", hot: true },
   { label: "מדריכים", href: "#guides" },
   { label: "משאבים", href: "#resources", badge: "FREE" },
