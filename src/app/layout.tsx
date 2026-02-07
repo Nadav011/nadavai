@@ -5,7 +5,7 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://nadav.ai"),
+  metadataBase: new URL("https://nadavc.ai"),
 };
 
 export default function RootLayout({
