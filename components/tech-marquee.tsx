@@ -1,10 +1,10 @@
 "use client"
 
 const techs = [
-  "Claude Code", "GPT-4", "Cursor", "v0.dev", "Next.js", "React", "TypeScript",
-  "Supabase", "Tailwind", "Vercel", "Node.js", "Flutter", "Dart",
-  "Firebase", "React Native", "Expo", "Capacitor", "AI SDK",
-  "Python", "CrewAI", "Docker", "Ollama",
+  "Claude Code", "GPT", "Codex", "Cursor", "v0.dev", "Gemini", "Deepseek", "Qwen",
+  "Next.js", "React", "TypeScript", "Supabase", "Tailwind", "Vercel", "Node.js",
+  "Flutter", "Dart", "Firebase", "React Native", "Expo", "Capacitor", "AI SDK",
+  "Python", "CrewAI", "Docker", "Ollama", "ChromaDB", "Bun",
 ]
 
 export function TechMarquee() {

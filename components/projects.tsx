@@ -1,7 +1,7 @@
 "use client"
 
 import React, { useState } from "react"
-import { ExternalLink, Github, Star, ArrowDown, Globe, Cpu, Layers, Clock } from "lucide-react"
+import { ExternalLink, Github, Star, ArrowDown, Globe, Cpu, Layers, Clock, Shield } from "lucide-react"
 import { ScrollReveal } from "./scroll-reveal"
 import { SectionHeader } from "./section-header"
 import { TiltCard } from "./tilt-card"
@@ -95,6 +95,21 @@ const projects = [
     color: "#4f46e5",
     metrics: { modules: "28", arch: "Clean" },
     github: "",
+    demo: "",
+  },
+  {
+    title: "APEX Engine",
+    description: "מנוע ביקורת קוד עם 579 gates, auto-healing, זיהוי טכנולוגיה אוטומטי, ומטריצה ויזואלית 10x7. TypeScript + Bun.",
+    tech: ["TypeScript", "Bun", "Claude Code", "AST"],
+    category: "Dev Tool",
+    icon: Shield,
+    status: "production",
+    statusColor: "#27ca40",
+    stars: 0,
+    featured: true,
+    color: "#4f46e5",
+    metrics: { gates: "579", matrix: "10x7" },
+    github: "https://github.com/Nadav011",
     demo: "",
   },
   {

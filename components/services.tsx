@@ -71,7 +71,7 @@ const additionalServices = [
 
 const trustSignals = [
   { icon: Clock, text: "זמן תגובה < 24 שעות" },
-  { icon: Users, text: "7+ אפליקציות production" },
+  { icon: Users, text: "8+ אפליקציות production" },
   { icon: Shield, text: "80 AI Skills בשימוש" },
 ]
 
