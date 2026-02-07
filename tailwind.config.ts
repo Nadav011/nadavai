@@ -11,7 +11,7 @@ const config: Config = {
   theme: {
     extend: {
       fontFamily: {
-        sans: ['var(--font-space-grotesk)', 'system-ui', 'sans-serif'],
+        sans: ['var(--font-space-grotesk)', 'var(--font-heebo)', 'system-ui', 'sans-serif'],
         mono: ['var(--font-jetbrains)', 'monospace'],
       },
       colors: {

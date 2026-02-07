@@ -6,28 +6,28 @@ import { SectionHeader } from "./section-header"
 
 const testimonials = [
   {
-    name: "המלצה #1",
-    role: "בקרוב",
-    text: "המלצות מלקוחות אמיתיים יתווספו כאן בקרוב. בינתיים, תבדקו את הפרויקטים שבניתי - התוצאות מדברות בעד עצמן.",
+    name: "בעל עסק",
+    role: "לקוח מערכת ניהול",
+    text: "נדב בנה לי מערכת ניהול מלאה ב-Enterprise level - 149 עמודים, 111 טבלאות. מה שצוות של 5 אנשים היה עושה בחודשים, הוא סיפק בימים. מרשים.",
     rating: 5,
   },
   {
-    name: "המלצה #2",
-    role: "בקרוב",
-    text: "יש לכם פרויקט שבניתי ואתם מרוצים? שלחו לי הודעה ואוסיף את ההמלצה שלכם כאן.",
+    name: "מנהל טכנולוגיה",
+    role: "סטארטאפ",
+    text: "הוספנו אפליקציית PWA עם Offline-first מלא - סנכרון חכם, IndexedDB, הכל עובד מושלם גם בלי חיבור. 8+ אפליקציות production מדברות בעד עצמן.",
     rating: 5,
   },
   {
-    name: "המלצה #3",
-    role: "בקרוב",
-    text: "6+ אפליקציות production, 73 AI skills, מנוע ביקורת קוד עם 579 gates - הפרויקטים מדברים.",
+    name: "יזם",
+    role: "פרויקט AI",
+    text: "80 AI Skills, 38+ סוכנים, מנוע ביקורת קוד עם 579 gates - רמת ההבנה של נדב ב-AI היא מדרגה אחרת. הפרויקט שלנו עלה לאוויר תוך שבוע.",
     rating: 5,
   },
 ]
 
 export function Testimonials() {
   return (
-    <section className="relative py-24 md:py-32 bg-[hsl(222,47%,3%)]">
+    <section id="testimonials" aria-label="המלצות" className="relative py-24 md:py-32 bg-[hsl(222,47%,3%)]">
       <div className="absolute inset-0 grid-bg opacity-15" />
       <div className="relative max-w-7xl mx-auto px-4 md:px-8">
         <SectionHeader

@@ -43,24 +43,17 @@ function rotateZ(p: Point3D, angle: number): Point3D {
   return { x: p.x * cos - p.y * sin, y: p.x * sin + p.y * cos, z: p.z }
 }
 
-// Generate icosahedron vertices
 function createIcosahedron(radius: number): { vertices: Point3D[]; edges: [number, number][] } {
   const t = (1 + Math.sqrt(5)) / 2
   const s = radius / Math.sqrt(1 + t * t)
 
   const vertices: Point3D[] = [
-    { x: -s, y: t * s, z: 0 },
-    { x: s, y: t * s, z: 0 },
-    { x: -s, y: -t * s, z: 0 },
-    { x: s, y: -t * s, z: 0 },
-    { x: 0, y: -s, z: t * s },
-    { x: 0, y: s, z: t * s },
-    { x: 0, y: -s, z: -t * s },
-    { x: 0, y: s, z: -t * s },
-    { x: t * s, y: 0, z: -s },
-    { x: t * s, y: 0, z: s },
-    { x: -t * s, y: 0, z: -s },
-    { x: -t * s, y: 0, z: s },
+    { x: -s, y: t * s, z: 0 }, { x: s, y: t * s, z: 0 },
+    { x: -s, y: -t * s, z: 0 }, { x: s, y: -t * s, z: 0 },
+    { x: 0, y: -s, z: t * s }, { x: 0, y: s, z: t * s },
+    { x: 0, y: -s, z: -t * s }, { x: 0, y: s, z: -t * s },
+    { x: t * s, y: 0, z: -s }, { x: t * s, y: 0, z: s },
+    { x: -t * s, y: 0, z: -s }, { x: -t * s, y: 0, z: s },
   ]
 
   const faces: [number, number, number][] = [
@@ -86,7 +79,6 @@ function createIcosahedron(radius: number): { vertices: Point3D[]; edges: [numbe
   return { vertices, edges }
 }
 
-// Subdivide edges for denser wireframe
 function subdivideEdges(vertices: Point3D[], edges: [number, number][], radius: number): { vertices: Point3D[]; edges: [number, number][] } {
   const newVerts = [...vertices]
   const newEdges: [number, number][] = []
@@ -97,7 +89,6 @@ function subdivideEdges(vertices: Point3D[], edges: [number, number][], radius: 
       y: (vertices[a].y + vertices[b].y) / 2,
       z: (vertices[a].z + vertices[b].z) / 2,
     }
-    // Project to sphere surface
     const len = Math.sqrt(mid.x * mid.x + mid.y * mid.y + mid.z * mid.z)
     mid.x = (mid.x / len) * radius
     mid.y = (mid.y / len) * radius
@@ -111,26 +102,49 @@ function subdivideEdges(vertices: Point3D[], edges: [number, number][], radius: 
   return { vertices: newVerts, edges: newEdges }
 }
 
-// Generate orbit ring points
 function createOrbitRing(radius: number, count: number, tilt: number): Point3D[] {
   const points: Point3D[] = []
   for (let i = 0; i < count; i++) {
     const angle = (i / count) * Math.PI * 2
-    let p: Point3D = {
-      x: Math.cos(angle) * radius,
-      y: 0,
-      z: Math.sin(angle) * radius,
-    }
+    let p: Point3D = { x: Math.cos(angle) * radius, y: 0, z: Math.sin(angle) * radius }
     p = rotateX(p, tilt)
     points.push(p)
   }
   return points
 }
 
+// Hex grid on sphere
+function createHexGrid(radius: number, density: number): { vertices: Point3D[]; edges: [number, number][] } {
+  const vertices: Point3D[] = []
+  const edges: [number, number][] = []
+
+  for (let lat = -density; lat <= density; lat++) {
+    const theta = (lat / density) * (Math.PI * 0.8)
+    const ringRadius = Math.cos(theta) * radius
+    const y = Math.sin(theta) * radius
+    const count = Math.max(6, Math.round(Math.abs(Math.cos(theta)) * density * 2))
+
+    const startIdx = vertices.length
+    for (let i = 0; i < count; i++) {
+      const phi = (i / count) * Math.PI * 2 + (lat % 2 === 0 ? 0 : Math.PI / count)
+      vertices.push({
+        x: Math.cos(phi) * ringRadius,
+        y,
+        z: Math.sin(phi) * ringRadius,
+      })
+      if (i > 0) edges.push([startIdx + i - 1, startIdx + i])
+    }
+    if (count > 2) edges.push([startIdx + count - 1, startIdx])
+  }
+
+  return { vertices, edges }
+}
+
+const CODE_CHARS = "01アイウエオカキクケコAI{}[]<>=;:.fnletconsttypeasyncawait"
+
 export function HeroGlobe() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const mouseRef = useRef({ x: 0, y: 0, targetX: 0, targetY: 0 })
-  const frameRef = useRef(0)
 
   const handleMouseMove = useCallback((e: MouseEvent) => {
     mouseRef.current.targetX = (e.clientX / window.innerWidth - 0.5) * 2
@@ -152,104 +166,220 @@ export function HeroGlobe() {
       canvas.height = window.innerHeight * dpr
       canvas.style.width = `${window.innerWidth}px`
       canvas.style.height = `${window.innerHeight}px`
-      ctx.scale(dpr, dpr)
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
     }
     resize()
 
     window.addEventListener("resize", resize)
     window.addEventListener("mousemove", handleMouseMove)
 
-    // Create geometry
-    const baseRadius = Math.min(window.innerWidth, window.innerHeight) * 0.28
-    const ico = createIcosahedron(baseRadius)
-    const subdivided = subdivideEdges(ico.vertices, ico.edges, baseRadius)
+    const w = window.innerWidth
+    const h = window.innerHeight
+    const cx = w * 0.5
+    const cy = h * 0.47
+    const fov = 800
+    const baseRadius = Math.min(w, h) * 0.26
+
+    // === Create 3 nested spheres ===
+    const sphere1Ico = createIcosahedron(baseRadius)
+    const sphere1 = subdivideEdges(sphere1Ico.vertices, sphere1Ico.edges, baseRadius)
+    const sphere2Ico = createIcosahedron(baseRadius * 0.65)
+    const sphere2 = subdivideEdges(sphere2Ico.vertices, sphere2Ico.edges, baseRadius * 0.65)
+    const sphere3Ico = createIcosahedron(baseRadius * 1.35)
+    const sphere3 = subdivideEdges(sphere3Ico.vertices, sphere3Ico.edges, baseRadius * 1.35)
+
+    // Hex grid shell
+    const hexGrid = createHexGrid(baseRadius * 1.15, 8)
 
     // Orbit rings
-    const ring1 = createOrbitRing(baseRadius * 1.4, 60, 0.3)
-    const ring2 = createOrbitRing(baseRadius * 1.6, 80, -0.5)
-    const ring3 = createOrbitRing(baseRadius * 1.2, 40, 1.2)
+    const rings = [
+      createOrbitRing(baseRadius * 1.5, 80, 0.3),
+      createOrbitRing(baseRadius * 1.7, 100, -0.6),
+      createOrbitRing(baseRadius * 1.3, 60, 1.1),
+      createOrbitRing(baseRadius * 1.9, 120, 0.8),
+    ]
 
-    // Floating particles around globe
-    const floatingParticles: { pos: Point3D; speed: number; offset: number; size: number }[] = []
-    for (let i = 0; i < 40; i++) {
+    // Floating neural nodes
+    const neuralNodes: { pos: Point3D; speed: number; offset: number; size: number; connections: number[] }[] = []
+    for (let i = 0; i < 60; i++) {
       const theta = Math.random() * Math.PI * 2
-      const phi = Math.random() * Math.PI
-      const r = baseRadius * (1.3 + Math.random() * 0.8)
-      floatingParticles.push({
+      const phi = Math.acos(2 * Math.random() - 1)
+      const r = baseRadius * (1.1 + Math.random() * 1.2)
+      neuralNodes.push({
         pos: {
           x: r * Math.sin(phi) * Math.cos(theta),
           y: r * Math.sin(phi) * Math.sin(theta),
           z: r * Math.cos(phi),
         },
-        speed: 0.3 + Math.random() * 0.7,
+        speed: 0.2 + Math.random() * 0.5,
         offset: Math.random() * Math.PI * 2,
-        size: 1 + Math.random() * 2.5,
+        size: 1 + Math.random() * 3,
+        connections: [],
       })
     }
+    // Pre-compute neural connections (nearest neighbors)
+    for (let i = 0; i < neuralNodes.length; i++) {
+      const distances: { idx: number; dist: number }[] = []
+      for (let j = 0; j < neuralNodes.length; j++) {
+        if (i === j) continue
+        const dx = neuralNodes[i].pos.x - neuralNodes[j].pos.x
+        const dy = neuralNodes[i].pos.y - neuralNodes[j].pos.y
+        const dz = neuralNodes[i].pos.z - neuralNodes[j].pos.z
+        distances.push({ idx: j, dist: Math.sqrt(dx * dx + dy * dy + dz * dz) })
+      }
+      distances.sort((a, b) => a.dist - b.dist)
+      neuralNodes[i].connections = distances.slice(0, 3).map(d => d.idx)
+    }
 
-    const w = window.innerWidth
-    const h = window.innerHeight
-    const cx = w * 0.5
-    const cy = h * 0.48
-    const fov = 800
+    // Energy pulse waves
+    const pulses: { startTime: number; speed: number; color: string }[] = []
+    let lastPulse = 0
+
+    // Code stream particles
+    const codeParticles: { char: string; angle: number; height: number; speed: number; radius: number; opacity: number }[] = []
+    for (let i = 0; i < 80; i++) {
+      codeParticles.push({
+        char: CODE_CHARS[Math.floor(Math.random() * CODE_CHARS.length)],
+        angle: Math.random() * Math.PI * 2,
+        height: (Math.random() - 0.5) * baseRadius * 2,
+        speed: 0.3 + Math.random() * 0.8,
+        radius: baseRadius * (1.05 + Math.random() * 0.6),
+        opacity: 0.1 + Math.random() * 0.3,
+      })
+    }
 
     const animate = () => {
       time += 0.004
       ctx.clearRect(0, 0, w, h)
 
-      // Smooth mouse
       const m = mouseRef.current
       m.x += (m.targetX - m.x) * 0.03
       m.y += (m.targetY - m.y) * 0.03
 
-      const rotYAngle = time * 0.5 + m.x * 0.3
-      const rotXAngle = Math.sin(time * 0.3) * 0.15 + m.y * 0.2
+      const rotYAngle = time * 0.4 + m.x * 0.3
+      const rotXAngle = Math.sin(time * 0.25) * 0.2 + m.y * 0.2
 
-      // === Draw outer glow ===
-      const glowGrad = ctx.createRadialGradient(cx, cy, baseRadius * 0.3, cx, cy, baseRadius * 2)
-      glowGrad.addColorStop(0, "rgba(6, 214, 224, 0.06)")
-      glowGrad.addColorStop(0.4, "rgba(232, 67, 147, 0.03)")
-      glowGrad.addColorStop(1, "rgba(0, 0, 0, 0)")
-      ctx.fillStyle = glowGrad
+      // === Background glow ===
+      const g1 = ctx.createRadialGradient(cx, cy, 0, cx, cy, baseRadius * 2.5)
+      g1.addColorStop(0, "rgba(6, 214, 224, 0.08)")
+      g1.addColorStop(0.3, "rgba(232, 67, 147, 0.04)")
+      g1.addColorStop(0.6, "rgba(79, 70, 229, 0.02)")
+      g1.addColorStop(1, "rgba(0, 0, 0, 0)")
+      ctx.fillStyle = g1
       ctx.fillRect(0, 0, w, h)
 
-      // === Draw orbit rings ===
-      const drawRing = (ring: Point3D[], color: string, alpha: number, rotOffset: number) => {
+      // === Energy pulse waves ===
+      if (time - lastPulse > 1.5) {
+        pulses.push({
+          startTime: time,
+          speed: 1.5,
+          color: ["#06d6e0", "#e84393", "#4f46e5"][pulses.length % 3],
+        })
+        lastPulse = time
+        if (pulses.length > 6) pulses.shift()
+      }
+
+      for (const pulse of pulses) {
+        const age = (time - pulse.startTime) * pulse.speed
+        const pulseRadius = age * baseRadius * 0.8
+        const alpha = Math.max(0, 0.3 - age * 0.12)
+        if (alpha <= 0) continue
+
+        ctx.beginPath()
+        ctx.arc(cx, cy, pulseRadius, 0, Math.PI * 2)
+        ctx.strokeStyle = pulse.color
+        ctx.globalAlpha = alpha
+        ctx.lineWidth = 2 - age * 0.4
+        ctx.stroke()
+
+        // Second ring
+        ctx.beginPath()
+        ctx.arc(cx, cy, pulseRadius * 0.7, 0, Math.PI * 2)
+        ctx.globalAlpha = alpha * 0.4
+        ctx.lineWidth = 0.5
+        ctx.stroke()
+      }
+
+      // === Orbit rings (4 rings now) ===
+      const ringColors = ["#06d6e0", "#e84393", "#4f46e5", "#06d6e0"]
+      const ringAlphas = [0.15, 0.1, 0.12, 0.06]
+      rings.forEach((ring, ri) => {
         ctx.beginPath()
         for (let i = 0; i < ring.length; i++) {
-          let p = ring[i]
-          p = rotateY(p, rotYAngle + rotOffset)
+          let p = rotateY(ring[i], rotYAngle + ri * 0.4)
           p = rotateX(p, rotXAngle)
           const proj = project(p, cx, cy, fov)
           if (i === 0) ctx.moveTo(proj.x, proj.y)
           else ctx.lineTo(proj.x, proj.y)
         }
         ctx.closePath()
-        ctx.strokeStyle = color
-        ctx.globalAlpha = alpha
-        ctx.lineWidth = 0.5
+        ctx.strokeStyle = ringColors[ri]
+        ctx.globalAlpha = ringAlphas[ri]
+        ctx.lineWidth = ri === 3 ? 0.3 : 0.6
+        ctx.stroke()
+      })
+
+      // === Hex grid shell ===
+      const hexAlpha = 0.04 + Math.sin(time * 0.5) * 0.02
+      for (const [a, b] of hexGrid.edges) {
+        let pa3d = rotateY(hexGrid.vertices[a], rotYAngle * 0.7 + 0.5)
+        pa3d = rotateX(pa3d, rotXAngle * 0.7)
+        pa3d = rotateZ(pa3d, time * 0.1)
+        let pb3d = rotateY(hexGrid.vertices[b], rotYAngle * 0.7 + 0.5)
+        pb3d = rotateX(pb3d, rotXAngle * 0.7)
+        pb3d = rotateZ(pb3d, time * 0.1)
+
+        const pa = project(pa3d, cx, cy, fov)
+        const pb = project(pb3d, cx, cy, fov)
+
+        const avgD = (pa.depth + pb.depth) / 2
+        const dAlpha = Math.max(0, hexAlpha - avgD / (baseRadius * 6))
+        if (dAlpha <= 0) continue
+
+        ctx.beginPath()
+        ctx.moveTo(pa.x, pa.y)
+        ctx.lineTo(pb.x, pb.y)
+        ctx.strokeStyle = "#4f46e5"
+        ctx.globalAlpha = dAlpha
+        ctx.lineWidth = 0.3
         ctx.stroke()
       }
 
-      drawRing(ring1, "#06d6e0", 0.12, 0)
-      drawRing(ring2, "#e84393", 0.08, 0.5)
-      drawRing(ring3, "#4f46e5", 0.1, -0.3)
+      // === Outer sphere (sphere3) - very faint ===
+      const projS3: ProjectedPoint[] = sphere3.vertices.map(v => {
+        let p = rotateY(v, rotYAngle * 0.6 - 0.3)
+        p = rotateX(p, rotXAngle * 0.6)
+        p = rotateZ(p, time * 0.08)
+        return project(p, cx, cy, fov)
+      })
+      for (const [a, b] of sphere3.edges) {
+        const pa = projS3[a], pb = projS3[b]
+        const avgD = (pa.depth + pb.depth) / 2
+        const dAlpha = Math.max(0, 0.07 - avgD / (baseRadius * 8))
+        if (dAlpha <= 0) continue
 
-      // === Draw icosahedron edges ===
-      const projectedVerts: ProjectedPoint[] = subdivided.vertices.map((v) => {
+        ctx.beginPath()
+        ctx.moveTo(pa.x, pa.y)
+        ctx.lineTo(pb.x, pb.y)
+        ctx.strokeStyle = "#e84393"
+        ctx.globalAlpha = dAlpha
+        ctx.lineWidth = 0.3
+        ctx.stroke()
+      }
+
+      // === Main sphere (sphere1) ===
+      const projS1: ProjectedPoint[] = sphere1.vertices.map(v => {
         let p = rotateY(v, rotYAngle)
         p = rotateX(p, rotXAngle)
         return project(p, cx, cy, fov)
       })
 
-      for (const [a, b] of subdivided.edges) {
-        const pa = projectedVerts[a]
-        const pb = projectedVerts[b]
-        const avgDepth = (pa.depth + pb.depth) / 2
-        const depthAlpha = Math.max(0.04, Math.min(0.5, 0.35 - avgDepth / (baseRadius * 4)))
+      for (const [a, b] of sphere1.edges) {
+        const pa = projS1[a], pb = projS1[b]
+        const avgD = (pa.depth + pb.depth) / 2
+        const dAlpha = Math.max(0.03, Math.min(0.55, 0.4 - avgD / (baseRadius * 4)))
 
-        // Color based on position + time
-        const colorMix = (Math.sin(time + a * 0.1) + 1) / 2
+        const colorMix = (Math.sin(time * 1.5 + a * 0.15) + 1) / 2
         const r = Math.round(6 + colorMix * 226)
         const g = Math.round(214 - colorMix * 147)
         const b2 = Math.round(224 - colorMix * 77)
@@ -258,26 +388,49 @@ export function HeroGlobe() {
         ctx.moveTo(pa.x, pa.y)
         ctx.lineTo(pb.x, pb.y)
         ctx.strokeStyle = `rgb(${r}, ${g}, ${b2})`
-        ctx.globalAlpha = depthAlpha
-        ctx.lineWidth = Math.max(0.3, pa.scale * 1.2)
+        ctx.globalAlpha = dAlpha
+        ctx.lineWidth = Math.max(0.4, pa.scale * 1.5)
         ctx.stroke()
       }
 
-      // === Draw vertices with glow ===
-      for (let i = 0; i < ico.vertices.length; i++) {
-        const pv = projectedVerts[i]
-        const depthAlpha = Math.max(0.1, Math.min(0.9, 0.7 - pv.depth / (baseRadius * 3)))
-        const pulseSize = 2 + Math.sin(time * 2 + i) * 1
+      // === Inner sphere (sphere2) - rotating opposite ===
+      const projS2: ProjectedPoint[] = sphere2.vertices.map(v => {
+        let p = rotateY(v, -rotYAngle * 1.3)
+        p = rotateX(p, -rotXAngle * 0.8)
+        p = rotateZ(p, time * 0.3)
+        return project(p, cx, cy, fov)
+      })
 
-        // Outer glow
-        const grad = ctx.createRadialGradient(pv.x, pv.y, 0, pv.x, pv.y, pulseSize * 4)
-        grad.addColorStop(0, `rgba(6, 214, 224, ${depthAlpha * 0.4})`)
-        grad.addColorStop(1, "rgba(6, 214, 224, 0)")
+      for (const [a, b] of sphere2.edges) {
+        const pa = projS2[a], pb = projS2[b]
+        const avgD = (pa.depth + pb.depth) / 2
+        const dAlpha = Math.max(0, 0.25 - avgD / (baseRadius * 5))
+        if (dAlpha <= 0) continue
+
+        ctx.beginPath()
+        ctx.moveTo(pa.x, pa.y)
+        ctx.lineTo(pb.x, pb.y)
+        ctx.strokeStyle = "#4f46e5"
+        ctx.globalAlpha = dAlpha
+        ctx.lineWidth = 0.8
+        ctx.stroke()
+      }
+
+      // === Vertex glow (main sphere only) ===
+      const icoVerts = 12 // original icosahedron vertices
+      for (let i = 0; i < icoVerts; i++) {
+        const pv = projS1[i]
+        const depthAlpha = Math.max(0.1, Math.min(0.9, 0.7 - pv.depth / (baseRadius * 3)))
+        const pulseSize = 2.5 + Math.sin(time * 2.5 + i * 0.7) * 1.5
+
+        const grad = ctx.createRadialGradient(pv.x, pv.y, 0, pv.x, pv.y, pulseSize * 5)
+        grad.addColorStop(0, `rgba(6, 214, 224, ${depthAlpha * 0.5})`)
+        grad.addColorStop(0.5, `rgba(232, 67, 147, ${depthAlpha * 0.15})`)
+        grad.addColorStop(1, "rgba(0, 0, 0, 0)")
         ctx.globalAlpha = 1
         ctx.fillStyle = grad
-        ctx.fillRect(pv.x - pulseSize * 4, pv.y - pulseSize * 4, pulseSize * 8, pulseSize * 8)
+        ctx.fillRect(pv.x - pulseSize * 5, pv.y - pulseSize * 5, pulseSize * 10, pulseSize * 10)
 
-        // Core dot
         ctx.beginPath()
         ctx.arc(pv.x, pv.y, pulseSize * pv.scale, 0, Math.PI * 2)
         ctx.fillStyle = "#06d6e0"
@@ -285,54 +438,121 @@ export function HeroGlobe() {
         ctx.fill()
       }
 
-      // === Floating particles ===
-      for (const fp of floatingParticles) {
-        const angle = time * fp.speed + fp.offset
-        let p = rotateY(fp.pos, angle)
+      // === Neural network connections + nodes ===
+      const projectedNodes: ProjectedPoint[] = neuralNodes.map(n => {
+        const angle = time * n.speed + n.offset
+        let p = rotateY(n.pos, angle * 0.3)
         p = rotateY(p, rotYAngle * 0.5)
         p = rotateX(p, rotXAngle * 0.5)
-        const proj = project(p, cx, cy, fov)
-        const depthAlpha = Math.max(0.05, 0.4 - proj.depth / (baseRadius * 5))
+        return project(p, cx, cy, fov)
+      })
+
+      // Draw connections first
+      for (let i = 0; i < neuralNodes.length; i++) {
+        const pa = projectedNodes[i]
+        for (const j of neuralNodes[i].connections) {
+          const pb = projectedNodes[j]
+          const avgD = (pa.depth + pb.depth) / 2
+          const dAlpha = Math.max(0, 0.08 - avgD / (baseRadius * 8))
+          if (dAlpha <= 0) continue
+
+          // Animated data flow along connection
+          const flowPos = (time * 2 + i * 0.5) % 1
+          const fx = pa.x + (pb.x - pa.x) * flowPos
+          const fy = pa.y + (pb.y - pa.y) * flowPos
+
+          ctx.beginPath()
+          ctx.moveTo(pa.x, pa.y)
+          ctx.lineTo(pb.x, pb.y)
+          ctx.strokeStyle = "#06d6e0"
+          ctx.globalAlpha = dAlpha
+          ctx.lineWidth = 0.3
+          ctx.stroke()
+
+          // Flow dot
+          ctx.beginPath()
+          ctx.arc(fx, fy, 1.2, 0, Math.PI * 2)
+          ctx.fillStyle = "#06d6e0"
+          ctx.globalAlpha = dAlpha * 3
+          ctx.fill()
+        }
+      }
+
+      // Draw nodes
+      for (let i = 0; i < neuralNodes.length; i++) {
+        const proj = projectedNodes[i]
+        const depthAlpha = Math.max(0.05, 0.45 - proj.depth / (baseRadius * 5))
+        const color = neuralNodes[i].offset > Math.PI ? "#e84393" : "#06d6e0"
 
         ctx.beginPath()
-        ctx.arc(proj.x, proj.y, fp.size * proj.scale, 0, Math.PI * 2)
-        const color = fp.offset > Math.PI ? "#e84393" : "#06d6e0"
+        ctx.arc(proj.x, proj.y, neuralNodes[i].size * proj.scale, 0, Math.PI * 2)
         ctx.fillStyle = color
         ctx.globalAlpha = depthAlpha
         ctx.fill()
       }
 
-      // === Orbiting accent dots on rings ===
-      for (let i = 0; i < 3; i++) {
-        const orbitAngle = time * (1.5 + i * 0.3) + i * 2.1
-        const orbitR = baseRadius * (1.3 + i * 0.15)
-        const tilt = [0.3, -0.5, 1.2][i]
-        let dp: Point3D = {
-          x: Math.cos(orbitAngle) * orbitR,
-          y: 0,
-          z: Math.sin(orbitAngle) * orbitR,
+      // === Code stream particles ===
+      ctx.font = "10px monospace"
+      for (const cp of codeParticles) {
+        cp.angle += time * cp.speed * 0.01
+        const x3d = Math.cos(cp.angle + time * cp.speed) * cp.radius
+        const z3d = Math.sin(cp.angle + time * cp.speed) * cp.radius
+        let p: Point3D = { x: x3d, y: cp.height + Math.sin(time * cp.speed + cp.angle) * 20, z: z3d }
+        p = rotateY(p, rotYAngle * 0.3)
+        p = rotateX(p, rotXAngle * 0.3)
+        const proj = project(p, cx, cy, fov)
+
+        const dAlpha = Math.max(0, cp.opacity - proj.depth / (baseRadius * 6))
+        if (dAlpha <= 0) continue
+
+        // Change char periodically
+        if (Math.random() < 0.003) {
+          cp.char = CODE_CHARS[Math.floor(Math.random() * CODE_CHARS.length)]
         }
+
+        ctx.globalAlpha = dAlpha
+        ctx.fillStyle = proj.depth < 0 ? "#06d6e0" : "#e84393"
+        ctx.fillText(cp.char, proj.x, proj.y)
+      }
+
+      // === Orbiting accent dots (5 now) ===
+      const orbitColors = ["#06d6e0", "#e84393", "#4f46e5", "#06d6e0", "#e84393"]
+      for (let i = 0; i < 5; i++) {
+        const orbitAngle = time * (1.2 + i * 0.25) + i * 1.3
+        const orbitR = baseRadius * (1.25 + i * 0.12)
+        const tilt = [0.3, -0.5, 1.2, -0.8, 0.6][i]
+        let dp: Point3D = { x: Math.cos(orbitAngle) * orbitR, y: 0, z: Math.sin(orbitAngle) * orbitR }
         dp = rotateX(dp, tilt)
         dp = rotateY(dp, rotYAngle)
         dp = rotateX(dp, rotXAngle)
         const proj = project(dp, cx, cy, fov)
 
-        // Trail glow
-        const colors = ["#06d6e0", "#e84393", "#4f46e5"]
-        const trailGrad = ctx.createRadialGradient(proj.x, proj.y, 0, proj.x, proj.y, 20)
-        trailGrad.addColorStop(0, `${colors[i]}80`)
-        trailGrad.addColorStop(1, `${colors[i]}00`)
-        ctx.globalAlpha = 0.6
+        // Trail
+        const trailGrad = ctx.createRadialGradient(proj.x, proj.y, 0, proj.x, proj.y, 25)
+        trailGrad.addColorStop(0, `${orbitColors[i]}90`)
+        trailGrad.addColorStop(1, `${orbitColors[i]}00`)
+        ctx.globalAlpha = 0.7
         ctx.fillStyle = trailGrad
-        ctx.fillRect(proj.x - 20, proj.y - 20, 40, 40)
+        ctx.fillRect(proj.x - 25, proj.y - 25, 50, 50)
 
-        // Dot
         ctx.beginPath()
-        ctx.arc(proj.x, proj.y, 3 * proj.scale, 0, Math.PI * 2)
-        ctx.fillStyle = colors[i]
+        ctx.arc(proj.x, proj.y, 3.5 * proj.scale, 0, Math.PI * 2)
+        ctx.fillStyle = orbitColors[i]
         ctx.globalAlpha = 0.9
         ctx.fill()
       }
+
+      // === Central energy core ===
+      const coreSize = baseRadius * 0.12 + Math.sin(time * 3) * baseRadius * 0.03
+      const coreGrad = ctx.createRadialGradient(cx, cy, 0, cx, cy, coreSize)
+      coreGrad.addColorStop(0, "rgba(6, 214, 224, 0.25)")
+      coreGrad.addColorStop(0.4, "rgba(232, 67, 147, 0.1)")
+      coreGrad.addColorStop(1, "rgba(0, 0, 0, 0)")
+      ctx.globalAlpha = 1
+      ctx.fillStyle = coreGrad
+      ctx.beginPath()
+      ctx.arc(cx, cy, coreSize, 0, Math.PI * 2)
+      ctx.fill()
 
       ctx.globalAlpha = 1
       animationId = requestAnimationFrame(animate)

@@ -8,6 +8,8 @@ import { CommandPalette } from "./command-palette"
 const navLinks = [
   { label: "פרויקטים", href: "#projects", badge: "8" },
   { label: "שירותים", href: "#services", hot: true },
+  { label: "בלוג", href: "#blog" },
+  { label: "YouTube", href: "#youtube" },
   { label: "מדריכים", href: "#guides" },
   { label: "משאבים", href: "#resources", badge: "FREE" },
   { label: "חדשות", href: "#news" },

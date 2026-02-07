@@ -6,7 +6,7 @@ import { Magnetic } from "./magnetic"
 
 export function Contact() {
   return (
-    <section id="contact" className="relative py-24 md:py-32 overflow-hidden">
+    <section id="contact" aria-label="צור קשר" className="relative py-24 md:py-32 overflow-hidden">
       {/* Background glow */}
       <div className="absolute top-0 w-[800px] h-[400px] bg-[#06d6e0]/5 rounded-full blur-[120px]" style={{ left: "50%", transform: "translateX(-50%)" }} />
 

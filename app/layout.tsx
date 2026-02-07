@@ -1,6 +1,6 @@
 import React from "react"
 import type { Metadata, Viewport } from "next"
-import { Space_Grotesk, JetBrains_Mono } from "next/font/google"
+import { Space_Grotesk, JetBrains_Mono, Heebo } from "next/font/google"
 import { Analytics } from "@vercel/analytics/react"
 import { SpeedInsights } from "@vercel/speed-insights/next"
 import "./globals.css"
@@ -13,6 +13,11 @@ const spaceGrotesk = Space_Grotesk({
 const jetbrainsMono = JetBrains_Mono({
   subsets: ["latin"],
   variable: "--font-jetbrains",
+})
+
+const heebo = Heebo({
+  subsets: ["latin", "hebrew"],
+  variable: "--font-heebo",
 })
 
 export const metadata: Metadata = {
@@ -82,7 +87,7 @@ export default function RootLayout({
   return (
     <html lang="he" dir="rtl" className="dark">
       <body
-        className={`${spaceGrotesk.variable} ${jetbrainsMono.variable} font-sans antialiased overflow-x-hidden`}
+        className={`${spaceGrotesk.variable} ${jetbrainsMono.variable} ${heebo.variable} font-sans antialiased overflow-x-hidden`}
       >
         <script
           type="application/ld+json"
@@ -106,6 +111,12 @@ export default function RootLayout({
             }),
           }}
         />
+        <a
+          href="#main-content"
+          className="sr-only focus:not-sr-only focus:absolute focus:z-[100] focus:top-4 focus:start-4 focus:px-4 focus:py-2 focus:rounded-lg focus:bg-[#06d6e0] focus:text-[hsl(222,47%,4%)] focus:font-bold focus:text-sm"
+        >
+          {"דלג לתוכן הראשי"}
+        </a>
         {children}
         <Analytics />
         <SpeedInsights />

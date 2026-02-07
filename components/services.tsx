@@ -79,7 +79,7 @@ export function Services() {
   const [hoveredIdx, setHoveredIdx] = useState<number | null>(null)
 
   return (
-    <section id="services" className="relative py-24 md:py-32 overflow-hidden">
+    <section id="services" aria-label="שירותים" className="relative py-24 md:py-32 overflow-hidden">
       {/* Premium background */}
       <div className="absolute inset-0 bg-[hsl(222,47%,3%)]" />
       <div className="absolute w-[1000px] h-[600px] bg-[#e84393]/4 rounded-full blur-[150px]" style={{ top: 0, left: "50%", transform: "translateX(-50%)" }} />

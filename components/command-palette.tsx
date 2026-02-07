@@ -15,6 +15,8 @@ import {
   Cpu,
   Sparkles,
   ArrowDown,
+  PenLine,
+  Play,
 } from "lucide-react"
 import {
   CommandDialog,
@@ -30,6 +32,8 @@ const sections = [
   { label: "פרויקטים", href: "#projects", icon: Briefcase, description: "ראה מה בניתי" },
   { label: "שירותים", href: "#services", icon: Zap, description: "שירותי AI ופיתוח" },
   { label: "תהליך עבודה", href: "#process", icon: Cpu, description: "איך אני עובד" },
+  { label: "בלוג", href: "#blog", icon: PenLine, description: "פוסטים ותובנות" },
+  { label: "YouTube", href: "#youtube", icon: Play, description: "סרטונים ומדריכים" },
   { label: "מדריכים", href: "#guides", icon: BookOpen, description: "מדריכים וטיפים" },
   { label: "משאבים", href: "#resources", icon: FolderGit2, description: "כלים חינמיים" },
   { label: "חדשות", href: "#news", icon: Newspaper, description: "חדשות טכנולוגיה" },

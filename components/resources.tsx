@@ -55,7 +55,7 @@ const repos = [
 
 export function Resources() {
   return (
-    <section id="resources" className="relative py-24 md:py-32 bg-[hsl(222,47%,3%)]">
+    <section id="resources" aria-label="משאבים חינמיים" className="relative py-24 md:py-32 bg-[hsl(222,47%,3%)]">
       <div className="absolute inset-0 grid-bg opacity-15" />
       <div className="relative max-w-7xl mx-auto px-4 md:px-8">
         <SectionHeader

@@ -37,7 +37,7 @@ const steps = [
 
 export function Process() {
   return (
-    <section className="relative py-24 md:py-32">
+    <section id="process" aria-label="תהליך העבודה" className="relative py-24 md:py-32">
       <div className="max-w-7xl mx-auto px-4 md:px-8">
         <SectionHeader
           badge="process"

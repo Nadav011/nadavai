@@ -7,6 +7,8 @@ import { Projects } from "@/components/projects"
 import { Services } from "@/components/services"
 import { Process } from "@/components/process"
 import { Testimonials } from "@/components/testimonials"
+import { Blog } from "@/components/blog"
+import { YouTube } from "@/components/youtube"
 import { Guides } from "@/components/guides"
 import { Resources } from "@/components/resources"
 import { News } from "@/components/news"
@@ -30,13 +32,15 @@ export default function Page() {
       <EasterEgg />
       <div className="relative z-10">
         <Navbar />
-        <main>
+        <main id="main-content">
           <Hero />
           <TechMarquee />
           <Projects />
           <Services />
           <Process />
           <Testimonials />
+          <Blog />
+          <YouTube />
           <Guides />
           <Resources />
           <News />

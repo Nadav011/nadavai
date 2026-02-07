@@ -51,7 +51,7 @@ const socialLinks = [
 
 export function Social() {
   return (
-    <section className="relative py-24 md:py-32 bg-[hsl(222,47%,3%)]">
+    <section id="social" aria-label="רשתות חברתיות" className="relative py-24 md:py-32 bg-[hsl(222,47%,3%)]">
       <div className="absolute inset-0 grid-bg opacity-15" />
       <div className="relative max-w-7xl mx-auto px-4 md:px-8">
         <SectionHeader

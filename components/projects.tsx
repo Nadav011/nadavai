@@ -142,7 +142,7 @@ export function Projects() {
   const [activeProject, setActiveProject] = useState<number | null>(null)
 
   return (
-    <section id="projects" className="relative py-24 md:py-32">
+    <section id="projects" aria-label="פרויקטים" className="relative py-24 md:py-32">
       <div className="max-w-7xl mx-auto px-4 md:px-8">
         <SectionHeader
           badge="projects"
