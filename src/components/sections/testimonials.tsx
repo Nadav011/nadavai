@@ -4,29 +4,16 @@ import { useTranslations } from "next-intl";
 import { motion } from "motion/react";
 import { InfiniteMovingCards } from "@/components/ui/infinite-moving-cards";
 
-const TESTIMONIALS = [
-  {
-    quote:
-      "Nadav's AI automation saved us 20 hours per week. His understanding of both AI and practical business needs is rare.",
-    name: "David Levy",
-    title: "CTO, TechStartup IL",
-  },
-  {
-    quote:
-      "The app Nadav built completely transformed our workflow. Fast delivery and outstanding quality.",
-    name: "Sarah Cohen",
-    title: "Product Manager, FinTech Co",
-  },
-  {
-    quote:
-      "Working with Nadav was a game-changer. He brought AI solutions we didn't even know were possible.",
-    name: "Amit Ben-David",
-    title: "Founder, E-Commerce Plus",
-  },
-];
+const TESTIMONIAL_IDS = [0, 1, 2];
 
 export function Testimonials() {
   const t = useTranslations("Testimonials");
+
+  const items = TESTIMONIAL_IDS.map((i) => ({
+    quote: t(`items.${i}.quote`),
+    name: t(`items.${i}.name`),
+    title: t(`items.${i}.title`),
+  }));
 
   return (
     <section className="bg-surface/30 py-24">
@@ -47,7 +34,7 @@ export function Testimonials() {
 
       {/* Aceternity InfiniteMovingCards */}
       <InfiniteMovingCards
-        items={TESTIMONIALS}
+        items={items}
         direction="left"
         speed="slow"
         pauseOnHover

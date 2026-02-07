@@ -2,33 +2,11 @@
 
 import { useTranslations } from "next-intl";
 import { motion } from "motion/react";
-import type { BlogPost } from "@/types";
 
-const POSTS: BlogPost[] = [
-  {
-    id: "1",
-    title: "How I Built a Full App with AI in 48 Hours",
-    excerpt: "A deep dive into using AI tools to build production-ready apps at record speed.",
-    category: "ai",
-    readingTime: 8,
-    date: "2026-01-15",
-  },
-  {
-    id: "2",
-    title: "The Future of AI-First Development",
-    excerpt: "Why every developer should be thinking AI-first in 2026.",
-    category: "development",
-    readingTime: 5,
-    date: "2026-01-10",
-  },
-  {
-    id: "3",
-    title: "Next.js 16: Everything You Need to Know",
-    excerpt: "A comprehensive guide to the latest features in Next.js 16.",
-    category: "tutorials",
-    readingTime: 12,
-    date: "2026-01-05",
-  },
+const POSTS = [
+  { id: "1", category: "ai", readingTime: 8, date: "2026-01-15" },
+  { id: "2", category: "development", readingTime: 5, date: "2026-01-10" },
+  { id: "3", category: "tutorials", readingTime: 12, date: "2026-01-05" },
 ];
 
 export function Blog() {
@@ -67,9 +45,11 @@ export function Blog() {
                 <span dir="ltr">{post.readingTime} {t("minRead")}</span>
               </div>
               <h3 className="text-lg font-semibold text-foreground group-hover:text-primary transition-colors">
-                {post.title}
+                {t(`posts.${post.id}.title`)}
               </h3>
-              <p className="mt-2 text-sm text-muted">{post.excerpt}</p>
+              <p className="mt-2 text-sm text-muted">
+                {t(`posts.${post.id}.excerpt`)}
+              </p>
               <a
                 href={`/blog/${post.id}`}
                 className="mt-4 inline-block text-sm font-medium text-primary hover:underline"

@@ -2,13 +2,11 @@
 
 import { useTranslations } from "next-intl";
 import { motion } from "motion/react";
-import type { Project } from "@/types";
 
-const PROJECTS: Project[] = [
+const PROJECTS = [
   {
     id: "mexicani",
     title: "Mexicani",
-    description: "Franchise management system with AI-powered analytics and real-time tracking",
     image: "/images/projects/mexicani.png",
     techStack: ["Next.js", "Supabase", "TypeScript", "Tailwind"],
     liveUrl: "https://mexicani.app",
@@ -18,7 +16,6 @@ const PROJECTS: Project[] = [
   {
     id: "cash",
     title: "Cash",
-    description: "Delivery tracking PWA with offline-first architecture and real-time updates",
     image: "/images/projects/cash.png",
     techStack: ["React", "Vite", "Supabase", "PWA"],
     liveUrl: "https://cash.app",
@@ -27,7 +24,6 @@ const PROJECTS: Project[] = [
   {
     id: "shifts",
     title: "Shifts",
-    description: "Shift management platform with automated scheduling and employee dashboard",
     image: "/images/projects/shifts.png",
     techStack: ["Next.js", "TypeScript", "Supabase"],
     featured: false,
@@ -35,7 +31,6 @@ const PROJECTS: Project[] = [
   {
     id: "hatumdigital",
     title: "Hatum Digital",
-    description: "Order management system with real-time inventory tracking",
     image: "/images/projects/hatumdigital.png",
     techStack: ["React", "Vite", "TypeScript"],
     liveUrl: "https://hatumdigital.app",
@@ -87,7 +82,9 @@ export function Projects() {
               <h3 className="text-lg font-semibold text-foreground">
                 {project.title}
               </h3>
-              <p className="mt-2 text-sm text-muted">{project.description}</p>
+              <p className="mt-2 text-sm text-muted">
+                {t(`items.${project.id}.description`)}
+              </p>
 
               <div className="mt-4 flex flex-wrap gap-2">
                 {project.techStack.map((tech) => (

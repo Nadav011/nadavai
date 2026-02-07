@@ -2,30 +2,11 @@
 
 import { useTranslations } from "next-intl";
 import { motion } from "motion/react";
-import type { YouTubeVideo } from "@/types";
 
-const VIDEOS: YouTubeVideo[] = [
-  {
-    id: "video1",
-    title: "Build an AI App in 30 Minutes",
-    thumbnail: "/images/youtube/thumb1.png",
-    category: "tutorials",
-    publishedAt: "2026-01-20",
-  },
-  {
-    id: "video2",
-    title: "AI Tools Every Developer Needs in 2026",
-    thumbnail: "/images/youtube/thumb2.png",
-    category: "ai",
-    publishedAt: "2026-01-12",
-  },
-  {
-    id: "video3",
-    title: "Hebrew: מדריך AI למפתחים",
-    thumbnail: "/images/youtube/thumb3.png",
-    category: "tutorials",
-    publishedAt: "2026-01-05",
-  },
+const VIDEOS = [
+  { id: "video1", category: "tutorials", publishedAt: "2026-01-20" },
+  { id: "video2", category: "ai", publishedAt: "2026-01-12" },
+  { id: "video3", category: "tutorials", publishedAt: "2026-01-05" },
 ];
 
 export function YouTube() {
@@ -62,7 +43,7 @@ export function YouTube() {
               </div>
               <div className="p-4">
                 <h3 className="text-sm font-semibold text-foreground group-hover:text-primary transition-colors">
-                  {video.title}
+                  {t(`videos.${video.id}.title`)}
                 </h3>
                 <p dir="ltr" className="mt-1 text-xs text-muted">
                   {video.publishedAt}

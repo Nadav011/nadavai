@@ -4,9 +4,9 @@ import { useTranslations } from "next-intl";
 import { motion } from "motion/react";
 
 const REPOS = [
-  { name: "ai-skills", description: "Collection of AI agent skills and prompts", stars: 120, forks: 25 },
-  { name: "ai-agents", description: "Production-ready AI agent framework", stars: 85, forks: 18 },
-  { name: "nextjs-starter", description: "RTL-first Next.js starter with AI integration", stars: 45, forks: 12 },
+  { name: "ai-skills", stars: 120, forks: 25 },
+  { name: "ai-agents", stars: 85, forks: 18 },
+  { name: "nextjs-starter", stars: 45, forks: 12 },
 ];
 
 export function Resources() {
@@ -41,7 +41,9 @@ export function Resources() {
               <h3 className="text-lg font-semibold text-foreground font-mono">
                 {repo.name}
               </h3>
-              <p className="mt-2 text-sm text-muted">{repo.description}</p>
+              <p className="mt-2 text-sm text-muted">
+                {t(`repos.${repo.name}.description`)}
+              </p>
 
               <div className="mt-4 flex gap-4">
                 <span className="flex items-center gap-1 text-sm text-muted" dir="ltr">

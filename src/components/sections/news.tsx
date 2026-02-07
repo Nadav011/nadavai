@@ -4,24 +4,9 @@ import { useTranslations } from "next-intl";
 import { motion } from "motion/react";
 
 const NEWS_ITEMS = [
-  {
-    id: "1",
-    title: "OpenAI Releases GPT-5 with Reasoning Capabilities",
-    date: "2026-02-01",
-    category: "AI",
-  },
-  {
-    id: "2",
-    title: "Next.js 16 Introduces Cache Components",
-    date: "2026-01-28",
-    category: "Development",
-  },
-  {
-    id: "3",
-    title: "GSAP Goes Fully Free After Webflow Acquisition",
-    date: "2026-01-20",
-    category: "Tools",
-  },
+  { id: "1", date: "2026-02-01", category: "ai" },
+  { id: "2", date: "2026-01-28", category: "development" },
+  { id: "3", date: "2026-01-20", category: "tools" },
 ];
 
 export function News() {
@@ -54,11 +39,11 @@ export function News() {
               transition={{ duration: 0.4, delay: i * 0.1 }}
             >
               <span className="shrink-0 rounded-lg bg-primary/10 px-3 py-1 text-xs font-medium text-primary">
-                {item.category}
+                {t(`categories.${item.category}`)}
               </span>
               <div className="min-w-0 flex-1">
                 <h3 className="truncate text-sm font-medium text-foreground">
-                  {item.title}
+                  {t(`items.${item.id}.title`)}
                 </h3>
               </div>
               <time dir="ltr" className="shrink-0 text-xs text-muted">

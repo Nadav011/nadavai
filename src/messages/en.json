@@ -37,7 +37,21 @@
     "viewLive": "View Live",
     "viewCode": "Source Code",
     "techStack": "Tech Stack",
-    "featured": "Featured"
+    "featured": "Featured",
+    "items": {
+      "mexicani": {
+        "description": "Franchise management system with AI-powered analytics and real-time tracking"
+      },
+      "cash": {
+        "description": "Delivery tracking PWA with offline-first architecture and real-time updates"
+      },
+      "shifts": {
+        "description": "Shift management platform with automated scheduling and employee dashboard"
+      },
+      "hatumdigital": {
+        "description": "Order management system with real-time inventory tracking"
+      }
+    }
   },
   "Blog": {
     "title": "Blog",
@@ -51,6 +65,20 @@
       "development": "Development",
       "tutorials": "Tutorials",
       "news": "News"
+    },
+    "posts": {
+      "1": {
+        "title": "How I Built a Full App with AI in 48 Hours",
+        "excerpt": "A deep dive into using AI tools to build production-ready apps at record speed."
+      },
+      "2": {
+        "title": "The Future of AI-First Development",
+        "excerpt": "Why every developer should be thinking AI-first in 2026."
+      },
+      "3": {
+        "title": "Next.js 16: Everything You Need to Know",
+        "excerpt": "A comprehensive guide to the latest features in Next.js 16."
+      }
     }
   },
   "Guides": {
@@ -62,14 +90,36 @@
       "advanced": "Advanced"
     },
     "readGuide": "Read Guide",
-    "minRead": "min read"
+    "minRead": "min read",
+    "items": {
+      "1": {
+        "title": "Building Your First AI Agent"
+      },
+      "2": {
+        "title": "Next.js 16 App Router Deep Dive"
+      },
+      "3": {
+        "title": "Advanced RAG Patterns for Production"
+      }
+    }
   },
   "Resources": {
     "title": "Free Resources",
     "subtitle": "Open source for the community",
     "stars": "Stars",
     "forks": "Forks",
-    "viewRepo": "View on GitHub"
+    "viewRepo": "View on GitHub",
+    "repos": {
+      "ai-skills": {
+        "description": "Collection of AI agent skills and prompts"
+      },
+      "ai-agents": {
+        "description": "Production-ready AI agent framework"
+      },
+      "nextjs-starter": {
+        "description": "RTL-first Next.js starter with AI integration"
+      }
+    }
   },
   "Services": {
     "title": "Services",
@@ -106,16 +156,60 @@
     "title": "Videos",
     "subtitle": "AI and development tutorials",
     "watchNow": "Watch Now",
-    "subscribe": "Subscribe"
+    "subscribe": "Subscribe",
+    "videos": {
+      "video1": {
+        "title": "Build an AI App in 30 Minutes"
+      },
+      "video2": {
+        "title": "AI Tools Every Developer Needs in 2026"
+      },
+      "video3": {
+        "title": "Hebrew: AI Guide for Developers"
+      }
+    }
   },
   "News": {
     "title": "Tech News",
     "subtitle": "Latest updates from the AI and tech world",
-    "readMore": "Read More"
+    "readMore": "Read More",
+    "categories": {
+      "ai": "AI",
+      "development": "Development",
+      "tools": "Tools"
+    },
+    "items": {
+      "1": {
+        "title": "OpenAI Releases GPT-5 with Reasoning Capabilities"
+      },
+      "2": {
+        "title": "Next.js 16 Introduces Cache Components"
+      },
+      "3": {
+        "title": "GSAP Goes Fully Free After Webflow Acquisition"
+      }
+    }
   },
   "Testimonials": {
     "title": "What Clients Say",
-    "subtitle": "Real results from real clients"
+    "subtitle": "Real results from real clients",
+    "items": {
+      "0": {
+        "quote": "Nadav's AI automation saved us 20 hours per week. His understanding of both AI and practical business needs is rare.",
+        "name": "David Levy",
+        "title": "CTO, TechStartup IL"
+      },
+      "1": {
+        "quote": "The app Nadav built completely transformed our workflow. Fast delivery and outstanding quality.",
+        "name": "Sarah Cohen",
+        "title": "Product Manager, FinTech Co"
+      },
+      "2": {
+        "quote": "Working with Nadav was a game-changer. He brought AI solutions we didn't even know were possible.",
+        "name": "Amit Ben-David",
+        "title": "Founder, E-Commerce Plus"
+      }
+    }
   },
   "Contact": {
     "title": "Let's Build Something with AI",

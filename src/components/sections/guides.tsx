@@ -7,19 +7,16 @@ import { BackgroundBeams } from "@/components/ui/background-beams";
 const GUIDES = [
   {
     id: "1",
-    title: "Building Your First AI Agent",
     difficulty: "beginner" as const,
     readingTime: 15,
   },
   {
     id: "2",
-    title: "Next.js 16 App Router Deep Dive",
     difficulty: "intermediate" as const,
     readingTime: 25,
   },
   {
     id: "3",
-    title: "Advanced RAG Patterns for Production",
     difficulty: "advanced" as const,
     readingTime: 30,
   },
@@ -72,7 +69,7 @@ export function Guides() {
                 </span>
               </div>
               <h3 className="text-lg font-semibold text-foreground group-hover:text-primary transition-colors">
-                {guide.title}
+                {t(`items.${guide.id}.title`)}
               </h3>
               <a
                 href={`/guides/${guide.id}`}
