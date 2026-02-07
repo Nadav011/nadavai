@@ -35,11 +35,24 @@ function NewsletterForm() {
   const [email, setEmail] = useState("")
   const [status, setStatus] = useState<"idle" | "success" | "error">("idle")
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!email) return
-    setStatus("success")
-    setEmail("")
+    try {
+      const res = await fetch("/api/newsletter", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      })
+      if (res.ok) {
+        setStatus("success")
+        setEmail("")
+      } else {
+        setStatus("error")
+      }
+    } catch {
+      setStatus("error")
+    }
   }
 
   return (
@@ -76,6 +89,9 @@ function NewsletterForm() {
       </div>
       {status === "success" && (
         <p className="mt-3 text-xs text-[#06d6e0]">{"תודה! נוסף/ה בהצלחה לרשימת התפוצה"}</p>
+      )}
+      {status === "error" && (
+        <p className="mt-3 text-xs text-[#e84393]">{"שגיאה, נסו שוב מאוחר יותר"}</p>
       )}
     </div>
   )
