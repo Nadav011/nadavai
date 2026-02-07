@@ -23,7 +23,7 @@ export function Footer() {
       <div className="mx-auto max-w-6xl px-6 py-12">
         <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
           <div>
-            <a href={`/${locale}`} className="flex items-center gap-1 text-lg font-bold">
+            <a href={`/${locale}`} className="flex min-h-11 items-center gap-1 text-lg font-bold">
               <span className="text-foreground">NADAV</span>
               <span className="text-primary">AI</span>
             </a>
@@ -40,7 +40,7 @@ export function Footer() {
                   <li key={key}>
                     <a
                       href={`#${key}`}
-                      className="text-sm text-muted transition-colors hover:text-primary"
+                      className="min-h-11 inline-flex items-center text-sm text-muted transition-colors hover:text-primary"
                     >
                       {tNav(key)}
                     </a>
@@ -63,7 +63,7 @@ export function Footer() {
                       href={link.href}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex items-center gap-2 text-sm text-muted transition-colors hover:text-primary"
+                      className="flex min-h-11 items-center gap-2 text-sm text-muted transition-colors hover:text-primary"
                     >
                       <Icon className="h-4 w-4" />
                       {link.label}

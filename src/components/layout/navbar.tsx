@@ -47,7 +47,7 @@ export function Navbar() {
       )}
     >
       <nav className="flex items-center justify-between" aria-label={t("navigation")}>
-        <a href={`/${locale}`} className="flex items-center gap-1 text-lg font-bold">
+        <a href={`/${locale}`} className="flex min-h-11 items-center gap-1 text-lg font-bold">
           <span className="text-foreground">NADAV</span>
           <span className="text-primary">AI</span>
         </a>
@@ -57,7 +57,7 @@ export function Navbar() {
             <li key={item.key}>
               <a
                 href={item.href}
-                className="text-sm text-muted transition-colors hover:text-foreground"
+                className="min-h-11 inline-flex items-center text-sm text-muted transition-colors hover:text-foreground"
               >
                 {t(item.key)}
               </a>
@@ -72,7 +72,7 @@ export function Navbar() {
                 new KeyboardEvent("keydown", { key: "k", metaKey: true })
               );
             }}
-            className="hidden h-9 items-center gap-1.5 rounded-lg border border-border/50 px-2.5 text-xs text-muted transition-colors hover:text-foreground md:flex"
+            className="hidden min-h-11 items-center gap-1.5 rounded-lg border border-border/50 px-2.5 text-xs text-muted transition-colors hover:text-foreground md:flex"
             aria-label="Search"
           >
             <Command className="h-3 w-3" />
@@ -81,7 +81,7 @@ export function Navbar() {
 
           <button
             onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-            className="flex h-9 w-9 items-center justify-center rounded-lg text-muted transition-colors hover:text-foreground"
+            className="flex min-h-11 min-w-11 items-center justify-center rounded-lg text-muted transition-colors hover:text-foreground"
             aria-label={t("toggleTheme")}
           >
             {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
@@ -89,7 +89,7 @@ export function Navbar() {
 
           <button
             onClick={switchLocale}
-            className="flex h-9 min-w-9 items-center justify-center rounded-lg px-2 text-sm font-medium text-muted transition-colors hover:text-foreground"
+            className="flex min-h-11 min-w-11 items-center justify-center rounded-lg px-2 text-sm font-medium text-muted transition-colors hover:text-foreground"
             aria-label={t("toggleLocale")}
           >
             {t("toggleLocale")}
@@ -97,7 +97,7 @@ export function Navbar() {
 
           <button
             onClick={() => setMobileOpen(!mobileOpen)}
-            className="flex h-9 w-9 items-center justify-center rounded-lg text-muted transition-colors hover:text-foreground md:hidden"
+            className="flex min-h-11 min-w-11 items-center justify-center rounded-lg text-muted transition-colors hover:text-foreground md:hidden"
             aria-label={t("menu")}
             aria-expanded={mobileOpen}
           >
@@ -113,7 +113,7 @@ export function Navbar() {
               <a
                 href={item.href}
                 onClick={() => setMobileOpen(false)}
-                className="block py-2 text-sm text-muted transition-colors hover:text-foreground"
+                className="block min-h-11 py-3 text-sm text-muted transition-colors hover:text-foreground"
               >
                 {t(item.key)}
               </a>
