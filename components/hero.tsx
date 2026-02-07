@@ -4,6 +4,7 @@ import { useEffect, useState } from "react"
 import { ArrowDown, Play, Sparkles } from "lucide-react"
 import { Magnetic } from "./magnetic"
 import { AnimatedCounter } from "./animated-counter"
+import { HeroGlobe } from "./hero-globe"
 
 const roles = ["Full-Stack Developer", "AI Builder", "Prompt Engineer", "System Architect", "Tech Creator"]
 
@@ -43,17 +44,19 @@ export function Hero() {
 
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20">
+      {/* 3D Globe Background */}
+      <HeroGlobe />
+
       {/* Background effects */}
-      <div className="absolute inset-0">
+      <div className="absolute inset-0" style={{ zIndex: 0 }}>
         {/* Grid */}
-        <div className="absolute inset-0 grid-bg opacity-40" />
-        {/* Gradient orbs */}
-        <div className="absolute w-[600px] h-[600px] bg-[#06d6e0]/8 rounded-full blur-[120px] animate-pulse-glow" style={{ top: "25%", insetInlineEnd: "25%" }} />
-        <div className="absolute w-[500px] h-[500px] bg-[#e84393]/6 rounded-full blur-[120px] animate-pulse-glow" style={{ bottom: "25%", insetInlineStart: "25%", animationDelay: "2s" }} />
-        <div className="absolute w-[400px] h-[400px] bg-[#4f46e5]/5 rounded-full blur-[100px] animate-pulse-glow" style={{ top: "50%", left: "50%", transform: "translate(-50%, -50%)", animationDelay: "4s" }} />
+        <div className="absolute inset-0 grid-bg opacity-20" />
+        {/* Ambient glow - softer to let globe shine */}
+        <div className="absolute w-[800px] h-[800px] bg-[#06d6e0]/4 rounded-full blur-[180px] animate-pulse-glow" style={{ top: "30%", left: "50%", transform: "translate(-50%, -50%)" }} />
+        <div className="absolute w-[600px] h-[600px] bg-[#e84393]/3 rounded-full blur-[150px] animate-pulse-glow" style={{ bottom: "20%", insetInlineStart: "30%", animationDelay: "2s" }} />
         {/* Scan line */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          <div className="w-full h-[1px] bg-gradient-to-l from-transparent via-[#06d6e0]/20 to-transparent" style={{ animation: "scan-line 8s linear infinite" }} />
+          <div className="w-full h-[1px] bg-gradient-to-l from-transparent via-[#06d6e0]/15 to-transparent" style={{ animation: "scan-line 8s linear infinite" }} />
         </div>
       </div>
 

@@ -17,16 +17,56 @@ const jetbrainsMono = JetBrains_Mono({
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://nadavc.ai"),
-  title: "NADAV.AI | Full-Stack AI Developer",
+  title: {
+    default: "NADAV.AI | Full-Stack AI Developer",
+    template: "%s | NADAV.AI",
+  },
   description:
-    "בונה הכל עם AI. אפליקציות, מדריכים, כלים ושירותים - הכל מונע בינה מלאכותית.",
+    "נדב כהן - מפתח Full-Stack שבונה הכל עם AI. אפליקציות web, מערכות enterprise, סוכני AI ואוטומציה. 8+ אפליקציות production, 80 AI Skills.",
+  keywords: [
+    "מפתח AI", "Full-Stack Developer", "בינה מלאכותית", "פיתוח אפליקציות",
+    "React", "Next.js", "TypeScript", "Supabase", "AI Developer Israel",
+    "נדב כהן", "פיתוח עם AI", "סוכני AI", "Claude Code", "Nadav Cohen",
+  ],
+  authors: [{ name: "Nadav Cohen", url: "https://nadavc.ai" }],
+  creator: "Nadav Cohen",
   openGraph: {
     title: "NADAV.AI | Full-Stack AI Developer",
-    description: "בונה הכל עם AI. אפליקציות, מדריכים, כלים ושירותים.",
+    description: "בונה הכל עם AI. 8+ אפליקציות production, 80 AI Skills, 38+ סוכנים.",
     url: "https://nadavc.ai",
     siteName: "NADAV.AI",
     locale: "he_IL",
     type: "website",
+    images: [
+      {
+        url: "/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "NADAV.AI - Full-Stack AI Developer",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "NADAV.AI | Full-Stack AI Developer",
+    description: "בונה הכל עם AI. 8+ אפליקציות production, 80 AI Skills.",
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
+  alternates: {
+    canonical: "https://nadavc.ai",
+  },
+  verification: {
+    google: "verification-token-placeholder",
   },
 }
 
@@ -44,6 +84,28 @@ export default function RootLayout({
       <body
         className={`${spaceGrotesk.variable} ${jetbrainsMono.variable} font-sans antialiased overflow-x-hidden`}
       >
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "Person",
+              name: "Nadav Cohen",
+              alternateName: "נדב כהן",
+              url: "https://nadavc.ai",
+              jobTitle: "Full-Stack AI Developer",
+              description: "Full-Stack Developer who builds everything with AI. 8+ production apps, 80 AI Skills, 38+ agents.",
+              knowsAbout: [
+                "Artificial Intelligence", "Full-Stack Development", "React", "Next.js",
+                "TypeScript", "Supabase", "Flutter", "Claude Code", "AI Agents",
+              ],
+              sameAs: [
+                "https://github.com/Nadav011",
+                "https://www.facebook.com/nadav.cohen.167",
+              ],
+            }),
+          }}
+        />
         {children}
         <Analytics />
         <SpeedInsights />
