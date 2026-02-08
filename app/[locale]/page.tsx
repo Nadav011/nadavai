@@ -1,3 +1,4 @@
+import { Suspense } from "react"
 import dynamic from "next/dynamic"
 import { Navbar } from "@/components/navbar"
 import { Hero } from "@/components/hero"
@@ -23,11 +24,14 @@ const Contact = dynamic(() => import("@/components/contact").then(mod => ({ defa
 
 export default function Page() {
   return (
-    <SmoothScroll>
-      <GSAPSetup />
-      <ScrollProgress />
-      <NonCritical />
-      <div className="relative z-10">
+    <>
+      <Suspense fallback={null}>
+        <NonCritical />
+      </Suspense>
+      <SmoothScroll>
+        <GSAPSetup />
+        <ScrollProgress />
+        <div className="relative z-10">
         <Navbar />
         <main id="main-content">
           <Hero />
@@ -75,5 +79,6 @@ export default function Page() {
         <Footer />
       </div>
     </SmoothScroll>
+    </>
   )
 }
