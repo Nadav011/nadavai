@@ -127,7 +127,7 @@ export function YouTube() {
   )
 
   return (
-    <section ref={sectionRef} id="youtube" aria-label={t("title")} className="relative py-24 md:py-32 bg-[hsl(222,47%,3%)]">
+    <section ref={sectionRef} id="youtube" aria-label={t("title")} className="relative py-16 md:py-32 bg-[hsl(222,47%,3%)]">
       <div className="absolute inset-0 dot-grid-subtle opacity-30" />
       <div className="relative max-w-7xl mx-auto px-4 md:px-8">
         <SectionHeader
@@ -137,7 +137,7 @@ export function YouTube() {
           description={t("description")}
         />
 
-        <div className="flex flex-wrap items-center justify-center gap-2 mb-12">
+        <div className="flex flex-nowrap md:flex-wrap items-center md:justify-center gap-2 mb-8 md:mb-12 overflow-x-auto px-1 pb-2 scrollbar-hide">
           {categories.map((cat) => (
             <button
               key={cat.key}
@@ -154,7 +154,7 @@ export function YouTube() {
           ))}
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
           {filtered.map((video, i) => (
             <div key={video.title} className="video-card group relative h-full rounded-2xl border border-[hsl(215,28%,16%)] bg-[hsl(222,47%,5%)] overflow-hidden hover:border-opacity-50 transition-all duration-500">
               <div className="relative aspect-video bg-[hsl(222,47%,7%)] overflow-hidden">
@@ -219,7 +219,7 @@ export function YouTube() {
           ))}
         </div>
 
-        <div className="flex justify-center mt-12">
+        <div className="flex justify-center mt-8 md:mt-12">
           <a
             href="https://youtube.com/@nadavai"
             target="_blank"

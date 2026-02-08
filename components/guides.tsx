@@ -74,7 +74,7 @@ export function Guides() {
   )
 
   return (
-    <section ref={sectionRef} id="guides" aria-label={t("title")} className="relative py-24 md:py-32">
+    <section ref={sectionRef} id="guides" aria-label={t("title")} className="relative py-16 md:py-32">
       <div className="absolute inset-0 grid-bg opacity-[0.15] pointer-events-none" aria-hidden="true" />
       <div className="max-w-7xl mx-auto px-4 md:px-8">
         <SectionHeader
@@ -84,7 +84,7 @@ export function Guides() {
           description={t("description")}
         />
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
           {guides.map((guide, i) => (
             <div key={i} className="guide-card">
               <CodeCard

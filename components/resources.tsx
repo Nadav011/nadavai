@@ -78,7 +78,7 @@ export function Resources() {
   )
 
   return (
-    <section ref={sectionRef} id="resources" aria-label={t("title")} className="relative py-24 md:py-32 bg-[hsl(222,47%,3%)]">
+    <section ref={sectionRef} id="resources" aria-label={t("title")} className="relative py-16 md:py-32 bg-[hsl(222,47%,3%)]">
       <div className="absolute inset-0 grid-bg opacity-15" />
       <div className="relative max-w-7xl mx-auto px-4 md:px-8">
         <SectionHeader
@@ -88,7 +88,7 @@ export function Resources() {
           description={t("description")}
         />
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
           {repos.map((repo, i) => (
             <div key={i} className="resource-card">
               <CodeCard
