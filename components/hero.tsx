@@ -125,7 +125,7 @@ export function Hero() {
       <div className="absolute inset-0" style={{ zIndex: 0 }}>
         <div className="absolute inset-0 grid-bg opacity-20" />
         <div className="absolute w-[800px] h-[800px] bg-[#06d6e0]/4 rounded-full blur-[180px] animate-pulse-glow" style={{ top: "30%", left: "50%", transform: "translate(-50%, -50%)" }} />
-        <div className="absolute w-[600px] h-[600px] bg-[#e84393]/3 rounded-full blur-[150px] animate-pulse-glow" style={{ bottom: "20%", insetInlineStart: "30%", animationDelay: "2s" }} />
+        <div className="absolute w-[500px] h-[500px] bg-[#06d6e0]/3 rounded-full blur-[150px] animate-pulse-glow" style={{ bottom: "20%", insetInlineStart: "30%", animationDelay: "2s" }} />
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
           <div className="w-full h-[1px] bg-gradient-to-l from-transparent via-[#06d6e0]/15 to-transparent" style={{ animation: "scan-line 8s linear infinite" }} />
         </div>
@@ -154,7 +154,7 @@ export function Hero() {
                 <span className="relative z-10 animate-ai-glow">AI</span>
                 <span className="absolute inset-0 -m-2 rounded-lg bg-[#06d6e0]/10 blur-xl animate-pulse-glow" />
                 <Sparkles className="absolute -top-3 -start-3 w-5 h-5 text-[#06d6e0] animate-pulse" aria-hidden="true" />
-                <Sparkles className="absolute -bottom-2 -end-3 w-4 h-4 text-[#e84393] animate-pulse" style={{ animationDelay: "1s" }} aria-hidden="true" />
+                <Sparkles className="absolute -bottom-2 -end-3 w-4 h-4 text-[#0ea5e9] animate-pulse" style={{ animationDelay: "1s" }} aria-hidden="true" />
               </span>
             </h1>
           </div>
