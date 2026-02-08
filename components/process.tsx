@@ -70,7 +70,7 @@ export function Process() {
       id="process"
       ref={sectionRef}
       aria-label={t("badge")}
-      className="relative py-24 md:py-32 overflow-hidden"
+      className="relative py-16 md:py-32 overflow-hidden"
     >
       <div className="max-w-7xl mx-auto px-4 md:px-8">
         {/* Section Header */}
@@ -89,12 +89,12 @@ export function Process() {
         {/* Steps - vertical timeline layout, mobile-first */}
         <div className="relative max-w-2xl mx-auto">
           {steps.map((step, index) => (
-            <div key={index} className="process-step relative flex gap-6 md:gap-8 pb-12 last:pb-0">
+            <div key={index} className="process-step relative flex gap-4 md:gap-8 pb-10 md:pb-12 last:pb-0">
               {/* Timeline column */}
               <div className="flex flex-col items-center flex-shrink-0">
                 {/* Step number circle */}
                 <div
-                  className="relative w-14 h-14 md:w-16 md:h-16 rounded-2xl flex items-center justify-center border-2 transition-all duration-500 flex-shrink-0"
+                  className="relative w-12 h-12 md:w-16 md:h-16 rounded-xl md:rounded-2xl flex items-center justify-center border-2 transition-all duration-500 flex-shrink-0"
                   style={{
                     borderColor: step.color,
                     backgroundColor: "hsl(222,47%,5%)",

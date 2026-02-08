@@ -70,8 +70,8 @@ export function WhatsAppButton() {
       {/* Tooltip */}
       {tooltip && (
         <div ref={tooltipRef} className="relative opacity-0">
-          <div className="relative flex items-center gap-2 px-4 py-2.5 rounded-xl bg-[hsl(222,47%,7%)] border border-[hsl(215,28%,16%)] shadow-lg">
-            <span className="text-sm text-[hsl(210,40%,98%)]">{t("tooltip")}</span>
+          <div className="relative flex items-center gap-2 px-3 md:px-4 py-2 md:py-2.5 rounded-xl bg-[hsl(222,47%,7%)] border border-[hsl(215,28%,16%)] shadow-lg max-w-[200px] md:max-w-none">
+            <span className="text-xs md:text-sm text-[hsl(210,40%,98%)] leading-snug">{t("tooltip")}</span>
             <button
               onClick={() => {
                 if (tooltipRef.current) {
@@ -101,7 +101,7 @@ export function WhatsAppButton() {
         href="https://wa.me/972504401760"
         target="_blank"
         rel="noreferrer"
-        className="group relative flex items-center justify-center w-14 h-14 rounded-full bg-[#25D366] shadow-[0_4px_20px_rgba(37,211,102,0.4)] hover:shadow-[0_4px_30px_rgba(37,211,102,0.6)] hover:scale-110 transition-all duration-300 opacity-0"
+        className="group relative flex items-center justify-center w-12 h-12 md:w-14 md:h-14 rounded-full bg-[#25D366] shadow-[0_4px_20px_rgba(37,211,102,0.4)] hover:shadow-[0_4px_30px_rgba(37,211,102,0.6)] hover:scale-110 transition-all duration-300 opacity-0"
         aria-label={t("ariaLabel")}
       >
         {/* Ping animation */}

@@ -160,7 +160,7 @@ export function Hero() {
           </div>
 
           <div ref={terminalRef}>
-            <div className="inline-flex items-center gap-3 px-6 py-3 rounded-xl border border-[hsl(215,28%,16%)] bg-[hsl(222,47%,5%)] font-mono">
+            <div className="inline-flex items-center gap-2 md:gap-3 px-4 md:px-6 py-2.5 md:py-3 rounded-xl border border-[hsl(215,28%,16%)] bg-[hsl(222,47%,5%)] font-mono max-w-full overflow-hidden">
               <span className="text-[#06d6e0]">{">"}</span>
               <span className="text-[hsl(215,20%,65%)] text-sm md:text-base">
                 {roles[roleIndex].slice(0, charIndex)}
@@ -178,12 +178,12 @@ export function Hero() {
 
           <div
             ref={buttonsRef}
-            className="flex flex-col sm:flex-row items-center gap-4"
+            className="flex flex-col sm:flex-row items-center gap-3 md:gap-4 w-full sm:w-auto px-4 sm:px-0"
           >
             <Magnetic strength={0.2}>
               <a
                 href="#projects"
-                className="group relative inline-flex items-center gap-3 px-8 py-4 rounded-xl text-base font-bold text-[hsl(222,47%,4%)] bg-gradient-to-l from-[#06d6e0] to-[#0abfca] hover:shadow-[0_0_40px_hsl(187,92%,55%,0.4)] transition-all duration-500"
+                className="group relative inline-flex items-center justify-center gap-3 px-8 py-4 rounded-xl text-base font-bold text-[hsl(222,47%,4%)] bg-gradient-to-l from-[#06d6e0] to-[#0abfca] hover:shadow-[0_0_40px_hsl(187,92%,55%,0.4)] transition-all duration-500 w-full sm:w-auto"
               >
                 {t("cta1")}
                 <ArrowDown className="w-4 h-4 group-hover:translate-y-1 transition-transform" />
@@ -192,7 +192,7 @@ export function Hero() {
             <Magnetic strength={0.2}>
               <a
                 href="#services"
-                className="group inline-flex items-center gap-3 px-8 py-4 rounded-xl text-base font-medium text-[hsl(210,40%,98%)] border border-[hsl(215,28%,20%)] bg-[hsl(222,47%,7%)] hover:border-[#e84393]/40 hover:shadow-[0_0_30px_hsl(330,85%,60%,0.15)] transition-all duration-500"
+                className="group inline-flex items-center justify-center gap-3 px-8 py-4 rounded-xl text-base font-medium text-[hsl(210,40%,98%)] border border-[hsl(215,28%,20%)] bg-[hsl(222,47%,7%)] hover:border-[#e84393]/40 hover:shadow-[0_0_30px_hsl(330,85%,60%,0.15)] transition-all duration-500 w-full sm:w-auto"
               >
                 <Play className="w-4 h-4 text-[#e84393]" />
                 {t("cta2")}
@@ -214,7 +214,7 @@ export function Hero() {
             ))}
           </div>
 
-          <div ref={scrollIndicatorRef} className="mt-12">
+          <div ref={scrollIndicatorRef} className="mt-8 md:mt-12 hidden md:block">
             <div className="flex flex-col items-center gap-2 animate-float">
               <span className="text-[10px] font-mono text-[hsl(215,20%,48%)] tracking-widest uppercase">scroll</span>
               <div className="w-[1px] h-12 bg-gradient-to-b from-[#06d6e0] to-transparent" />

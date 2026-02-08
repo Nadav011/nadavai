@@ -148,7 +148,7 @@ export function Services() {
   ]
 
   return (
-    <section ref={sectionRef} id="services" aria-label={t("badge")} className="relative py-24 md:py-32 overflow-hidden">
+    <section ref={sectionRef} id="services" aria-label={t("badge")} className="relative py-16 md:py-32 overflow-hidden">
       <div className="absolute inset-0 bg-[hsl(222,47%,3%)]" />
       <div className="absolute w-[1000px] h-[600px] bg-[#06d6e0]/3 rounded-full blur-[150px]" style={{ top: 0, left: "50%", transform: "translateX(-50%)" }} />
       <div className="absolute bottom-0 end-0 w-[600px] h-[400px] bg-[#06d6e0]/3 rounded-full blur-[120px]" />
@@ -277,7 +277,7 @@ export function Services() {
         </div>
 
         <ScrollReveal delay={200} direction="left">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-4">
             {additionalServices.map((service, i) => (
               <a
                 key={i}

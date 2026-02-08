@@ -193,7 +193,7 @@ export function Blog() {
   }, { scope: sectionRef, dependencies: [filtered] })
 
   return (
-    <section ref={sectionRef} id="blog" aria-label={t("title")} className="relative py-24 md:py-32">
+    <section ref={sectionRef} id="blog" aria-label={t("title")} className="relative py-16 md:py-32">
       <div className="absolute inset-0 dot-grid opacity-[0.12] pointer-events-none" aria-hidden="true" />
       <div className="max-w-7xl mx-auto px-4 md:px-8">
         <div ref={headerRef}>
@@ -206,7 +206,7 @@ export function Blog() {
         </div>
 
         {/* Category filter */}
-        <div ref={categoryRef} className="flex flex-wrap items-center justify-center gap-2 mb-12">
+        <div ref={categoryRef} className="flex flex-nowrap md:flex-wrap items-center md:justify-center gap-2 mb-8 md:mb-12 overflow-x-auto px-1 pb-2 scrollbar-hide">
           {categories.map((cat) => (
             <button
               key={cat.key}
@@ -224,7 +224,7 @@ export function Blog() {
         </div>
 
         {/* Posts grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
           {filtered.map((post, i) => (
             <a
               key={post.title}

@@ -70,7 +70,7 @@ export function Contact() {
   )
 
   return (
-    <section ref={sectionRef} id="contact" aria-label={t("title")} className="relative py-24 md:py-32 overflow-hidden">
+    <section ref={sectionRef} id="contact" aria-label={t("title")} className="relative py-16 md:py-32 overflow-hidden">
       <div className="absolute top-0 w-[800px] h-[400px] bg-[#06d6e0]/5 rounded-full blur-[120px]" style={{ left: "50%", transform: "translateX(-50%)" }} />
 
       <div className="relative max-w-4xl mx-auto px-4 md:px-8 text-center">
@@ -104,14 +104,14 @@ export function Contact() {
             <div className="w-12" />
           </div>
 
-          <div className="p-6 md:p-8 space-y-4 text-end">
+          <div className="p-4 md:p-8 space-y-3 md:space-y-4 text-end">
             <div className="flex items-center gap-3 font-mono text-sm">
               <span className="text-[#06d6e0]">$</span>
               <span className="text-[hsl(215,20%,60%)]">echo</span>
               <span className="text-[#e84393]">{`"${t("terminalCmd")}"`}</span>
             </div>
 
-            <div className="space-y-3 me-6">
+            <div className="space-y-2 md:space-y-3 me-2 md:me-6">
               <a
                 href="https://wa.me/972504401760"
                 target="_blank"

@@ -46,7 +46,7 @@ function NewsletterForm() {
             {t("newsletterDesc")}
           </p>
         </div>
-        <form onSubmit={handleSubmit} className="flex items-center gap-2 w-full md:w-auto">
+        <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 w-full md:w-auto">
           <div className="relative flex-1 md:w-64">
             <label htmlFor="newsletter-email" className="sr-only">{t("newsletterTitle")}</label>
             <input

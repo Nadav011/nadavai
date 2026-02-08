@@ -79,7 +79,7 @@ export function Testimonials() {
   }, { scope: sectionRef })
 
   return (
-    <section ref={sectionRef} id="testimonials" aria-label={t("title")} className="relative py-24 md:py-32 bg-[hsl(222,47%,3%)]">
+    <section ref={sectionRef} id="testimonials" aria-label={t("title")} className="relative py-16 md:py-32 bg-[hsl(222,47%,3%)]">
       <div className="absolute inset-0 grid-bg opacity-15" />
       <div className="relative max-w-7xl mx-auto px-4 md:px-8">
         <div ref={headerRef}>
@@ -91,7 +91,7 @@ export function Testimonials() {
           />
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
           {testimonials.map((t, i) => (
             <div key={i} className="testimonial-card group relative h-full p-6 rounded-xl border border-[hsl(215,28%,16%)] bg-[hsl(222,47%,5%)] hover:border-[#06d6e0]/20 transition-all duration-500">
               {/* Quote icon */}
