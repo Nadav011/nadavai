@@ -2,107 +2,130 @@
 
 import { useState } from "react"
 import { Calendar, Clock, ArrowLeft, MessageSquare, ThumbsUp, ExternalLink } from "lucide-react"
+import { useTranslations, useLocale } from "next-intl"
 import { ScrollReveal } from "./scroll-reveal"
 import { SectionHeader } from "./section-header"
 
-const categories = ["הכל", "AI", "פיתוח", "טיפים", "קריירה"]
 
-const posts = [
-  {
-    title: "למה AI משנה את כללי המשחק לפרילנסרים",
-    excerpt: "לפני שנה בניתי אפליקציות ב-3 חודשים. היום? אותה רמת איכות ב-3 ימים. ככה AI שינה לי את החיים כמפתח.",
-    category: "AI",
-    date: "2026-02-01",
-    readTime: 4,
-    likes: 47,
-    comments: 12,
-    platform: "Facebook",
-    href: "https://www.facebook.com/nadav.cohen.167",
-    color: "#06d6e0",
-  },
-  {
-    title: "8 אפליקציות production בשנה אחת - איך עשיתי את זה",
-    excerpt: "הסוד? לא קוד מסורתי. שימוש ב-80 AI Skills, סוכנים חכמים, ומנוע APEX עם 579 gates שמוודא שהכל ברמה הכי גבוהה.",
-    category: "פיתוח",
-    date: "2026-01-15",
-    readTime: 6,
-    likes: 83,
-    comments: 24,
-    platform: "Facebook",
-    href: "https://www.facebook.com/nadav.cohen.167",
-    color: "#e84393",
-  },
-  {
-    title: "Claude Code vs Cursor - מה באמת עדיף למפתחים?",
-    excerpt: "ניסיתי את שניהם לעומק. הנה ההבדלים האמיתיים, מה עובד יותר טוב, ואיפה כל אחד מנצח.",
-    category: "AI",
-    date: "2026-01-05",
-    readTime: 8,
-    likes: 156,
-    comments: 42,
-    platform: "Facebook",
-    href: "https://www.facebook.com/nadav.cohen.167",
-    color: "#4f46e5",
-  },
-  {
-    title: "5 טעויות שכל מתחיל עם AI עושה",
-    excerpt: "טעות #1: לחשוב ש-AI מחליף אותך. הוא לא. הוא מגביר אותך פי 10. הנה איך להשתמש בזה נכון.",
-    category: "טיפים",
-    date: "2025-12-20",
-    readTime: 5,
-    likes: 92,
-    comments: 18,
-    platform: "Facebook",
-    href: "https://www.facebook.com/nadav.cohen.167",
-    color: "#06d6e0",
-  },
-  {
-    title: "הדרך מאפס לפרילנסר AI ב-2026",
-    excerpt: "תוכנית פעולה מפורטת: מה ללמוד, איזה כלים להכיר, ואיך לבנות פורטפוליו שמשכנע - גם בלי ניסיון קודם.",
-    category: "קריירה",
-    date: "2025-12-10",
-    readTime: 10,
-    likes: 210,
-    comments: 56,
-    platform: "Facebook",
-    href: "https://www.facebook.com/nadav.cohen.167",
-    color: "#e84393",
-  },
-  {
-    title: "Supabase + Next.js - הסטאק המושלם ל-2026",
-    excerpt: "למה אני בוחר Supabase על Firebase, איך לעבוד עם RLS בצורה נכונה, וטיפים לביצועים ברמת Enterprise.",
-    category: "פיתוח",
-    date: "2025-11-28",
-    readTime: 7,
-    likes: 134,
-    comments: 31,
-    platform: "Facebook",
-    href: "https://www.facebook.com/nadav.cohen.167",
-    color: "#4f46e5",
-  },
-]
 
-function formatDate(dateStr: string) {
-  const date = new Date(dateStr)
-  return date.toLocaleDateString("he-IL", { day: "numeric", month: "short", year: "numeric" })
-}
+
+
+
 
 export function Blog() {
-  const [activeCategory, setActiveCategory] = useState("הכל")
+  const t = useTranslations("blog")
+  const locale = useLocale()
+  const [activeCategory, setActiveCategory] = useState("all")
 
-  const filtered = activeCategory === "הכל"
+  const categories = [
+    { key: "all", display: t("catAll") },
+    { key: "AI", display: t("catAI") },
+    { key: "dev", display: t("catDev") },
+    { key: "tips", display: t("catTips") },
+    { key: "career", display: t("catCareer") },
+  ]
+
+  const posts = [
+    {
+      title: t("b1Title"),
+      excerpt: t("b1Excerpt"),
+      category: "AI",
+      date: "2026-02-01",
+      readTime: 4,
+      likes: 47,
+      comments: 12,
+      platform: "Facebook",
+      href: "https://www.facebook.com/nadav.cohen.167",
+      color: "#06d6e0",
+    },
+    {
+      title: t("b2Title"),
+      excerpt: t("b2Excerpt"),
+      category: "פיתוח",
+      date: "2026-01-15",
+      readTime: 6,
+      likes: 83,
+      comments: 24,
+      platform: "Facebook",
+      href: "https://www.facebook.com/nadav.cohen.167",
+      color: "#e84393",
+    },
+    {
+      title: t("b3Title"),
+      excerpt: t("b3Excerpt"),
+      category: "AI",
+      date: "2026-01-05",
+      readTime: 8,
+      likes: 156,
+      comments: 42,
+      platform: "Facebook",
+      href: "https://www.facebook.com/nadav.cohen.167",
+      color: "#4f46e5",
+    },
+    {
+      title: t("b4Title"),
+      excerpt: t("b4Excerpt"),
+      category: "טיפים",
+      date: "2025-12-20",
+      readTime: 5,
+      likes: 92,
+      comments: 18,
+      platform: "Facebook",
+      href: "https://www.facebook.com/nadav.cohen.167",
+      color: "#06d6e0",
+    },
+    {
+      title: t("b5Title"),
+      excerpt: t("b5Excerpt"),
+      category: "קריירה",
+      date: "2025-12-10",
+      readTime: 10,
+      likes: 210,
+      comments: 56,
+      platform: "Facebook",
+      href: "https://www.facebook.com/nadav.cohen.167",
+      color: "#e84393",
+    },
+    {
+      title: t("b6Title"),
+      excerpt: t("b6Excerpt"),
+      category: "פיתוח",
+      date: "2025-11-28",
+      readTime: 7,
+      likes: 134,
+      comments: 31,
+      platform: "Facebook",
+      href: "https://www.facebook.com/nadav.cohen.167",
+      color: "#4f46e5",
+    },
+  ]
+
+  function formatDate(dateStr: string) {
+    const date = new Date(dateStr)
+    return date.toLocaleDateString(locale === "he" ? "he-IL" : "en-US", { day: "numeric", month: "short", year: "numeric" })
+  }
+
+  const filtered = activeCategory === "all"
     ? posts
-    : posts.filter((p) => p.category === activeCategory)
+    : posts.filter((p) => {
+        const catMap: Record<string, string> = {
+          "AI": "AI",
+          "פיתוח": "dev",
+          "טיפים": "tips",
+          "קריירה": "career",
+        }
+        return catMap[p.category] === activeCategory
+      })
 
   return (
     <section id="blog" aria-label="בלוג" className="relative py-24 md:py-32">
       <div className="absolute inset-0 dot-grid opacity-[0.12] pointer-events-none" aria-hidden="true" />
       <div className="max-w-7xl mx-auto px-4 md:px-8">
         <SectionHeader
-          badge="blog"
-          title="מה אני"
-          highlight="כותב"
-          description="תובנות, טיפים, וניתוחים מהשטח - על AI, פיתוח, והעתיד של הטכנולוגיה."
+          badge={t("badge")}
+          title={t("title")}
+          highlight={t("highlight")}
+          description={t("description")}
         />
 
         {/* Category filter */}
@@ -110,15 +133,15 @@ export function Blog() {
           <div className="flex flex-wrap items-center justify-center gap-2 mb-12">
             {categories.map((cat) => (
               <button
-                key={cat}
-                onClick={() => setActiveCategory(cat)}
+                key={cat.key}
+                onClick={() => setActiveCategory(cat.key)}
                 className={`px-4 py-2 rounded-lg text-sm font-mono transition-all duration-300 min-h-11 ${
-                  activeCategory === cat
+                  activeCategory === cat.key
                     ? "bg-[#06d6e0]/15 text-[#06d6e0] border border-[#06d6e0]/30"
                     : "bg-[hsl(222,47%,6%)] text-[hsl(215,20%,50%)] border border-[hsl(215,28%,16%)] hover:border-[hsl(215,28%,22%)] hover:text-[hsl(215,20%,65%)]"
                 }`}
               >
-                {cat}
+                {cat.display}
               </button>
             ))}
           </div>
@@ -206,7 +229,7 @@ export function Blog() {
               rel="noreferrer"
               className="group flex items-center gap-2 px-6 py-3 rounded-xl border border-[hsl(215,28%,20%)] bg-[hsl(222,47%,6%)] text-sm font-medium text-[hsl(215,20%,65%)] hover:text-[#06d6e0] hover:border-[#06d6e0]/30 transition-all duration-500 min-h-11"
             >
-              {"כל הפוסטים ב-Facebook"}
+              {t("allPosts")}
               <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
             </a>
           </div>

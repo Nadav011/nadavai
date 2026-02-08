@@ -1,12 +1,18 @@
 "use client"
 
+import { useTranslations } from "next-intl"
 import { Send, Mail, MessageSquare, Zap, Phone } from "lucide-react"
 import { ScrollReveal } from "./scroll-reveal"
 import { Magnetic } from "./magnetic"
+import { BackgroundBeams } from "./background-beams"
 
 export function Contact() {
+  const t = useTranslations("contact")
+
   return (
     <section id="contact" aria-label="צור קשר" className="relative py-24 md:py-32 overflow-hidden">
+      {/* Background beams */}
+      <BackgroundBeams />
       {/* Background glow */}
       <div className="absolute top-0 w-[800px] h-[400px] bg-[#06d6e0]/5 rounded-full blur-[120px]" style={{ left: "50%", transform: "translateX(-50%)" }} />
 
@@ -14,21 +20,21 @@ export function Contact() {
         <ScrollReveal>
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-[#e84393]/20 bg-[#e84393]/5 mb-6">
             <Zap className="w-3.5 h-3.5 text-[#e84393]" />
-            <span className="text-xs font-mono text-[#e84393] tracking-wider uppercase">{"בוא נעשה משהו מטורף"}</span>
+            <span className="text-xs font-mono text-[#e84393] tracking-wider uppercase">{t("badge")}</span>
           </div>
         </ScrollReveal>
 
         <ScrollReveal delay={100}>
           <h2 className="text-4xl md:text-6xl lg:text-7xl font-bold text-[hsl(210,40%,98%)] mb-6 leading-[1.1]">
-            {"יש לך רעיון?"}
+            {t("heading1")}
             <br />
-            <span className="text-gradient-animated">{"בוא נבנה אותו."}</span>
+            <span className="text-gradient-animated">{t("heading2")}</span>
           </h2>
         </ScrollReveal>
 
         <ScrollReveal delay={200}>
           <p className="text-lg text-[hsl(215,20%,55%)] max-w-xl mx-auto mb-10 leading-relaxed">
-            {"לא משנה אם זה MVP קטן או מערכת enterprise - אם זה כרוך ב-AI ו-code, אני יכול לבנות את זה. מהר."}
+            {t("description")}
           </p>
         </ScrollReveal>
 
@@ -65,7 +71,7 @@ export function Contact() {
                   <Phone className="w-5 h-5 text-[#27ca40]" />
                   <div className="text-end">
                     <div className="text-sm font-medium text-[hsl(210,40%,98%)]">{"WhatsApp"}</div>
-                    <div className="text-xs text-[#27ca40]">{"הכי מהיר - תגובה תוך דקות"}</div>
+                    <div className="text-xs text-[#27ca40]">{t("waSubtitle")}</div>
                   </div>
                 </a>
 
@@ -76,7 +82,7 @@ export function Contact() {
                   <Mail className="w-5 h-5 text-[#06d6e0]" />
                   <div className="text-end">
                     <div className="text-sm font-medium text-[hsl(210,40%,98%)]">hello@nadavc.ai</div>
-                    <div className="text-xs text-[hsl(215,20%,45%)]">{"מייל - תמיד עונה"}</div>
+                    <div className="text-xs text-[hsl(215,20%,45%)]">{t("emailSubtitle")}</div>
                   </div>
                 </a>
 
@@ -88,16 +94,16 @@ export function Contact() {
                 >
                   <MessageSquare className="w-5 h-5 text-[#e84393]" />
                   <div className="text-end">
-                    <div className="text-sm font-medium text-[hsl(210,40%,98%)]">{"הודעה בפייסבוק"}</div>
-                    <div className="text-xs text-[hsl(215,20%,45%)]">{"DM פתוח - כתוב לי"}</div>
+                    <div className="text-sm font-medium text-[hsl(210,40%,98%)]">{t("fbTitle")}</div>
+                    <div className="text-xs text-[hsl(215,20%,45%)]">{t("fbSubtitle")}</div>
                   </div>
                 </a>
               </div>
 
               <div className="flex items-center gap-3 font-mono text-sm pt-2">
                 <span className="text-[#27ca40]">{">"}</span>
-                <span className="text-[hsl(215,20%,50%)]">{"זמן תגובה ממוצע:"}</span>
-                <span className="text-[#06d6e0]">{"< 24 שעות"}</span>
+                <span className="text-[hsl(215,20%,50%)]">{t("avgResponseLabel")}</span>
+                <span className="text-[#06d6e0]">{t("avgResponseValue")}</span>
               </div>
             </div>
           </div>
@@ -114,8 +120,8 @@ export function Contact() {
             >
               <svg className="w-5 h-5 text-[#4f46e5]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" /><line x1="16" y1="2" x2="16" y2="6" /><line x1="8" y1="2" x2="8" y2="6" /><line x1="3" y1="10" x2="21" y2="10" /></svg>
               <div className="text-end">
-                <div className="text-sm font-medium text-[hsl(210,40%,98%)]">{"קביעת שיחת היכרות (חינם)"}</div>
-                <div className="text-xs text-[#4f46e5]">{"30 דקות - נדבר על הפרויקט שלך"}</div>
+                <div className="text-sm font-medium text-[hsl(210,40%,98%)]">{t("calendlyTitle")}</div>
+                <div className="text-xs text-[#4f46e5]">{t("calendlySubtitle")}</div>
               </div>
             </a>
           </div>
@@ -132,7 +138,7 @@ export function Contact() {
                 className="group relative inline-flex items-center gap-3 px-10 py-5 rounded-xl text-lg font-bold text-[hsl(222,47%,4%)] bg-gradient-to-l from-[#27ca40] to-[#22a838] hover:shadow-[0_0_50px_hsl(135,65%,45%,0.4)] transition-all duration-500"
               >
                 <Phone className="w-5 h-5" />
-                {"שלח הודעה בוואטסאפ"}
+                {t("ctaWhatsapp")}
               </a>
             </Magnetic>
             <Magnetic strength={0.2}>
@@ -141,7 +147,7 @@ export function Contact() {
                 className="group relative inline-flex items-center gap-3 px-8 py-4 rounded-xl text-base font-medium text-[hsl(210,40%,98%)] border border-[hsl(215,28%,20%)] bg-[hsl(222,47%,7%)] hover:border-[#06d6e0]/40 transition-all duration-500"
               >
                 <Send className="w-4 h-4 text-[#06d6e0]" />
-                {"שלח מייל"}
+                {t("ctaEmail")}
               </a>
             </Magnetic>
           </div>

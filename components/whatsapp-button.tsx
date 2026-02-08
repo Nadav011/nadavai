@@ -1,9 +1,11 @@
 "use client"
 
+import { useTranslations } from "next-intl"
 import { useState, useEffect } from "react"
 import { Phone, X } from "lucide-react"
 
 export function WhatsAppButton() {
+  const t = useTranslations("whatsapp")
   const [visible, setVisible] = useState(false)
   const [tooltip, setTooltip] = useState(true)
 
@@ -26,11 +28,11 @@ export function WhatsAppButton() {
       {tooltip && (
         <div className="relative animate-fade-up">
           <div className="relative flex items-center gap-2 px-4 py-2.5 rounded-xl bg-[hsl(222,47%,7%)] border border-[hsl(215,28%,16%)] shadow-lg">
-            <span className="text-sm text-[hsl(210,40%,98%)]">{"צריך עזרה? דבר איתי"}</span>
+            <span className="text-sm text-[hsl(210,40%,98%)]">{t("tooltip")}</span>
             <button
               onClick={() => setTooltip(false)}
               className="p-0.5 rounded hover:bg-[hsl(215,28%,14%)] transition-colors"
-              aria-label="סגור"
+              aria-label={t("close")}
             >
               <X className="w-3 h-3 text-[hsl(215,20%,45%)]" />
             </button>

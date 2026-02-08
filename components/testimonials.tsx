@@ -1,40 +1,45 @@
 "use client"
 
 import { Quote, Star } from "lucide-react"
+import { useTranslations } from "next-intl"
 import { ScrollReveal } from "./scroll-reveal"
 import { SectionHeader } from "./section-header"
 
-const testimonials = [
-  {
-    name: "בעל עסק",
-    role: "לקוח מערכת ניהול",
-    text: "נדב בנה לי מערכת ניהול מלאה ב-Enterprise level - 149 עמודים, 111 טבלאות. מה שצוות של 5 אנשים היה עושה בחודשים, הוא סיפק בימים. מרשים.",
-    rating: 5,
-  },
-  {
-    name: "מנהל טכנולוגיה",
-    role: "סטארטאפ",
-    text: "הוספנו אפליקציית PWA עם Offline-first מלא - סנכרון חכם, IndexedDB, הכל עובד מושלם גם בלי חיבור. 8+ אפליקציות production מדברות בעד עצמן.",
-    rating: 5,
-  },
-  {
-    name: "יזם",
-    role: "פרויקט AI",
-    text: "80 AI Skills, 38+ סוכנים, מנוע ביקורת קוד עם 579 gates - רמת ההבנה של נדב ב-AI היא מדרגה אחרת. הפרויקט שלנו עלה לאוויר תוך שבוע.",
-    rating: 5,
-  },
-]
+
 
 export function Testimonials() {
+  const t = useTranslations("testimonials")
+
+  const testimonials = [
+    {
+      name: t("t1Name"),
+      role: t("t1Role"),
+      text: t("t1Text"),
+      rating: 5,
+    },
+    {
+      name: t("t2Name"),
+      role: t("t2Role"),
+      text: t("t2Text"),
+      rating: 5,
+    },
+    {
+      name: t("t3Name"),
+      role: t("t3Role"),
+      text: t("t3Text"),
+      rating: 5,
+    },
+  ]
+
   return (
     <section id="testimonials" aria-label="המלצות" className="relative py-24 md:py-32 bg-[hsl(222,47%,3%)]">
       <div className="absolute inset-0 grid-bg opacity-15" />
       <div className="relative max-w-7xl mx-auto px-4 md:px-8">
         <SectionHeader
-          badge="testimonials"
-          title="מה אומרים"
-          highlight="עליי"
-          description="לקוחות שבנו איתי - ולא הפסיקו לספר."
+          badge={t("badge")}
+          title={t("title")}
+          highlight={t("highlight")}
+          description={t("description")}
         />
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">

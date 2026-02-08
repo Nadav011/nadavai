@@ -1,37 +1,38 @@
 "use client"
 
 import { Flame, Calendar, ArrowLeft } from "lucide-react"
+import { useTranslations } from "next-intl"
 import { ScrollReveal } from "./scroll-reveal"
 import { SectionHeader } from "./section-header"
 import { CodeCard } from "./code-card"
 
 const news = [
   {
-    title: "80 Skills ל-Claude Code",
+    title: "n1Title",
     filename: "skills-milestone",
     lang: "ts",
     date: "2026-02",
-    description: "הגענו ל-80 סקילים מותאמים אישית ל-Claude Code: 20 APEX (Web), 25 Flutter (Mobile), 10 Utility, 5 Agent Skills, ועוד.",
+    description: "n1Desc",
     trending: true,
     badge: "milestone",
     badgeColor: "pink" as const,
   },
   {
-    title: "APEX Engine - 579 Gates",
+    title: "n2Title",
     filename: "apex-engine",
     lang: "ts",
     date: "2026-01",
-    description: "מנוע ביקורת קוד עם 579 gates ומטריצה ויזואלית 10x7. Auto-healing, זיהוי טכנולוגיה אוטומטי, ודוחות מפורטים.",
+    description: "n2Desc",
     trending: true,
     badge: "engine",
     badgeColor: "pink" as const,
   },
   {
-    title: "Singularity Forge - Open Source",
+    title: "n3Title",
     filename: "singularity-forge",
     lang: "ts",
     date: "2026-01",
-    description: "שחררתי את Singularity Forge - מנוע לבניית skills עם 70-Gate Matrix, auto-heal, ו-research workflows. פתוח לכולם.",
+    description: "n3Desc",
     trending: false,
     badge: "open source",
     badgeColor: "cyan" as const,
@@ -39,22 +40,24 @@ const news = [
 ]
 
 export function News() {
+  const t = useTranslations("news")
+
   return (
     <section id="news" aria-label="חדשות טכנולוגיה" className="relative py-24 md:py-32">
       <div className="absolute inset-0 dot-grid-subtle opacity-[0.12] pointer-events-none" aria-hidden="true" />
       <div className="max-w-7xl mx-auto px-4 md:px-8">
         <SectionHeader
-          badge="news"
-          title="חדשות"
-          highlight="ועדכונים"
-          description="מה חדש בעולם ה-AI, כלים חדשים, עדכונים חשובים, ובמה אני משתמש עכשיו."
+          badge={t("badge")}
+          title={t("title")}
+          highlight={t("highlight")}
+          description={t("description")}
         />
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {news.map((item, i) => (
             <ScrollReveal key={i} delay={i * 100} direction={i === 1 ? "up" : i === 0 ? "right" : "left"}>
               <CodeCard
-                title={item.title}
+                title={t(item.title)}
                 filename={item.filename}
                 lang={item.lang}
                 badge={item.badge}
@@ -64,7 +67,7 @@ export function News() {
                 <div className="space-y-3">
                   <div className="flex items-start gap-3">
                     <span className="text-xs font-mono text-[hsl(215,20%,35%)] select-none leading-5">02</span>
-                    <p className="text-sm text-[hsl(215,20%,60%)] leading-relaxed">{item.description}</p>
+                    <p className="text-sm text-[hsl(215,20%,60%)] leading-relaxed">{t(item.description)}</p>
                   </div>
                   <div className="flex items-center justify-between pt-3 border-t border-[hsl(215,28%,14%)]">
                     <div className="flex items-center gap-1.5 text-[hsl(215,20%,45%)]">

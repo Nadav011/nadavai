@@ -2,90 +2,110 @@
 
 import { useState } from "react"
 import { Play, Clock, Eye, ExternalLink, ArrowLeft } from "lucide-react"
+import { useTranslations } from "next-intl"
 import { ScrollReveal } from "./scroll-reveal"
 import { SectionHeader } from "./section-header"
 
-const categories = ["הכל", "AI", "פיתוח", "הדגמות", "טיפים"]
 
-const videos = [
-  {
-    title: "איך בניתי אפליקציית Enterprise עם AI בשבוע",
-    description: "הדגמה חיה של בניית Mexicani - מערכת ניהול זכיינות עם 149 עמודים ו-111 טבלאות. הכל עם Claude Code.",
-    thumbnail: null,
-    category: "הדגמות",
-    duration: "18:42",
-    views: "2.1K",
-    date: "2026-01",
-    color: "#06d6e0",
-  },
-  {
-    title: "Claude Code - המדריך המלא למתחילים",
-    description: "מהתקנה ועד production. איך משתמשים ב-Claude Code בצורה הכי יעילה, מה ה-Skills, ואיך לכתוב prompts שעובדים.",
-    thumbnail: null,
-    category: "AI",
-    duration: "24:15",
-    views: "5.3K",
-    date: "2026-01",
-    color: "#e84393",
-  },
-  {
-    title: "Next.js 16 - מה חדש ולמה זה משנה",
-    description: "Turbopack, React 19.2, View Transitions, Cache Components. ניתוח מעמיק של כל הפיצ'רים החדשים.",
-    thumbnail: null,
-    category: "פיתוח",
-    duration: "15:30",
-    views: "3.8K",
-    date: "2025-12",
-    color: "#4f46e5",
-  },
-  {
-    title: "Supabase RLS - אבטחה נכונה ב-5 דקות",
-    description: "Row Level Security הוא חובה. מראה בדיוק איך לכתוב policies שמגנות על הנתונים שלכם.",
-    thumbnail: null,
-    category: "טיפים",
-    duration: "8:45",
-    views: "1.7K",
-    date: "2025-12",
-    color: "#06d6e0",
-  },
-  {
-    title: "APEX Engine - מנוע ביקורת קוד עם 579 Gates",
-    description: "הדגמה של המערכת שבניתי לבדיקת קוד אוטומטית. TypeScript + Bun, מטריצה ויזואלית 10x7, auto-healing.",
-    thumbnail: null,
-    category: "הדגמות",
-    duration: "22:10",
-    views: "4.2K",
-    date: "2025-11",
-    color: "#e84393",
-  },
-  {
-    title: "PWA Offline-First - איך בניתי אפליקציה שעובדת בלי אינטרנט",
-    description: "Service Workers, IndexedDB, Background Sync - המדריך המלא לבניית אפליקציות שעובדות תמיד.",
-    thumbnail: null,
-    category: "פיתוח",
-    duration: "19:55",
-    views: "2.9K",
-    date: "2025-11",
-    color: "#4f46e5",
-  },
-]
+
+
 
 export function YouTube() {
-  const [activeCategory, setActiveCategory] = useState("הכל")
+  const t = useTranslations("youtube")
+  const [activeCategory, setActiveCategory] = useState("all")
 
-  const filtered = activeCategory === "הכל"
+  const categories = [
+    { key: "all", display: t("catAll") },
+    { key: "AI", display: t("catAI") },
+    { key: "dev", display: t("catDev") },
+    { key: "demos", display: t("catDemos") },
+    { key: "tips", display: t("catTips") },
+  ]
+
+  const videos = [
+    {
+      title: t("v1Title"),
+      description: t("v1Desc"),
+      thumbnail: null,
+      category: "הדגמות",
+      duration: "18:42",
+      views: "2.1K",
+      date: "2026-01",
+      color: "#06d6e0",
+    },
+    {
+      title: t("v2Title"),
+      description: t("v2Desc"),
+      thumbnail: null,
+      category: "AI",
+      duration: "24:15",
+      views: "5.3K",
+      date: "2026-01",
+      color: "#e84393",
+    },
+    {
+      title: t("v3Title"),
+      description: t("v3Desc"),
+      thumbnail: null,
+      category: "פיתוח",
+      duration: "15:30",
+      views: "3.8K",
+      date: "2025-12",
+      color: "#4f46e5",
+    },
+    {
+      title: t("v4Title"),
+      description: t("v4Desc"),
+      thumbnail: null,
+      category: "טיפים",
+      duration: "8:45",
+      views: "1.7K",
+      date: "2025-12",
+      color: "#06d6e0",
+    },
+    {
+      title: t("v5Title"),
+      description: t("v5Desc"),
+      thumbnail: null,
+      category: "הדגמות",
+      duration: "22:10",
+      views: "4.2K",
+      date: "2025-11",
+      color: "#e84393",
+    },
+    {
+      title: t("v6Title"),
+      description: t("v6Desc"),
+      thumbnail: null,
+      category: "פיתוח",
+      duration: "19:55",
+      views: "2.9K",
+      date: "2025-11",
+      color: "#4f46e5",
+    },
+  ]
+
+  const filtered = activeCategory === "all"
     ? videos
-    : videos.filter((v) => v.category === activeCategory)
+    : videos.filter((v) => {
+        const catMap: Record<string, string> = {
+          "AI": "AI",
+          "פיתוח": "dev",
+          "הדגמות": "demos",
+          "טיפים": "tips",
+        }
+        return catMap[v.category] === activeCategory
+      })
 
   return (
     <section id="youtube" aria-label="סרטוני YouTube" className="relative py-24 md:py-32 bg-[hsl(222,47%,3%)]">
       <div className="absolute inset-0 dot-grid-subtle opacity-30" />
       <div className="relative max-w-7xl mx-auto px-4 md:px-8">
         <SectionHeader
-          badge="youtube"
-          title="הערוץ"
-          highlight="שלי"
-          description="מדריכים, הדגמות, וטיפים בעברית - על פיתוח עם AI. הירשמו לערוץ."
+          badge={t("badge")}
+          title={t("title")}
+          highlight={t("highlight")}
+          description={t("description")}
         />
 
         {/* Category filter */}
@@ -93,15 +113,15 @@ export function YouTube() {
           <div className="flex flex-wrap items-center justify-center gap-2 mb-12">
             {categories.map((cat) => (
               <button
-                key={cat}
-                onClick={() => setActiveCategory(cat)}
+                key={cat.key}
+                onClick={() => setActiveCategory(cat.key)}
                 className={`px-4 py-2 rounded-lg text-sm font-mono transition-all duration-300 min-h-11 ${
-                  activeCategory === cat
+                  activeCategory === cat.key
                     ? "bg-[#e84393]/15 text-[#e84393] border border-[#e84393]/30"
                     : "bg-[hsl(222,47%,6%)] text-[hsl(215,20%,50%)] border border-[hsl(215,28%,16%)] hover:border-[hsl(215,28%,22%)] hover:text-[hsl(215,20%,65%)]"
                 }`}
               >
-                {cat}
+                {cat.display}
               </button>
             ))}
           </div>
@@ -196,7 +216,7 @@ export function YouTube() {
               <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
                 <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
               </svg>
-              {"הירשמו לערוץ"}
+              {t("subscribe")}
               <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
             </a>
           </div>

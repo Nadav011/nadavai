@@ -1,37 +1,11 @@
 "use client"
 
+import { useTranslations } from "next-intl"
 import { useState } from "react"
 import { Zap, Send } from "lucide-react"
 
-const footerLinks = [
-  {
-    title: "ניווט",
-    links: [
-      { label: "פרויקטים", href: "#projects" },
-      { label: "שירותים", href: "#services" },
-      { label: "מדריכים", href: "#guides" },
-      { label: "משאבים", href: "#resources" },
-    ],
-  },
-  {
-    title: "תוכן",
-    links: [
-      { label: "חדשות", href: "#news" },
-      { label: "מדריכי וידאו", href: "#guides" },
-      { label: "ריפוזיטוריז", href: "#resources" },
-      { label: "צור קשר", href: "#contact" },
-    ],
-  },
-  {
-    title: "סושיאל",
-    links: [
-      { label: "GitHub", href: "https://github.com/Nadav011" },
-      { label: "Facebook", href: "https://www.facebook.com/nadav.cohen.167" },
-    ],
-  },
-]
-
 function NewsletterForm() {
+  const t = useTranslations("footer")
   const [email, setEmail] = useState("")
   const [status, setStatus] = useState<"idle" | "success" | "error">("idle")
 
@@ -60,10 +34,10 @@ function NewsletterForm() {
       <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
         <div>
           <h4 className="text-sm font-semibold text-[hsl(210,40%,98%)] mb-1">
-            {"הישארו מעודכנים"}
+            {t("newsletterTitle")}
           </h4>
           <p className="text-xs text-[hsl(215,20%,45%)]">
-            {"טיפים, מדריכים וחדשות AI ישירות למייל"}
+            {t("newsletterDesc")}
           </p>
         </div>
         <form onSubmit={handleSubmit} className="flex items-center gap-2 w-full md:w-auto">
@@ -83,21 +57,51 @@ function NewsletterForm() {
             className="h-11 px-5 rounded-lg bg-gradient-to-l from-[#06d6e0] to-[#0abfca] text-[hsl(222,47%,4%)] text-sm font-bold flex items-center gap-2 hover:shadow-[0_0_20px_hsl(187,92%,55%,0.3)] transition-shadow"
           >
             <Send className="w-3.5 h-3.5" />
-            <span>{"הרשמה"}</span>
+            <span>{t("newsletterBtn")}</span>
           </button>
         </form>
       </div>
       {status === "success" && (
-        <p className="mt-3 text-xs text-[#06d6e0]">{"תודה! נוסף/ה בהצלחה לרשימת התפוצה"}</p>
+        <p className="mt-3 text-xs text-[#06d6e0]">{t("newsletterSuccess")}</p>
       )}
       {status === "error" && (
-        <p className="mt-3 text-xs text-[#e84393]">{"שגיאה, נסו שוב מאוחר יותר"}</p>
+        <p className="mt-3 text-xs text-[#e84393]">{t("newsletterError")}</p>
       )}
     </div>
   )
 }
 
 export function Footer() {
+  const t = useTranslations("footer")
+
+  const footerLinks = [
+    {
+      title: t("navTitle"),
+      links: [
+        { label: t("navProjects"), href: "#projects" },
+        { label: t("navServices"), href: "#services" },
+        { label: t("navGuides"), href: "#guides" },
+        { label: t("navResources"), href: "#resources" },
+      ],
+    },
+    {
+      title: t("contentTitle"),
+      links: [
+        { label: t("contentNews"), href: "#news" },
+        { label: t("contentVideos"), href: "#guides" },
+        { label: t("contentRepos"), href: "#resources" },
+        { label: t("contentContact"), href: "#contact" },
+      ],
+    },
+    {
+      title: t("socialTitle"),
+      links: [
+        { label: "GitHub", href: "https://github.com/Nadav011" },
+        { label: "Facebook", href: "https://www.facebook.com/nadav.cohen.167" },
+      ],
+    },
+  ]
+
   return (
     <footer className="relative border-t border-[hsl(215,28%,16%)] bg-[hsl(222,47%,3%)]">
       <div className="max-w-7xl mx-auto px-4 md:px-8">
@@ -114,11 +118,11 @@ export function Footer() {
               <span className="text-lg font-bold text-[hsl(210,40%,98%)]">NADAV<span className="text-gradient">.AI</span></span>
             </a>
             <p className="text-sm text-[hsl(215,20%,45%)] leading-relaxed mb-4">
-              {"בונה את העתיד עם AI. כל פרויקט, כל שורת קוד, כל פיקסל - מופעל על ידי בינה מלאכותית."}
+              {t("brand")}
             </p>
             <div className="flex items-center gap-2">
               <div className="w-1.5 h-1.5 rounded-full bg-[#27ca40] animate-pulse" />
-              <span className="text-xs font-mono text-[hsl(215,20%,40%)]">{"זמין לפרויקטים"}</span>
+              <span className="text-xs font-mono text-[hsl(215,20%,40%)]">{t("available")}</span>
             </div>
           </div>
 

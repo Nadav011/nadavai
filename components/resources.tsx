@@ -1,6 +1,7 @@
 "use client"
 
 import { ExternalLink, FileCode2 } from "lucide-react"
+import { useTranslations } from "next-intl"
 import { ScrollReveal } from "./scroll-reveal"
 import { SectionHeader } from "./section-header"
 import { CodeCard } from "./code-card"
@@ -10,7 +11,7 @@ const repos = [
     title: "Singularity Forge",
     filename: "skillbuilder",
     lang: "ts",
-    description: "מנוע לבניית skills ל-Claude Code עם מטריצת 70-Gate, auto-heal, ו-research-first workflows. Web + Mobile.",
+    description: "r1Desc",
     github: "https://github.com/Nadav011/skillbuilder",
     badge: "open source",
     badgeColor: "cyan" as const,
@@ -19,7 +20,7 @@ const repos = [
     title: "VibeCoder",
     filename: "vibecoder",
     lang: "tsx",
-    description: "אפליקציית ניהול פרויקטים ל-vibe coders. React Native, Expo, 14 OMEGA Skills, Glassmorphism UI.",
+    description: "r2Desc",
     github: "https://github.com/Nadav011/vibecoder",
     badge: "open source",
     badgeColor: "green" as const,
@@ -28,7 +29,7 @@ const repos = [
     title: "80 Claude Code Skills",
     filename: "claude-skills",
     lang: "ts",
-    description: "מערכת של 80 סקילים: 20 APEX (Web), 25 Flutter (Mobile), 10 Utility, 5 Agent Skills. אוטומציה מלאה לפיתוח.",
+    description: "r3Desc",
     github: "https://github.com/Nadav011",
     badge: "ecosystem",
     badgeColor: "pink" as const,
@@ -37,7 +38,7 @@ const repos = [
     title: "AI Agent System",
     filename: "ai-agent-system",
     lang: "py",
-    description: "מערכת סוכני AI עם CrewAI, Ollama (מודלים לוקליים), ChromaDB לזיכרון, ו-Docker. AGI מקומי על המחשב שלך.",
+    description: "r4Desc",
     github: "https://github.com/Nadav011",
     badge: "AI/AGI",
     badgeColor: "pink" as const,
@@ -46,7 +47,7 @@ const repos = [
     title: "APEX Engine",
     filename: "apex-engine",
     lang: "ts",
-    description: "מנוע ביקורת קוד עם 579 gates, auto-healing, זיהוי טכנולוגיה אוטומטי, ומטריצה ויזואלית 10x7.",
+    description: "r5Desc",
     github: "https://github.com/Nadav011",
     badge: "engine",
     badgeColor: "yellow" as const,
@@ -54,15 +55,17 @@ const repos = [
 ]
 
 export function Resources() {
+  const t = useTranslations("resources")
+
   return (
     <section id="resources" aria-label="משאבים חינמיים" className="relative py-24 md:py-32 bg-[hsl(222,47%,3%)]">
       <div className="absolute inset-0 grid-bg opacity-15" />
       <div className="relative max-w-7xl mx-auto px-4 md:px-8">
         <SectionHeader
-          badge="open source"
-          title="משאבים"
-          highlight="חינמיים"
-          description="ריפוזיטוריז, templates, וכלים שאני נותן במתנה. קח, השתמש, תהנה."
+          badge={t("badge")}
+          title={t("title")}
+          highlight={t("highlight")}
+          description={t("description")}
         />
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -79,7 +82,7 @@ export function Resources() {
                 <div className="space-y-3">
                   <div className="flex items-start gap-3">
                     <span className="text-xs font-mono text-[hsl(215,20%,35%)] select-none leading-5">02</span>
-                    <p className="text-sm text-[hsl(215,20%,60%)] leading-relaxed">{repo.description}</p>
+                    <p className="text-sm text-[hsl(215,20%,60%)] leading-relaxed">{t(repo.description)}</p>
                   </div>
 
                   {/* Terminal-style filename */}

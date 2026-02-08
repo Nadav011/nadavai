@@ -1,6 +1,7 @@
 "use client"
 
-import { useEffect, useRef, useState, type ReactNode } from "react"
+import { type ReactNode } from "react"
+import { motion } from "motion/react"
 
 interface ScrollRevealProps {
   children: ReactNode
@@ -9,42 +10,27 @@ interface ScrollRevealProps {
   direction?: "up" | "down" | "left" | "right"
 }
 
+const directionVariants = {
+  up: { y: 40 },
+  down: { y: -40 },
+  left: { x: 40 },
+  right: { x: -40 },
+}
+
 export function ScrollReveal({ children, className = "", delay = 0, direction = "up" }: ScrollRevealProps) {
-  const ref = useRef<HTMLDivElement>(null)
-  const [isVisible, setIsVisible] = useState(false)
-
-  const transforms: Record<string, string> = {
-    up: "translateY(40px)",
-    down: "translateY(-40px)",
-    left: "translateX(40px)",
-    right: "translateX(-40px)",
-  }
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsVisible(true)
-          observer.unobserve(entry.target)
-        }
-      },
-      { threshold: 0.1, rootMargin: "0px 0px -50px 0px" }
-    )
-    if (ref.current) observer.observe(ref.current)
-    return () => observer.disconnect()
-  }, [])
-
   return (
-    <div
-      ref={ref}
+    <motion.div
       className={className}
-      style={{
-        opacity: isVisible ? 1 : 0,
-        transform: isVisible ? "translate(0)" : transforms[direction],
-        transition: `opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1) ${delay}ms, transform 0.7s cubic-bezier(0.16, 1, 0.3, 1) ${delay}ms`,
+      initial={{ opacity: 0, ...directionVariants[direction] }}
+      whileInView={{ opacity: 1, x: 0, y: 0 }}
+      viewport={{ once: true, amount: 0.1, margin: "0px 0px -50px 0px" }}
+      transition={{
+        duration: 0.7,
+        delay: delay / 1000,
+        ease: [0.16, 1, 0.3, 1],
       }}
     >
       {children}
-    </div>
+    </motion.div>
   )
 }
