@@ -89,7 +89,11 @@ export function Contact() {
           {t("description")}
         </p>
 
-        <div ref={terminalRef} className="relative mx-auto max-w-2xl rounded-xl overflow-hidden border border-[hsl(215,28%,16%)] bg-[hsl(222,47%,5%)]">
+        <div ref={terminalRef} className="relative mx-auto max-w-2xl rounded-xl overflow-hidden border border-[hsl(215,28%,16%)] bg-[hsl(222,47%,5%)] group/terminal">
+          {/* Terminal scan line */}
+          <div className="absolute inset-0 pointer-events-none overflow-hidden rounded-xl z-10">
+            <div className="w-full h-[1px] bg-gradient-to-r from-transparent via-[#06d6e0]/20 to-transparent" style={{ animation: "scan-line 6s linear infinite" }} />
+          </div>
           <div className="flex items-center justify-between px-4 py-3 border-b border-[hsl(215,28%,16%)] bg-[hsl(222,47%,6%)]">
             <div className="flex items-center gap-1.5">
               <div className="w-3 h-3 rounded-full bg-[#ff5f56]" />

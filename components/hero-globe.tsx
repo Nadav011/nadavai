@@ -163,7 +163,7 @@ export function HeroGlobe() {
           const dist = Math.sqrt(dx * dx + dy * dy)
 
           if (dist < LINK_DISTANCE) {
-            const opacity = (1 - dist / LINK_DISTANCE) * 0.15
+            const opacity = (1 - dist / LINK_DISTANCE) * 0.25
 
             // Brighter near mouse
             let mouseBright = 0
@@ -176,7 +176,7 @@ export function HeroGlobe() {
               const md2 = Math.sqrt(mx2 * mx2 + my2 * my2)
               const minMd = Math.min(md1, md2)
               if (minMd < MOUSE_RADIUS * 1.5) {
-                mouseBright = (1 - minMd / (MOUSE_RADIUS * 1.5)) * 0.25
+                mouseBright = (1 - minMd / (MOUSE_RADIUS * 1.5)) * 0.4
               }
             }
 
@@ -184,7 +184,7 @@ export function HeroGlobe() {
             ctx.moveTo(particles[i].x, particles[i].y)
             ctx.lineTo(particles[j].x, particles[j].y)
             ctx.strokeStyle = `rgba(6, 214, 224, ${opacity + mouseBright})`
-            ctx.lineWidth = 0.5
+            ctx.lineWidth = 0.8
             ctx.stroke()
           }
         }
@@ -231,9 +231,9 @@ export function HeroGlobe() {
       }
 
       // Central subtle glow - gives depth, like a light source in center
-      const centerGlow = ctx.createRadialGradient(cw * 0.5, ch * 0.45, 0, cw * 0.5, ch * 0.45, cw * 0.35)
-      centerGlow.addColorStop(0, "rgba(6, 214, 224, 0.015)")
-      centerGlow.addColorStop(0.5, "rgba(6, 214, 224, 0.005)")
+      const centerGlow = ctx.createRadialGradient(cw * 0.5, ch * 0.45, 0, cw * 0.5, ch * 0.45, cw * 0.4)
+      centerGlow.addColorStop(0, "rgba(6, 214, 224, 0.04)")
+      centerGlow.addColorStop(0.4, "rgba(6, 214, 224, 0.015)")
       centerGlow.addColorStop(1, "rgba(0, 0, 0, 0)")
       ctx.fillStyle = centerGlow
       ctx.fillRect(0, 0, cw, ch)

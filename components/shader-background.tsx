@@ -121,35 +121,38 @@ void main() {
   c = mix(c, midCyan, wisps * 0.25);
   
   // Energy veins - bright cyan channels
-  c += brightCyan * veins * 0.12;
+  c += brightCyan * veins * 0.18;
   
   // Aurora bands
-  c = mix(c, darkTeal * 1.5, aurora * smoothstep(-0.2, 0.3, base));
+  c = mix(c, darkTeal * 1.8, aurora * smoothstep(-0.2, 0.3, base));
   
   // Bright peaks where noise aligns
-  float peak = smoothstep(0.45, 0.85, base * detail + veins * 0.5);
-  c += brightCyan * peak * 0.08;
+  float peak = smoothstep(0.4, 0.8, base * detail + veins * 0.5);
+  c += brightCyan * peak * 0.12;
   
   // Rare ultra-bright sparks
-  float spark = smoothstep(0.7, 0.95, base * detail * 1.5);
-  c += whiteCyan * spark * 0.04;
+  float spark = smoothstep(0.65, 0.9, base * detail * 1.5);
+  c += whiteCyan * spark * 0.07;
   
-  // Mouse reactive glow
-  c += brightCyan * mInfluence * 0.06;
-  c += midCyan * smoothstep(0.3, 0.0, mDist) * 0.03;
+  // Breathing pulse - entire shader gently breathes
+  float breathe = 0.85 + 0.15 * sin(u_time * 0.4);
+  
+  // Mouse reactive glow - stronger
+  c += brightCyan * mInfluence * 0.10;
+  c += whiteCyan * smoothstep(0.2, 0.0, mDist) * 0.04;
   
   // Screen blend for luminosity
-  c = 1.0 - (1.0 - c) * (1.0 - brightCyan * smoothstep(0.3, 0.85, base + detail * 0.4) * 0.05);
+  c = 1.0 - (1.0 - c) * (1.0 - brightCyan * smoothstep(0.3, 0.85, base + detail * 0.4) * 0.07);
   
-  // Vignette
-  float vig = 1.0 - smoothstep(0.3, 1.4, length((uv - 0.5) * 1.8));
+  // Vignette - less aggressive
+  float vig = 1.0 - smoothstep(0.4, 1.5, length((uv - 0.5) * 1.6));
   c *= vig;
   
   // Edge fade
-  c *= smoothstep(0.0, 0.2, uv.y * 0.5 + 0.1);
+  c *= smoothstep(0.0, 0.15, uv.y * 0.5 + 0.1);
   
-  // Overall intensity
-  c *= 0.38;
+  // Overall intensity with breathing
+  c *= 0.48 * breathe;
   
   fragColor = vec4(c, 1.0);
 }`
@@ -186,8 +189,9 @@ export function ShaderBackground() {
     const el = ref.current
     if (!el) return
 
-    // CSS fallback on mobile
-    if (window.matchMedia("(max-width: 768px)").matches) return useFallback(el)
+    // CSS fallback only on very small/old devices
+    const mobile = window.matchMedia("(max-width: 768px)").matches
+    if (mobile && !window.WebGL2RenderingContext) return useFallback(el)
 
     const canvas = document.createElement("canvas")
     canvas.style.cssText = "width:100%;height:100%"
@@ -225,7 +229,7 @@ export function ShaderBackground() {
     let mx = 0.5, my = 0.5, tx = 0.5, ty = 0.5
 
     function resize() {
-      const dpr = Math.min(window.devicePixelRatio, 1.5)
+      const dpr = Math.min(window.devicePixelRatio, mobile ? 1 : 1.5)
       canvas.width = window.innerWidth * dpr
       canvas.height = window.innerHeight * dpr
       gl.viewport(0, 0, canvas.width, canvas.height)

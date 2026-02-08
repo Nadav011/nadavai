@@ -23,10 +23,10 @@ export function AmbientOrbs() {
       id: i,
       x: Math.random() * 100,
       y: Math.random() * 100,
-      size: isMobile ? 150 + Math.random() * 200 : 200 + Math.random() * 400,
-      opacity: 0.015 + Math.random() * 0.025,
-      duration: 15 + Math.random() * 25,
-      delay: Math.random() * -20,
+      size: isMobile ? 180 + Math.random() * 250 : 250 + Math.random() * 450,
+      opacity: 0.025 + Math.random() * 0.04,
+      duration: 12 + Math.random() * 20,
+      delay: Math.random() * -15,
     }))
     setOrbs(generated)
   }, [])
