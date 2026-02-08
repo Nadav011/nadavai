@@ -4,15 +4,12 @@ import { useTranslations } from "next-intl"
 import { Send, Mail, MessageSquare, Zap, Phone } from "lucide-react"
 import { ScrollReveal } from "./scroll-reveal"
 import { Magnetic } from "./magnetic"
-import { BackgroundBeams } from "./background-beams"
 
 export function Contact() {
   const t = useTranslations("contact")
 
   return (
     <section id="contact" aria-label="צור קשר" className="relative py-24 md:py-32 overflow-hidden">
-      {/* Background beams */}
-      <BackgroundBeams />
       {/* Background glow */}
       <div className="absolute top-0 w-[800px] h-[400px] bg-[#06d6e0]/5 rounded-full blur-[120px]" style={{ left: "50%", transform: "translateX(-50%)" }} />
 

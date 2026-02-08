@@ -2,6 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
+@property --shader-angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+
 @layer base {
   :root {
     --background: 222 47% 4%;
@@ -53,10 +59,10 @@
   }
   body {
     @apply bg-background text-foreground;
-  }
-  ::selection {
-    background: hsl(187 92% 55% / 0.3);
-    color: hsl(210 40% 98%);
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+    -webkit-touch-callout: none;
   }
   ::-webkit-scrollbar {
     width: 6px;
@@ -194,6 +200,10 @@
 @keyframes matrix-fall {
   0% { transform: translateY(-100%); opacity: 1; }
   100% { transform: translateY(100vh); opacity: 0; }
+}
+
+@keyframes shader-rotate {
+  to { --shader-angle: 360deg; }
 }
 
 /* =================== UTILITY CLASSES =================== */
@@ -363,6 +373,19 @@
   .section-divider {
     height: 1px;
     background: linear-gradient(to left, transparent, hsl(215 28% 20% / 0.5), hsl(187 92% 55% / 0.2), hsl(215 28% 20% / 0.5), transparent);
+  }
+
+  .shader-fallback {
+    background: conic-gradient(
+      from var(--shader-angle),
+      hsl(187 92% 55% / 0.08),
+      hsl(330 85% 60% / 0.06),
+      hsl(240 70% 60% / 0.05),
+      hsl(222 47% 4%),
+      hsl(187 92% 55% / 0.08)
+    );
+    animation: shader-rotate 20s linear infinite;
+    filter: blur(80px);
   }
 
   .holographic {
