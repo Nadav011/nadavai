@@ -1,7 +1,18 @@
 "use client"
 
-import { ReactLenis } from "lenis/react"
+import { ReactLenis, useLenis } from "lenis/react"
 import type { ReactNode } from "react"
+import { gsap } from "gsap"
+import { ScrollTrigger } from "gsap/ScrollTrigger"
+
+gsap.registerPlugin(ScrollTrigger)
+
+function LenisGSAPSync() {
+  useLenis(() => {
+    ScrollTrigger.update()
+  })
+  return null
+}
 
 export function SmoothScroll({ children }: { children: ReactNode }) {
   return (
@@ -13,6 +24,7 @@ export function SmoothScroll({ children }: { children: ReactNode }) {
         smoothWheel: true,
       }}
     >
+      <LenisGSAPSync />
       {children}
     </ReactLenis>
   )

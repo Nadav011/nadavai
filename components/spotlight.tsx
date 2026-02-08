@@ -1,7 +1,6 @@
 "use client"
 
-import { useRef, useState, useCallback } from "react"
-import { motion } from "motion/react"
+import { useRef, useCallback } from "react"
 
 interface SpotlightProps {
   className?: string
@@ -10,29 +9,40 @@ interface SpotlightProps {
 
 export function Spotlight({ className = "", fill = "#06d6e0" }: SpotlightProps) {
   const containerRef = useRef<HTMLDivElement>(null)
-  const [position, setPosition] = useState({ x: 0, y: 0 })
-  const [opacity, setOpacity] = useState(0)
+  const gradientRef = useRef<HTMLDivElement>(null)
 
   const handleMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
-    if (!containerRef.current) return
+    if (!containerRef.current || !gradientRef.current) return
     const rect = containerRef.current.getBoundingClientRect()
-    setPosition({ x: e.clientX - rect.left, y: e.clientY - rect.top })
+    const x = e.clientX - rect.left
+    const y = e.clientY - rect.top
+    gradientRef.current.style.background = `radial-gradient(600px circle at ${x}px ${y}px, ${fill}08, transparent 40%)`
+  }, [fill])
+
+  const handleMouseEnter = useCallback(() => {
+    if (!gradientRef.current) return
+    gradientRef.current.style.opacity = "1"
+  }, [])
+
+  const handleMouseLeave = useCallback(() => {
+    if (!gradientRef.current) return
+    gradientRef.current.style.opacity = "0"
   }, [])
 
   return (
     <div
       ref={containerRef}
       onMouseMove={handleMouseMove}
-      onMouseEnter={() => setOpacity(1)}
-      onMouseLeave={() => setOpacity(0)}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
       className={`absolute inset-0 overflow-hidden ${className}`}
     >
-      <motion.div
+      <div
+        ref={gradientRef}
         className="pointer-events-none absolute -inset-px"
-        animate={{ opacity }}
-        transition={{ duration: 0.4 }}
         style={{
-          background: `radial-gradient(600px circle at ${position.x}px ${position.y}px, ${fill}08, transparent 40%)`,
+          opacity: 0,
+          transition: "opacity 0.4s",
         }}
       />
     </div>

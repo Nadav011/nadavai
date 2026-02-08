@@ -1,7 +1,7 @@
 "use client"
 
-import { useTranslations } from "next-intl"
-import { useEffect, useState, useCallback } from "react"
+import { useTranslations, useLocale } from "next-intl"
+import { useEffect, useState } from "react"
 import {
   Briefcase,
   BookOpen,
@@ -29,6 +29,8 @@ import {
 
 export function CommandPalette() {
   const t = useTranslations("commandPalette")
+  const locale = useLocale()
+  const [isMac, setIsMac] = useState(true) // Default true for SSR
 
   const sections = [
     { label: t("projects"), href: "#projects", icon: Briefcase, description: t("projectsDesc") },
@@ -62,7 +64,11 @@ export function CommandPalette() {
     return () => document.removeEventListener("keydown", down)
   }, [])
 
-  const handleSelect = useCallback((value: string) => {
+  useEffect(() => {
+    setIsMac(navigator.platform?.toLowerCase().includes("mac") ?? /mac/i.test(navigator.userAgent))
+  }, [])
+
+  const handleSelect = (value: string) => {
     setOpen(false)
 
     // Check for external links
@@ -84,7 +90,7 @@ export function CommandPalette() {
         el.scrollIntoView({ behavior: "smooth" })
       }
     }
-  }, [])
+  }
 
   return (
     <>
@@ -96,13 +102,20 @@ export function CommandPalette() {
         <Terminal className="w-3 h-3" />
         <span className="hidden xl:inline">{t("search")}</span>
         <kbd className="px-1.5 py-0.5 rounded bg-[hsl(215,28%,12%)] border border-[hsl(215,28%,18%)] text-[10px] font-mono">
-          ⌘K
+          {isMac ? "⌘K" : "Ctrl+K"}
         </kbd>
       </button>
 
       <CommandDialog open={open} onOpenChange={setOpen}>
-        <CommandInput placeholder={t("placeholder")} className="text-end" dir="rtl" />
-        <CommandList dir="rtl" className="text-end">
+        <CommandInput
+          placeholder={t("placeholder")}
+          className={locale === "he" ? "text-end" : "text-start"}
+          dir={locale === "he" ? "rtl" : "ltr"}
+        />
+        <CommandList
+          dir={locale === "he" ? "rtl" : "ltr"}
+          className={locale === "he" ? "text-end" : "text-start"}
+        >
           <CommandEmpty>{t("empty")}</CommandEmpty>
 
           <CommandGroup heading={t("navGroup")}>
@@ -111,10 +124,10 @@ export function CommandPalette() {
                 key={item.href}
                 value={item.label}
                 onSelect={() => handleSelect(item.href)}
-                className="flex items-center gap-3 flex-row-reverse"
+                className={`flex items-center gap-3 ${locale === "he" ? "flex-row-reverse" : ""}`}
               >
                 <item.icon className="w-4 h-4 text-[#06d6e0]" />
-                <div className="flex flex-col items-end">
+                <div className={`flex flex-col ${locale === "he" ? "items-end" : "items-start"}`}>
                   <span>{item.label}</span>
                   <span className="text-xs text-[hsl(215,20%,45%)]">{item.description}</span>
                 </div>
@@ -130,7 +143,7 @@ export function CommandPalette() {
                 key={item.href}
                 value={item.label}
                 onSelect={() => handleSelect(item.href)}
-                className="flex items-center gap-3 flex-row-reverse"
+                className={`flex items-center gap-3 ${locale === "he" ? "flex-row-reverse" : ""}`}
               >
                 <item.icon className="w-4 h-4 text-[#e84393]" />
                 <span>{item.label}</span>

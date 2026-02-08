@@ -16,6 +16,8 @@ export function Navbar() {
   const [activeSection, setActiveSection] = useState("")
   const [indicatorStyle, setIndicatorStyle] = useState({ width: 0, left: 0 })
   const navRef = useRef<HTMLDivElement>(null)
+  const mobileMenuRef = useRef<HTMLDivElement>(null)
+  const hamburgerButtonRef = useRef<HTMLButtonElement>(null)
 
   const navLinks = [
     { label: t("projects"), href: "#projects", badge: "8" },
@@ -55,6 +57,51 @@ export function Navbar() {
     }
   }, [activeSection])
 
+  // Escape key handler for mobile menu
+  useEffect(() => {
+    if (!mobileOpen) return
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        setMobileOpen(false)
+        hamburgerButtonRef.current?.focus()
+      }
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [mobileOpen])
+
+  // Focus trap for mobile menu
+  useEffect(() => {
+    if (!mobileOpen || !mobileMenuRef.current) return
+
+    const focusableElements = mobileMenuRef.current.querySelectorAll(
+      'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])'
+    )
+    const firstElement = focusableElements[0] as HTMLElement
+    const lastElement = focusableElements[focusableElements.length - 1] as HTMLElement
+
+    const handleTabKey = (e: KeyboardEvent) => {
+      if (e.key !== 'Tab') return
+
+      if (e.shiftKey) {
+        if (document.activeElement === firstElement) {
+          e.preventDefault()
+          lastElement?.focus()
+        }
+      } else {
+        if (document.activeElement === lastElement) {
+          e.preventDefault()
+          firstElement?.focus()
+        }
+      }
+    }
+
+    document.addEventListener('keydown', handleTabKey)
+    firstElement?.focus()
+
+    return () => document.removeEventListener('keydown', handleTabKey)
+  }, [mobileOpen])
+
   return (
     <>
       <nav
@@ -85,7 +132,7 @@ export function Navbar() {
               <span className="text-lg font-bold tracking-tight text-[hsl(210,40%,98%)] leading-none">
                 NADAV<span className="text-gradient">.AI</span>
               </span>
-              <span className="text-[9px] font-mono text-[hsl(215,20%,40%)] tracking-[0.25em] uppercase mt-0.5">
+              <span className="text-[9px] font-mono text-[hsl(215,20%,48%)] tracking-[0.25em] uppercase mt-0.5">
                 {t("logoSubtitle")}
               </span>
             </div>
@@ -164,9 +211,12 @@ export function Navbar() {
           </div>
 
           <button
+            ref={hamburgerButtonRef}
             onClick={() => setMobileOpen(!mobileOpen)}
             className="lg:hidden relative p-2.5 rounded-xl border border-[hsl(215,28%,16%)] bg-[hsl(222,47%,6%)] text-[hsl(210,40%,98%)] hover:border-[#06d6e0]/30 transition-all"
-            aria-label={t("toggleMenu")}
+            aria-label={mobileOpen ? t("closeMenu") : t("toggleMenu")}
+            aria-expanded={mobileOpen}
+            aria-controls="mobile-menu"
           >
             <div className="relative w-5 h-5 flex items-center justify-center">
               <span className={`absolute block w-5 h-[1.5px] bg-current transition-all duration-300 ${mobileOpen ? "rotate-45" : "-translate-y-1.5"}`} />
@@ -177,7 +227,14 @@ export function Navbar() {
         </div>
       </nav>
 
-      <div className={`fixed inset-0 z-40 lg:hidden transition-all duration-500 ${mobileOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"}`}>
+      <div 
+        id="mobile-menu"
+        ref={mobileMenuRef}
+        role="dialog"
+        aria-modal="true"
+        aria-label={t("mobileNavigation")}
+        className={`fixed inset-0 z-40 lg:hidden transition-all duration-500 ${mobileOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"}`}
+      >
         <div className="absolute inset-0 bg-[hsl(222,47%,3%)/0.98] backdrop-blur-2xl" />
         <div className="relative pt-24 px-6 h-full flex flex-col">
           <div className="flex flex-col gap-2 flex-1">

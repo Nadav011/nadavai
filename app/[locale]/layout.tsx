@@ -91,8 +91,6 @@ export const viewport: Viewport = {
   themeColor: "#06d6e0",
   width: "device-width",
   initialScale: 1,
-  maximumScale: 1,
-  userScalable: false,
 }
 
 export function generateStaticParams() {
@@ -113,6 +111,7 @@ export default async function LocaleLayout({
   }
 
   const messages = await getMessages()
+  const t = await getTranslations({ locale, namespace: "layout" })
   const dir = getDirection(locale)
 
   return (
@@ -241,7 +240,7 @@ export default async function LocaleLayout({
           href="#main-content"
           className="sr-only focus:not-sr-only focus:absolute focus:z-[100] focus:top-4 focus:start-4 focus:px-4 focus:py-2 focus:rounded-lg focus:bg-[#06d6e0] focus:text-[hsl(222,47%,4%)] focus:font-bold focus:text-sm"
         >
-          {locale === "he" ? "דלג לתוכן הראשי" : "Skip to main content"}
+          {t("skipToContent")}
         </a>
         <NextIntlClientProvider messages={messages}>
           {children}

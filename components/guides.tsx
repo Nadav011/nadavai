@@ -1,10 +1,15 @@
 "use client"
 
+import { useRef } from "react"
 import { BookOpen, Play, Clock } from "lucide-react"
 import { useTranslations } from "next-intl"
-import { ScrollReveal } from "./scroll-reveal"
 import { SectionHeader } from "./section-header"
 import { CodeCard } from "./code-card"
+import { gsap } from "gsap"
+import { ScrollTrigger } from "gsap/ScrollTrigger"
+import { useGSAP } from "@gsap/react"
+
+gsap.registerPlugin(ScrollTrigger)
 
 const guides = [
   {
@@ -51,9 +56,25 @@ const guides = [
 
 export function Guides() {
   const t = useTranslations("guides")
+  const sectionRef = useRef<HTMLDivElement>(null)
+
+  useGSAP(
+    () => {
+      ScrollTrigger.batch(".guide-card", {
+        onEnter: (batch) =>
+          gsap.fromTo(
+            batch,
+            { opacity: 0, y: 30 },
+            { opacity: 1, y: 0, duration: 0.7, ease: "expo.out", stagger: 0.12 }
+          ),
+        once: true,
+      })
+    },
+    { scope: sectionRef }
+  )
 
   return (
-    <section id="guides" aria-label="מדריכים" className="relative py-24 md:py-32">
+    <section ref={sectionRef} id="guides" aria-label={t("title")} className="relative py-24 md:py-32">
       <div className="absolute inset-0 grid-bg opacity-[0.15] pointer-events-none" aria-hidden="true" />
       <div className="max-w-7xl mx-auto px-4 md:px-8">
         <SectionHeader
@@ -65,7 +86,7 @@ export function Guides() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {guides.map((guide, i) => (
-            <ScrollReveal key={i} delay={i * 100} direction={i % 2 === 0 ? "right" : "left"}>
+            <div key={i} className="guide-card">
               <CodeCard
                 title={t(guide.title)}
                 filename={guide.filename}
@@ -76,7 +97,7 @@ export function Guides() {
               >
                 <div className="space-y-3">
                   <div className="flex items-start gap-3">
-                    <span className="text-xs font-mono text-[hsl(215,20%,35%)] select-none leading-5">02</span>
+                    <span className="text-xs font-mono text-[hsl(215,20%,45%)] select-none leading-5">02</span>
                     <p className="text-sm text-[hsl(215,20%,60%)] leading-relaxed">{t(guide.description)}</p>
                   </div>
                   <div className="flex items-center justify-between pt-3 border-t border-[hsl(215,28%,14%)]">
@@ -92,7 +113,7 @@ export function Guides() {
                   </div>
                 </div>
               </CodeCard>
-            </ScrollReveal>
+            </div>
           ))}
         </div>
       </div>

@@ -48,7 +48,7 @@ export function CodeCard({
               <div className="flex items-center gap-2 px-3 py-1 rounded-md bg-[hsl(215,28%,12%)] border border-[hsl(215,28%,18%)]">
                 {icon && <span className="text-sm">{icon}</span>}
                 <span className="text-xs font-mono text-[hsl(215,20%,55%)]">{filename}</span>
-                <span className="text-[10px] font-mono text-[hsl(215,20%,40%)] uppercase">.{lang}</span>
+                <span className="text-[10px] font-mono text-[hsl(215,20%,48%)] uppercase">.{lang}</span>
               </div>
             )}
           </div>
@@ -65,7 +65,7 @@ export function CodeCard({
         <div className="p-5">
           {/* Title with line number styling */}
           <div className="flex items-start gap-3 mb-4">
-            <span className="text-xs font-mono text-[hsl(215,20%,35%)] select-none leading-6">01</span>
+            <span className="text-xs font-mono text-[hsl(215,20%,45%)] select-none leading-6">01</span>
             <h3 className="text-base font-semibold text-[hsl(210,40%,96%)] leading-6">{title}</h3>
           </div>
           {/* Body content */}
@@ -78,9 +78,9 @@ export function CodeCard({
         <div className="flex items-center justify-between px-4 py-2 border-t border-[hsl(215,28%,16%)] bg-[hsl(222,47%,5%)]">
           <div className="flex items-center gap-2">
             <div className="w-1.5 h-1.5 rounded-full bg-[#27ca40] animate-pulse" />
-            <span className="text-[10px] font-mono text-[hsl(215,20%,40%)]">ready</span>
+            <span className="text-[10px] font-mono text-[hsl(215,20%,48%)]">ready</span>
           </div>
-          <span className="text-[10px] font-mono text-[hsl(215,20%,35%)]">UTF-8</span>
+          <span className="text-[10px] font-mono text-[hsl(215,20%,45%)]">UTF-8</span>
         </div>
 
         {/* Hover glow effect */}

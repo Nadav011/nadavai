@@ -1,9 +1,10 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 
 export function CustomCursor() {
-  const [pos, setPos] = useState({ x: 0, y: 0 })
+  const dotRef = useRef<HTMLDivElement>(null)
+  const glowRef = useRef<HTMLDivElement>(null)
   const [hovering, setHovering] = useState(false)
   const [visible, setVisible] = useState(false)
 
@@ -12,13 +13,22 @@ export function CustomCursor() {
     if (isTouchDevice) return
 
     const move = (e: MouseEvent) => {
-      setPos({ x: e.clientX, y: e.clientY })
+      // Update DOM directly via refs - no React re-render
+      if (dotRef.current) {
+        dotRef.current.style.left = `${e.clientX}px`
+        dotRef.current.style.top = `${e.clientY}px`
+      }
+      if (glowRef.current) {
+        glowRef.current.style.left = `${e.clientX}px`
+        glowRef.current.style.top = `${e.clientY}px`
+      }
       setVisible(true)
     }
+    
     const addHover = () => setHovering(true)
     const removeHover = () => setHovering(false)
 
-    window.addEventListener("mousemove", move)
+    window.addEventListener("mousemove", move, { passive: true })
     document.addEventListener("mouseleave", () => setVisible(false))
     document.addEventListener("mouseenter", () => setVisible(true))
 
@@ -42,10 +52,11 @@ export function CustomCursor() {
   return (
     <>
       <div
+        ref={dotRef}
         className="fixed pointer-events-none z-[9999] mix-blend-difference hidden md:block"
         style={{
-          left: pos.x,
-          top: pos.y,
+          left: 0,
+          top: 0,
           width: hovering ? 48 : 12,
           height: hovering ? 48 : 12,
           borderRadius: "50%",
@@ -57,10 +68,11 @@ export function CustomCursor() {
         aria-hidden="true"
       />
       <div
+        ref={glowRef}
         className="fixed pointer-events-none z-[9998] hidden md:block"
         style={{
-          left: pos.x,
-          top: pos.y,
+          left: 0,
+          top: 0,
           width: 200,
           height: 200,
           borderRadius: "50%",

@@ -1,11 +1,15 @@
 "use client"
 
-import React from "react"
+import React, { useRef } from "react"
 import { useTranslations } from "next-intl"
+import { gsap } from "gsap"
+import { ScrollTrigger } from "gsap/ScrollTrigger"
+import { useGSAP } from "@gsap/react"
 
-import { ScrollReveal } from "./scroll-reveal"
 import { SectionHeader } from "./section-header"
 import { ExternalLink, Github, Users } from "lucide-react"
+
+gsap.registerPlugin(ScrollTrigger)
 
 const socialLinks = [
   {
@@ -52,9 +56,26 @@ const socialLinks = [
 
 export function Social() {
   const t = useTranslations("social")
+  const sectionRef = useRef<HTMLDivElement>(null)
+
+  useGSAP(
+    () => {
+      ScrollTrigger.batch(".social-card", {
+        onEnter: (batch) =>
+          gsap.fromTo(
+            batch,
+            { opacity: 0, y: 30 },
+            { opacity: 1, y: 0, duration: 0.7, ease: "expo.out", stagger: 0.12 }
+          ),
+        start: "top 80%",
+        once: true,
+      })
+    },
+    { scope: sectionRef }
+  )
 
   return (
-    <section id="social" aria-label="רשתות חברתיות" className="relative py-24 md:py-32 bg-[hsl(222,47%,3%)]">
+    <section ref={sectionRef} id="social" aria-label={t("title")} className="relative py-24 md:py-32 bg-[hsl(222,47%,3%)]">
       <div className="absolute inset-0 grid-bg opacity-15" />
       <div className="relative max-w-7xl mx-auto px-4 md:px-8">
         <SectionHeader
@@ -66,44 +87,40 @@ export function Social() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {socialLinks.map((link, i) => (
-            <ScrollReveal key={i} delay={i * 100} direction={i % 2 === 0 ? "right" : "left"}>
-              <a
-                href={link.href}
-                target="_blank"
-                rel="noreferrer"
-                className="group relative block h-full p-6 rounded-xl border border-[hsl(215,28%,16%)] bg-[hsl(222,47%,5%)] hover:border-opacity-50 transition-all duration-500"
-                style={{
-                  borderColor: undefined,
-                }}
-                onMouseEnter={(e) => { e.currentTarget.style.borderColor = `${link.color}30` }}
-                onMouseLeave={(e) => { e.currentTarget.style.borderColor = "" }}
-              >
-                {/* Header */}
-                <div className="flex items-center gap-3 mb-4">
-                  <div
-                    className="w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-500"
-                    style={{ background: `${link.color}10`, border: `1px solid ${link.color}20` }}
-                  >
-                    {link.icon}
-                  </div>
-                  <div>
-                    <div className="text-sm font-semibold text-[hsl(210,40%,98%)]">{link.platform}</div>
-                    <div className="text-[10px] font-mono text-[hsl(215,20%,45%)]">{t(link.labelKey)}</div>
-                  </div>
+            <a
+              key={i}
+              href={link.href}
+              target="_blank"
+              rel="noreferrer"
+              className="social-card group relative block h-full p-6 rounded-xl border border-[hsl(215,28%,16%)] bg-[hsl(222,47%,5%)] hover:border-opacity-50 transition-all duration-500"
+              style={{
+                borderColor: undefined,
+              }}
+              onMouseEnter={(e) => { e.currentTarget.style.borderColor = `${link.color}30` }}
+              onMouseLeave={(e) => { e.currentTarget.style.borderColor = "" }}
+            >
+              <div className="flex items-center gap-3 mb-4">
+                <div
+                  className="w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-500"
+                  style={{ background: `${link.color}10`, border: `1px solid ${link.color}20` }}
+                >
+                  {link.icon}
                 </div>
-
-                {/* Description */}
-                <p className="text-sm text-[hsl(215,20%,60%)] leading-relaxed mb-4">{t(link.descKey)}</p>
-
-                {/* Footer */}
-                <div className="flex items-center justify-end pt-3 border-t border-[hsl(215,28%,14%)]">
-                  <span className="inline-flex items-center gap-1.5 text-xs font-mono transition-colors" style={{ color: link.color }}>
-                    <ExternalLink className="w-3 h-3" />
-                    {">> open"}
-                  </span>
+                <div>
+                  <div className="text-sm font-semibold text-[hsl(210,40%,98%)]">{link.platform}</div>
+                  <div className="text-[10px] font-mono text-[hsl(215,20%,45%)]">{t(link.labelKey)}</div>
                 </div>
-              </a>
-            </ScrollReveal>
+              </div>
+
+              <p className="text-sm text-[hsl(215,20%,60%)] leading-relaxed mb-4">{t(link.descKey)}</p>
+
+              <div className="flex items-center justify-end pt-3 border-t border-[hsl(215,28%,14%)]">
+                <span className="inline-flex items-center gap-1.5 text-xs font-mono transition-colors" style={{ color: link.color }}>
+                  <ExternalLink className="w-3 h-3" />
+                  {">> open"}
+                </span>
+              </div>
+            </a>
           ))}
         </div>
       </div>

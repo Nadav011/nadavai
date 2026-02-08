@@ -1,10 +1,15 @@
 "use client"
 
+import { useRef } from "react"
 import { Flame, Calendar, ArrowLeft } from "lucide-react"
 import { useTranslations } from "next-intl"
-import { ScrollReveal } from "./scroll-reveal"
+import { gsap } from "gsap"
+import { ScrollTrigger } from "gsap/ScrollTrigger"
+import { useGSAP } from "@gsap/react"
 import { SectionHeader } from "./section-header"
 import { CodeCard } from "./code-card"
+
+gsap.registerPlugin(ScrollTrigger)
 
 const news = [
   {
@@ -41,9 +46,24 @@ const news = [
 
 export function News() {
   const t = useTranslations("news")
+  const sectionRef = useRef<HTMLDivElement>(null)
+
+  useGSAP(
+    () => {
+      ScrollTrigger.batch(".news-card", {
+        onEnter: (batch) =>
+          gsap.fromTo(
+            batch,
+            { opacity: 0, y: 30 },
+            { opacity: 1, y: 0, duration: 0.7, ease: "expo.out", stagger: 0.12 }
+          ),
+      })
+    },
+    { scope: sectionRef }
+  )
 
   return (
-    <section id="news" aria-label="חדשות טכנולוגיה" className="relative py-24 md:py-32">
+    <section ref={sectionRef} id="news" aria-label={t("title")} className="relative py-24 md:py-32">
       <div className="absolute inset-0 dot-grid-subtle opacity-[0.12] pointer-events-none" aria-hidden="true" />
       <div className="max-w-7xl mx-auto px-4 md:px-8">
         <SectionHeader
@@ -55,7 +75,7 @@ export function News() {
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {news.map((item, i) => (
-            <ScrollReveal key={i} delay={i * 100} direction={i === 1 ? "up" : i === 0 ? "right" : "left"}>
+            <div key={i} className="news-card">
               <CodeCard
                 title={t(item.title)}
                 filename={item.filename}
@@ -66,7 +86,7 @@ export function News() {
               >
                 <div className="space-y-3">
                   <div className="flex items-start gap-3">
-                    <span className="text-xs font-mono text-[hsl(215,20%,35%)] select-none leading-5">02</span>
+                    <span className="text-xs font-mono text-[hsl(215,20%,45%)] select-none leading-5">02</span>
                     <p className="text-sm text-[hsl(215,20%,60%)] leading-relaxed">{t(item.description)}</p>
                   </div>
                   <div className="flex items-center justify-between pt-3 border-t border-[hsl(215,28%,14%)]">
@@ -81,7 +101,7 @@ export function News() {
                   </div>
                 </div>
               </CodeCard>
-            </ScrollReveal>
+            </div>
           ))}
         </div>
       </div>

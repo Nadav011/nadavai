@@ -1,7 +1,11 @@
 "use client"
 
-import { type ReactNode } from "react"
-import { motion } from "motion/react"
+import { useRef, type ReactNode } from "react"
+import { gsap } from "gsap"
+import { ScrollTrigger } from "gsap/ScrollTrigger"
+import { useGSAP } from "@gsap/react"
+
+gsap.registerPlugin(ScrollTrigger)
 
 interface ScrollRevealProps {
   children: ReactNode
@@ -10,27 +14,38 @@ interface ScrollRevealProps {
   direction?: "up" | "down" | "left" | "right"
 }
 
-const directionVariants = {
-  up: { y: 40 },
-  down: { y: -40 },
-  left: { x: 40 },
-  right: { x: -40 },
+const directionOffsets = {
+  up: { y: 40, x: 0 },
+  down: { y: -40, x: 0 },
+  left: { x: 40, y: 0 },
+  right: { x: -40, y: 0 },
 }
 
 export function ScrollReveal({ children, className = "", delay = 0, direction = "up" }: ScrollRevealProps) {
+  const ref = useRef<HTMLDivElement>(null)
+
+  useGSAP(() => {
+    if (!ref.current) return
+    const offset = directionOffsets[direction]
+
+    gsap.from(ref.current, {
+      opacity: 0,
+      x: offset.x,
+      y: offset.y,
+      duration: 0.8,
+      delay: delay / 1000,
+      ease: "expo.out",
+      scrollTrigger: {
+        trigger: ref.current,
+        start: "top 85%",
+        once: true,
+      },
+    })
+  }, { scope: ref })
+
   return (
-    <motion.div
-      className={className}
-      initial={{ opacity: 0, ...directionVariants[direction] }}
-      whileInView={{ opacity: 1, x: 0, y: 0 }}
-      viewport={{ once: true, amount: 0.1, margin: "0px 0px -50px 0px" }}
-      transition={{
-        duration: 0.7,
-        delay: delay / 1000,
-        ease: [0.16, 1, 0.3, 1],
-      }}
-    >
+    <div ref={ref} className={className}>
       {children}
-    </motion.div>
+    </div>
   )
 }

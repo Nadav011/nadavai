@@ -1,11 +1,16 @@
 "use client"
 
-import React, { useState } from "react"
+import React, { useState, useRef } from "react"
 import { ExternalLink, Github, Star, ArrowDown, Globe, Cpu, Layers, Clock, Shield } from "lucide-react"
 import { useTranslations } from "next-intl"
 import { ScrollReveal } from "./scroll-reveal"
 import { SectionHeader } from "./section-header"
 import { TiltCard } from "./tilt-card"
+import { gsap } from "gsap"
+import { ScrollTrigger } from "gsap/ScrollTrigger"
+import { useGSAP } from "@gsap/react"
+
+gsap.registerPlugin(ScrollTrigger)
 
 
 
@@ -14,6 +19,51 @@ import { TiltCard } from "./tilt-card"
 export function Projects() {
   const t = useTranslations("projects")
   const [activeProject, setActiveProject] = useState<number | null>(null)
+  const sectionRef = useRef<HTMLElement>(null)
+
+  useGSAP(
+    () => {
+      if (!sectionRef.current) return
+
+      // Animate project cards with batch
+      const cards = sectionRef.current.querySelectorAll(".project-card")
+      if (cards.length > 0) {
+        gsap.set(cards, { opacity: 0, y: 30 })
+        ScrollTrigger.batch(cards, {
+          onEnter: (batch) => {
+            gsap.to(batch, {
+              opacity: 1,
+              y: 0,
+              duration: 0.8,
+              stagger: 0.12,
+              ease: "expo.out",
+            })
+          },
+          start: "top 85%",
+          once: true,
+        })
+      }
+
+      // Animate section header title words
+      const titleWords = sectionRef.current.querySelectorAll(".section-title-word")
+      if (titleWords.length > 0) {
+        gsap.set(titleWords, { opacity: 0, y: 20 })
+        gsap.to(titleWords, {
+          opacity: 1,
+          y: 0,
+          duration: 0.6,
+          stagger: 0.08,
+          ease: "power3.out",
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: "top 80%",
+            once: true,
+          },
+        })
+      }
+    },
+    { scope: sectionRef }
+  )
 
   const projects = [
     {
@@ -148,7 +198,7 @@ export function Projects() {
   }
 
   return (
-    <section id="projects" aria-label="פרויקטים" className="relative py-24 md:py-32">
+    <section ref={sectionRef} id="projects" aria-label={t("title")} className="relative py-24 md:py-32">
       <div className="absolute inset-0 dot-grid-subtle opacity-[0.15] pointer-events-none" aria-hidden="true" />
       <div className="max-w-7xl mx-auto px-4 md:px-8">
         <SectionHeader
@@ -164,7 +214,7 @@ export function Projects() {
             <ScrollReveal key={i} delay={i * 80} direction={i % 2 === 0 ? "right" : "left"}>
               <TiltCard className={project.featured ? "md:row-span-1" : ""}>
                 <div
-                  className="group relative h-full rounded-2xl border border-[hsl(215,28%,16%)] bg-[hsl(222,47%,5%)] overflow-hidden transition-all duration-700 hover:border-opacity-50"
+                  className="project-card group relative h-full rounded-2xl border border-[hsl(215,28%,16%)] bg-[hsl(222,47%,5%)] overflow-hidden transition-all duration-700 hover:border-opacity-50"
                   onMouseEnter={() => setActiveProject(i)}
                   onMouseLeave={() => setActiveProject(null)}
                   style={{
@@ -220,7 +270,7 @@ export function Projects() {
                       {Object.entries(project.metrics).map(([key, val]) => (
                         <div key={key} className="flex items-center gap-1.5">
                           <span className="text-sm font-bold text-[hsl(210,40%,98%)]">{val}</span>
-                          <span className="text-[10px] font-mono text-[hsl(215,20%,40%)] uppercase">{key}</span>
+                          <span className="text-[10px] font-mono text-[hsl(215,20%,48%)] uppercase">{key}</span>
                         </div>
                       ))}
                     </div>

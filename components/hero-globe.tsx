@@ -157,11 +157,14 @@ export function HeroGlobe() {
     const ctx = canvas.getContext("2d")
     if (!ctx) return
 
+    // Mobile detection
+    const isMobile = window.matchMedia("(max-width: 768px)").matches
+
     let animationId: number
     let time = 0
 
     const resize = () => {
-      const dpr = Math.min(window.devicePixelRatio, 2)
+      const dpr = Math.min(window.devicePixelRatio, isMobile ? 1.5 : 2)
       canvas.width = window.innerWidth * dpr
       canvas.height = window.innerHeight * dpr
       canvas.style.width = `${window.innerWidth}px`
@@ -173,35 +176,56 @@ export function HeroGlobe() {
     window.addEventListener("resize", resize)
     window.addEventListener("mousemove", handleMouseMove)
 
+    // Touch support for mobile
+    const onTouch = (e: TouchEvent) => {
+      if (e.touches.length > 0) {
+        mouseRef.current.targetX = (e.touches[0].clientX / window.innerWidth - 0.5) * 2
+        mouseRef.current.targetY = (e.touches[0].clientY / window.innerHeight - 0.5) * 2
+      }
+    }
+    if (isMobile) {
+      window.addEventListener("touchmove", onTouch, { passive: true })
+    }
+
     const w = window.innerWidth
     const h = window.innerHeight
     const cx = w * 0.5
     const cy = h * 0.47
     const fov = 800
-    const baseRadius = Math.min(w, h) * 0.26
+    const baseRadius = Math.min(w, h) * (isMobile ? 0.30 : 0.26)
 
     // === Create 3 nested spheres ===
     const sphere1Ico = createIcosahedron(baseRadius)
     const sphere1 = subdivideEdges(sphere1Ico.vertices, sphere1Ico.edges, baseRadius)
     const sphere2Ico = createIcosahedron(baseRadius * 0.65)
     const sphere2 = subdivideEdges(sphere2Ico.vertices, sphere2Ico.edges, baseRadius * 0.65)
-    const sphere3Ico = createIcosahedron(baseRadius * 1.35)
-    const sphere3 = subdivideEdges(sphere3Ico.vertices, sphere3Ico.edges, baseRadius * 1.35)
 
-    // Hex grid shell
-    const hexGrid = createHexGrid(baseRadius * 1.15, 8)
+    // sphere3 only on desktop
+    let sphere3: { vertices: Point3D[]; edges: [number, number][] } | null = null
+    if (!isMobile) {
+      const sphere3Ico = createIcosahedron(baseRadius * 1.35)
+      sphere3 = subdivideEdges(sphere3Ico.vertices, sphere3Ico.edges, baseRadius * 1.35)
+    }
 
-    // Orbit rings
+    // Hex grid shell only on desktop
+    let hexGrid: { vertices: Point3D[]; edges: [number, number][] } | null = null
+    if (!isMobile) {
+      hexGrid = createHexGrid(baseRadius * 1.15, 8)
+    }
+
+    // Orbit rings - 2 on mobile, 4 on desktop
+    const orbitRingCount = isMobile ? 2 : 4
     const rings = [
       createOrbitRing(baseRadius * 1.5, 80, 0.3),
       createOrbitRing(baseRadius * 1.7, 100, -0.6),
       createOrbitRing(baseRadius * 1.3, 60, 1.1),
       createOrbitRing(baseRadius * 1.9, 120, 0.8),
-    ]
+    ].slice(0, orbitRingCount)
 
-    // Floating neural nodes
+    // Floating neural nodes - 20 on mobile, 60 on desktop
+    const neuralNodeCount = isMobile ? 20 : 60
     const neuralNodes: { pos: Point3D; speed: number; offset: number; size: number; connections: number[] }[] = []
-    for (let i = 0; i < 60; i++) {
+    for (let i = 0; i < neuralNodeCount; i++) {
       const theta = Math.random() * Math.PI * 2
       const phi = Math.acos(2 * Math.random() - 1)
       const r = baseRadius * (1.1 + Math.random() * 1.2)
@@ -235,9 +259,10 @@ export function HeroGlobe() {
     const pulses: { startTime: number; speed: number; color: string }[] = []
     let lastPulse = 0
 
-    // Code stream particles
+    // Code stream particles - 0 on mobile, 80 on desktop
+    const codeParticleCount = isMobile ? 0 : 80
     const codeParticles: { char: string; angle: number; height: number; speed: number; radius: number; opacity: number }[] = []
-    for (let i = 0; i < 80; i++) {
+    for (let i = 0; i < codeParticleCount; i++) {
       codeParticles.push({
         char: CODE_CHARS[Math.floor(Math.random() * CODE_CHARS.length)],
         angle: Math.random() * Math.PI * 2,
@@ -248,8 +273,18 @@ export function HeroGlobe() {
       })
     }
 
+    // Accent dot count - 2 on mobile, 5 on desktop
+    const accentDotCount = isMobile ? 2 : 5
+
     const animate = () => {
-      time += 0.004
+      // Skip animation if tab is hidden
+      if (document.hidden) {
+        animationId = requestAnimationFrame(animate)
+        return
+      }
+
+      // Faster auto-rotation on mobile
+      time += isMobile ? 0.006 : 0.004
       ctx.clearRect(0, 0, w, h)
 
       const m = mouseRef.current
@@ -300,7 +335,7 @@ export function HeroGlobe() {
         ctx.stroke()
       }
 
-      // === Orbit rings (4 rings now) ===
+      // === Orbit rings ===
       const ringColors = ["#06d6e0", "#e84393", "#4f46e5", "#06d6e0"]
       const ringAlphas = [0.15, 0.1, 0.12, 0.06]
       rings.forEach((ring, ri) => {
@@ -319,52 +354,56 @@ export function HeroGlobe() {
         ctx.stroke()
       })
 
-      // === Hex grid shell ===
-      const hexAlpha = 0.04 + Math.sin(time * 0.5) * 0.02
-      for (const [a, b] of hexGrid.edges) {
-        let pa3d = rotateY(hexGrid.vertices[a], rotYAngle * 0.7 + 0.5)
-        pa3d = rotateX(pa3d, rotXAngle * 0.7)
-        pa3d = rotateZ(pa3d, time * 0.1)
-        let pb3d = rotateY(hexGrid.vertices[b], rotYAngle * 0.7 + 0.5)
-        pb3d = rotateX(pb3d, rotXAngle * 0.7)
-        pb3d = rotateZ(pb3d, time * 0.1)
+      // === Hex grid shell (desktop only) ===
+      if (!isMobile && hexGrid) {
+        const hexAlpha = 0.04 + Math.sin(time * 0.5) * 0.02
+        for (const [a, b] of hexGrid.edges) {
+          let pa3d = rotateY(hexGrid.vertices[a], rotYAngle * 0.7 + 0.5)
+          pa3d = rotateX(pa3d, rotXAngle * 0.7)
+          pa3d = rotateZ(pa3d, time * 0.1)
+          let pb3d = rotateY(hexGrid.vertices[b], rotYAngle * 0.7 + 0.5)
+          pb3d = rotateX(pb3d, rotXAngle * 0.7)
+          pb3d = rotateZ(pb3d, time * 0.1)
 
-        const pa = project(pa3d, cx, cy, fov)
-        const pb = project(pb3d, cx, cy, fov)
+          const pa = project(pa3d, cx, cy, fov)
+          const pb = project(pb3d, cx, cy, fov)
 
-        const avgD = (pa.depth + pb.depth) / 2
-        const dAlpha = Math.max(0, hexAlpha - avgD / (baseRadius * 6))
-        if (dAlpha <= 0) continue
+          const avgD = (pa.depth + pb.depth) / 2
+          const dAlpha = Math.max(0, hexAlpha - avgD / (baseRadius * 6))
+          if (dAlpha <= 0) continue
 
-        ctx.beginPath()
-        ctx.moveTo(pa.x, pa.y)
-        ctx.lineTo(pb.x, pb.y)
-        ctx.strokeStyle = "#4f46e5"
-        ctx.globalAlpha = dAlpha
-        ctx.lineWidth = 0.3
-        ctx.stroke()
+          ctx.beginPath()
+          ctx.moveTo(pa.x, pa.y)
+          ctx.lineTo(pb.x, pb.y)
+          ctx.strokeStyle = "#4f46e5"
+          ctx.globalAlpha = dAlpha
+          ctx.lineWidth = 0.3
+          ctx.stroke()
+        }
       }
 
-      // === Outer sphere (sphere3) - very faint ===
-      const projS3: ProjectedPoint[] = sphere3.vertices.map(v => {
-        let p = rotateY(v, rotYAngle * 0.6 - 0.3)
-        p = rotateX(p, rotXAngle * 0.6)
-        p = rotateZ(p, time * 0.08)
-        return project(p, cx, cy, fov)
-      })
-      for (const [a, b] of sphere3.edges) {
-        const pa = projS3[a], pb = projS3[b]
-        const avgD = (pa.depth + pb.depth) / 2
-        const dAlpha = Math.max(0, 0.07 - avgD / (baseRadius * 8))
-        if (dAlpha <= 0) continue
+      // === Outer sphere (sphere3) - desktop only ===
+      if (!isMobile && sphere3) {
+        const projS3: ProjectedPoint[] = sphere3.vertices.map(v => {
+          let p = rotateY(v, rotYAngle * 0.6 - 0.3)
+          p = rotateX(p, rotXAngle * 0.6)
+          p = rotateZ(p, time * 0.08)
+          return project(p, cx, cy, fov)
+        })
+        for (const [a, b] of sphere3.edges) {
+          const pa = projS3[a], pb = projS3[b]
+          const avgD = (pa.depth + pb.depth) / 2
+          const dAlpha = Math.max(0, 0.07 - avgD / (baseRadius * 8))
+          if (dAlpha <= 0) continue
 
-        ctx.beginPath()
-        ctx.moveTo(pa.x, pa.y)
-        ctx.lineTo(pb.x, pb.y)
-        ctx.strokeStyle = "#e84393"
-        ctx.globalAlpha = dAlpha
-        ctx.lineWidth = 0.3
-        ctx.stroke()
+          ctx.beginPath()
+          ctx.moveTo(pa.x, pa.y)
+          ctx.lineTo(pb.x, pb.y)
+          ctx.strokeStyle = "#e84393"
+          ctx.globalAlpha = dAlpha
+          ctx.lineWidth = 0.3
+          ctx.stroke()
+        }
       }
 
       // === Main sphere (sphere1) ===
@@ -491,33 +530,35 @@ export function HeroGlobe() {
         ctx.fill()
       }
 
-      // === Code stream particles ===
-      ctx.font = "10px monospace"
-      for (const cp of codeParticles) {
-        cp.angle += time * cp.speed * 0.01
-        const x3d = Math.cos(cp.angle + time * cp.speed) * cp.radius
-        const z3d = Math.sin(cp.angle + time * cp.speed) * cp.radius
-        let p: Point3D = { x: x3d, y: cp.height + Math.sin(time * cp.speed + cp.angle) * 20, z: z3d }
-        p = rotateY(p, rotYAngle * 0.3)
-        p = rotateX(p, rotXAngle * 0.3)
-        const proj = project(p, cx, cy, fov)
+      // === Code stream particles (desktop only) ===
+      if (!isMobile && codeParticles.length > 0) {
+        ctx.font = "10px monospace"
+        for (const cp of codeParticles) {
+          cp.angle += time * cp.speed * 0.01
+          const x3d = Math.cos(cp.angle + time * cp.speed) * cp.radius
+          const z3d = Math.sin(cp.angle + time * cp.speed) * cp.radius
+          let p: Point3D = { x: x3d, y: cp.height + Math.sin(time * cp.speed + cp.angle) * 20, z: z3d }
+          p = rotateY(p, rotYAngle * 0.3)
+          p = rotateX(p, rotXAngle * 0.3)
+          const proj = project(p, cx, cy, fov)
 
-        const dAlpha = Math.max(0, cp.opacity - proj.depth / (baseRadius * 6))
-        if (dAlpha <= 0) continue
+          const dAlpha = Math.max(0, cp.opacity - proj.depth / (baseRadius * 6))
+          if (dAlpha <= 0) continue
 
-        // Change char periodically
-        if (Math.random() < 0.003) {
-          cp.char = CODE_CHARS[Math.floor(Math.random() * CODE_CHARS.length)]
+          // Change char periodically
+          if (Math.random() < 0.003) {
+            cp.char = CODE_CHARS[Math.floor(Math.random() * CODE_CHARS.length)]
+          }
+
+          ctx.globalAlpha = dAlpha
+          ctx.fillStyle = proj.depth < 0 ? "#06d6e0" : "#e84393"
+          ctx.fillText(cp.char, proj.x, proj.y)
         }
-
-        ctx.globalAlpha = dAlpha
-        ctx.fillStyle = proj.depth < 0 ? "#06d6e0" : "#e84393"
-        ctx.fillText(cp.char, proj.x, proj.y)
       }
 
-      // === Orbiting accent dots (5 now) ===
+      // === Orbiting accent dots ===
       const orbitColors = ["#06d6e0", "#e84393", "#4f46e5", "#06d6e0", "#e84393"]
-      for (let i = 0; i < 5; i++) {
+      for (let i = 0; i < accentDotCount; i++) {
         const orbitAngle = time * (1.2 + i * 0.25) + i * 1.3
         const orbitR = baseRadius * (1.25 + i * 0.12)
         const tilt = [0.3, -0.5, 1.2, -0.8, 0.6][i]
@@ -564,6 +605,9 @@ export function HeroGlobe() {
       cancelAnimationFrame(animationId)
       window.removeEventListener("resize", resize)
       window.removeEventListener("mousemove", handleMouseMove)
+      if (isMobile) {
+        window.removeEventListener("touchmove", onTouch)
+      }
     }
   }, [handleMouseMove])
 

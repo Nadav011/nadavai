@@ -106,6 +106,10 @@
   0% { transform: translateX(0); }
   100% { transform: translateX(-50%); }
 }
+@keyframes marquee-reverse {
+  0% { transform: translateX(-50%); }
+  100% { transform: translateX(0); }
+}
 
 @keyframes typing-cursor {
   0%, 100% { opacity: 1; }
@@ -293,6 +297,7 @@
     z-index: -1;
   }
 
+  .animate-marquee-reverse { animation: marquee-reverse 30s linear infinite; }
   .animate-float { animation: float 6s ease-in-out infinite; }
   .animate-pulse-glow { animation: pulse-glow 4s ease-in-out infinite; }
   .animate-gradient { animation: gradient-shift 4s ease infinite; background-size: 200% 200%; }
@@ -399,5 +404,128 @@
     );
     background-size: 300% 300%;
     animation: gradient-shift 6s ease infinite;
+  }
+}
+
+/* =================== SCROLL-DRIVEN ANIMATIONS =================== */
+@supports (animation-timeline: scroll()) {
+  .scroll-reveal-css {
+    animation: scroll-fade-in linear both;
+    animation-timeline: view();
+    animation-range: entry 0% entry 30%;
+  }
+
+  @keyframes scroll-fade-in {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .scroll-scale-in {
+    animation: scroll-scale linear both;
+    animation-timeline: view();
+    animation-range: entry 0% entry 40%;
+  }
+
+  @keyframes scroll-scale {
+    from { opacity: 0; transform: scale(0.85); }
+    to { opacity: 1; transform: scale(1); }
+  }
+
+  .scroll-slide-start {
+    animation: scroll-slide-s linear both;
+    animation-timeline: view();
+    animation-range: entry 0% entry 35%;
+  }
+
+  @keyframes scroll-slide-s {
+    from { opacity: 0; transform: translateX(-30px); }
+    to { opacity: 1; transform: translateX(0); }
+  }
+}
+
+  /* =================== SCROLL PROGRESS BAR =================== */
+  .scroll-progress-bar {
+    transform-origin: left;
+    animation: scroll-progress linear;
+    animation-timeline: scroll();
+    box-shadow: 0 0 10px hsl(187 92% 55% / 0.5), 0 0 20px hsl(187 92% 55% / 0.2);
+  }
+
+  @keyframes scroll-progress {
+    from { transform: scaleX(0); }
+    to { transform: scaleX(1); }
+  }
+
+  /* RTL support - use transform-origin: right for RTL */
+  [dir="rtl"] .scroll-progress-bar {
+    transform-origin: right;
+  }
+
+/* =================== SECTION GLOWS =================== */
+.section-glow-cyan {
+  position: relative;
+}
+.section-glow-cyan::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 60% 40% at 50% 0%, hsl(187 92% 55% / 0.04), transparent 60%);
+  pointer-events: none;
+}
+
+.section-glow-pink {
+  position: relative;
+}
+.section-glow-pink::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 60% 40% at 50% 100%, hsl(330 85% 60% / 0.04), transparent 60%);
+  pointer-events: none;
+}
+
+.section-glow-indigo {
+  position: relative;
+}
+.section-glow-indigo::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 50% 30% at 50% 50%, hsl(270 70% 60% / 0.03), transparent 50%);
+  pointer-events: none;
+}
+
+/* =================== ANIMATED SECTION DIVIDERS =================== */
+.section-divider-animated {
+  height: 1px;
+  background: linear-gradient(to right, transparent, hsl(215 28% 20% / 0.5), hsl(187 92% 55% / 0.3), hsl(215 28% 20% / 0.5), transparent);
+  position: relative;
+  overflow: hidden;
+}
+.section-divider-animated::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, hsl(187 92% 55% / 0.6), transparent);
+  transform: translateX(-100%);
+  animation: divider-sweep 4s ease-in-out infinite;
+}
+@keyframes divider-sweep {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+/* =================== REDUCED MOTION =================== */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .shader-fallback {
+    animation: none !important;
   }
 }

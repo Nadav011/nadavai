@@ -1,13 +1,18 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect, useState, useRef } from "react"
 import { ArrowDown, Play, Sparkles } from "lucide-react"
+import { gsap } from "gsap"
+import { ScrollTrigger } from "gsap/ScrollTrigger"
+import { useGSAP } from "@gsap/react"
 import { Magnetic } from "./magnetic"
 import { AnimatedCounter } from "./animated-counter"
 import { HeroGlobe } from "./hero-globe"
 import { Spotlight } from "./spotlight"
 import { TextGenerate } from "./text-generate"
 import { useTranslations } from "next-intl"
+
+gsap.registerPlugin(ScrollTrigger)
 
 const roles = ["Full-Stack Developer", "AI Builder", "Prompt Engineer", "System Architect", "Tech Creator"]
 
@@ -16,12 +21,15 @@ export function Hero() {
   const [roleIndex, setRoleIndex] = useState(0)
   const [charIndex, setCharIndex] = useState(0)
   const [isDeleting, setIsDeleting] = useState(false)
-  const [mounted, setMounted] = useState(false)
 
-  useEffect(() => {
-    const id = requestAnimationFrame(() => setMounted(true))
-    return () => cancelAnimationFrame(id)
-  }, [])
+  const badgeRef = useRef<HTMLDivElement>(null)
+  const headingRef = useRef<HTMLDivElement>(null)
+  const terminalRef = useRef<HTMLDivElement>(null)
+  const descriptionRef = useRef<HTMLDivElement>(null)
+  const buttonsRef = useRef<HTMLDivElement>(null)
+  const statsRef = useRef<HTMLDivElement>(null)
+  const scrollIndicatorRef = useRef<HTMLDivElement>(null)
+  const contentRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     const current = roles[roleIndex]
@@ -43,6 +51,66 @@ export function Hero() {
     return () => clearTimeout(timeout)
   }, [charIndex, isDeleting, roleIndex])
 
+  useGSAP(() => {
+    const tl = gsap.timeline({ defaults: { ease: "expo.out" } })
+
+    tl.fromTo(
+      badgeRef.current,
+      { opacity: 0, y: 20 },
+      { opacity: 1, y: 0, duration: 0.6 }
+    )
+      .fromTo(
+        headingRef.current,
+        { opacity: 0, y: 30 },
+        { opacity: 1, y: 0, duration: 0.8 },
+        "<0.15"
+      )
+      .fromTo(
+        terminalRef.current,
+        { opacity: 0, y: 20 },
+        { opacity: 1, y: 0, duration: 0.6 },
+        "<0.2"
+      )
+      .fromTo(
+        descriptionRef.current,
+        { opacity: 0, y: 20 },
+        { opacity: 1, y: 0, duration: 0.6 },
+        "<0.15"
+      )
+      .fromTo(
+        buttonsRef.current?.children || [],
+        { opacity: 0, y: 20 },
+        { opacity: 1, y: 0, duration: 0.6, stagger: 0.1 },
+        "<0.15"
+      )
+      .fromTo(
+        statsRef.current?.children || [],
+        { opacity: 0, y: 20 },
+        { opacity: 1, y: 0, duration: 0.6, stagger: 0.1 },
+        "<0.2"
+      )
+      .fromTo(
+        scrollIndicatorRef.current,
+        { opacity: 0 },
+        { opacity: 1, duration: 0.5 },
+        "<0.2"
+      )
+
+    // Parallax effect on scroll
+    if (contentRef.current) {
+      gsap.to(contentRef.current, {
+        y: -100,
+        ease: "none",
+        scrollTrigger: {
+          trigger: contentRef.current,
+          start: "top top",
+          end: "bottom top",
+          scrub: true,
+        },
+      })
+    }
+  })
+
   const stats = [
     { value: 8, suffix: "+", label: t("stat1") },
     { value: 80, suffix: "", label: t("stat2") },
@@ -63,12 +131,11 @@ export function Hero() {
         </div>
       </div>
 
-      <div className="relative z-10 max-w-7xl mx-auto px-4 md:px-8 w-full">
+      <div ref={contentRef} className="relative z-10 max-w-7xl mx-auto px-4 md:px-8 w-full">
         <div className="flex flex-col items-center text-center gap-8">
           <div
-            className={`inline-flex items-center gap-3 px-5 py-2 rounded-full border border-[#06d6e0]/20 bg-[#06d6e0]/5 transition-all duration-1000 ${
-              mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
-            }`}
+            ref={badgeRef}
+            className="inline-flex items-center gap-3 px-5 py-2 rounded-full border border-[#06d6e0]/20 bg-[#06d6e0]/5"
           >
             <span className="relative flex h-2 w-2">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#27ca40] opacity-75" />
@@ -77,11 +144,7 @@ export function Hero() {
             <span className="text-xs font-mono text-[#06d6e0] tracking-wider">{t("badge")}</span>
           </div>
 
-          <div
-            className={`transition-all duration-1000 delay-200 ${
-              mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-            }`}
-          >
+          <div ref={headingRef}>
             <h1 className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-bold leading-[1.1] tracking-tight text-[hsl(210,40%,98%)]">
               {t("heading1")}
               <br className="hidden sm:block" />
@@ -96,11 +159,7 @@ export function Hero() {
             </h1>
           </div>
 
-          <div
-            className={`transition-all duration-1000 delay-400 ${
-              mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-            }`}
-          >
+          <div ref={terminalRef}>
             <div className="inline-flex items-center gap-3 px-6 py-3 rounded-xl border border-[hsl(215,28%,16%)] bg-[hsl(222,47%,5%)] font-mono">
               <span className="text-[#06d6e0]">{">"}</span>
               <span className="text-[hsl(215,20%,65%)] text-sm md:text-base">
@@ -111,17 +170,15 @@ export function Hero() {
           </div>
 
           <div
-            className={`text-lg md:text-xl text-[hsl(215,20%,55%)] max-w-2xl leading-relaxed transition-all duration-1000 delay-500 ${
-              mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-            }`}
+            ref={descriptionRef}
+            className="text-lg md:text-xl text-[hsl(215,20%,55%)] max-w-2xl leading-relaxed"
           >
             <TextGenerate words={t("description")} />
           </div>
 
           <div
-            className={`flex flex-col sm:flex-row items-center gap-4 transition-all duration-1000 delay-700 ${
-              mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-            }`}
+            ref={buttonsRef}
+            className="flex flex-col sm:flex-row items-center gap-4"
           >
             <Magnetic strength={0.2}>
               <a
@@ -144,9 +201,8 @@ export function Hero() {
           </div>
 
           <div
-            className={`flex items-center gap-8 md:gap-16 mt-8 transition-all duration-1000 delay-[900ms] ${
-              mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-            }`}
+            ref={statsRef}
+            className="flex items-center gap-8 md:gap-16 mt-8"
           >
             {stats.map((stat, i) => (
               <div key={i} className="text-center">
@@ -158,13 +214,9 @@ export function Hero() {
             ))}
           </div>
 
-          <div
-            className={`mt-12 transition-all duration-1000 delay-[1100ms] ${
-              mounted ? "opacity-100" : "opacity-0"
-            }`}
-          >
+          <div ref={scrollIndicatorRef} className="mt-12">
             <div className="flex flex-col items-center gap-2 animate-float">
-              <span className="text-[10px] font-mono text-[hsl(215,20%,40%)] tracking-widest uppercase">scroll</span>
+              <span className="text-[10px] font-mono text-[hsl(215,20%,48%)] tracking-widest uppercase">scroll</span>
               <div className="w-[1px] h-12 bg-gradient-to-b from-[#06d6e0] to-transparent" />
             </div>
           </div>

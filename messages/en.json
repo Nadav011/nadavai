@@ -16,6 +16,8 @@
     "contact": "Contact",
     "cta": "Let's Talk",
     "toggleMenu": "Toggle menu",
+    "closeMenu": "Close menu",
+    "mobileNavigation": "Mobile navigation",
     "logoSubtitle": "Full-Stack AI Dev"
   },
   "hero": {
