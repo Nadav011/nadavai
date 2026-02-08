@@ -46,68 +46,110 @@ float snoise(vec2 v) {
   return 130.0 * dot(m, g);
 }
 
-float fbm(vec2 p) {
+float fbm(vec2 p, int octaves) {
   float v = 0.0, a = 0.5;
   mat2 r = mat2(cos(0.5), sin(0.5), -sin(0.5), cos(0.5));
-  for (int i = 0; i < 5; i++) { v += a * snoise(p); p = r * p * 2.0; a *= 0.5; }
+  for (int i = 0; i < 7; i++) {
+    if (i >= octaves) break;
+    v += a * snoise(p);
+    p = r * p * 2.0;
+    a *= 0.5;
+  }
   return v;
+}
+
+// Energy vein function - creates sharp flowing lines
+float vein(vec2 uv, float t) {
+  float n = fbm(uv * 3.0 + vec2(t * 0.3, -t * 0.15), 5);
+  return pow(abs(sin(n * 3.14159 * 3.0)), 8.0);
 }
 
 void main() {
   vec2 uv = gl_FragCoord.xy / u_resolution;
+  float aspect = u_resolution.x / u_resolution.y;
+  vec2 uvA = vec2(uv.x * aspect, uv.y);
   
-  // Subtle mouse influence
-  vec2 mOff = (u_mouse - 0.5) * 0.05;
-  uv += mOff * smoothstep(1.0, 0.0, length(uv - u_mouse));
+  // Mouse influence - creates a reactive glow area
+  vec2 mDiff = uv - u_mouse;
+  float mDist = length(mDiff);
+  float mInfluence = smoothstep(0.5, 0.0, mDist);
   
-  float t = u_time * 0.04;
+  // Subtle UV warp near mouse
+  uv += mDiff * mInfluence * 0.02;
   
-  // Layered warped noise for organic flow
-  vec2 w = uv + 0.25 * vec2(
-    fbm(uv * 1.8 + vec2(t, 0.0)),
-    fbm(uv * 1.8 + vec2(0.0, t * 0.8))
+  float t = u_time * 0.035;
+  
+  // === Layer 1: Deep organic flow (base) ===
+  vec2 w1 = uv + 0.3 * vec2(
+    fbm(uv * 1.5 + vec2(t, 0.0), 5),
+    fbm(uv * 1.5 + vec2(0.0, t * 0.7), 5)
   );
+  float base = fbm(w1 * 2.0 + t * 0.15, 6);
   
-  float n1 = fbm(w * 2.5 + t * 0.2);
-  float n2 = fbm(w * 3.0 + vec2(t * 0.3, -t * 0.15) + n1 * 0.4);
-  float n3 = fbm(uv * 4.0 + vec2(-t * 0.15, t * 0.25));
+  // === Layer 2: Fine detail noise ===
+  float detail = fbm(uvA * 5.0 + vec2(t * 0.2, -t * 0.1) + base * 0.3, 5);
   
-  // Color palette: only cyan/teal tones + deep dark
-  vec3 deepDark = vec3(0.030, 0.035, 0.065);       // Deep navy-black
-  vec3 cyanDim  = vec3(0.012, 0.18, 0.22);          // Dark teal
-  vec3 cyanMid  = vec3(0.024, 0.55, 0.58);          // Mid cyan
-  vec3 cyanBri  = vec3(0.024, 0.839, 0.878);        // Bright cyan #06d6e0
-  vec3 tealDeep = vec3(0.008, 0.12, 0.15);          // Very dark teal
+  // === Layer 3: Energy veins ===
+  float v1 = vein(uvA + vec2(t * 0.1, 0.0), t);
+  float v2 = vein(uvA * 1.3 + vec2(0.0, t * 0.15), t * 0.8);
+  float veins = max(v1, v2 * 0.7);
   
-  // Build color from noise layers
-  vec3 c = deepDark;
+  // === Layer 4: Aurora waves ===
+  float wave1 = sin(uv.x * 4.0 + t * 0.5 + base * 2.0) * 0.5 + 0.5;
+  float wave2 = sin(uv.x * 6.0 - t * 0.3 + detail * 3.0) * 0.5 + 0.5;
+  float aurora = smoothstep(0.4, 0.6, uv.y + wave1 * 0.15 - 0.1) * 
+                 smoothstep(0.8, 0.5, uv.y + wave2 * 0.1);
+  aurora *= 0.4;
   
-  // First layer: soft teal clouds
-  c = mix(c, tealDeep, smoothstep(-0.4, 0.3, n1) * 0.8);
+  // === Color palette: cyan ecosystem ===
+  vec3 deepBlack  = vec3(0.020, 0.025, 0.050);
+  vec3 deepNavy   = vec3(0.030, 0.040, 0.075);
+  vec3 darkTeal   = vec3(0.010, 0.14, 0.18);
+  vec3 midCyan    = vec3(0.020, 0.45, 0.50);
+  vec3 brightCyan = vec3(0.024, 0.839, 0.878);
+  vec3 whiteCyan  = vec3(0.6, 0.95, 1.0);
   
-  // Second layer: mid cyan wisps
-  c = mix(c, cyanDim, smoothstep(0.0, 0.5, n2) * 0.6);
+  // === Build final color ===
+  vec3 c = deepBlack;
   
-  // Third layer: bright cyan highlights (sparse)
-  float highlight = smoothstep(0.35, 0.7, n1 + n2 * 0.4);
-  c = mix(c, cyanMid, highlight * 0.25);
+  // Base organic clouds
+  c = mix(c, deepNavy, smoothstep(-0.5, 0.4, base) * 0.9);
+  c = mix(c, darkTeal, smoothstep(-0.1, 0.5, base + detail * 0.3) * 0.7);
   
-  // Subtle bright spots where noise peaks align
-  float peak = smoothstep(0.5, 0.9, n1 * n2 + n3 * 0.3);
-  c += cyanBri * peak * 0.08;
+  // Mid-tone flowing wisps
+  float wisps = smoothstep(0.15, 0.6, base * 0.6 + detail * 0.4);
+  c = mix(c, midCyan, wisps * 0.25);
   
-  // Screen blend for soft glow
-  c = 1.0 - (1.0 - c) * (1.0 - cyanBri * smoothstep(0.4, 0.9, n1 + n2 * 0.5) * 0.06);
+  // Energy veins - bright cyan channels
+  c += brightCyan * veins * 0.12;
   
-  // Vignette: darken edges
-  float vignette = 1.0 - smoothstep(0.3, 1.3, length((uv - 0.5) * 2.0));
-  c *= vignette;
+  // Aurora bands
+  c = mix(c, darkTeal * 1.5, aurora * smoothstep(-0.2, 0.3, base));
   
-  // Fade bottom edge
-  c *= smoothstep(0.0, 0.25, uv.y * 0.5 + 0.12);
+  // Bright peaks where noise aligns
+  float peak = smoothstep(0.45, 0.85, base * detail + veins * 0.5);
+  c += brightCyan * peak * 0.08;
   
-  // Overall intensity - keep it subtle and elegant
-  c *= 0.30;
+  // Rare ultra-bright sparks
+  float spark = smoothstep(0.7, 0.95, base * detail * 1.5);
+  c += whiteCyan * spark * 0.04;
+  
+  // Mouse reactive glow
+  c += brightCyan * mInfluence * 0.06;
+  c += midCyan * smoothstep(0.3, 0.0, mDist) * 0.03;
+  
+  // Screen blend for luminosity
+  c = 1.0 - (1.0 - c) * (1.0 - brightCyan * smoothstep(0.3, 0.85, base + detail * 0.4) * 0.05);
+  
+  // Vignette
+  float vig = 1.0 - smoothstep(0.3, 1.4, length((uv - 0.5) * 1.8));
+  c *= vig;
+  
+  // Edge fade
+  c *= smoothstep(0.0, 0.2, uv.y * 0.5 + 0.1);
+  
+  // Overall intensity
+  c *= 0.38;
   
   fragColor = vec4(c, 1.0);
 }`
@@ -200,8 +242,8 @@ export function ShaderBackground() {
     function frame() {
       if (!document.hidden) {
         time += 0.016
-        mx += (tx - mx) * 0.015
-        my += (ty - my) * 0.015
+        mx += (tx - mx) * 0.02
+        my += (ty - my) * 0.02
         gl.uniform1f(uTime, time)
         gl.uniform2f(uRes, canvas.width, canvas.height)
         gl.uniform2f(uMouse, mx, my)

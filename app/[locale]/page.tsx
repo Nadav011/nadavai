@@ -34,15 +34,15 @@ export default function Page() {
           <div className="section-divider-animated" />
           <TechMarquee />
           <div className="section-divider-animated" />
-          <div className="section-glow-cyan">
+          <div className="section-glow-cyan section-glow-top">
             <Projects />
           </div>
           <div className="section-divider-animated" />
-          <div className="section-glow-pink">
+          <div className="section-glow-cyan section-glow-bottom">
             <Services />
           </div>
           <div className="section-divider-animated" />
-          <div className="section-glow-indigo">
+          <div className="section-glow-top">
             <Process />
           </div>
           <div className="section-divider-animated" />
@@ -50,25 +50,31 @@ export default function Page() {
             <Testimonials />
           </div>
           <div className="section-divider-animated" />
-          <Blog />
+          <div className="section-glow-top">
+            <Blog />
+          </div>
           <div className="section-divider-animated" />
-          <div className="section-glow-pink">
+          <div className="section-glow-cyan section-glow-bottom">
             <YouTube />
           </div>
           <div className="section-divider-animated" />
-          <Guides />
+          <div className="section-glow-top">
+            <Guides />
+          </div>
           <div className="section-divider-animated" />
-          <div className="section-glow-indigo">
+          <div className="section-glow-cyan">
             <Resources />
           </div>
           <div className="section-divider-animated" />
-          <News />
+          <div className="section-glow-top">
+            <News />
+          </div>
           <div className="section-divider-animated" />
-          <div className="section-glow-cyan">
+          <div className="section-glow-cyan section-glow-bottom">
             <Social />
           </div>
           <div className="section-divider-animated" />
-          <div className="section-glow-pink">
+          <div className="section-glow-cyan section-glow-top">
             <Contact />
           </div>
         </main>

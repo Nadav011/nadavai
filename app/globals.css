@@ -386,16 +386,20 @@
   }
 
   .shader-fallback {
-    background: conic-gradient(
-      from var(--shader-angle),
-      hsl(187 92% 55% / 0.06),
-      hsl(185 80% 40% / 0.04),
-      hsl(190 70% 30% / 0.03),
-      hsl(222 47% 4%),
-      hsl(187 92% 55% / 0.06)
-    );
-    animation: shader-rotate 20s linear infinite;
-    filter: blur(80px);
+    background: 
+      radial-gradient(ellipse 80% 50% at 30% 20%, hsl(187 92% 55% / 0.08), transparent 60%),
+      radial-gradient(ellipse 60% 40% at 70% 80%, hsl(187 70% 40% / 0.06), transparent 50%),
+      radial-gradient(ellipse 50% 30% at 50% 50%, hsl(190 80% 30% / 0.04), transparent 40%),
+      conic-gradient(
+        from var(--shader-angle),
+        hsl(187 92% 55% / 0.05),
+        hsl(185 80% 40% / 0.03),
+        hsl(190 70% 30% / 0.02),
+        hsl(222 47% 4%),
+        hsl(187 92% 55% / 0.05)
+      );
+    animation: shader-rotate 25s linear infinite;
+    filter: blur(60px);
   }
 
   .holographic {
@@ -474,29 +478,46 @@
   content: '';
   position: absolute;
   inset: 0;
-  background: radial-gradient(ellipse 60% 40% at 50% 0%, hsl(187 92% 55% / 0.04), transparent 60%);
+  background: 
+    radial-gradient(ellipse 70% 40% at 50% 0%, hsl(187 92% 55% / 0.05), transparent 60%),
+    radial-gradient(ellipse 40% 30% at 20% 50%, hsl(187 70% 45% / 0.02), transparent 50%);
   pointer-events: none;
 }
 
-.section-glow-pink {
+.section-glow-top {
   position: relative;
 }
-.section-glow-pink::after {
+.section-glow-top::before {
   content: '';
   position: absolute;
-  inset: 0;
-  background: radial-gradient(ellipse 60% 40% at 50% 100%, hsl(330 85% 60% / 0.04), transparent 60%);
+  top: -1px;
+  left: 10%;
+  right: 10%;
+  height: 1px;
+  background: linear-gradient(to right, transparent, hsl(187 92% 55% / 0.3), transparent);
+}
+.section-glow-top::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 20%;
+  right: 20%;
+  height: 80px;
+  background: radial-gradient(ellipse at top, hsl(187 92% 55% / 0.04), transparent 80%);
   pointer-events: none;
 }
 
-.section-glow-indigo {
+.section-glow-bottom {
   position: relative;
 }
-.section-glow-indigo::after {
+.section-glow-bottom::after {
   content: '';
   position: absolute;
-  inset: 0;
-  background: radial-gradient(ellipse 50% 30% at 50% 50%, hsl(270 70% 60% / 0.03), transparent 50%);
+  bottom: 0;
+  left: 20%;
+  right: 20%;
+  height: 80px;
+  background: radial-gradient(ellipse at bottom, hsl(187 92% 55% / 0.03), transparent 80%);
   pointer-events: none;
 }
 
