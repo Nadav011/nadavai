@@ -79,8 +79,8 @@ export function Projects() {
       featured: true,
       color: "#06d6e0",
       metrics: { pages: "149", tables: "111" },
-      github: "https://github.com/Nadav011/Mexicani",
-      demo: "",
+      github: "",
+      demo: "https://mexicani.vercel.app",
     },
     {
       title: "Cash",
@@ -94,8 +94,8 @@ export function Projects() {
       featured: true,
       color: "#e84393",
       metrics: { offline: "100%", sync: "Real-time" },
-      github: "https://github.com/Nadav011/cash",
-      demo: "https://cash-ashy-zeta.vercel.app",
+      github: "",
+      demo: "https://deliverycash.vercel.app",
     },
     {
       title: "Shifts",
@@ -109,7 +109,7 @@ export function Projects() {
       featured: false,
       color: "#4f46e5",
       metrics: { components: "154", hooks: "25" },
-      github: "https://github.com/Nadav011/mexicani-shifts",
+      github: "",
       demo: "",
     },
     {
@@ -124,8 +124,8 @@ export function Projects() {
       featured: false,
       color: "#06d6e0",
       metrics: { platform: "iOS", patterns: "Clean" },
-      github: "https://github.com/Nadav011/hatumdigital",
-      demo: "",
+      github: "",
+      demo: "https://hatumdigital.com",
     },
     {
       title: "Z",
@@ -139,7 +139,7 @@ export function Projects() {
       featured: false,
       color: "#e84393",
       metrics: { offline: "100%", currency: "ILS" },
-      github: "https://github.com/Nadav011/Z",
+      github: "",
       demo: "",
     },
     {
@@ -169,7 +169,7 @@ export function Projects() {
       featured: true,
       color: "#4f46e5",
       metrics: { gates: "579", matrix: "10x7" },
-      github: "https://github.com/Nadav011",
+      github: "",
       demo: "",
     },
     {
@@ -184,7 +184,7 @@ export function Projects() {
       featured: false,
       color: "#06d6e0",
       metrics: { platform: "iOS/Android", lang: "Hebrew" },
-      github: "https://github.com/Nadav011/israeli-finance-app",
+      github: "",
       demo: "",
     },
   ]
