@@ -178,9 +178,9 @@ export function Footer() {
     <footer ref={sectionRef} className="relative border-t border-[hsl(215,28%,16%)] bg-[hsl(222,47%,3%)]">
       <div className="max-w-7xl mx-auto px-4 md:px-8">
         {/* Main footer */}
-        <div className="py-16 grid grid-cols-1 md:grid-cols-4 gap-10">
+        <div className="py-12 md:py-16 grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-10">
           {/* Brand */}
-          <div className="footer-brand md:col-span-1">
+          <div className="footer-brand col-span-2 md:col-span-1">
             <a href="#" className="flex items-center gap-2.5 mb-4">
               <div className="relative flex items-center justify-center w-9 h-9 rounded-lg bg-gradient-to-br from-[#06d6e0] to-[#e84393] p-[1px]">
                 <div className="flex items-center justify-center w-full h-full rounded-[6px] bg-[hsl(222,47%,3%)]">

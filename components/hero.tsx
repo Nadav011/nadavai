@@ -145,7 +145,7 @@ export function Hero() {
           </div>
 
           <div ref={headingRef}>
-            <h1 id="hero-heading" className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-bold leading-[1.1] tracking-tight text-[hsl(210,40%,98%)]">
+            <h1 id="hero-heading" className="text-3xl sm:text-5xl md:text-7xl lg:text-8xl font-bold leading-[1.1] tracking-tight text-[hsl(210,40%,98%)]">
               {t("heading1")}
               <br className="hidden sm:block" />
               <span className="text-gradient-animated">{t("heading2")}</span>
@@ -171,7 +171,7 @@ export function Hero() {
 
           <div
             ref={descriptionRef}
-            className="text-lg md:text-xl text-[hsl(215,20%,55%)] max-w-2xl leading-relaxed"
+            className="text-base md:text-xl text-[hsl(215,20%,55%)] max-w-2xl leading-relaxed px-2 md:px-0"
           >
             <TextGenerate words={t("description")} />
           </div>
@@ -202,11 +202,11 @@ export function Hero() {
 
           <div
             ref={statsRef}
-            className="flex items-center gap-8 md:gap-16 mt-8"
+            className="flex items-center gap-6 md:gap-16 mt-6 md:mt-8"
           >
             {stats.map((stat, i) => (
               <div key={i} className="text-center">
-                <div className="text-2xl md:text-4xl font-bold text-[hsl(210,40%,98%)]">
+                <div className="text-xl md:text-4xl font-bold text-[hsl(210,40%,98%)]">
                   <AnimatedCounter end={stat.value} suffix={stat.suffix} />
                 </div>
                 <div className="text-xs font-mono text-[hsl(215,20%,45%)] mt-1">{stat.label}</div>

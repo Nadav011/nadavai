@@ -66,7 +66,7 @@ export function WhatsAppButton() {
   }, { scope: containerRef })
 
   return (
-    <div ref={containerRef} className="fixed bottom-6 start-6 z-50 flex items-end gap-3">
+    <div ref={containerRef} className="fixed bottom-4 start-4 md:bottom-6 md:start-6 z-50 flex items-end gap-3">
       {/* Tooltip */}
       {tooltip && (
         <div ref={tooltipRef} className="relative opacity-0">

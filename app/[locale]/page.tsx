@@ -27,8 +27,8 @@ export default function Page() {
       <GSAPSetup />
       <ScrollProgress />
       <NonCritical />
+      <Navbar />
       <div className="relative z-10">
-        <Navbar />
         <main id="main-content">
           <Hero />
           <div className="section-divider-animated" />

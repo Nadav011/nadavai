@@ -79,7 +79,7 @@ export function Contact() {
           <span className="text-xs font-mono text-[#e84393] tracking-wider uppercase">{t("badge")}</span>
         </div>
 
-        <h2 ref={headingRef} className="text-4xl md:text-6xl lg:text-7xl font-bold text-[hsl(210,40%,98%)] mb-6 leading-[1.1]">
+        <h2 ref={headingRef} className="text-3xl md:text-6xl lg:text-7xl font-bold text-[hsl(210,40%,98%)] mb-6 leading-[1.1]">
           {t("heading1")}
           <br />
           <span className="text-gradient-animated">{t("heading2")}</span>
@@ -175,7 +175,7 @@ export function Contact() {
               href="https://wa.me/972504401760"
               target="_blank"
               rel="noreferrer"
-              className="group relative inline-flex items-center gap-3 px-10 py-5 rounded-xl text-lg font-bold text-[hsl(222,47%,4%)] bg-gradient-to-l from-[#27ca40] to-[#22a838] hover:shadow-[0_0_50px_hsl(135,65%,45%,0.4)] transition-all duration-500"
+              className="group relative inline-flex items-center justify-center gap-3 px-8 py-4 md:px-10 md:py-5 rounded-xl text-base md:text-lg font-bold text-[hsl(222,47%,4%)] bg-gradient-to-l from-[#27ca40] to-[#22a838] hover:shadow-[0_0_50px_hsl(135,65%,45%,0.4)] transition-all duration-500 w-full sm:w-auto"
             >
               <Phone className="w-5 h-5" />
               {t("ctaWhatsapp")}
@@ -184,7 +184,7 @@ export function Contact() {
           <Magnetic strength={0.2}>
             <a
               href="mailto:hello@nadavc.ai"
-              className="group relative inline-flex items-center gap-3 px-8 py-4 rounded-xl text-base font-medium text-[hsl(210,40%,98%)] border border-[hsl(215,28%,20%)] bg-[hsl(222,47%,7%)] hover:border-[#06d6e0]/40 transition-all duration-500"
+              className="group relative inline-flex items-center justify-center gap-3 px-8 py-4 rounded-xl text-base font-medium text-[hsl(210,40%,98%)] border border-[hsl(215,28%,20%)] bg-[hsl(222,47%,7%)] hover:border-[#06d6e0]/40 transition-all duration-500 w-full sm:w-auto"
             >
               <Send className="w-4 h-4 text-[#06d6e0]" />
               {t("ctaEmail")}

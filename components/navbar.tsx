@@ -236,7 +236,7 @@ export function Navbar() {
         className={`fixed inset-0 z-40 lg:hidden transition-all duration-500 ${mobileOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"}`}
       >
         <div className="absolute inset-0 bg-[hsl(222,47%,3%)/0.98] backdrop-blur-2xl" />
-        <div className="relative pt-24 px-6 h-full flex flex-col">
+        <div className="relative pt-24 px-6 h-full flex flex-col overflow-y-auto">
           <div className="flex flex-col gap-2 flex-1">
             {navLinks.map((link, i) => (
               <a

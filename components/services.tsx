@@ -172,7 +172,7 @@ export function Services() {
           </div>
         </ScrollReveal>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-16">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-5 md:gap-6 mb-12 md:mb-16">
           {services.map((service, i) => (
             <ScrollReveal key={i} delay={i * 120} direction={i === 1 ? "up" : i === 0 ? "right" : "left"}>
               <div
