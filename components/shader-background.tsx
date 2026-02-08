@@ -120,39 +120,39 @@ void main() {
   float wisps = smoothstep(0.15, 0.6, base * 0.6 + detail * 0.4);
   c = mix(c, midCyan, wisps * 0.25);
   
-  // Energy veins - bright cyan channels
-  c += brightCyan * veins * 0.18;
+  // Energy veins - subtle flowing lines
+  c += brightCyan * veins * 0.10;
   
-  // Aurora bands
-  c = mix(c, darkTeal * 1.8, aurora * smoothstep(-0.2, 0.3, base));
+  // Aurora bands - softer
+  c = mix(c, darkTeal * 1.4, aurora * smoothstep(-0.2, 0.3, base) * 0.8);
   
   // Bright peaks where noise aligns
-  float peak = smoothstep(0.4, 0.8, base * detail + veins * 0.5);
-  c += brightCyan * peak * 0.12;
+  float peak = smoothstep(0.45, 0.85, base * detail + veins * 0.4);
+  c += brightCyan * peak * 0.07;
   
   // Rare ultra-bright sparks
-  float spark = smoothstep(0.65, 0.9, base * detail * 1.5);
-  c += whiteCyan * spark * 0.07;
+  float spark = smoothstep(0.7, 0.95, base * detail * 1.5);
+  c += whiteCyan * spark * 0.04;
   
-  // Breathing pulse - entire shader gently breathes
-  float breathe = 0.85 + 0.15 * sin(u_time * 0.4);
+  // Gentle breathing
+  float breathe = 0.92 + 0.08 * sin(u_time * 0.3);
   
-  // Mouse reactive glow - stronger
-  c += brightCyan * mInfluence * 0.10;
-  c += whiteCyan * smoothstep(0.2, 0.0, mDist) * 0.04;
+  // Mouse reactive glow - elegant
+  c += brightCyan * mInfluence * 0.06;
+  c += whiteCyan * smoothstep(0.15, 0.0, mDist) * 0.02;
   
   // Screen blend for luminosity
-  c = 1.0 - (1.0 - c) * (1.0 - brightCyan * smoothstep(0.3, 0.85, base + detail * 0.4) * 0.07);
+  c = 1.0 - (1.0 - c) * (1.0 - brightCyan * smoothstep(0.3, 0.85, base + detail * 0.4) * 0.04);
   
-  // Vignette - less aggressive
-  float vig = 1.0 - smoothstep(0.4, 1.5, length((uv - 0.5) * 1.6));
+  // Soft vignette
+  float vig = 1.0 - smoothstep(0.5, 1.6, length((uv - 0.5) * 1.5));
   c *= vig;
   
   // Edge fade
-  c *= smoothstep(0.0, 0.15, uv.y * 0.5 + 0.1);
+  c *= smoothstep(0.0, 0.2, uv.y * 0.5 + 0.1);
   
-  // Overall intensity with breathing
-  c *= 0.48 * breathe;
+  // Overall intensity - elegant, not overwhelming
+  c *= 0.35 * breathe;
   
   fragColor = vec4(c, 1.0);
 }`
