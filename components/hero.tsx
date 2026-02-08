@@ -132,7 +132,7 @@ export function Hero() {
       </div>
 
       <div ref={contentRef} className="relative z-10 max-w-7xl mx-auto px-4 md:px-8 w-full">
-        <div className="flex flex-col items-center text-center gap-8">
+        <div className="flex flex-col items-center text-center gap-5 md:gap-8">
           <div
             ref={badgeRef}
             className="inline-flex items-center gap-3 px-5 py-2 rounded-full border border-[#06d6e0]/20 bg-[#06d6e0]/5"
@@ -145,7 +145,7 @@ export function Hero() {
           </div>
 
           <div ref={headingRef}>
-            <h1 id="hero-heading" className="text-3xl sm:text-5xl md:text-7xl lg:text-8xl font-bold leading-[1.1] tracking-tight text-[hsl(210,40%,98%)]">
+            <h1 id="hero-heading" className="text-[1.75rem] sm:text-5xl md:text-7xl lg:text-8xl font-bold leading-[1.1] tracking-tight text-[hsl(210,40%,98%)]">
               {t("heading1")}
               <br className="hidden sm:block" />
               <span className="text-gradient-animated">{t("heading2")}</span>
@@ -202,7 +202,7 @@ export function Hero() {
 
           <div
             ref={statsRef}
-            className="flex items-center gap-6 md:gap-16 mt-6 md:mt-8"
+            className="flex items-center gap-8 md:gap-16 mt-4 md:mt-8"
           >
             {stats.map((stat, i) => (
               <div key={i} className="text-center">

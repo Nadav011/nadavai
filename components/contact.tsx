@@ -79,13 +79,13 @@ export function Contact() {
           <span className="text-xs font-mono text-[#e84393] tracking-wider uppercase">{t("badge")}</span>
         </div>
 
-        <h2 ref={headingRef} className="text-3xl md:text-6xl lg:text-7xl font-bold text-[hsl(210,40%,98%)] mb-6 leading-[1.1]">
+        <h2 ref={headingRef} className="text-2xl md:text-6xl lg:text-7xl font-bold text-[hsl(210,40%,98%)] mb-4 md:mb-6 leading-[1.1]">
           {t("heading1")}
           <br />
           <span className="text-gradient-animated">{t("heading2")}</span>
         </h2>
 
-        <p ref={descRef} className="text-lg text-[hsl(215,20%,55%)] max-w-xl mx-auto mb-10 leading-relaxed">
+        <p ref={descRef} className="text-base md:text-lg text-[hsl(215,20%,55%)] max-w-xl mx-auto mb-8 md:mb-10 leading-relaxed px-2 md:px-0">
           {t("description")}
         </p>
 
@@ -173,7 +173,7 @@ export function Contact() {
           </a>
         </div>
 
-        <div ref={ctaRef} className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
+        <div ref={ctaRef} className="mt-8 md:mt-10 flex flex-col sm:flex-row items-center justify-center gap-3 md:gap-4">
           <Magnetic strength={0.2}>
             <a
               href="https://wa.me/972504401760"

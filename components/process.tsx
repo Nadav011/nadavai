@@ -74,14 +74,14 @@ export function Process() {
     >
       <div className="max-w-7xl mx-auto px-4 md:px-8">
         {/* Section Header */}
-        <div className="text-center mb-16 md:mb-20">
+        <div className="text-center mb-10 md:mb-20">
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-[#06d6e0]/20 bg-[#06d6e0]/5 mb-6">
             <span className="text-sm font-medium text-[#06d6e0]">{t("badge")}</span>
           </div>
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-[hsl(210,40%,98%)] mb-4 text-balance">
+          <h2 className="text-2xl md:text-4xl lg:text-5xl font-bold text-[hsl(210,40%,98%)] mb-3 md:mb-4 text-balance">
             {t("title")} <span className="text-gradient">{t("highlight")}</span>
           </h2>
-          <p className="text-lg text-[hsl(215,20%,50%)] max-w-2xl mx-auto leading-relaxed">
+          <p className="text-base md:text-lg text-[hsl(215,20%,50%)] max-w-2xl mx-auto leading-relaxed px-2 md:px-0">
             {t("description")}
           </p>
         </div>

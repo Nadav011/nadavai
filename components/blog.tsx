@@ -241,7 +241,7 @@ export function Blog() {
                 style={{ background: `linear-gradient(to right, transparent, ${post.color}, transparent)` }}
               />
 
-              <div className="p-6">
+              <div className="p-4 md:p-6">
                 {/* Meta row */}
                 <div className="flex items-center justify-between mb-4">
                   <span
@@ -296,7 +296,7 @@ export function Blog() {
         </div>
 
         {/* View all CTA */}
-        <div ref={ctaRef} className="flex justify-center mt-12">
+        <div ref={ctaRef} className="flex justify-center mt-8 md:mt-12">
           <a
             href="https://www.facebook.com/nadav.cohen.167"
             target="_blank"

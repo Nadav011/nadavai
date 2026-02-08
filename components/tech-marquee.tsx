@@ -7,19 +7,21 @@ import { useGSAP } from "@gsap/react"
 
 gsap.registerPlugin(ScrollTrigger)
 
-const techs = [
-  "Claude Code", "GPT", "Codex", "Cursor", "v0.dev", "Gemini", "Deepseek", "Qwen",
-  "Next.js", "React", "TypeScript", "Supabase", "Tailwind", "Vercel", "Node.js",
-  "Flutter", "Dart", "Firebase", "React Native", "Expo", "Capacitor", "AI SDK",
-  "Python", "CrewAI", "Docker", "Ollama", "ChromaDB", "Bun",
+const row1Items = [
+  "Claude Code", "GPT-4o", "Codex", "Cursor", "v0.dev", "Gemini Pro", "DeepSeek V3",
+  "Qwen 2.5", "Mistral", "Llama 3", "Copilot", "Perplexity", "Grok", "Midjourney",
+  "Stable Diffusion", "DALL-E 3", "Claude Opus", "GPT-5",
 ]
 
-const row1 = techs.slice(0, Math.ceil(techs.length / 2))
-const row2 = techs.slice(Math.ceil(techs.length / 2))
+const row2Items = [
+  "Next.js", "React", "TypeScript", "Supabase", "Tailwind", "Vercel", "Node.js",
+  "Flutter", "Dart", "Firebase", "React Native", "Expo", "AI SDK", "Python",
+  "CrewAI", "Docker", "Ollama", "ChromaDB", "Bun", "Prisma",
+]
 
-// Triple the items to ensure there are never gaps on any screen size
-const row1Triple = [...row1, ...row1, ...row1]
-const row2Triple = [...row2, ...row2, ...row2]
+// Quadruple items to guarantee no gaps on any screen size
+const row1Quad = [...row1Items, ...row1Items, ...row1Items, ...row1Items]
+const row2Quad = [...row2Items, ...row2Items, ...row2Items, ...row2Items]
 
 export function TechMarquee() {
   const sectionRef = useRef<HTMLElement>(null)
@@ -56,7 +58,7 @@ export function TechMarquee() {
       <div className="flex flex-col gap-4 md:gap-6">
         {/* Row 1 */}
         <div className="flex animate-marquee whitespace-nowrap">
-          {row1Triple.map((tech, i) => (
+          {row1Quad.map((tech, i) => (
             <div key={`r1-${i}`} className="flex items-center gap-4 md:gap-8 mx-4 md:mx-8">
               <span className="tech-item text-xs md:text-sm font-mono text-[hsl(215,20%,45%)] hover:text-[#06d6e0] transition-all duration-300 cursor-default">
                 {tech}
@@ -68,7 +70,7 @@ export function TechMarquee() {
 
         {/* Row 2 - reverse */}
         <div className="flex animate-marquee-reverse whitespace-nowrap">
-          {row2Triple.map((tech, i) => (
+          {row2Quad.map((tech, i) => (
             <div key={`r2-${i}`} className="flex items-center gap-4 md:gap-8 mx-4 md:mx-8">
               <span className="tech-item text-xs md:text-sm font-mono text-[hsl(215,20%,45%)] hover:text-[#06d6e0] transition-all duration-300 cursor-default">
                 {tech}
