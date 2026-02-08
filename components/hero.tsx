@@ -14,7 +14,10 @@ export function Hero() {
   const [isDeleting, setIsDeleting] = useState(false)
   const [mounted, setMounted] = useState(false)
 
-  useEffect(() => setMounted(true), [])
+  useEffect(() => {
+    const id = requestAnimationFrame(() => setMounted(true))
+    return () => cancelAnimationFrame(id)
+  }, [])
 
   useEffect(() => {
     const current = roles[roleIndex]

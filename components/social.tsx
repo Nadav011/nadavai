@@ -4,7 +4,7 @@ import React from "react"
 
 import { ScrollReveal } from "./scroll-reveal"
 import { SectionHeader } from "./section-header"
-import { ExternalLink, Github, MessageSquare, Users } from "lucide-react"
+import { ExternalLink, Github, Users } from "lucide-react"
 
 const socialLinks = [
   {

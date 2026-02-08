@@ -96,6 +96,7 @@ export function Blog() {
 
   return (
     <section id="blog" aria-label="בלוג" className="relative py-24 md:py-32">
+      <div className="absolute inset-0 dot-grid opacity-[0.12] pointer-events-none" aria-hidden="true" />
       <div className="max-w-7xl mx-auto px-4 md:px-8">
         <SectionHeader
           badge="blog"

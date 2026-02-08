@@ -3,7 +3,6 @@ import type { Metadata, Viewport } from "next"
 import { Space_Grotesk, JetBrains_Mono, Heebo } from "next/font/google"
 import { Analytics } from "@vercel/analytics/react"
 import { SpeedInsights } from "@vercel/speed-insights/next"
-import { ThemeProvider } from "@/components/theme-provider"
 import "./globals.css"
 
 const spaceGrotesk = Space_Grotesk({
@@ -36,6 +35,7 @@ export const metadata: Metadata = {
   ],
   authors: [{ name: "Nadav Cohen", url: "https://nadavc.ai" }],
   creator: "Nadav Cohen",
+  manifest: "/manifest.json",
   openGraph: {
     title: "NADAV.AI | Full-Stack AI Developer",
     description: "בונה הכל עם AI. 8+ אפליקציות production, 80 AI Skills, 38+ סוכנים.",
@@ -64,9 +64,6 @@ export const metadata: Metadata = {
   alternates: {
     canonical: "https://nadavc.ai",
   },
-  verification: {
-    google: "verification-token-placeholder",
-  },
 }
 
 export const viewport: Viewport = {
@@ -79,11 +76,10 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="he" dir="rtl" className="dark" suppressHydrationWarning>
+    <html lang="he" dir="rtl" className="dark">
       <body
         className={`${spaceGrotesk.variable} ${jetbrainsMono.variable} ${heebo.variable} font-sans antialiased overflow-x-hidden`}
       >
-        <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false}>
           <script
             type="application/ld+json"
             dangerouslySetInnerHTML={{
@@ -106,6 +102,53 @@ export default function RootLayout({
               }),
             }}
           />
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{
+              __html: JSON.stringify({
+                "@context": "https://schema.org",
+                "@type": "WebSite",
+                name: "NADAV.AI",
+                alternateName: "נדב כהן - מפתח AI",
+                url: "https://nadavc.ai",
+              }),
+            }}
+          />
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{
+              __html: JSON.stringify({
+                "@context": "https://schema.org",
+                "@type": "FAQPage",
+                mainEntity: [
+                  {
+                    "@type": "Question",
+                    name: "מה נדב כהן בונה?",
+                    acceptedAnswer: {
+                      "@type": "Answer",
+                      text: "נדב כהן בונה אפליקציות Full-Stack עם AI - כולל אפליקציות web, מערכות enterprise, סוכני AI ואוטומציה. יותר מ-8 אפליקציות production פעילות.",
+                    },
+                  },
+                  {
+                    "@type": "Question",
+                    name: "איזה טכנולוגיות נדב משתמש?",
+                    acceptedAnswer: {
+                      "@type": "Answer",
+                      text: "React, Next.js, TypeScript, Supabase, Flutter, Claude Code, ועוד. נדב מתמחה בשילוב בינה מלאכותית בכל שלב של הפיתוח.",
+                    },
+                  },
+                  {
+                    "@type": "Question",
+                    name: "איך אפשר ליצור קשר עם נדב?",
+                    acceptedAnswer: {
+                      "@type": "Answer",
+                      text: "דרך WhatsApp, אימייל nadav@nadavc.ai, או דרך טופס יצירת קשר באתר. ניתן גם לעקוב בפייסבוק ובגיטהאב.",
+                    },
+                  },
+                ],
+              }),
+            }}
+          />
           <a
             href="#main-content"
             className="sr-only focus:not-sr-only focus:absolute focus:z-[100] focus:top-4 focus:start-4 focus:px-4 focus:py-2 focus:rounded-lg focus:bg-[#06d6e0] focus:text-[hsl(222,47%,4%)] focus:font-bold focus:text-sm"
@@ -113,7 +156,6 @@ export default function RootLayout({
             {"דלג לתוכן הראשי"}
           </a>
           {children}
-        </ThemeProvider>
         <Analytics />
         <SpeedInsights />
       </body>

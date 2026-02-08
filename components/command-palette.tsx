@@ -13,8 +13,6 @@ import {
   Zap,
   Terminal,
   Cpu,
-  Sparkles,
-  ArrowDown,
   PenLine,
   Play,
 } from "lucide-react"
@@ -47,10 +45,6 @@ const links = [
   { label: "אימייל", href: "mailto:hello@nadavc.ai", icon: Mail, external: true },
 ]
 
-const quickActions = [
-  { label: "הורד קורות חיים", action: "cv", icon: ArrowDown },
-  { label: "מצב AI", action: "ai-status", icon: Sparkles },
-]
 
 export function CommandPalette() {
   const [open, setOpen] = useState(false)

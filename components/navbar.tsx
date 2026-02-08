@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect, useRef } from "react"
-import { Menu, X, Zap, ChevronDown, ExternalLink, Terminal } from "lucide-react"
+import { Zap, ExternalLink } from "lucide-react"
 import { Magnetic } from "./magnetic"
 import { CommandPalette } from "./command-palette"
 

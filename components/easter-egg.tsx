@@ -1,35 +1,45 @@
 "use client"
 
-import { useEffect, useState, useCallback } from "react"
+import { useEffect, useState, useMemo } from "react"
 
 const KONAMI = ["ArrowUp", "ArrowUp", "ArrowDown", "ArrowDown", "ArrowLeft", "ArrowRight", "ArrowLeft", "ArrowRight", "b", "a"]
 
+function seededRandom(seed: number) {
+  const x = Math.sin(seed + 1) * 10000
+  return x - Math.floor(x)
+}
+
 export function EasterEgg() {
-  const [sequence, setSequence] = useState<string[]>([])
   const [active, setActive] = useState(false)
 
-  const handleKey = useCallback((e: KeyboardEvent) => {
-    setSequence((prev) => {
-      const next = [...prev, e.key].slice(-KONAMI.length)
-      if (next.length === KONAMI.length && next.every((k, i) => k === KONAMI[i])) {
+  useEffect(() => {
+    let buffer: string[] = []
+    const onKey = (e: KeyboardEvent) => {
+      buffer = [...buffer, e.key].slice(-KONAMI.length)
+      if (buffer.length === KONAMI.length && buffer.every((k, i) => k === KONAMI[i])) {
         setActive(true)
         setTimeout(() => setActive(false), 5000)
-        return []
+        buffer = []
       }
-      return next
-    })
+    }
+    window.addEventListener("keydown", onKey)
+    return () => window.removeEventListener("keydown", onKey)
   }, [])
 
-  useEffect(() => {
-    window.addEventListener("keydown", handleKey)
-    return () => window.removeEventListener("keydown", handleKey)
-  }, [handleKey])
+  const columns = useMemo(() =>
+    Array.from({ length: 30 }).map((_, i) => ({
+      left: `${(i / 30) * 100}%`,
+      animation: `matrix-fall ${2 + seededRandom(i) * 3}s linear ${seededRandom(i + 100) * 2}s infinite`,
+      fontSize: `${10 + seededRandom(i + 200) * 8}px`,
+      chars: Array.from({ length: 20 }).map((_, j) =>
+        String.fromCharCode(0x30A0 + Math.floor(seededRandom(i * 20 + j) * 96))
+      ),
+    })), [])
 
   if (!active) return null
 
   return (
     <div className="fixed inset-0 z-[9999] pointer-events-none overflow-hidden">
-      {/* Matrix-style rain */}
       <div className="absolute inset-0 bg-[hsl(222,47%,3%)/0.85]" />
       <div className="absolute inset-0 flex items-center justify-center">
         <div className="text-center space-y-4 animate-fade-up">
@@ -44,20 +54,19 @@ export function EasterEgg() {
           </div>
         </div>
       </div>
-      {/* Falling characters */}
-      {Array.from({ length: 30 }).map((_, i) => (
+      {columns.map((col, i) => (
         <div
           key={i}
           className="absolute top-0 text-[#06d6e0]/30 font-mono text-sm"
           style={{
-            insetInlineStart: `${(i / 30) * 100}%`,
-            animation: `matrix-fall ${2 + Math.random() * 3}s linear ${Math.random() * 2}s infinite`,
-            fontSize: `${10 + Math.random() * 8}px`,
+            insetInlineStart: col.left,
+            animation: col.animation,
+            fontSize: col.fontSize,
           }}
         >
-          {Array.from({ length: 20 }).map((_, j) => (
+          {col.chars.map((char, j) => (
             <div key={j} className="opacity-70">
-              {String.fromCharCode(0x30A0 + Math.floor(Math.random() * 96))}
+              {char}
             </div>
           ))}
         </div>

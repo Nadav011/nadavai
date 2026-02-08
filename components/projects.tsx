@@ -143,6 +143,7 @@ export function Projects() {
 
   return (
     <section id="projects" aria-label="פרויקטים" className="relative py-24 md:py-32">
+      <div className="absolute inset-0 dot-grid-subtle opacity-[0.15] pointer-events-none" aria-hidden="true" />
       <div className="max-w-7xl mx-auto px-4 md:px-8">
         <SectionHeader
           badge="projects"

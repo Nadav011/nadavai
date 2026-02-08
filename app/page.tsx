@@ -34,17 +34,29 @@ export default function Page() {
         <Navbar />
         <main id="main-content">
           <Hero />
+          <div className="section-divider" />
           <TechMarquee />
+          <div className="section-divider" />
           <Projects />
+          <div className="section-divider" />
           <Services />
+          <div className="section-divider" />
           <Process />
+          <div className="section-divider" />
           <Testimonials />
+          <div className="section-divider" />
           <Blog />
+          <div className="section-divider" />
           <YouTube />
+          <div className="section-divider" />
           <Guides />
+          <div className="section-divider" />
           <Resources />
+          <div className="section-divider" />
           <News />
+          <div className="section-divider" />
           <Social />
+          <div className="section-divider" />
           <Contact />
         </main>
         <Footer />
