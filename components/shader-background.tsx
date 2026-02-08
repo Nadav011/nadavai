@@ -16,6 +16,7 @@ uniform vec2 u_resolution;
 uniform vec2 u_mouse;
 out vec4 fragColor;
 
+// Simplex noise
 vec3 mod289(vec3 x) { return x - floor(x / 289.0) * 289.0; }
 vec2 mod289(vec2 x) { return x - floor(x / 289.0) * 289.0; }
 vec3 permute(vec3 x) { return mod289((x * 34.0 + 10.0) * x); }
@@ -48,31 +49,66 @@ float snoise(vec2 v) {
 float fbm(vec2 p) {
   float v = 0.0, a = 0.5;
   mat2 r = mat2(cos(0.5), sin(0.5), -sin(0.5), cos(0.5));
-  for (int i = 0; i < 4; i++) { v += a * snoise(p); p = r * p * 2.0; a *= 0.5; }
+  for (int i = 0; i < 5; i++) { v += a * snoise(p); p = r * p * 2.0; a *= 0.5; }
   return v;
 }
 
 void main() {
   vec2 uv = gl_FragCoord.xy / u_resolution;
-  vec2 mOff = (u_mouse - 0.5) * 0.08;
+  
+  // Subtle mouse influence
+  vec2 mOff = (u_mouse - 0.5) * 0.05;
   uv += mOff * smoothstep(1.0, 0.0, length(uv - u_mouse));
-  float t = u_time * 0.05;
-  vec2 w = uv + 0.3 * vec2(fbm(uv * 1.5 + vec2(t, 0.0)),
-                            fbm(uv * 1.5 + vec2(0.0, t * 1.2)));
-  float n1 = fbm(w * 2.0 + t * 0.3);
-  float n2 = fbm(w * 3.5 + vec2(t * 0.4, -t * 0.2) + n1 * 0.5);
-  float n3 = fbm(uv * 5.0 + vec2(-t * 0.2, t * 0.3));
-  vec3 cy = vec3(0.024, 0.839, 0.878);
-  vec3 pk = vec3(0.910, 0.263, 0.576);
-  vec3 ind = vec3(0.310, 0.275, 0.898);
-  vec3 dp = vec3(0.050, 0.055, 0.120);
-  vec3 c = mix(dp, cy, smoothstep(-0.3, 0.2, n1) * 0.6);
-  c = mix(c, pk, smoothstep(0.1, 0.6, n2) * 0.4);
-  c = mix(c, ind, smoothstep(0.3, 0.8, n3) * 0.5);
-  c = 1.0 - (1.0 - c) * (1.0 - cy * smoothstep(0.3, 0.8, n1 + n2 * 0.5) * 0.15);
-  c *= 1.0 - smoothstep(0.4, 1.4, length((uv - 0.5) * 2.0));
-  c *= smoothstep(0.0, 0.3, uv.y * 0.5 + 0.15);
-  c *= 0.35;
+  
+  float t = u_time * 0.04;
+  
+  // Layered warped noise for organic flow
+  vec2 w = uv + 0.25 * vec2(
+    fbm(uv * 1.8 + vec2(t, 0.0)),
+    fbm(uv * 1.8 + vec2(0.0, t * 0.8))
+  );
+  
+  float n1 = fbm(w * 2.5 + t * 0.2);
+  float n2 = fbm(w * 3.0 + vec2(t * 0.3, -t * 0.15) + n1 * 0.4);
+  float n3 = fbm(uv * 4.0 + vec2(-t * 0.15, t * 0.25));
+  
+  // Color palette: only cyan/teal tones + deep dark
+  vec3 deepDark = vec3(0.030, 0.035, 0.065);       // Deep navy-black
+  vec3 cyanDim  = vec3(0.012, 0.18, 0.22);          // Dark teal
+  vec3 cyanMid  = vec3(0.024, 0.55, 0.58);          // Mid cyan
+  vec3 cyanBri  = vec3(0.024, 0.839, 0.878);        // Bright cyan #06d6e0
+  vec3 tealDeep = vec3(0.008, 0.12, 0.15);          // Very dark teal
+  
+  // Build color from noise layers
+  vec3 c = deepDark;
+  
+  // First layer: soft teal clouds
+  c = mix(c, tealDeep, smoothstep(-0.4, 0.3, n1) * 0.8);
+  
+  // Second layer: mid cyan wisps
+  c = mix(c, cyanDim, smoothstep(0.0, 0.5, n2) * 0.6);
+  
+  // Third layer: bright cyan highlights (sparse)
+  float highlight = smoothstep(0.35, 0.7, n1 + n2 * 0.4);
+  c = mix(c, cyanMid, highlight * 0.25);
+  
+  // Subtle bright spots where noise peaks align
+  float peak = smoothstep(0.5, 0.9, n1 * n2 + n3 * 0.3);
+  c += cyanBri * peak * 0.08;
+  
+  // Screen blend for soft glow
+  c = 1.0 - (1.0 - c) * (1.0 - cyanBri * smoothstep(0.4, 0.9, n1 + n2 * 0.5) * 0.06);
+  
+  // Vignette: darken edges
+  float vignette = 1.0 - smoothstep(0.3, 1.3, length((uv - 0.5) * 2.0));
+  c *= vignette;
+  
+  // Fade bottom edge
+  c *= smoothstep(0.0, 0.25, uv.y * 0.5 + 0.12);
+  
+  // Overall intensity - keep it subtle and elegant
+  c *= 0.30;
+  
   fragColor = vec4(c, 1.0);
 }`
 
@@ -108,6 +144,7 @@ export function ShaderBackground() {
     const el = ref.current
     if (!el) return
 
+    // CSS fallback on mobile
     if (window.matchMedia("(max-width: 768px)").matches) return useFallback(el)
 
     const canvas = document.createElement("canvas")
@@ -146,7 +183,7 @@ export function ShaderBackground() {
     let mx = 0.5, my = 0.5, tx = 0.5, ty = 0.5
 
     function resize() {
-      const dpr = Math.min(window.devicePixelRatio, 2)
+      const dpr = Math.min(window.devicePixelRatio, 1.5)
       canvas.width = window.innerWidth * dpr
       canvas.height = window.innerHeight * dpr
       gl.viewport(0, 0, canvas.width, canvas.height)
@@ -163,8 +200,8 @@ export function ShaderBackground() {
     function frame() {
       if (!document.hidden) {
         time += 0.016
-        mx += (tx - mx) * 0.02
-        my += (ty - my) * 0.02
+        mx += (tx - mx) * 0.015
+        my += (ty - my) * 0.015
         gl.uniform1f(uTime, time)
         gl.uniform2f(uRes, canvas.width, canvas.height)
         gl.uniform2f(uMouse, mx, my)
