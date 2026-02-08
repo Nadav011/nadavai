@@ -85,7 +85,7 @@
     "p1": "מערכת ניהול זכיינות ברמת Enterprise - 149 עמודים, 111 טבלאות, 38 Edge Functions. ניהול סניפים, הזמנות, מלאי, עובדים ודוחות מתקדמים.",
     "p2": "מערכת ניהול משלוחים PWA עם תמיכה אופליין מלאה. סנכרון חכם, IndexedDB, ותור פעולות לעבודה ללא חיבור.",
     "p3": "מערכת ניהול משמרות עם Drag & Drop, התראות Push, ולוח זמנים אינטראקטיבי. 154 קומפוננטות, 25 hooks.",
-    "p4": "מערכת ניהול הזמנות עם אפליקציית iOS. Entity Factory pattern, Result<T,E> לטיפול בשגיאות, וולידציה עם Zod.",
+    "p4": "מערכת ניהול הזמנות עם אפליקציית iOS. Entity Factory pattern, Result(T,E) לטיפול בשגיאות, וולידציה עם Zod.",
     "p5": "מערכת ניהול קופות - סגירת קופה, הפקדות, ניהול סניפים. PWA עם Offline-first, IndexedDB, ותמיכה מלאה בעברית.",
     "p6": "אפליקציית צ'אט ספורט מובייל - Flutter עם 28 מודולים: צ'אטים, חדרי קול, מסיבות צפייה, תחזיות ומשחקים.",
     "p7": "מנוע ביקורת קוד עם 579 gates, auto-healing, זיהוי טכנולוגיה אוטומטי, ומטריצה ויזואלית 10x7. TypeScript + Bun.",
@@ -199,8 +199,11 @@
     "title": "חדשות",
     "highlight": "ועדכונים",
     "description": "מה חדש בעולם ה-AI, כלים חדשים, עדכונים חשובים, ובמה אני משתמש עכשיו.",
+    "n1Title": "80 AI Skills ל-Claude Code",
     "n1Desc": "הגענו ל-80 סקילים מותאמים אישית ל-Claude Code: 20 APEX (Web), 25 Flutter (Mobile), 10 Utility, 5 Agent Skills, ועוד.",
+    "n2Title": "APEX Engine v23",
     "n2Desc": "מנוע ביקורת קוד עם 579 gates ומטריצה ויזואלית 10x7. Auto-healing, זיהוי טכנולוגיה אוטומטי, ודוחות מפורטים.",
+    "n3Title": "Singularity Forge - Open Source",
     "n3Desc": "שחררתי את Singularity Forge - מנוע לבניית skills עם 70-Gate Matrix, auto-heal, ו-research workflows. פתוח לכולם."
   },
   "social": {

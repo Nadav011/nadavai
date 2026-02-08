@@ -85,7 +85,7 @@
     "p1": "Enterprise franchise management system - 149 pages, 111 tables, 38 Edge Functions. Branch, order, inventory, employee management and advanced reports.",
     "p2": "Delivery management PWA with full offline support. Smart sync, IndexedDB, and operation queue for working without connection.",
     "p3": "Shift management system with Drag & Drop, Push notifications, and interactive scheduling. 154 components, 25 hooks.",
-    "p4": "Order management system with iOS app. Entity Factory pattern, Result<T,E> for error handling, and Zod validation.",
+    "p4": "Order management system with iOS app. Entity Factory pattern, Result(T,E) for error handling, and Zod validation.",
     "p5": "Cash register management system - register closing, deposits, branch management. PWA with Offline-first, IndexedDB, and full Hebrew support.",
     "p6": "Mobile sports chat app - Flutter with 28 modules: chats, voice rooms, watch parties, predictions and games.",
     "p7": "Code audit engine with 579 gates, auto-healing, automatic technology detection, and 10x7 visual matrix. TypeScript + Bun.",
@@ -199,8 +199,11 @@
     "title": "News",
     "highlight": "& Updates",
     "description": "What's new in the AI world, new tools, important updates, and what I'm using now.",
+    "n1Title": "80 AI Skills for Claude Code",
     "n1Desc": "Reached 80 custom skills for Claude Code: 20 APEX (Web), 25 Flutter (Mobile), 10 Utility, 5 Agent Skills, and more.",
+    "n2Title": "APEX Engine v23",
     "n2Desc": "Code audit engine with 579 gates and 10x7 visual matrix. Auto-healing, automatic technology detection, and detailed reports.",
+    "n3Title": "Singularity Forge - Open Source",
     "n3Desc": "Released Singularity Forge - an engine for building skills with 70-Gate Matrix, auto-heal, and research workflows. Open to everyone."
   },
   "social": {
