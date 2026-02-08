@@ -257,7 +257,7 @@ export function Services() {
                         ) : (
                           <>
                             {t("ctaDefault")}
-                            <ArrowLeft className="w-4 h-4" />
+                            <ArrowLeft className="w-4 h-4 rtl:rotate-180" />
                           </>
                         )}
                       </a>
@@ -291,7 +291,7 @@ export function Services() {
                   <h4 className="text-sm font-semibold text-[hsl(210,40%,98%)] mb-0.5">{service.title}</h4>
                   <p className="text-xs text-[hsl(215,20%,45%)]">{service.description}</p>
                 </div>
-                <ArrowLeft className="w-4 h-4 text-[hsl(215,20%,45%)] group-hover:text-[#06d6e0] me-auto opacity-0 group-hover:opacity-100 -translate-x-2 group-hover:translate-x-0 transition-all" />
+                <ArrowLeft className="w-4 h-4 text-[hsl(215,20%,45%)] group-hover:text-[#06d6e0] me-auto opacity-0 group-hover:opacity-100 -translate-x-2 group-hover:translate-x-0 transition-all rtl:rotate-180" />
               </a>
             ))}
           </div>

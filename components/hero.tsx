@@ -12,7 +12,7 @@ import { Spotlight } from "./spotlight"
 import { TextGenerate } from "./text-generate"
 import { useTranslations } from "next-intl"
 
-gsap.registerPlugin(ScrollTrigger)
+// ScrollTrigger is registered in page.tsx - no need to register again
 
 const roles = ["Full-Stack Developer", "AI Builder", "Prompt Engineer", "System Architect", "Tech Creator"]
 
@@ -118,7 +118,7 @@ export function Hero() {
   ]
 
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20">
+    <section aria-labelledby="hero-heading" className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20">
       <HeroGlobe />
       <Spotlight />
 
@@ -145,7 +145,7 @@ export function Hero() {
           </div>
 
           <div ref={headingRef}>
-            <h1 className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-bold leading-[1.1] tracking-tight text-[hsl(210,40%,98%)]">
+            <h1 id="hero-heading" className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-bold leading-[1.1] tracking-tight text-[hsl(210,40%,98%)]">
               {t("heading1")}
               <br className="hidden sm:block" />
               <span className="text-gradient-animated">{t("heading2")}</span>
@@ -153,8 +153,8 @@ export function Hero() {
               <span className="relative inline-block">
                 <span className="relative z-10 animate-ai-glow">AI</span>
                 <span className="absolute inset-0 -m-2 rounded-lg bg-[#06d6e0]/10 blur-xl animate-pulse-glow" />
-                <Sparkles className="absolute -top-3 -start-3 w-5 h-5 text-[#06d6e0] animate-pulse" />
-                <Sparkles className="absolute -bottom-2 -end-3 w-4 h-4 text-[#e84393] animate-pulse" style={{ animationDelay: "1s" }} />
+                <Sparkles className="absolute -top-3 -start-3 w-5 h-5 text-[#06d6e0] animate-pulse" aria-hidden="true" />
+                <Sparkles className="absolute -bottom-2 -end-3 w-4 h-4 text-[#e84393] animate-pulse" style={{ animationDelay: "1s" }} aria-hidden="true" />
               </span>
             </h1>
           </div>

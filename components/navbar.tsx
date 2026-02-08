@@ -189,7 +189,7 @@ export function Navbar() {
             >
               {tCommon("langSwitch")}
             </Link>
-            <a href="https://github.com/Nadav011" target="_blank" rel="noreferrer" className="p-2.5 rounded-lg text-[hsl(215,20%,50%)] hover:text-[hsl(210,40%,98%)] hover:bg-[hsl(215,28%,12%)] transition-all" aria-label="GitHub">
+            <a href="https://github.com/Nadav011" target="_blank" rel="noreferrer" className="p-2.5 rounded-lg text-[hsl(215,20%,50%)] hover:text-[hsl(210,40%,98%)] hover:bg-[hsl(215,28%,12%)] transition-all" aria-label={tCommon("githubAriaLabel")}>
               <ExternalLink className="w-4 h-4" />
             </a>
             <Magnetic strength={0.2}>

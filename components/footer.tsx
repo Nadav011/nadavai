@@ -11,6 +11,7 @@ gsap.registerPlugin(ScrollTrigger)
 
 function NewsletterForm() {
   const t = useTranslations("footer")
+  const tCommon = useTranslations("common")
   const [email, setEmail] = useState("")
   const [status, setStatus] = useState<"idle" | "success" | "error">("idle")
 
@@ -47,30 +48,34 @@ function NewsletterForm() {
         </div>
         <form onSubmit={handleSubmit} className="flex items-center gap-2 w-full md:w-auto">
           <div className="relative flex-1 md:w-64">
+            <label htmlFor="newsletter-email" className="sr-only">{t("newsletterTitle")}</label>
             <input
+              id="newsletter-email"
               type="email"
               dir="ltr"
               value={email}
               onChange={(e) => { setEmail(e.target.value); setStatus("idle") }}
-              placeholder="your@email.com"
+              placeholder={tCommon("emailPlaceholder")}
               className="w-full h-11 px-4 rounded-lg bg-[hsl(222,47%,6%)] border border-[hsl(215,28%,16%)] text-sm text-[hsl(210,40%,98%)] placeholder:text-[hsl(215,20%,45%)] focus:outline-none focus:border-[#06d6e0]/50 transition-colors"
               required
+              aria-describedby={status === "success" ? "newsletter-success" : status === "error" ? "newsletter-error" : undefined}
             />
           </div>
           <button
             type="submit"
             className="h-11 px-5 rounded-lg bg-gradient-to-l from-[#06d6e0] to-[#0abfca] text-[hsl(222,47%,4%)] text-sm font-bold flex items-center gap-2 hover:shadow-[0_0_20px_hsl(187,92%,55%,0.3)] transition-shadow"
+            aria-label={t("newsletterBtn")}
           >
-            <Send className="w-3.5 h-3.5" />
+            <Send className="w-3.5 h-3.5" aria-hidden="true" />
             <span>{t("newsletterBtn")}</span>
           </button>
         </form>
       </div>
       {status === "success" && (
-        <p className="mt-3 text-xs text-[#06d6e0]">{t("newsletterSuccess")}</p>
+        <p id="newsletter-success" role="status" className="mt-3 text-xs text-[#06d6e0]">{t("newsletterSuccess")}</p>
       )}
       {status === "error" && (
-        <p className="mt-3 text-xs text-[#e84393]">{t("newsletterError")}</p>
+        <p id="newsletter-error" role="alert" className="mt-3 text-xs text-[#e84393]">{t("newsletterError")}</p>
       )}
     </div>
   )
@@ -78,6 +83,7 @@ function NewsletterForm() {
 
 export function Footer() {
   const t = useTranslations("footer")
+  const tCommon = useTranslations("common")
   const sectionRef = useRef<HTMLElement>(null)
 
   const footerLinks = [

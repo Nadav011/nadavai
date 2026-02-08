@@ -12,6 +12,7 @@ gsap.registerPlugin(ScrollTrigger)
 
 export function YouTube() {
   const t = useTranslations("youtube")
+  const tCat = useTranslations("categories")
   const [activeCategory, setActiveCategory] = useState("all")
   const sectionRef = useRef<HTMLDivElement>(null)
 
@@ -28,7 +29,7 @@ export function YouTube() {
       title: t("v1Title"),
       description: t("v1Desc"),
       thumbnail: null,
-      category: "הדגמות",
+      category: "demos",
       duration: "18:42",
       views: "2.1K",
       date: "2026-01",
@@ -48,7 +49,7 @@ export function YouTube() {
       title: t("v3Title"),
       description: t("v3Desc"),
       thumbnail: null,
-      category: "פיתוח",
+      category: "dev",
       duration: "15:30",
       views: "3.8K",
       date: "2025-12",
@@ -58,7 +59,7 @@ export function YouTube() {
       title: t("v4Title"),
       description: t("v4Desc"),
       thumbnail: null,
-      category: "טיפים",
+      category: "tips",
       duration: "8:45",
       views: "1.7K",
       date: "2025-12",
@@ -68,7 +69,7 @@ export function YouTube() {
       title: t("v5Title"),
       description: t("v5Desc"),
       thumbnail: null,
-      category: "הדגמות",
+      category: "demos",
       duration: "22:10",
       views: "4.2K",
       date: "2025-11",
@@ -78,7 +79,7 @@ export function YouTube() {
       title: t("v6Title"),
       description: t("v6Desc"),
       thumbnail: null,
-      category: "פיתוח",
+      category: "dev",
       duration: "19:55",
       views: "2.9K",
       date: "2025-11",
@@ -88,15 +89,7 @@ export function YouTube() {
 
   const filtered = activeCategory === "all"
     ? videos
-    : videos.filter((v) => {
-        const catMap: Record<string, string> = {
-          "AI": "AI",
-          "פיתוח": "dev",
-          "הדגמות": "demos",
-          "טיפים": "tips",
-        }
-        return catMap[v.category] === activeCategory
-      })
+    : videos.filter((v) => v.category === activeCategory)
 
   useGSAP(
     () => {
@@ -193,7 +186,7 @@ export function YouTube() {
                     className="text-[10px] font-mono px-2 py-1 rounded-md tracking-wider uppercase backdrop-blur-sm"
                     style={{ background: `${video.color}25`, color: video.color }}
                   >
-                    {video.category}
+                    {tCat(video.category)}
                   </span>
                 </div>
               </div>
@@ -236,7 +229,7 @@ export function YouTube() {
               <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
             </svg>
             {t("subscribe")}
-            <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
+            <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform rtl:rotate-180" />
           </a>
         </div>
       </div>

@@ -96,7 +96,7 @@ export function News() {
                     </div>
                     <button className="inline-flex items-center gap-1.5 text-xs font-mono text-[#06d6e0] hover:text-[#e84393] transition-colors group/btn">
                       {">> read"}
-                      <ArrowLeft className="w-3 h-3 group-hover/btn:-translate-x-0.5 transition-transform" />
+                      <ArrowLeft className="w-3 h-3 group-hover/btn:-translate-x-0.5 transition-transform rtl:rotate-180" />
                     </button>
                   </div>
                 </div>

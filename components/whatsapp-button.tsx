@@ -102,7 +102,7 @@ export function WhatsAppButton() {
         target="_blank"
         rel="noreferrer"
         className="group relative flex items-center justify-center w-14 h-14 rounded-full bg-[#25D366] shadow-[0_4px_20px_rgba(37,211,102,0.4)] hover:shadow-[0_4px_30px_rgba(37,211,102,0.6)] hover:scale-110 transition-all duration-300 opacity-0"
-        aria-label="WhatsApp"
+        aria-label={t("ariaLabel")}
       >
         {/* Ping animation */}
         <span className="absolute inset-0 rounded-full bg-[#25D366] animate-ping opacity-20" />

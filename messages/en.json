@@ -2,8 +2,8 @@
   "layout": {
     "skipToContent": "Skip to main content",
     "title": "NADAV.AI | Full-Stack AI Developer",
-    "description": "Nadav Cohen - Full-Stack Developer who builds everything with AI. Web apps, enterprise systems, AI agents & automation. 8+ production apps, 80 AI Skills.",
-    "ogDescription": "Building everything with AI. 8+ production apps, 80 AI Skills, 38+ agents."
+    "description": "AI-powered development in Israel. 8+ production systems, 80 AI tools, 38+ automation agents. Expert Full-Stack developer in React, Next.js, TypeScript, Supabase & Flutter.",
+    "ogDescription": "Building everything with AI. 8+ production apps, 80 AI Skills, 38+ agents. Advanced Full-Stack development with artificial intelligence."
   },
   "nav": {
     "projects": "Projects",
@@ -288,9 +288,37 @@
   },
   "whatsapp": {
     "tooltip": "Need help? Talk to me",
-    "close": "Close"
+    "close": "Close",
+    "ariaLabel": "WhatsApp"
   },
   "common": {
-    "langSwitch": "HE"
+    "langSwitch": "HE",
+    "emailPlaceholder": "your@email.com",
+    "githubAriaLabel": "GitHub"
+  },
+  "categories": {
+    "AI": "AI",
+    "dev": "Development",
+    "demos": "Demos",
+    "tips": "Tips",
+    "career": "Career"
+  },
+  "error": {
+    "title": "Oops! Something went wrong",
+    "description": "An unexpected error occurred. We're already working on it. Meanwhile, try refreshing the page or return to the home page.",
+    "retry": "Try again",
+    "home": "Back to home",
+    "hint": "If the problem persists, contact via WhatsApp"
+  },
+  "notFound": {
+    "title": "Page not found",
+    "description": "Sorry, the page you're looking for doesn't exist or has been moved. Let's get you back on track.",
+    "home": "Back to home",
+    "contact": "Contact",
+    "suggestionsTitle": "You might want to visit:",
+    "projects": "Projects",
+    "services": "Services",
+    "blog": "Blog",
+    "guides": "Guides"
   }
 }

@@ -2,8 +2,8 @@
   "layout": {
     "skipToContent": "דלג לתוכן הראשי",
     "title": "NADAV.AI | Full-Stack AI Developer",
-    "description": "נדב כהן - מפתח Full-Stack שבונה הכל עם AI. אפליקציות web, מערכות enterprise, סוכני AI ואוטומציה. 8+ אפליקציות production, 80 AI Skills.",
-    "ogDescription": "בונה הכל עם AI. 8+ אפליקציות production, 80 AI Skills, 38+ סוכנים."
+    "description": "פיתוח אפליקציות עם בינה מלאכותית בישראל. 8+ מערכות production, 80 כלי AI, 38+ סוכני אוטומציה. מפתח Full-Stack מומחה ב-React, Next.js, TypeScript, Supabase ו-Flutter.",
+    "ogDescription": "בונה הכל עם AI. 8+ אפליקציות production, 80 AI Skills, 38+ סוכנים. פיתוח Full-Stack מתקדם עם בינה מלאכותית."
   },
   "nav": {
     "projects": "פרויקטים",
@@ -288,9 +288,37 @@
   },
   "whatsapp": {
     "tooltip": "צריך עזרה? דבר איתי",
-    "close": "סגור"
+    "close": "סגור",
+    "ariaLabel": "WhatsApp"
   },
   "common": {
-    "langSwitch": "EN"
+    "langSwitch": "EN",
+    "emailPlaceholder": "your@email.com",
+    "githubAriaLabel": "GitHub"
+  },
+  "categories": {
+    "AI": "AI",
+    "dev": "פיתוח",
+    "demos": "הדגמות",
+    "tips": "טיפים",
+    "career": "קריירה"
+  },
+  "error": {
+    "title": "אופס! משהו השתבש",
+    "description": "קרתה שגיאה בלתי צפויה. אנחנו כבר עובדים על זה. בינתיים, נסה לרענן את הדף או לחזור לדף הבית.",
+    "retry": "נסה שוב",
+    "home": "חזרה לדף הבית",
+    "hint": "אם הבעיה נמשכת, צור קשר דרך WhatsApp"
+  },
+  "notFound": {
+    "title": "הדף לא נמצא",
+    "description": "מצטערים, הדף שחיפשת לא קיים או הועבר. בוא נחזור למסלול.",
+    "home": "חזרה לדף הבית",
+    "contact": "צור קשר",
+    "suggestionsTitle": "אולי תרצה לבקר ב:",
+    "projects": "פרויקטים",
+    "services": "שירותים",
+    "blog": "בלוג",
+    "guides": "מדריכים"
   }
 }

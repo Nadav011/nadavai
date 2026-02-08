@@ -12,6 +12,7 @@ gsap.registerPlugin(ScrollTrigger)
 
 export function Blog() {
   const t = useTranslations("blog")
+  const tCat = useTranslations("categories")
   const locale = useLocale()
   const [activeCategory, setActiveCategory] = useState("all")
   const sectionRef = useRef<HTMLElement>(null)
@@ -43,7 +44,7 @@ export function Blog() {
     {
       title: t("b2Title"),
       excerpt: t("b2Excerpt"),
-      category: "פיתוח",
+      category: "dev",
       date: "2026-01-15",
       readTime: 6,
       likes: 83,
@@ -67,7 +68,7 @@ export function Blog() {
     {
       title: t("b4Title"),
       excerpt: t("b4Excerpt"),
-      category: "טיפים",
+      category: "tips",
       date: "2025-12-20",
       readTime: 5,
       likes: 92,
@@ -79,7 +80,7 @@ export function Blog() {
     {
       title: t("b5Title"),
       excerpt: t("b5Excerpt"),
-      category: "קריירה",
+      category: "career",
       date: "2025-12-10",
       readTime: 10,
       likes: 210,
@@ -91,7 +92,7 @@ export function Blog() {
     {
       title: t("b6Title"),
       excerpt: t("b6Excerpt"),
-      category: "פיתוח",
+      category: "dev",
       date: "2025-11-28",
       readTime: 7,
       likes: 134,
@@ -109,15 +110,7 @@ export function Blog() {
 
   const filtered = activeCategory === "all"
     ? posts
-    : posts.filter((p) => {
-        const catMap: Record<string, string> = {
-          "AI": "AI",
-          "פיתוח": "dev",
-          "טיפים": "tips",
-          "קריירה": "career",
-        }
-        return catMap[p.category] === activeCategory
-      })
+    : posts.filter((p) => p.category === activeCategory)
 
   useGSAP(() => {
     if (!sectionRef.current) return
@@ -254,7 +247,7 @@ export function Blog() {
                     className="text-[10px] font-mono px-2.5 py-1 rounded-full tracking-wider uppercase"
                     style={{ background: `${post.color}12`, color: post.color, border: `1px solid ${post.color}25` }}
                   >
-                    {post.category}
+                    {tCat(post.category)}
                   </span>
                   <div className="flex items-center gap-1.5 text-[hsl(215,20%,48%)]">
                     <Calendar className="w-3 h-3" />
@@ -310,7 +303,7 @@ export function Blog() {
             className="group flex items-center gap-2 px-6 py-3 rounded-xl border border-[hsl(215,28%,20%)] bg-[hsl(222,47%,6%)] text-sm font-medium text-[hsl(215,20%,65%)] hover:text-[#06d6e0] hover:border-[#06d6e0]/30 transition-all duration-500 min-h-11"
           >
             {t("allPosts")}
-            <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
+            <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform rtl:rotate-180" />
           </a>
         </div>
       </div>

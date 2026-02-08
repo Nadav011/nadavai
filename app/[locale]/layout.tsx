@@ -12,16 +12,22 @@ import "../globals.css"
 const spaceGrotesk = Space_Grotesk({
   subsets: ["latin"],
   variable: "--font-space-grotesk",
+  display: "swap",
+  preload: true,
 })
 
 const jetbrainsMono = JetBrains_Mono({
   subsets: ["latin"],
   variable: "--font-jetbrains",
+  display: "swap",
+  preload: false, // Only preload critical fonts
 })
 
 const heebo = Heebo({
   subsets: ["latin", "hebrew"],
   variable: "--font-heebo",
+  display: "swap",
+  preload: true, // Critical for Hebrew content
 })
 
 function getDirection(locale: string): "rtl" | "ltr" {
@@ -64,6 +70,9 @@ export async function generateMetadata({
       card: "summary_large_image",
       title: t("title"),
       description: t("ogDescription"),
+      images: ["/opengraph-image"],
+      creator: "@nadavcohen",
+      site: "@nadavcohen",
     },
     robots: {
       index: true,
@@ -150,6 +159,151 @@ export default async function LocaleLayout({
               name: "NADAV.AI",
               alternateName: "נדב כהן - מפתח AI",
               url: "https://nadavc.ai",
+              potentialAction: {
+                "@type": "SearchAction",
+                target: {
+                  "@type": "EntryPoint",
+                  urlTemplate: "https://nadavc.ai/{locale}?search={search_term_string}",
+                },
+                "query-input": "required name=search_term_string",
+              },
+            }),
+          }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "Organization",
+              "@id": "https://nadavc.ai/#organization",
+              name: "NADAV AI",
+              alternateName: ["נדב AI", "NADAV.AI"],
+              url: "https://nadavc.ai",
+              logo: {
+                "@type": "ImageObject",
+                url: "https://nadavc.ai/opengraph-image",
+                width: 1200,
+                height: 630,
+              },
+              description: "AI Development Agency specializing in Full-Stack development, enterprise systems, AI agents, and automation solutions.",
+              founder: {
+                "@type": "Person",
+                name: "Nadav Cohen",
+                alternateName: "נדב כהן",
+              },
+              foundingDate: "2024",
+              foundingLocation: {
+                "@type": "Place",
+                address: {
+                  "@type": "PostalAddress",
+                  addressCountry: "IL",
+                  addressRegion: "Israel",
+                },
+              },
+              areaServed: ["IL", "US", "Worldwide"],
+              sameAs: [
+                "https://github.com/Nadav011",
+                "https://www.facebook.com/nadav.cohen.167",
+              ],
+              contactPoint: {
+                "@type": "ContactPoint",
+                telephone: "+972-50-524-5677",
+                contactType: "Customer Service",
+                email: "nadav@nadavc.ai",
+                availableLanguage: ["Hebrew", "English"],
+                areaServed: "Worldwide",
+              },
+              knowsAbout: [
+                "Artificial Intelligence",
+                "Full-Stack Development",
+                "React",
+                "Next.js",
+                "TypeScript",
+                "Supabase",
+                "Flutter",
+                "AI Agents",
+                "Enterprise Software",
+                "Web Applications",
+              ],
+            }),
+          }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "ProfessionalService",
+              "@id": "https://nadavc.ai/#professionalservice",
+              name: "NADAV AI - AI Development Services",
+              alternateName: "נדב AI - שירותי פיתוח AI",
+              image: "https://nadavc.ai/opengraph-image",
+              url: "https://nadavc.ai",
+              telephone: "+972-50-524-5677",
+              email: "nadav@nadavc.ai",
+              priceRange: "$$",
+              address: {
+                "@type": "PostalAddress",
+                addressCountry: "IL",
+                addressRegion: "Israel",
+              },
+              geo: {
+                "@type": "GeoCoordinates",
+                addressCountry: "IL",
+              },
+              areaServed: ["IL", "US", "Worldwide"],
+              availableLanguage: ["Hebrew", "English"],
+              serviceType: [
+                "Full-Stack Development",
+                "AI Development",
+                "Enterprise Software Development",
+                "AI Agent Development",
+                "Web Application Development",
+                "Mobile App Development",
+                "Automation Solutions",
+              ],
+              description: "Professional AI development services: Full-Stack web & mobile apps, enterprise systems, AI agents, automation. 8+ production applications, 80+ AI skills.",
+              slogan: "Building everything with AI",
+              founder: {
+                "@type": "Person",
+                name: "Nadav Cohen",
+              },
+            }),
+          }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "BreadcrumbList",
+              itemListElement: [
+                {
+                  "@type": "ListItem",
+                  position: 1,
+                  name: "Home",
+                  item: `https://nadavc.ai/${locale}`,
+                },
+                {
+                  "@type": "ListItem",
+                  position: 2,
+                  name: locale === "he" ? "פרויקטים" : "Projects",
+                  item: `https://nadavc.ai/${locale}#projects`,
+                },
+                {
+                  "@type": "ListItem",
+                  position: 3,
+                  name: locale === "he" ? "שירותים" : "Services",
+                  item: `https://nadavc.ai/${locale}#services`,
+                },
+                {
+                  "@type": "ListItem",
+                  position: 4,
+                  name: locale === "he" ? "יצירת קשר" : "Contact",
+                  item: `https://nadavc.ai/${locale}#contact`,
+                },
+              ],
             }),
           }}
         />

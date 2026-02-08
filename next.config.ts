@@ -7,6 +7,14 @@ const nextConfig: NextConfig = {
   images: {
     formats: ["image/avif", "image/webp"],
   },
+  // Performance optimizations
+  compiler: {
+    removeConsole: process.env.NODE_ENV === "production" ? {
+      exclude: ["error", "warn"],
+    } : false,
+  },
+  // Enable production optimizations
+  reactStrictMode: true,
 }
 
 export default withNextIntl(nextConfig)

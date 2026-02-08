@@ -18,6 +18,7 @@ gsap.registerPlugin(ScrollTrigger)
 
 export function Projects() {
   const t = useTranslations("projects")
+  const tCommon = useTranslations("common")
   const [activeProject, setActiveProject] = useState<number | null>(null)
   const sectionRef = useRef<HTMLElement>(null)
 
@@ -295,7 +296,7 @@ export function Projects() {
                       </div>
                       <div className="flex items-center gap-2">
                         {project.github && (
-                          <a href={project.github} target="_blank" rel="noreferrer" className="p-2 rounded-lg hover:bg-[hsl(215,28%,12%)] text-[hsl(215,20%,45%)] hover:text-[hsl(210,40%,98%)] transition-all" aria-label="GitHub">
+                          <a href={project.github} target="_blank" rel="noreferrer" className="p-2 rounded-lg hover:bg-[hsl(215,28%,12%)] text-[hsl(215,20%,45%)] hover:text-[hsl(210,40%,98%)] transition-all" aria-label={tCommon("githubAriaLabel")}>
                             <Github className="w-4 h-4" />
                           </a>
                         )}

@@ -2,11 +2,9 @@
 
 import { ReactLenis, useLenis } from "lenis/react"
 import type { ReactNode } from "react"
-import { gsap } from "gsap"
 import { ScrollTrigger } from "gsap/ScrollTrigger"
 
-gsap.registerPlugin(ScrollTrigger)
-
+// ScrollTrigger is registered in page.tsx - no need to register again
 function LenisGSAPSync() {
   useLenis(() => {
     ScrollTrigger.update()

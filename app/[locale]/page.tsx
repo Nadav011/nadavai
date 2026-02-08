@@ -1,31 +1,36 @@
 "use client"
 
 import { useEffect } from "react"
+import dynamic from "next/dynamic"
 import { Navbar } from "@/components/navbar"
 import { Hero } from "@/components/hero"
-import { TechMarquee } from "@/components/tech-marquee"
-import { Projects } from "@/components/projects"
-import { Services } from "@/components/services"
-import { Process } from "@/components/process"
-import { Testimonials } from "@/components/testimonials"
-import { Blog } from "@/components/blog"
-import { YouTube } from "@/components/youtube"
-import { Guides } from "@/components/guides"
-import { Resources } from "@/components/resources"
-import { News } from "@/components/news"
-import { Social } from "@/components/social"
-import { Contact } from "@/components/contact"
 import { Footer } from "@/components/footer"
-import { Particles } from "@/components/particles"
-import { CustomCursor } from "@/components/custom-cursor"
 import { ScrollProgress } from "@/components/scroll-progress"
-import { WhatsAppButton } from "@/components/whatsapp-button"
 import { SmoothScroll } from "@/components/smooth-scroll"
-import { EasterEgg } from "@/components/easter-egg"
 import gsap from "gsap"
 import { ScrollTrigger } from "gsap/dist/ScrollTrigger"
 
-// Register GSAP plugins
+// Lazy load below-the-fold sections (code splitting)
+const TechMarquee = dynamic(() => import("@/components/tech-marquee").then(mod => ({ default: mod.TechMarquee })), { ssr: true })
+const Projects = dynamic(() => import("@/components/projects").then(mod => ({ default: mod.Projects })), { ssr: true })
+const Services = dynamic(() => import("@/components/services").then(mod => ({ default: mod.Services })), { ssr: true })
+const Process = dynamic(() => import("@/components/process").then(mod => ({ default: mod.Process })), { ssr: true })
+const Testimonials = dynamic(() => import("@/components/testimonials").then(mod => ({ default: mod.Testimonials })), { ssr: true })
+const Blog = dynamic(() => import("@/components/blog").then(mod => ({ default: mod.Blog })), { ssr: true })
+const YouTube = dynamic(() => import("@/components/youtube").then(mod => ({ default: mod.YouTube })), { ssr: true })
+const Guides = dynamic(() => import("@/components/guides").then(mod => ({ default: mod.Guides })), { ssr: true })
+const Resources = dynamic(() => import("@/components/resources").then(mod => ({ default: mod.Resources })), { ssr: true })
+const News = dynamic(() => import("@/components/news").then(mod => ({ default: mod.News })), { ssr: true })
+const Social = dynamic(() => import("@/components/social").then(mod => ({ default: mod.Social })), { ssr: true })
+const Contact = dynamic(() => import("@/components/contact").then(mod => ({ default: mod.Contact })), { ssr: true })
+
+// Lazy load non-critical client components (no SSR needed)
+const Particles = dynamic(() => import("@/components/particles").then(mod => ({ default: mod.Particles })), { ssr: false })
+const CustomCursor = dynamic(() => import("@/components/custom-cursor").then(mod => ({ default: mod.CustomCursor })), { ssr: false })
+const WhatsAppButton = dynamic(() => import("@/components/whatsapp-button").then(mod => ({ default: mod.WhatsAppButton })), { ssr: false })
+const EasterEgg = dynamic(() => import("@/components/easter-egg").then(mod => ({ default: mod.EasterEgg })), { ssr: false })
+
+// Register GSAP plugins (consolidated)
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger)
 }
