@@ -125,7 +125,7 @@ export function Hero() {
       <div className="absolute inset-0" style={{ zIndex: 0 }}>
         <div className="absolute inset-0 grid-bg opacity-20" />
         <div className="absolute w-[800px] h-[800px] bg-[#06d6e0]/4 rounded-full blur-[180px] animate-pulse-glow" style={{ top: "30%", left: "50%", transform: "translate(-50%, -50%)" }} />
-        <div className="absolute w-[600px] h-[600px] bg-[#e84393]/3 rounded-full blur-[150px] animate-pulse-glow" style={{ bottom: "20%", insetInlineStart: "30%", animationDelay: "2s" }} />
+        <div className="absolute w-[500px] h-[500px] bg-[#06d6e0]/3 rounded-full blur-[150px] animate-pulse-glow" style={{ bottom: "20%", insetInlineStart: "30%", animationDelay: "2s" }} />
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
           <div className="w-full h-[1px] bg-gradient-to-l from-transparent via-[#06d6e0]/15 to-transparent" style={{ animation: "scan-line 8s linear infinite" }} />
         </div>
