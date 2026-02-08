@@ -124,9 +124,10 @@ export default async function LocaleLayout({
   const dir = getDirection(locale)
 
   return (
-    <html lang={locale} dir={dir} className="dark">
+    <html lang={locale} dir={dir} className="dark" style={{ backgroundColor: "#070a13", colorScheme: "dark" }}>
       <body
         className={`${spaceGrotesk.variable} ${jetbrainsMono.variable} ${heebo.variable} font-sans antialiased overflow-x-hidden`}
+        style={{ backgroundColor: "#070a13", color: "#f8fafc" }}
       >
         <script
           type="application/ld+json"
