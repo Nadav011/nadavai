@@ -7,11 +7,13 @@ const CustomCursor = dynamic(() => import("@/components/custom-cursor").then(mod
 const WhatsAppButton = dynamic(() => import("@/components/whatsapp-button").then(mod => ({ default: mod.WhatsAppButton })), { ssr: false })
 const EasterEgg = dynamic(() => import("@/components/easter-egg").then(mod => ({ default: mod.EasterEgg })), { ssr: false })
 const AmbientOrbs = dynamic(() => import("@/components/ambient-orbs").then(mod => ({ default: mod.AmbientOrbs })), { ssr: false })
+const GlobalParticles = dynamic(() => import("@/components/global-particles").then(mod => ({ default: mod.GlobalParticles })), { ssr: false })
 
 export function NonCritical() {
   return (
     <>
       <Particles />
+      <GlobalParticles />
       <AmbientOrbs />
       <CustomCursor />
       <WhatsAppButton />
