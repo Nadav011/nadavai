@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState, useRef } from "react"
+import { useState, useRef } from "react"
 import {
   Code2, Bot, Palette, Rocket, GraduationCap, Wrench,
   Check, ArrowLeft, Crown, Sparkles, Clock, Users, Shield, Zap

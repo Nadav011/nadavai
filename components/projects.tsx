@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState, useRef } from "react"
+import { useState, useRef } from "react"
 import { ExternalLink, Github, Star, ArrowDown, Globe, Cpu, Layers, Clock, Shield } from "lucide-react"
 import { useTranslations } from "next-intl"
 import { ScrollReveal } from "./scroll-reveal"

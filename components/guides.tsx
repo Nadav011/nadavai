@@ -107,7 +107,7 @@ export function Guides() {
                         <span className="text-xs font-mono">{t(guide.readTime)}</span>
                       </div>
                     </div>
-                    <button className="text-xs font-mono text-[#06d6e0] hover:text-[#e84393] transition-colors">
+                    <button aria-label={t(guide.title)} className="text-xs font-mono text-[#06d6e0] hover:text-[#e84393] transition-colors">
                       {guide.type === "video" ? ">> play" : ">> read"}
                     </button>
                   </div>

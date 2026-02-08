@@ -142,6 +142,7 @@ export function YouTube() {
             <button
               key={cat.key}
               onClick={() => setActiveCategory(cat.key)}
+              aria-pressed={activeCategory === cat.key}
               className={`yt-category-btn px-4 py-2 rounded-lg text-sm font-mono transition-all duration-300 min-h-11 ${
                 activeCategory === cat.key
                   ? "bg-[#e84393]/15 text-[#e84393] border border-[#e84393]/30"
@@ -225,7 +226,7 @@ export function YouTube() {
             rel="noreferrer"
             className="yt-cta group flex items-center gap-3 px-8 py-4 rounded-xl bg-gradient-to-l from-[#FF0000] to-[#cc0000] text-white font-bold text-sm hover:shadow-[0_0_40px_rgba(255,0,0,0.3)] transition-all duration-500 min-h-11"
           >
-            <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+            <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
               <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
             </svg>
             {t("subscribe")}

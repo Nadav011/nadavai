@@ -211,6 +211,7 @@ export function Blog() {
             <button
               key={cat.key}
               onClick={() => setActiveCategory(cat.key)}
+              aria-pressed={activeCategory === cat.key}
               className={`px-4 py-2 rounded-lg text-sm font-mono transition-all duration-300 min-h-11 ${
                 activeCategory === cat.key
                   ? "bg-[#06d6e0]/15 text-[#06d6e0] border border-[#06d6e0]/30"
