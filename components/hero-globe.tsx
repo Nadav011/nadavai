@@ -2,54 +2,46 @@
 
 import { useEffect, useRef, useCallback } from "react"
 
-interface Point3D {
-  x: number
-  y: number
-  z: number
+interface Point3D { x: number; y: number; z: number }
+interface Projected { x: number; y: number; s: number; d: number }
+
+function proj(p: Point3D, cx: number, cy: number, f: number): Projected {
+  const s = f / (f + p.z)
+  return { x: p.x * s + cx, y: p.y * s + cy, s, d: p.z }
 }
 
-interface ProjectedPoint {
-  x: number
-  y: number
-  scale: number
-  depth: number
+function rX(p: Point3D, a: number): Point3D {
+  const c = Math.cos(a), s = Math.sin(a)
+  return { x: p.x, y: p.y * c - p.z * s, z: p.y * s + p.z * c }
 }
 
-function project(point: Point3D, cx: number, cy: number, fov: number): ProjectedPoint {
-  const scale = fov / (fov + point.z)
-  return {
-    x: point.x * scale + cx,
-    y: point.y * scale + cy,
-    scale,
-    depth: point.z,
-  }
+function rY(p: Point3D, a: number): Point3D {
+  const c = Math.cos(a), s = Math.sin(a)
+  return { x: p.x * c + p.z * s, y: p.y, z: -p.x * s + p.z * c }
 }
 
-function rotateX(p: Point3D, angle: number): Point3D {
-  const cos = Math.cos(angle)
-  const sin = Math.sin(angle)
-  return { x: p.x, y: p.y * cos - p.z * sin, z: p.y * sin + p.z * cos }
+function rZ(p: Point3D, a: number): Point3D {
+  const c = Math.cos(a), s = Math.sin(a)
+  return { x: p.x * c - p.y * s, y: p.x * s + p.y * c, z: p.z }
 }
 
-function rotateY(p: Point3D, angle: number): Point3D {
-  const cos = Math.cos(angle)
-  const sin = Math.sin(angle)
-  return { x: p.x * cos + p.z * sin, y: p.y, z: -p.x * sin + p.z * cos }
+function normalize(p: Point3D, r: number): Point3D {
+  const l = Math.sqrt(p.x * p.x + p.y * p.y + p.z * p.z)
+  return { x: (p.x / l) * r, y: (p.y / l) * r, z: (p.z / l) * r }
 }
 
-function createIcosahedron(radius: number): { vertices: Point3D[]; edges: [number, number][] } {
+// Create geodesic sphere (subdivided icosahedron)
+function createGeodesic(radius: number, detail: number): { verts: Point3D[]; edges: [number, number][] } {
   const t = (1 + Math.sqrt(5)) / 2
-  const s = radius / Math.sqrt(1 + t * t)
-
-  const vertices: Point3D[] = [
-    { x: -s, y: t * s, z: 0 }, { x: s, y: t * s, z: 0 },
-    { x: -s, y: -t * s, z: 0 }, { x: s, y: -t * s, z: 0 },
-    { x: 0, y: -s, z: t * s }, { x: 0, y: s, z: t * s },
-    { x: 0, y: -s, z: -t * s }, { x: 0, y: s, z: -t * s },
-    { x: t * s, y: 0, z: -s }, { x: t * s, y: 0, z: s },
-    { x: -t * s, y: 0, z: -s }, { x: -t * s, y: 0, z: s },
+  const n = radius / Math.sqrt(1 + t * t)
+  const verts: Point3D[] = [
+    { x: -n, y: t * n, z: 0 }, { x: n, y: t * n, z: 0 },
+    { x: -n, y: -t * n, z: 0 }, { x: n, y: -t * n, z: 0 },
+    { x: 0, y: -n, z: t * n }, { x: 0, y: n, z: t * n },
+    { x: 0, y: -n, z: -t * n }, { x: 0, y: n, z: -t * n },
+    { x: t * n, y: 0, z: -n }, { x: t * n, y: 0, z: n },
+    { x: -t * n, y: 0, z: -n }, { x: -t * n, y: 0, z: n },
   ]
-
   const faces: [number, number, number][] = [
     [0, 11, 5], [0, 5, 1], [0, 1, 7], [0, 7, 10], [0, 10, 11],
     [1, 5, 9], [5, 11, 4], [11, 10, 2], [10, 7, 6], [7, 1, 8],
@@ -57,78 +49,75 @@ function createIcosahedron(radius: number): { vertices: Point3D[]; edges: [numbe
     [4, 9, 5], [2, 4, 11], [6, 2, 10], [8, 6, 7], [9, 8, 1],
   ]
 
+  let currentFaces = faces
+  for (let d = 0; d < detail; d++) {
+    const newFaces: [number, number, number][] = []
+    const midCache: Record<string, number> = {}
+    const getMid = (a: number, b: number): number => {
+      const key = `${Math.min(a, b)}-${Math.max(a, b)}`
+      if (midCache[key] !== undefined) return midCache[key]
+      const mid = normalize({
+        x: (verts[a].x + verts[b].x) / 2,
+        y: (verts[a].y + verts[b].y) / 2,
+        z: (verts[a].z + verts[b].z) / 2,
+      }, radius)
+      verts.push(mid)
+      midCache[key] = verts.length - 1
+      return midCache[key]
+    }
+    for (const [a, b, c] of currentFaces) {
+      const ab = getMid(a, b), bc = getMid(b, c), ca = getMid(c, a)
+      newFaces.push([a, ab, ca], [b, bc, ab], [c, ca, bc], [ab, bc, ca])
+    }
+    currentFaces = newFaces
+  }
+
   const edgeSet = new Set<string>()
   const edges: [number, number][] = []
-  for (const face of faces) {
-    const pairs: [number, number][] = [[face[0], face[1]], [face[1], face[2]], [face[0], face[2]]]
-    for (const [i, j] of pairs) {
+  for (const [a, b, c] of currentFaces) {
+    for (const [i, j] of [[a, b], [b, c], [a, c]] as [number, number][]) {
       const key = `${Math.min(i, j)}-${Math.max(i, j)}`
-      if (!edgeSet.has(key)) {
-        edgeSet.add(key)
-        edges.push([i, j])
-      }
+      if (!edgeSet.has(key)) { edgeSet.add(key); edges.push([i, j]) }
     }
   }
-
-  return { vertices, edges }
+  return { verts, edges }
 }
 
-function subdivide(vertices: Point3D[], edges: [number, number][], radius: number): { vertices: Point3D[]; edges: [number, number][] } {
-  const newVerts = [...vertices]
-  const newEdges: [number, number][] = []
-
-  for (const [a, b] of edges) {
-    const mid: Point3D = {
-      x: (vertices[a].x + vertices[b].x) / 2,
-      y: (vertices[a].y + vertices[b].y) / 2,
-      z: (vertices[a].z + vertices[b].z) / 2,
-    }
-    const len = Math.sqrt(mid.x * mid.x + mid.y * mid.y + mid.z * mid.z)
-    mid.x = (mid.x / len) * radius
-    mid.y = (mid.y / len) * radius
-    mid.z = (mid.z / len) * radius
-
-    const midIdx = newVerts.length
-    newVerts.push(mid)
-    newEdges.push([a, midIdx], [midIdx, b])
-  }
-
-  return { vertices: newVerts, edges: newEdges }
+// Data stream particle traveling along sphere surface
+interface DataStream {
+  lat: number; lng: number; speed: number; trail: Point3D[]; maxTrail: number
+  color: string; size: number; active: boolean; life: number
 }
 
-function createOrbitRing(radius: number, count: number, tilt: number): Point3D[] {
-  const points: Point3D[] = []
-  for (let i = 0; i < count; i++) {
-    const angle = (i / count) * Math.PI * 2
-    let p: Point3D = { x: Math.cos(angle) * radius, y: 0, z: Math.sin(angle) * radius }
-    p = rotateX(p, tilt)
-    points.push(p)
-  }
-  return points
+// Orbital ring point
+function ringPoint(radius: number, angle: number, tiltX: number, tiltZ: number): Point3D {
+  let p: Point3D = { x: Math.cos(angle) * radius, y: 0, z: Math.sin(angle) * radius }
+  p = rX(p, tiltX)
+  p = rZ(p, tiltZ)
+  return p
 }
 
 export function HeroGlobe() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
-  const mouseRef = useRef({ x: 0, y: 0, targetX: 0, targetY: 0 })
+  const mouseRef = useRef({ x: 0, y: 0, tx: 0, ty: 0 })
+  const frameRef = useRef(0)
 
-  const handleMouseMove = useCallback((e: MouseEvent) => {
-    mouseRef.current.targetX = (e.clientX / window.innerWidth - 0.5) * 2
-    mouseRef.current.targetY = (e.clientY / window.innerHeight - 0.5) * 2
+  const onMove = useCallback((e: MouseEvent) => {
+    mouseRef.current.tx = (e.clientX / window.innerWidth - 0.5) * 2
+    mouseRef.current.ty = (e.clientY / window.innerHeight - 0.5) * 2
   }, [])
 
   useEffect(() => {
     const canvas = canvasRef.current
     if (!canvas) return
-    const ctx = canvas.getContext("2d")
+    const ctx = canvas.getContext("2d", { alpha: true })
     if (!ctx) return
 
-    const isMobile = window.matchMedia("(max-width: 768px)").matches
-
-    let animationId: number
+    const mobile = window.innerWidth < 768
     let time = 0
 
     const resize = () => {
-      const dpr = Math.min(window.devicePixelRatio, isMobile ? 1.5 : 2)
+      const dpr = Math.min(window.devicePixelRatio, mobile ? 1.5 : 2)
       canvas.width = window.innerWidth * dpr
       canvas.height = window.innerHeight * dpr
       canvas.style.width = `${window.innerWidth}px`
@@ -136,244 +125,358 @@ export function HeroGlobe() {
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
     }
     resize()
-
     window.addEventListener("resize", resize)
-    window.addEventListener("mousemove", handleMouseMove)
+    window.addEventListener("mousemove", onMove)
 
     const onTouch = (e: TouchEvent) => {
       if (e.touches.length > 0) {
-        mouseRef.current.targetX = (e.touches[0].clientX / window.innerWidth - 0.5) * 2
-        mouseRef.current.targetY = (e.touches[0].clientY / window.innerHeight - 0.5) * 2
+        mouseRef.current.tx = (e.touches[0].clientX / window.innerWidth - 0.5) * 2
+        mouseRef.current.ty = (e.touches[0].clientY / window.innerHeight - 0.5) * 2
       }
     }
-    if (isMobile) {
-      window.addEventListener("touchmove", onTouch, { passive: true })
+    if (mobile) window.addEventListener("touchmove", onTouch, { passive: true })
+
+    const w = window.innerWidth, h = window.innerHeight
+    const cx = w * 0.5, cy = h * 0.47
+    const fov = 800
+    const R = Math.min(w, h) * (mobile ? 0.26 : 0.23)
+
+    // Geodesic sphere - 1 subdivision for clean look
+    const geo = createGeodesic(R, 1)
+
+    // 3 orbital rings at different tilts
+    const rings = [
+      { tiltX: 0.3, tiltZ: 0.15, radius: R * 1.35, speed: 0.4, count: 100 },
+      { tiltX: -0.5, tiltZ: 0.8, radius: R * 1.5, speed: -0.25, count: 80 },
+      { tiltX: 1.2, tiltZ: 0.3, radius: R * 1.2, speed: 0.55, count: 60 },
+    ]
+
+    // Data streams flowing across sphere surface
+    const streamCount = mobile ? 6 : 14
+    const streams: DataStream[] = []
+    const colors = ["#06d6e0", "#0ea5e9", "#06d6e0", "#22d3ee", "#06b6d4"]
+    for (let i = 0; i < streamCount; i++) {
+      streams.push({
+        lat: (Math.random() - 0.5) * Math.PI,
+        lng: Math.random() * Math.PI * 2,
+        speed: 0.008 + Math.random() * 0.015,
+        trail: [],
+        maxTrail: mobile ? 8 : 16,
+        color: colors[i % colors.length],
+        size: 1.5 + Math.random() * 1.5,
+        active: true,
+        life: Math.random() * 200 + 100,
+      })
     }
 
-    const w = window.innerWidth
-    const h = window.innerHeight
-    const cx = w * 0.5
-    const cy = h * 0.47
-    const fov = 800
-    const baseRadius = Math.min(w, h) * (isMobile ? 0.25 : 0.22)
-
-    // Single elegant wireframe sphere
-    const ico = createIcosahedron(baseRadius)
-    const sphere = subdivide(ico.vertices, ico.edges, baseRadius)
-
-    // One subtle orbit ring
-    const ring = createOrbitRing(baseRadius * 1.4, 80, 0.4)
-
-    // Floating neural nodes - fewer, cleaner
-    const nodeCount = isMobile ? 12 : 25
-    const nodes: { pos: Point3D; speed: number; offset: number; size: number; connections: number[] }[] = []
+    // Floating data nodes
+    const nodeCount = mobile ? 8 : 18
+    const nodes: { base: Point3D; orbitR: number; orbitSpeed: number; phase: number; size: number }[] = []
     for (let i = 0; i < nodeCount; i++) {
       const theta = Math.random() * Math.PI * 2
       const phi = Math.acos(2 * Math.random() - 1)
-      const r = baseRadius * (1.05 + Math.random() * 0.6)
+      const r = R * (1.15 + Math.random() * 0.5)
       nodes.push({
-        pos: {
-          x: r * Math.sin(phi) * Math.cos(theta),
-          y: r * Math.sin(phi) * Math.sin(theta),
-          z: r * Math.cos(phi),
-        },
-        speed: 0.15 + Math.random() * 0.3,
-        offset: Math.random() * Math.PI * 2,
+        base: { x: r * Math.sin(phi) * Math.cos(theta), y: r * Math.sin(phi) * Math.sin(theta), z: r * Math.cos(phi) },
+        orbitR: 3 + Math.random() * 8,
+        orbitSpeed: 0.3 + Math.random() * 0.6,
+        phase: Math.random() * Math.PI * 2,
         size: 1 + Math.random() * 2,
-        connections: [],
       })
     }
-    // Nearest neighbor connections
-    for (let i = 0; i < nodes.length; i++) {
-      const distances: { idx: number; dist: number }[] = []
-      for (let j = 0; j < nodes.length; j++) {
-        if (i === j) continue
-        const dx = nodes[i].pos.x - nodes[j].pos.x
-        const dy = nodes[i].pos.y - nodes[j].pos.y
-        const dz = nodes[i].pos.z - nodes[j].pos.z
-        distances.push({ idx: j, dist: Math.sqrt(dx * dx + dy * dy + dz * dz) })
-      }
-      distances.sort((a, b) => a.dist - b.dist)
-      nodes[i].connections = distances.slice(0, 2).map(d => d.idx)
-    }
-
-    // Single pulse wave
-    let pulseTime = 0
 
     const animate = () => {
-      if (document.hidden) {
-        animationId = requestAnimationFrame(animate)
-        return
-      }
-
-      time += isMobile ? 0.005 : 0.003
+      if (document.hidden) { frameRef.current = requestAnimationFrame(animate); return }
+      time += mobile ? 0.006 : 0.004
       ctx.clearRect(0, 0, w, h)
 
       const m = mouseRef.current
-      m.x += (m.targetX - m.x) * 0.03
-      m.y += (m.targetY - m.y) * 0.03
+      m.x += (m.tx - m.x) * 0.04
+      m.y += (m.ty - m.y) * 0.04
 
-      const rotYAngle = time * 0.35 + m.x * 0.25
-      const rotXAngle = Math.sin(time * 0.2) * 0.15 + m.y * 0.15
+      const rotY = time * 0.3 + m.x * 0.2
+      const rotXa = Math.sin(time * 0.15) * 0.12 + m.y * 0.12
 
-      // Subtle background glow
-      const g1 = ctx.createRadialGradient(cx, cy, 0, cx, cy, baseRadius * 2)
-      g1.addColorStop(0, "rgba(6, 214, 224, 0.06)")
-      g1.addColorStop(0.5, "rgba(6, 214, 224, 0.02)")
-      g1.addColorStop(1, "rgba(0, 0, 0, 0)")
-      ctx.fillStyle = g1
+      // --- Ambient glow ---
+      const g = ctx.createRadialGradient(cx, cy, 0, cx, cy, R * 2.2)
+      g.addColorStop(0, "rgba(6, 214, 224, 0.05)")
+      g.addColorStop(0.4, "rgba(6, 182, 212, 0.025)")
+      g.addColorStop(1, "rgba(0, 0, 0, 0)")
+      ctx.fillStyle = g
       ctx.fillRect(0, 0, w, h)
 
-      // Single pulse wave (subtle)
-      pulseTime += 0.008
-      const pulseRadius = (pulseTime % 3) * baseRadius * 0.6
-      const pulseAlpha = Math.max(0, 0.15 - (pulseTime % 3) * 0.06)
-      if (pulseAlpha > 0) {
+      // --- Orbital rings (behind sphere) ---
+      for (const ring of rings) {
         ctx.beginPath()
-        ctx.arc(cx, cy, pulseRadius, 0, Math.PI * 2)
+        const ringAngleOffset = time * ring.speed
+        for (let i = 0; i <= ring.count; i++) {
+          const angle = (i / ring.count) * Math.PI * 2 + ringAngleOffset
+          let p = ringPoint(ring.radius, angle, ring.tiltX, ring.tiltZ)
+          p = rY(p, rotY)
+          p = rX(p, rotXa)
+          const pr = proj(p, cx, cy, fov)
+          if (i === 0) ctx.moveTo(pr.x, pr.y)
+          else ctx.lineTo(pr.x, pr.y)
+        }
         ctx.strokeStyle = "#06d6e0"
-        ctx.globalAlpha = pulseAlpha
-        ctx.lineWidth = 1
+        ctx.globalAlpha = 0.06
+        ctx.lineWidth = 0.6
         ctx.stroke()
+
+        // Bright moving dot on ring
+        const dotAngle = time * ring.speed * 3
+        let dp = ringPoint(ring.radius, dotAngle, ring.tiltX, ring.tiltZ)
+        dp = rY(dp, rotY); dp = rX(dp, rotXa)
+        const dpr = proj(dp, cx, cy, fov)
+        const dotGlow = ctx.createRadialGradient(dpr.x, dpr.y, 0, dpr.x, dpr.y, 8)
+        dotGlow.addColorStop(0, "rgba(6, 214, 224, 0.6)")
+        dotGlow.addColorStop(1, "rgba(6, 214, 224, 0)")
+        ctx.globalAlpha = 1
+        ctx.fillStyle = dotGlow
+        ctx.fillRect(dpr.x - 8, dpr.y - 8, 16, 16)
+        ctx.beginPath()
+        ctx.arc(dpr.x, dpr.y, 1.5 * dpr.s, 0, Math.PI * 2)
+        ctx.fillStyle = "#06d6e0"
+        ctx.globalAlpha = 0.9
+        ctx.fill()
       }
 
-      // Orbit ring
-      ctx.beginPath()
-      for (let i = 0; i < ring.length; i++) {
-        let p = rotateY(ring[i], rotYAngle)
-        p = rotateX(p, rotXAngle)
-        const proj = project(p, cx, cy, fov)
-        if (i === 0) ctx.moveTo(proj.x, proj.y)
-        else ctx.lineTo(proj.x, proj.y)
-      }
-      ctx.closePath()
-      ctx.strokeStyle = "#06d6e0"
-      ctx.globalAlpha = 0.08
-      ctx.lineWidth = 0.5
-      ctx.stroke()
-
-      // Main sphere wireframe
-      const projected: ProjectedPoint[] = sphere.vertices.map(v => {
-        let p = rotateY(v, rotYAngle)
-        p = rotateX(p, rotXAngle)
-        return project(p, cx, cy, fov)
+      // --- Sphere wireframe ---
+      const pVerts: Projected[] = geo.verts.map(v => {
+        let p = rY(v, rotY); p = rX(p, rotXa)
+        return proj(p, cx, cy, fov)
       })
 
-      for (const [a, b] of sphere.edges) {
-        const pa = projected[a], pb = projected[b]
-        const avgD = (pa.depth + pb.depth) / 2
-        const dAlpha = Math.max(0.02, Math.min(0.35, 0.3 - avgD / (baseRadius * 4)))
-
-        // Subtle color shift between cyan and white
-        const colorMix = (Math.sin(time * 1.2 + a * 0.2) + 1) / 2
-        const r = Math.round(6 + colorMix * 30)
-        const g = Math.round(214 + colorMix * 20)
-        const b2 = Math.round(224 + colorMix * 10)
+      // Draw edges with depth-based opacity
+      for (const [a, b] of geo.edges) {
+        const pa = pVerts[a], pb = pVerts[b]
+        const avgD = (pa.d + pb.d) / 2
+        const alpha = Math.max(0.015, Math.min(0.28, 0.24 - avgD / (R * 4)))
 
         ctx.beginPath()
         ctx.moveTo(pa.x, pa.y)
         ctx.lineTo(pb.x, pb.y)
-        ctx.strokeStyle = `rgb(${r}, ${g}, ${b2})`
-        ctx.globalAlpha = dAlpha
-        ctx.lineWidth = Math.max(0.3, pa.scale * 1.2)
+        ctx.strokeStyle = "#06d6e0"
+        ctx.globalAlpha = alpha
+        ctx.lineWidth = Math.max(0.3, 0.8 * pa.s)
         ctx.stroke()
       }
 
-      // Vertex glow - only the 12 original icosahedron vertices
+      // Vertex highlights (original 12 icosahedron vertices only)
       for (let i = 0; i < 12; i++) {
-        const pv = projected[i]
-        const depthAlpha = Math.max(0.1, Math.min(0.7, 0.5 - pv.depth / (baseRadius * 3)))
-        const pulseSize = 2 + Math.sin(time * 2 + i * 0.8) * 1
+        const pv = pVerts[i]
+        const da = Math.max(0.1, 0.55 - pv.d / (R * 2.5))
+        const pulse = 2.2 + Math.sin(time * 2.5 + i * 0.7) * 0.8
 
-        const grad = ctx.createRadialGradient(pv.x, pv.y, 0, pv.x, pv.y, pulseSize * 4)
-        grad.addColorStop(0, `rgba(6, 214, 224, ${depthAlpha * 0.4})`)
-        grad.addColorStop(1, "rgba(0, 0, 0, 0)")
+        // Glow
+        const vg = ctx.createRadialGradient(pv.x, pv.y, 0, pv.x, pv.y, pulse * 5)
+        vg.addColorStop(0, `rgba(6, 214, 224, ${da * 0.3})`)
+        vg.addColorStop(1, "rgba(0, 0, 0, 0)")
         ctx.globalAlpha = 1
-        ctx.fillStyle = grad
-        ctx.fillRect(pv.x - pulseSize * 4, pv.y - pulseSize * 4, pulseSize * 8, pulseSize * 8)
+        ctx.fillStyle = vg
+        ctx.fillRect(pv.x - pulse * 5, pv.y - pulse * 5, pulse * 10, pulse * 10)
 
+        // Dot
         ctx.beginPath()
-        ctx.arc(pv.x, pv.y, pulseSize * pv.scale, 0, Math.PI * 2)
+        ctx.arc(pv.x, pv.y, pulse * pv.s * 0.6, 0, Math.PI * 2)
         ctx.fillStyle = "#06d6e0"
-        ctx.globalAlpha = depthAlpha
+        ctx.globalAlpha = da
         ctx.fill()
       }
 
-      // Neural node connections + nodes
-      const projectedNodes: ProjectedPoint[] = nodes.map(n => {
-        const angle = time * n.speed + n.offset
-        let p = rotateY(n.pos, angle * 0.2)
-        p = rotateY(p, rotYAngle * 0.4)
-        p = rotateX(p, rotXAngle * 0.4)
-        return project(p, cx, cy, fov)
-      })
+      // --- Data streams on sphere surface ---
+      for (const stream of streams) {
+        stream.lng += stream.speed
+        stream.lat += Math.sin(time * 2 + stream.lng) * 0.003
+        stream.life--
 
-      // Connections
+        if (stream.life <= 0) {
+          stream.lat = (Math.random() - 0.5) * Math.PI
+          stream.lng = Math.random() * Math.PI * 2
+          stream.life = Math.random() * 200 + 100
+          stream.trail = []
+        }
+
+        const sp: Point3D = {
+          x: R * Math.cos(stream.lat) * Math.cos(stream.lng),
+          y: R * Math.sin(stream.lat),
+          z: R * Math.cos(stream.lat) * Math.sin(stream.lng),
+        }
+        stream.trail.unshift(sp)
+        if (stream.trail.length > stream.maxTrail) stream.trail.pop()
+
+        // Draw trail
+        if (stream.trail.length > 1) {
+          for (let i = 0; i < stream.trail.length - 1; i++) {
+            let pa3 = rY(stream.trail[i], rotY); pa3 = rX(pa3, rotXa)
+            let pb3 = rY(stream.trail[i + 1], rotY); pb3 = rX(pb3, rotXa)
+            const pa = proj(pa3, cx, cy, fov)
+            const pb = proj(pb3, cx, cy, fov)
+
+            // Only draw if front-facing
+            if (pa.d > R * 0.3 && pb.d > R * 0.3) continue
+
+            const trailAlpha = (1 - i / stream.trail.length) * 0.5
+            const depthFade = Math.max(0, 1 - pa.d / (R * 1.5))
+
+            ctx.beginPath()
+            ctx.moveTo(pa.x, pa.y)
+            ctx.lineTo(pb.x, pb.y)
+            ctx.strokeStyle = stream.color
+            ctx.globalAlpha = trailAlpha * depthFade
+            ctx.lineWidth = stream.size * pa.s * (1 - i / stream.trail.length)
+            ctx.stroke()
+          }
+
+          // Head glow
+          let headP = rY(stream.trail[0], rotY); headP = rX(headP, rotXa)
+          const hp = proj(headP, cx, cy, fov)
+          if (hp.d < R * 0.3) {
+            const hg = ctx.createRadialGradient(hp.x, hp.y, 0, hp.x, hp.y, 6)
+            hg.addColorStop(0, stream.color.replace(")", ", 0.7)").replace("rgb", "rgba"))
+            hg.addColorStop(1, "rgba(0,0,0,0)")
+            ctx.globalAlpha = Math.max(0, 1 - hp.d / (R * 1.5))
+            ctx.fillStyle = hg
+            ctx.fillRect(hp.x - 6, hp.y - 6, 12, 12)
+
+            ctx.beginPath()
+            ctx.arc(hp.x, hp.y, stream.size * hp.s, 0, Math.PI * 2)
+            ctx.fillStyle = "#fff"
+            ctx.globalAlpha = Math.max(0, 0.8 - hp.d / R)
+            ctx.fill()
+          }
+        }
+      }
+
+      // --- Floating data nodes with connections ---
+      const nodeProj: Projected[] = []
       for (let i = 0; i < nodes.length; i++) {
-        const pa = projectedNodes[i]
-        for (const j of nodes[i].connections) {
-          const pb = projectedNodes[j]
-          const avgD = (pa.depth + pb.depth) / 2
-          const dAlpha = Math.max(0, 0.06 - avgD / (baseRadius * 8))
-          if (dAlpha <= 0) continue
+        const n = nodes[i]
+        const wobble = time * n.orbitSpeed + n.phase
+        let p: Point3D = {
+          x: n.base.x + Math.sin(wobble) * n.orbitR,
+          y: n.base.y + Math.cos(wobble * 1.3) * n.orbitR,
+          z: n.base.z + Math.sin(wobble * 0.7) * n.orbitR,
+        }
+        p = rY(p, rotY * 0.5)
+        p = rX(p, rotXa * 0.5)
+        nodeProj.push(proj(p, cx, cy, fov))
+      }
 
+      // Node connections (nearest 2)
+      for (let i = 0; i < nodeProj.length; i++) {
+        const pi = nodeProj[i]
+        const dists: { j: number; d: number }[] = []
+        for (let j = 0; j < nodeProj.length; j++) {
+          if (i === j) continue
+          const dx = pi.x - nodeProj[j].x, dy = pi.y - nodeProj[j].y
+          dists.push({ j, d: Math.sqrt(dx * dx + dy * dy) })
+        }
+        dists.sort((a, b) => a.d - b.d)
+        for (let k = 0; k < Math.min(2, dists.length); k++) {
+          const pj = nodeProj[dists[k].j]
+          const maxDist = mobile ? 100 : 150
+          if (dists[k].d > maxDist) continue
+
+          const lineAlpha = (1 - dists[k].d / maxDist) * 0.08
           ctx.beginPath()
-          ctx.moveTo(pa.x, pa.y)
-          ctx.lineTo(pb.x, pb.y)
+          ctx.moveTo(pi.x, pi.y)
+          ctx.lineTo(pj.x, pj.y)
           ctx.strokeStyle = "#06d6e0"
-          ctx.globalAlpha = dAlpha
-          ctx.lineWidth = 0.3
+          ctx.globalAlpha = lineAlpha
+          ctx.lineWidth = 0.4
+          ctx.setLineDash([2, 4])
           ctx.stroke()
+          ctx.setLineDash([])
 
-          // Data flow dot
-          const flowPos = (time * 1.5 + i * 0.5) % 1
-          const fx = pa.x + (pb.x - pa.x) * flowPos
-          const fy = pa.y + (pb.y - pa.y) * flowPos
+          // Traveling pulse dot
+          const pulse = (time * 1.5 + i * 0.3 + k) % 1
+          const px = pi.x + (pj.x - pi.x) * pulse
+          const py = pi.y + (pj.y - pi.y) * pulse
           ctx.beginPath()
-          ctx.arc(fx, fy, 1, 0, Math.PI * 2)
+          ctx.arc(px, py, 1, 0, Math.PI * 2)
           ctx.fillStyle = "#06d6e0"
-          ctx.globalAlpha = dAlpha * 2.5
+          ctx.globalAlpha = lineAlpha * 4
           ctx.fill()
         }
       }
 
-      // Nodes
-      for (let i = 0; i < nodes.length; i++) {
-        const proj = projectedNodes[i]
-        const depthAlpha = Math.max(0.05, 0.35 - proj.depth / (baseRadius * 5))
+      // Node dots
+      for (let i = 0; i < nodeProj.length; i++) {
+        const np = nodeProj[i]
+        const da = Math.max(0.08, 0.4 - np.d / (R * 4))
         ctx.beginPath()
-        ctx.arc(proj.x, proj.y, nodes[i].size * proj.scale, 0, Math.PI * 2)
+        ctx.arc(np.x, np.y, nodes[i].size * np.s, 0, Math.PI * 2)
         ctx.fillStyle = "#06d6e0"
-        ctx.globalAlpha = depthAlpha
+        ctx.globalAlpha = da
         ctx.fill()
+
+        // Soft glow
+        const ng = ctx.createRadialGradient(np.x, np.y, 0, np.x, np.y, nodes[i].size * 5)
+        ng.addColorStop(0, `rgba(6, 214, 224, ${da * 0.2})`)
+        ng.addColorStop(1, "rgba(0,0,0,0)")
+        ctx.globalAlpha = 1
+        ctx.fillStyle = ng
+        ctx.fillRect(np.x - nodes[i].size * 5, np.y - nodes[i].size * 5, nodes[i].size * 10, nodes[i].size * 10)
       }
 
-      // Central energy core - subtle
-      const coreSize = baseRadius * 0.08 + Math.sin(time * 2.5) * baseRadius * 0.02
-      const coreGrad = ctx.createRadialGradient(cx, cy, 0, cx, cy, coreSize)
-      coreGrad.addColorStop(0, "rgba(6, 214, 224, 0.15)")
-      coreGrad.addColorStop(1, "rgba(0, 0, 0, 0)")
+      // --- Central AI core ---
+      const coreBreath = 1 + Math.sin(time * 2) * 0.15
+      const coreR = R * 0.12 * coreBreath
+
+      // Outer haze
+      const c1 = ctx.createRadialGradient(cx, cy, 0, cx, cy, coreR * 3)
+      c1.addColorStop(0, "rgba(6, 214, 224, 0.08)")
+      c1.addColorStop(0.5, "rgba(6, 182, 212, 0.03)")
+      c1.addColorStop(1, "rgba(0,0,0,0)")
       ctx.globalAlpha = 1
-      ctx.fillStyle = coreGrad
+      ctx.fillStyle = c1
       ctx.beginPath()
-      ctx.arc(cx, cy, coreSize, 0, Math.PI * 2)
+      ctx.arc(cx, cy, coreR * 3, 0, Math.PI * 2)
       ctx.fill()
 
+      // Inner bright core
+      const c2 = ctx.createRadialGradient(cx, cy, 0, cx, cy, coreR)
+      c2.addColorStop(0, "rgba(6, 214, 224, 0.2)")
+      c2.addColorStop(0.7, "rgba(6, 214, 224, 0.06)")
+      c2.addColorStop(1, "rgba(0,0,0,0)")
+      ctx.fillStyle = c2
+      ctx.beginPath()
+      ctx.arc(cx, cy, coreR, 0, Math.PI * 2)
+      ctx.fill()
+
+      // Tiny bright center dot
+      ctx.beginPath()
+      ctx.arc(cx, cy, 2 * coreBreath, 0, Math.PI * 2)
+      ctx.fillStyle = "rgba(255, 255, 255, 0.3)"
+      ctx.fill()
+
+      // --- Pulse wave (every ~4 seconds) ---
+      const pulseCycle = (time * 0.7) % 3
+      if (pulseCycle < 2) {
+        const pulseR = pulseCycle * R * 0.9
+        const pulseA = Math.max(0, 0.12 * (1 - pulseCycle / 2))
+        ctx.beginPath()
+        ctx.arc(cx, cy, pulseR, 0, Math.PI * 2)
+        ctx.strokeStyle = "#06d6e0"
+        ctx.globalAlpha = pulseA
+        ctx.lineWidth = 1.5 * (1 - pulseCycle / 2)
+        ctx.stroke()
+      }
+
       ctx.globalAlpha = 1
-      animationId = requestAnimationFrame(animate)
+      frameRef.current = requestAnimationFrame(animate)
     }
 
-    animate()
+    frameRef.current = requestAnimationFrame(animate)
 
     return () => {
-      cancelAnimationFrame(animationId)
+      cancelAnimationFrame(frameRef.current)
       window.removeEventListener("resize", resize)
-      window.removeEventListener("mousemove", handleMouseMove)
-      if (isMobile) {
-        window.removeEventListener("touchmove", onTouch)
-      }
+      window.removeEventListener("mousemove", onMove)
+      if (mobile) window.removeEventListener("touchmove", onTouch)
     }
-  }, [handleMouseMove])
+  }, [onMove])
 
   return (
     <canvas
