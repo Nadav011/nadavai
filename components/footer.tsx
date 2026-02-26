@@ -83,7 +83,6 @@ function NewsletterForm() {
 
 export function Footer() {
   const t = useTranslations("footer")
-  const tCommon = useTranslations("common")
   const sectionRef = useRef<HTMLElement>(null)
 
   const footerLinks = [

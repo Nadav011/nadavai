@@ -113,7 +113,7 @@ export function Process() {
 
       const stepElements = stepsContainerRef.current.querySelectorAll(".process-step")
 
-      stepElements.forEach((step, index) => {
+      stepElements.forEach((step) => {
         gsap.from(step, {
           opacity: 0,
           y: 50,

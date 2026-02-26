@@ -155,7 +155,7 @@ export function YouTube() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filtered.map((video, i) => (
+          {filtered.map((video) => (
             <div key={video.title} className="video-card group relative h-full rounded-2xl border border-[hsl(215,28%,16%)] bg-[hsl(222,47%,5%)] overflow-hidden hover:border-opacity-50 transition-all duration-500">
               <div className="relative aspect-video bg-[hsl(222,47%,7%)] overflow-hidden">
                 <div

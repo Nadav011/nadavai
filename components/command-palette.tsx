@@ -61,11 +61,10 @@ export function CommandPalette() {
       }
     }
     document.addEventListener("keydown", down)
-    return () => document.removeEventListener("keydown", down)
-  }, [])
-
-  useEffect(() => {
+    // Sync browser platform to React state on mount — legitimate external state sync
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setIsMac(navigator.platform?.toLowerCase().includes("mac") ?? /mac/i.test(navigator.userAgent))
+    return () => document.removeEventListener("keydown", down)
   }, [])
 
   const handleSelect = (value: string) => {

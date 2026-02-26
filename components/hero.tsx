@@ -3,7 +3,6 @@
 import { useEffect, useState, useRef } from "react"
 import { ArrowDown, Play, Sparkles } from "lucide-react"
 import { gsap } from "gsap"
-import { ScrollTrigger } from "gsap/ScrollTrigger"
 import { useGSAP } from "@gsap/react"
 import { Magnetic } from "./magnetic"
 import { AnimatedCounter } from "./animated-counter"
@@ -12,7 +11,6 @@ import { Spotlight } from "./spotlight"
 import { TextGenerate } from "./text-generate"
 import { useTranslations } from "next-intl"
 
-// ScrollTrigger is registered in page.tsx - no need to register again
 
 const roles = ["Full-Stack Developer", "AI Builder", "Prompt Engineer", "System Architect", "Tech Creator"]
 

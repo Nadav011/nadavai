@@ -16,6 +16,7 @@ uniform vec2 u_resolution;
 uniform vec2 u_mouse;
 out vec4 fragColor;
 
+// Simplex noise (Ashima Arts, MIT)
 vec3 mod289(vec3 x) { return x - floor(x / 289.0) * 289.0; }
 vec2 mod289(vec2 x) { return x - floor(x / 289.0) * 289.0; }
 vec3 permute(vec3 x) { return mod289((x * 34.0 + 10.0) * x); }
@@ -45,34 +46,88 @@ float snoise(vec2 v) {
   return 130.0 * dot(m, g);
 }
 
-float fbm(vec2 p) {
+float fbm(vec2 p, int octaves) {
   float v = 0.0, a = 0.5;
-  mat2 r = mat2(cos(0.5), sin(0.5), -sin(0.5), cos(0.5));
-  for (int i = 0; i < 4; i++) { v += a * snoise(p); p = r * p * 2.0; a *= 0.5; }
+  mat2 rot = mat2(0.8776, 0.4794, -0.4794, 0.8776);
+  for (int i = 0; i < 5; i++) {
+    if (i >= octaves) break;
+    v += a * snoise(p);
+    p = rot * p * 2.0;
+    a *= 0.5;
+  }
   return v;
 }
 
 void main() {
   vec2 uv = gl_FragCoord.xy / u_resolution;
-  vec2 mOff = (u_mouse - 0.5) * 0.08;
-  uv += mOff * smoothstep(1.0, 0.0, length(uv - u_mouse));
-  float t = u_time * 0.05;
-  vec2 w = uv + 0.3 * vec2(fbm(uv * 1.5 + vec2(t, 0.0)),
-                            fbm(uv * 1.5 + vec2(0.0, t * 1.2)));
-  float n1 = fbm(w * 2.0 + t * 0.3);
-  float n2 = fbm(w * 3.5 + vec2(t * 0.4, -t * 0.2) + n1 * 0.5);
-  float n3 = fbm(uv * 5.0 + vec2(-t * 0.2, t * 0.3));
-  vec3 cy = vec3(0.024, 0.839, 0.878);
-  vec3 pk = vec3(0.910, 0.263, 0.576);
-  vec3 ind = vec3(0.310, 0.275, 0.898);
-  vec3 dp = vec3(0.050, 0.055, 0.120);
-  vec3 c = mix(dp, cy, smoothstep(-0.3, 0.2, n1) * 0.6);
-  c = mix(c, pk, smoothstep(0.1, 0.6, n2) * 0.4);
-  c = mix(c, ind, smoothstep(0.3, 0.8, n3) * 0.5);
-  c = 1.0 - (1.0 - c) * (1.0 - cy * smoothstep(0.3, 0.8, n1 + n2 * 0.5) * 0.15);
-  c *= 1.0 - smoothstep(0.4, 1.4, length((uv - 0.5) * 2.0));
-  c *= smoothstep(0.0, 0.3, uv.y * 0.5 + 0.15);
-  c *= 0.35;
+  float aspect = u_resolution.x / u_resolution.y;
+  vec2 p = vec2(uv.x * aspect, uv.y) * 1.2;
+  float t = u_time * 0.06;
+
+  // Mouse — wide soft warp
+  vec2 mp = vec2(u_mouse.x * aspect, u_mouse.y) * 1.2;
+  float md = length(p - mp);
+  p += (u_mouse - 0.5) * 0.08 * smoothstep(1.5, 0.0, md);
+
+  // Double domain warp — organic liquid flow (Stripe technique)
+  vec2 q = vec2(
+    fbm(p + vec2(1.7, 9.2) + vec2(t, t * 0.7), 3),
+    fbm(p + vec2(8.3, 2.8) + vec2(-t * 0.6, t * 0.8), 3)
+  );
+  vec2 r = vec2(
+    fbm(p + 4.0 * q + vec2(1.7, 9.2) + vec2(t * 0.4, 0.0), 4),
+    fbm(p + 4.0 * q + vec2(8.3, 2.8) + vec2(0.0, t * 0.5), 4)
+  );
+  float n1 = fbm(p + 4.0 * r, 4);
+
+  // Secondary slow field
+  vec2 s = vec2(
+    fbm(p * 0.5 + vec2(3.1, 7.4) + vec2(t * 0.3, -t * 0.2), 3),
+    fbm(p * 0.5 + vec2(5.8, 1.3) + vec2(-t * 0.25, t * 0.3), 3)
+  );
+  float n2 = fbm(p * 0.7 + 2.5 * s, 3);
+
+  // Fine shimmer
+  float n3 = fbm(p * 3.0 + vec2(t * 0.6, -t * 0.4) + n1 * 0.4, 3);
+
+  // Color palette — vivid site tokens
+  vec3 cyan   = vec3(0.024, 0.839, 0.878);
+  vec3 pink   = vec3(0.910, 0.263, 0.576);
+  vec3 indigo = vec3(0.310, 0.275, 0.898);
+  vec3 deep   = vec3(0.030, 0.035, 0.080);
+
+  // Color mapping — wide smooth blends, strong saturation
+  float b1 = smoothstep(-0.4, 0.5, n1);
+  float b2 = smoothstep(-0.3, 0.5, n2);
+  float b3 = smoothstep(-0.1, 0.6, n3 * 0.6 + n1 * 0.4);
+
+  vec3 c = mix(deep, cyan, b1 * 0.6);
+  c = mix(c, pink, b2 * 0.45);
+  c = mix(c, indigo, b3 * 0.5);
+
+  // Additive glow — screen blend for luminous hot spots
+  vec3 glow = cyan * smoothstep(0.1, 0.7, n1 + n2 * 0.4) * 0.2;
+  glow += pink * smoothstep(0.3, 0.8, n2 + n3 * 0.3) * 0.1;
+  c = 1.0 - (1.0 - c) * (1.0 - glow);
+
+  // Mouse glow — visible soft light at cursor
+  float mGlow = smoothstep(1.0, 0.0, md) * 0.15;
+  c += mix(cyan, pink, sin(t * 2.0) * 0.5 + 0.5) * mGlow;
+
+  // Vignette — gentle, wide
+  float vig = 1.0 - smoothstep(0.5, 1.8, length((uv - 0.5) * vec2(1.6, 1.8)));
+  c *= vig;
+
+  // Top fade — narrow, for navbar only
+  c *= smoothstep(0.0, 0.15, uv.y * 0.4 + 0.08);
+
+  // Subtle grain
+  float grain = (fract(sin(dot(gl_FragCoord.xy, vec2(12.9898, 78.233))) * 43758.5453) - 0.5) * 0.012;
+  c += grain;
+
+  // Final brightness — rich and visible
+  c = pow(max(c, 0.0), vec3(1.05)) * 0.65;
+
   fragColor = vec4(c, 1.0);
 }`
 
@@ -81,7 +136,10 @@ function compileShader(gl: WebGL2RenderingContext, type: number, src: string) {
   if (!s) return null
   gl.shaderSource(s, src)
   gl.compileShader(s)
-  if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) { gl.deleteShader(s); return null }
+  if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) {
+    gl.deleteShader(s)
+    return null
+  }
   return s
 }
 
@@ -91,11 +149,14 @@ function linkProgram(gl: WebGL2RenderingContext, vs: WebGLShader, fs: WebGLShade
   gl.attachShader(p, vs)
   gl.attachShader(p, fs)
   gl.linkProgram(p)
-  if (!gl.getProgramParameter(p, gl.LINK_STATUS)) { gl.deleteProgram(p); return null }
+  if (!gl.getProgramParameter(p, gl.LINK_STATUS)) {
+    gl.deleteProgram(p)
+    return null
+  }
   return p
 }
 
-function useFallback(el: HTMLDivElement, canvas?: HTMLCanvasElement) {
+function activateFallback(el: HTMLDivElement, canvas?: HTMLCanvasElement) {
   if (canvas?.parentNode === el) el.removeChild(canvas)
   el.classList.add("shader-fallback")
   return () => { el.classList.remove("shader-fallback") }
@@ -108,14 +169,14 @@ export function ShaderBackground() {
     const el = ref.current
     if (!el) return
 
-    if (window.matchMedia("(max-width: 768px)").matches) return useFallback(el)
+    if (window.matchMedia("(max-width: 768px)").matches) return activateFallback(el)
 
     const canvas = document.createElement("canvas")
     canvas.style.cssText = "width:100%;height:100%"
     el.appendChild(canvas)
 
     const ctx = canvas.getContext("webgl2", { antialias: false, alpha: false })
-    if (!ctx) return useFallback(el, canvas)
+    if (!ctx) return activateFallback(el, canvas)
     const gl = ctx
 
     const vs = compileShader(gl, gl.VERTEX_SHADER, VERT)
@@ -124,14 +185,15 @@ export function ShaderBackground() {
       if (vs) gl.deleteShader(vs)
       if (fs) gl.deleteShader(fs)
       gl.getExtension("WEBGL_lose_context")?.loseContext()
-      return useFallback(el, canvas)
+      return activateFallback(el, canvas)
     }
 
     const prog = linkProgram(gl, vs, fs)
     if (!prog) {
-      gl.deleteShader(vs); gl.deleteShader(fs)
+      gl.deleteShader(vs)
+      gl.deleteShader(fs)
       gl.getExtension("WEBGL_lose_context")?.loseContext()
-      return useFallback(el, canvas)
+      return activateFallback(el, canvas)
     }
 
     gl.useProgram(prog)
