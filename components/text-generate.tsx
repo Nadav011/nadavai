@@ -1,6 +1,6 @@
 "use client"
 
-import { motion } from "motion/react"
+import { useEffect, useRef, useState } from "react"
 
 interface TextGenerateProps {
   words: string
@@ -8,26 +8,41 @@ interface TextGenerateProps {
 }
 
 export function TextGenerate({ words, className = "" }: TextGenerateProps) {
+  const [visible, setVisible] = useState(false)
+  const ref = useRef<HTMLSpanElement>(null)
   const wordArray = words.split(" ")
 
+  useEffect(() => {
+    const el = ref.current
+    if (!el) return
+    const obs = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setVisible(true)
+          obs.disconnect()
+        }
+      },
+      { threshold: 0.1 }
+    )
+    obs.observe(el)
+    return () => obs.disconnect()
+  }, [])
+
   return (
-    <motion.span className={className}>
+    <span ref={ref} className={className}>
       {wordArray.map((word, i) => (
-        <motion.span
+        <span
           key={`${word}-${i}`}
           className="inline-block"
-          initial={{ opacity: 0, filter: "blur(8px)" }}
-          whileInView={{ opacity: 1, filter: "blur(0px)" }}
-          viewport={{ once: true }}
-          transition={{
-            duration: 0.4,
-            delay: i * 0.08,
-            ease: "easeOut",
+          style={{
+            opacity: visible ? 1 : 0,
+            filter: visible ? "blur(0px)" : "blur(8px)",
+            transition: "opacity 0.4s ease-out " + String(i * 0.08) + "s, filter 0.4s ease-out " + String(i * 0.08) + "s",
           }}
         >
           {word}&nbsp;
-        </motion.span>
+        </span>
       ))}
-    </motion.span>
+    </span>
   )
 }
