@@ -4,12 +4,18 @@ import { useEffect, useState, useRef } from "react"
 import { ArrowDown, Play, Sparkles } from "lucide-react"
 import { gsap } from "gsap"
 import { useGSAP } from "@gsap/react"
+import dynamic from "next/dynamic"
 import { Magnetic } from "./magnetic"
 import { AnimatedCounter } from "./animated-counter"
-import { HeroGlobe } from "./hero-globe"
 import { Spotlight } from "./spotlight"
 import { TextGenerate } from "./text-generate"
 import { useTranslations } from "next-intl"
+
+// HeroGlobe is a canvas/WebGL component — defer it to avoid blocking initial render
+const HeroGlobe = dynamic(
+  () => import("./hero-globe").then(m => ({ default: m.HeroGlobe })),
+  { ssr: false, loading: () => <div className="w-64 h-64" /> }
+)
 
 
 const roles = ["Full-Stack Developer", "AI Builder", "Prompt Engineer", "System Architect", "Tech Creator"]

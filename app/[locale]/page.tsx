@@ -5,7 +5,7 @@ import { Hero } from "@/components/hero"
 import { Footer } from "@/components/footer"
 import { ScrollProgress } from "@/components/scroll-progress"
 import { SmoothScroll } from "@/components/smooth-scroll"
-import { GSAPSetup } from "@/components/gsap-setup"
+import { GSAPSetupLazy } from "@/components/gsap-setup-lazy"
 import { NonCritical } from "@/components/non-critical"
 
 // Lazy load below-the-fold sections (code splitting)
@@ -29,7 +29,7 @@ export default function Page() {
         <NonCritical />
       </Suspense>
       <SmoothScroll>
-        <GSAPSetup />
+        <GSAPSetupLazy />
         <ScrollProgress />
         <div className="relative z-10">
         <Navbar />
