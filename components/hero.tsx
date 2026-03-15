@@ -2,8 +2,6 @@
 
 import { useEffect, useState, useRef } from "react"
 import { ArrowDown, Play, Sparkles } from "lucide-react"
-import { gsap } from "gsap"
-import { useGSAP } from "@gsap/react"
 import dynamic from "next/dynamic"
 import { Magnetic } from "./magnetic"
 import { AnimatedCounter } from "./animated-counter"
@@ -55,65 +53,79 @@ export function Hero() {
     return () => clearTimeout(timeout)
   }, [charIndex, isDeleting, roleIndex])
 
-  useGSAP(() => {
-    const tl = gsap.timeline({ defaults: { ease: "expo.out" } })
+  // Defer GSAP — keeps it out of the initial parse bundle
+  useEffect(() => {
+    let cancelled = false
 
-    tl.fromTo(
-      badgeRef.current,
-      { opacity: 0, y: 20 },
-      { opacity: 1, y: 0, duration: 0.6 }
-    )
-      .fromTo(
-        headingRef.current,
-        { opacity: 0, y: 30 },
-        { opacity: 1, y: 0, duration: 0.8 },
-        "<0.15"
-      )
-      .fromTo(
-        terminalRef.current,
-        { opacity: 0, y: 20 },
-        { opacity: 1, y: 0, duration: 0.6 },
-        "<0.2"
-      )
-      .fromTo(
-        descriptionRef.current,
-        { opacity: 0, y: 20 },
-        { opacity: 1, y: 0, duration: 0.6 },
-        "<0.15"
-      )
-      .fromTo(
-        buttonsRef.current?.children || [],
-        { opacity: 0, y: 20 },
-        { opacity: 1, y: 0, duration: 0.6, stagger: 0.1 },
-        "<0.15"
-      )
-      .fromTo(
-        statsRef.current?.children || [],
-        { opacity: 0, y: 20 },
-        { opacity: 1, y: 0, duration: 0.6, stagger: 0.1 },
-        "<0.2"
-      )
-      .fromTo(
-        scrollIndicatorRef.current,
-        { opacity: 0 },
-        { opacity: 1, duration: 0.5 },
-        "<0.2"
-      )
+    Promise.all([
+      import("gsap"),
+      import("gsap/ScrollTrigger"),
+    ]).then(([{ gsap }, { ScrollTrigger }]) => {
+      if (cancelled) return
 
-    // Parallax effect on scroll
-    if (contentRef.current) {
-      gsap.to(contentRef.current, {
-        y: -100,
-        ease: "none",
-        scrollTrigger: {
-          trigger: contentRef.current,
-          start: "top top",
-          end: "bottom top",
-          scrub: true,
-        },
-      })
-    }
-  })
+      gsap.registerPlugin(ScrollTrigger)
+
+      const tl = gsap.timeline({ defaults: { ease: "expo.out" } })
+
+      tl.fromTo(
+        badgeRef.current,
+        { opacity: 0, y: 20 },
+        { opacity: 1, y: 0, duration: 0.6 }
+      )
+        .fromTo(
+          headingRef.current,
+          { opacity: 0, y: 30 },
+          { opacity: 1, y: 0, duration: 0.8 },
+          "<0.15"
+        )
+        .fromTo(
+          terminalRef.current,
+          { opacity: 0, y: 20 },
+          { opacity: 1, y: 0, duration: 0.6 },
+          "<0.2"
+        )
+        .fromTo(
+          descriptionRef.current,
+          { opacity: 0, y: 20 },
+          { opacity: 1, y: 0, duration: 0.6 },
+          "<0.15"
+        )
+        .fromTo(
+          buttonsRef.current?.children ?? [],
+          { opacity: 0, y: 20 },
+          { opacity: 1, y: 0, duration: 0.6, stagger: 0.1 },
+          "<0.15"
+        )
+        .fromTo(
+          statsRef.current?.children ?? [],
+          { opacity: 0, y: 20 },
+          { opacity: 1, y: 0, duration: 0.6, stagger: 0.1 },
+          "<0.2"
+        )
+        .fromTo(
+          scrollIndicatorRef.current,
+          { opacity: 0 },
+          { opacity: 1, duration: 0.5 },
+          "<0.2"
+        )
+
+      // Parallax effect on scroll
+      if (contentRef.current) {
+        gsap.to(contentRef.current, {
+          y: -100,
+          ease: "none",
+          scrollTrigger: {
+            trigger: contentRef.current,
+            start: "top top",
+            end: "bottom top",
+            scrub: true,
+          },
+        })
+      }
+    })
+
+    return () => { cancelled = true }
+  }, [])
 
   const stats = [
     { value: 8, suffix: "+", label: t("stat1") },

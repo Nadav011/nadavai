@@ -2,8 +2,13 @@
 
 import { useState, useEffect, useRef } from "react"
 import { Zap, ExternalLink } from "lucide-react"
+import dynamic from "next/dynamic"
 import { Magnetic } from "./magnetic"
-import { CommandPalette } from "./command-palette"
+
+const CommandPalette = dynamic(
+  () => import("./command-palette").then(m => ({ default: m.CommandPalette })),
+  { ssr: false, loading: () => null }
+)
 import { useTranslations, useLocale } from "next-intl"
 import { Link } from "@/i18n/routing"
 
