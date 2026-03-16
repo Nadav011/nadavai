@@ -2,12 +2,21 @@
 
 import { ReactLenis, useLenis } from "lenis/react"
 import type { ReactNode } from "react"
-import { ScrollTrigger } from "gsap/ScrollTrigger"
+import { useEffect, useRef } from "react"
 
-// ScrollTrigger is registered in page.tsx - no need to register again
+// Lazily sync Lenis with ScrollTrigger — avoids pulling gsap/ScrollTrigger into the initial bundle
 function LenisGSAPSync() {
+  const stRef = useRef<{ update: () => void } | null>(null)
+
+  useEffect(() => {
+    // Dynamically import ScrollTrigger so it's deferred from the critical bundle
+    import("gsap/ScrollTrigger").then(({ ScrollTrigger }) => {
+      stRef.current = ScrollTrigger
+    })
+  }, [])
+
   useLenis(() => {
-    ScrollTrigger.update()
+    stRef.current?.update()
   })
   return null
 }
