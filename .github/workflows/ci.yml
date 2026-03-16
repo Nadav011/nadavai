@@ -17,5 +17,5 @@ jobs:
     uses: Nadav011/ci-standards/.github/workflows/ci-nextjs.yml@main
     with:
       node-version: "24"
-      package-manager: npm
+      package-manager: pnpm@10.30.3
     secrets: inherit
