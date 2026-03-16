@@ -40,8 +40,5 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-# stray lockfiles (only package-lock.json is canonical for this project)
-pnpm-lock.yaml
-
 # backup files
 *.bak
