@@ -1,0 +1,41 @@
+name: Bundle Size Check
+
+on:
+  pull_request:
+    branches: [main, master]
+  push:
+    branches: [main, master]
+
+jobs:
+  bundle:
+    name: Bundle Size Guard
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: 'pnpm'
+
+      - run: pnpm install --frozen-lockfile
+
+      - name: Build
+        run: pnpm run build
+        env:
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL || 'https://placeholder.supabase.co' }}
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'placeholder' }}
+
+      - name: Check total bundle size
+        run: |
+          TOTAL=$(find .next/static -name "*.js" -exec du -k {} + | awk '{sum+=$1} END{print sum}')
+          echo "Bundle: ${TOTAL} KB"
+          if [ "${TOTAL}" -gt 1200 ]; then
+            echo "FAILED: ${TOTAL} KB > 1200 KB limit"
+            exit 1
+          fi
+          echo "PASSED: ${TOTAL} KB"
