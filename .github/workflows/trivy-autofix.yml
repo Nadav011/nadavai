@@ -70,8 +70,7 @@ jobs:
                       print(f'Patched: {name} >= {fixed}')
           with open('package.json', 'w') as f:
               json.dump(pkg, f, indent=2, ensure_ascii=False)
-              f.write('
-')
+              f.write(chr(10))
           "
 
       - name: Create Pull Request
@@ -84,10 +83,9 @@ jobs:
           title: 'fix(security): auto-patch ${{ steps.check.outputs.count }} HIGH/CRITICAL CVEs'
           labels: security,dependencies,automated
           body: |
-            ## 🔒 Auto-generated CVE fix
+            ## Auto-generated CVE fix
 
             Trivy detected **${{ steps.check.outputs.count }}** HIGH/CRITICAL CVEs.
             This PR adds `pnpm.overrides` to pin patched versions.
 
             **Verify after merge:** `trivy fs . --severity HIGH,CRITICAL`
-
