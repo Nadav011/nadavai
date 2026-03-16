@@ -2,10 +2,11 @@ import { Suspense } from "react"
 import dynamic from "next/dynamic"
 import { Navbar } from "@/components/navbar"
 import { Hero } from "@/components/hero"
-import { Footer } from "@/components/footer"
+
+const Footer = dynamic(() => import("@/components/footer").then(mod => ({ default: mod.Footer })))
 import { ScrollProgress } from "@/components/scroll-progress"
 import { SmoothScroll } from "@/components/smooth-scroll"
-import { GSAPSetup } from "@/components/gsap-setup"
+import { GSAPSetupLazy } from "@/components/gsap-setup-lazy"
 import { NonCritical } from "@/components/non-critical"
 
 // Lazy load below-the-fold sections (code splitting)
@@ -29,7 +30,7 @@ export default function Page() {
         <NonCritical />
       </Suspense>
       <SmoothScroll>
-        <GSAPSetup />
+        <GSAPSetupLazy />
         <ScrollProgress />
         <div className="relative z-10">
         <Navbar />

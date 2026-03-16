@@ -35,6 +35,14 @@
     "tailwind-merge": "^2.5.5",
     "tailwindcss-animate": "^1.0.7"
   },
+  "browserslist": [
+    "> 0.5%",
+    "last 2 versions",
+    "not dead",
+    "not ie 11",
+    "not op_mini all",
+    "supports es6-module"
+  ],
   "devDependencies": {
     "@types/node": "^22",
     "@types/react": "19.2.7",
