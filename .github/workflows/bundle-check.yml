@@ -13,7 +13,7 @@ concurrency:
 jobs:
   bundle:
     name: Bundle Size Guard
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, linux, x64, pop-os]
     steps:
       - uses: actions/checkout@v4
 
