@@ -1,0 +1,39 @@
+name: dead-code-cleanup
+on:
+  schedule:
+    - cron: "0 4 * * 1"
+  workflow_dispatch:
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with: { version: "10" }
+      - uses: actions/setup-node@v4
+        with: { node-version: "24", cache: "pnpm" }
+      - run: pnpm install --frozen-lockfile
+      - name: Knip unused file PR
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          npx knip --reporter json > /tmp/knip.json 2>/dev/null || true
+          FILE=$(python3 -c "
+          import json,sys
+          try:
+              d=json.load(open("/tmp/knip.json"))
+              files=d.get("files",[])
+              safe=[f for f in files if not any(x in f for x in [".test.",".spec.",".stories.",".generated.","d.ts"])]
+              print(safe[0]) if safe else sys.exit(1)
+          except: sys.exit(1)
+          " 2>/dev/null) || { echo "None"; exit 0; }
+          BRANCH="chore/remove-unused-$(date +%Y%m%d-%H%M)"
+          git checkout -b "$BRANCH"
+          rm "$FILE"
+          pnpm run typecheck || { git checkout main; exit 0; }
+          git add -A && git commit -m "chore: remove unused $FILE"
+          git push origin "$BRANCH"
+          gh pr create --title "chore: remove unused $(basename $FILE)" --body "Detected by Knip" --base main --head "$BRANCH"
