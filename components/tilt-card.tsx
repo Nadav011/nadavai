@@ -1,6 +1,6 @@
 "use client"
 
-import { useRef, useEffect, useState, type ReactNode, type MouseEvent } from "react"
+import { useRef, useState, type ReactNode, type MouseEvent } from "react"
 
 interface TiltCardProps {
   children: ReactNode
@@ -9,11 +9,9 @@ interface TiltCardProps {
 
 export function TiltCard({ children, className = "" }: TiltCardProps) {
   const ref = useRef<HTMLDivElement>(null)
-  const [isTouchDevice, setIsTouchDevice] = useState(false)
-
-  useEffect(() => {
-    setIsTouchDevice("ontouchstart" in window || navigator.maxTouchPoints > 0)
-  }, [])
+  const [isTouchDevice] = useState(() =>
+    typeof window !== 'undefined' && ("ontouchstart" in window || navigator.maxTouchPoints > 0)
+  )
 
   const handleMove = (e: MouseEvent) => {
     if (isTouchDevice || !ref.current) return
