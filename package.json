@@ -25,7 +25,6 @@
     "clsx": "^2.1.1",
     "cmdk": "1.1.1",
     "gsap": "^3.14.2",
-    "lenis": "^1.3.17",
     "lucide-react": "^0.544.0",
     "motion": "^12.33.0",
     "next": "16.1.6",
@@ -55,5 +54,5 @@
     "tailwindcss": "^3.4.17",
     "typescript": "5.9.3"
   },
-  "_buildTimestamp": "2026-03-17T01:30"
+  "_buildTimestamp": "2026-03-17T10:55"
 }
