@@ -23,12 +23,13 @@ jobs:
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v4
+      - name: Enable pnpm via corepack
+        run: corepack enable pnpm
         with: { version: "10.30.3" }
       - uses: actions/setup-node@v4
         with: { node-version: "24" }
       - run: pnpm install --no-frozen-lockfile
-      - run: pnpm run typecheck
+      - run: ppnpm run typecheck
 
   lint:
     name: Lint
@@ -36,12 +37,13 @@ jobs:
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v4
+      - name: Enable pnpm via corepack
+        run: corepack enable pnpm
         with: { version: "10.30.3" }
       - uses: actions/setup-node@v4
         with: { node-version: "24" }
       - run: pnpm install --no-frozen-lockfile
-      - run: pnpm run lint
+      - run: ppnpm run lint
 
   build:
     name: Build
@@ -50,7 +52,8 @@ jobs:
     needs: [typecheck, lint]
     steps:
       - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v4
+      - name: Enable pnpm via corepack
+        run: corepack enable pnpm
         with: { version: "10.30.3" }
       - uses: actions/setup-node@v4
         with: { node-version: "24" }
