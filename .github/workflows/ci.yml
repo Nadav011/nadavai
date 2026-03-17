@@ -19,13 +19,11 @@ jobs:
       node-version: "24"
       package-manager: pnpm
     secrets: inherit
+
       - name: Notify Telegram on failure
         if: failure()
         run: |
-          curl -s "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage" \
-            -d "chat_id=${{ secrets.TELEGRAM_CHAT_ID }}" \
-            --data-urlencode "text=🚨 nadavai CI FAILED!
-Branch: ${{ github.ref_name }}
-Triggered by: ${{ github.actor }}
-$(date +'%d/%m %H:%M')" \
-            > /dev/null 2>&1 || true
+          MSG="🚨 nadavai CI FAILED! Branch=${{{{ github.ref_name }}}} Actor=${{{{ github.actor }}}}"
+          curl -s "https://api.telegram.org/bot${{{{ secrets.TELEGRAM_BOT_TOKEN }}}}/sendMessage" \
+            -d chat_id="${{{{ secrets.TELEGRAM_CHAT_ID }}}}" \
+            -d "text=$MSG" > /dev/null 2>&1 || true
