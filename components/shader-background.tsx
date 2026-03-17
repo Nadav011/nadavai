@@ -16,7 +16,7 @@ uniform vec2 u_resolution;
 uniform vec2 u_mouse;
 out vec4 fragColor;
 
-// Simplex noise (Ashima Arts, MIT)
+// Simplex noise
 vec3 mod289(vec3 x) { return x - floor(x / 289.0) * 289.0; }
 vec2 mod289(vec2 x) { return x - floor(x / 289.0) * 289.0; }
 vec3 permute(vec3 x) { return mod289((x * 34.0 + 10.0) * x); }
@@ -48,86 +48,112 @@ float snoise(vec2 v) {
 
 float fbm(vec2 p, int octaves) {
   float v = 0.0, a = 0.5;
-  mat2 rot = mat2(0.8776, 0.4794, -0.4794, 0.8776);
-  for (int i = 0; i < 5; i++) {
+  mat2 r = mat2(cos(0.5), sin(0.5), -sin(0.5), cos(0.5));
+  for (int i = 0; i < 7; i++) {
     if (i >= octaves) break;
     v += a * snoise(p);
-    p = rot * p * 2.0;
+    p = r * p * 2.0;
     a *= 0.5;
   }
   return v;
 }
 
+// Energy vein function - creates sharp flowing lines
+float vein(vec2 uv, float t) {
+  float n = fbm(uv * 3.0 + vec2(t * 0.3, -t * 0.15), 5);
+  return pow(abs(sin(n * 3.14159 * 3.0)), 8.0);
+}
+
 void main() {
   vec2 uv = gl_FragCoord.xy / u_resolution;
   float aspect = u_resolution.x / u_resolution.y;
-  vec2 p = vec2(uv.x * aspect, uv.y) * 1.2;
-  float t = u_time * 0.06;
-
-  // Mouse — wide soft warp
-  vec2 mp = vec2(u_mouse.x * aspect, u_mouse.y) * 1.2;
-  float md = length(p - mp);
-  p += (u_mouse - 0.5) * 0.08 * smoothstep(1.5, 0.0, md);
-
-  // Double domain warp — organic liquid flow (Stripe technique)
-  vec2 q = vec2(
-    fbm(p + vec2(1.7, 9.2) + vec2(t, t * 0.7), 3),
-    fbm(p + vec2(8.3, 2.8) + vec2(-t * 0.6, t * 0.8), 3)
+  vec2 uvA = vec2(uv.x * aspect, uv.y);
+  
+  // Mouse influence - creates a reactive glow area
+  vec2 mDiff = uv - u_mouse;
+  float mDist = length(mDiff);
+  float mInfluence = smoothstep(0.5, 0.0, mDist);
+  
+  // Subtle UV warp near mouse
+  uv += mDiff * mInfluence * 0.02;
+  
+  float t = u_time * 0.035;
+  
+  // === Layer 1: Deep organic flow (base) ===
+  vec2 w1 = uv + 0.3 * vec2(
+    fbm(uv * 1.5 + vec2(t, 0.0), 5),
+    fbm(uv * 1.5 + vec2(0.0, t * 0.7), 5)
   );
-  vec2 r = vec2(
-    fbm(p + 4.0 * q + vec2(1.7, 9.2) + vec2(t * 0.4, 0.0), 4),
-    fbm(p + 4.0 * q + vec2(8.3, 2.8) + vec2(0.0, t * 0.5), 4)
-  );
-  float n1 = fbm(p + 4.0 * r, 4);
-
-  // Secondary slow field
-  vec2 s = vec2(
-    fbm(p * 0.5 + vec2(3.1, 7.4) + vec2(t * 0.3, -t * 0.2), 3),
-    fbm(p * 0.5 + vec2(5.8, 1.3) + vec2(-t * 0.25, t * 0.3), 3)
-  );
-  float n2 = fbm(p * 0.7 + 2.5 * s, 3);
-
-  // Fine shimmer
-  float n3 = fbm(p * 3.0 + vec2(t * 0.6, -t * 0.4) + n1 * 0.4, 3);
-
-  // Color palette — vivid site tokens
-  vec3 cyan   = vec3(0.024, 0.839, 0.878);
-  vec3 pink   = vec3(0.910, 0.263, 0.576);
-  vec3 indigo = vec3(0.310, 0.275, 0.898);
-  vec3 deep   = vec3(0.030, 0.035, 0.080);
-
-  // Color mapping — wide smooth blends, strong saturation
-  float b1 = smoothstep(-0.4, 0.5, n1);
-  float b2 = smoothstep(-0.3, 0.5, n2);
-  float b3 = smoothstep(-0.1, 0.6, n3 * 0.6 + n1 * 0.4);
-
-  vec3 c = mix(deep, cyan, b1 * 0.6);
-  c = mix(c, pink, b2 * 0.45);
-  c = mix(c, indigo, b3 * 0.5);
-
-  // Additive glow — screen blend for luminous hot spots
-  vec3 glow = cyan * smoothstep(0.1, 0.7, n1 + n2 * 0.4) * 0.2;
-  glow += pink * smoothstep(0.3, 0.8, n2 + n3 * 0.3) * 0.1;
-  c = 1.0 - (1.0 - c) * (1.0 - glow);
-
-  // Mouse glow — visible soft light at cursor
-  float mGlow = smoothstep(1.0, 0.0, md) * 0.15;
-  c += mix(cyan, pink, sin(t * 2.0) * 0.5 + 0.5) * mGlow;
-
-  // Vignette — gentle, wide
-  float vig = 1.0 - smoothstep(0.5, 1.8, length((uv - 0.5) * vec2(1.6, 1.8)));
+  float base = fbm(w1 * 2.0 + t * 0.15, 6);
+  
+  // === Layer 2: Fine detail noise ===
+  float detail = fbm(uvA * 5.0 + vec2(t * 0.2, -t * 0.1) + base * 0.3, 5);
+  
+  // === Layer 3: Energy veins ===
+  float v1 = vein(uvA + vec2(t * 0.1, 0.0), t);
+  float v2 = vein(uvA * 1.3 + vec2(0.0, t * 0.15), t * 0.8);
+  float veins = max(v1, v2 * 0.7);
+  
+  // === Layer 4: Aurora waves ===
+  float wave1 = sin(uv.x * 4.0 + t * 0.5 + base * 2.0) * 0.5 + 0.5;
+  float wave2 = sin(uv.x * 6.0 - t * 0.3 + detail * 3.0) * 0.5 + 0.5;
+  float aurora = smoothstep(0.4, 0.6, uv.y + wave1 * 0.15 - 0.1) * 
+                 smoothstep(0.8, 0.5, uv.y + wave2 * 0.1);
+  aurora *= 0.4;
+  
+  // === Color palette: cyan ecosystem ===
+  vec3 deepBlack  = vec3(0.020, 0.025, 0.050);
+  vec3 deepNavy   = vec3(0.030, 0.040, 0.075);
+  vec3 darkTeal   = vec3(0.010, 0.14, 0.18);
+  vec3 midCyan    = vec3(0.020, 0.45, 0.50);
+  vec3 brightCyan = vec3(0.024, 0.839, 0.878);
+  vec3 whiteCyan  = vec3(0.6, 0.95, 1.0);
+  
+  // === Build final color ===
+  vec3 c = deepBlack;
+  
+  // Base organic clouds
+  c = mix(c, deepNavy, smoothstep(-0.5, 0.4, base) * 0.9);
+  c = mix(c, darkTeal, smoothstep(-0.1, 0.5, base + detail * 0.3) * 0.7);
+  
+  // Mid-tone flowing wisps
+  float wisps = smoothstep(0.15, 0.6, base * 0.6 + detail * 0.4);
+  c = mix(c, midCyan, wisps * 0.25);
+  
+  // Energy veins - subtle flowing lines
+  c += brightCyan * veins * 0.10;
+  
+  // Aurora bands - softer
+  c = mix(c, darkTeal * 1.4, aurora * smoothstep(-0.2, 0.3, base) * 0.8);
+  
+  // Bright peaks where noise aligns
+  float peak = smoothstep(0.45, 0.85, base * detail + veins * 0.4);
+  c += brightCyan * peak * 0.07;
+  
+  // Rare ultra-bright sparks
+  float spark = smoothstep(0.7, 0.95, base * detail * 1.5);
+  c += whiteCyan * spark * 0.04;
+  
+  // Gentle breathing
+  float breathe = 0.92 + 0.08 * sin(u_time * 0.3);
+  
+  // Mouse reactive glow - elegant
+  c += brightCyan * mInfluence * 0.06;
+  c += whiteCyan * smoothstep(0.15, 0.0, mDist) * 0.02;
+  
+  // Screen blend for luminosity
+  c = 1.0 - (1.0 - c) * (1.0 - brightCyan * smoothstep(0.3, 0.85, base + detail * 0.4) * 0.04);
+  
+  // Soft vignette
+  float vig = 1.0 - smoothstep(0.5, 1.6, length((uv - 0.5) * 1.5));
   c *= vig;
-
-  // Top fade — narrow, for navbar only
-  c *= smoothstep(0.0, 0.15, uv.y * 0.4 + 0.08);
-
-  // Subtle grain
-  float grain = (fract(sin(dot(gl_FragCoord.xy, vec2(12.9898, 78.233))) * 43758.5453) - 0.5) * 0.012;
-  c += grain;
-
-  // Final brightness — rich and visible
-  c = pow(max(c, 0.0), vec3(1.05)) * 0.65;
-
+  
+  // Edge fade
+  c *= smoothstep(0.0, 0.2, uv.y * 0.5 + 0.1);
+  
+  // Overall intensity - elegant, not overwhelming
+  c *= 0.35 * breathe;
+  
   fragColor = vec4(c, 1.0);
 }`
 
@@ -136,10 +162,7 @@ function compileShader(gl: WebGL2RenderingContext, type: number, src: string) {
   if (!s) return null
   gl.shaderSource(s, src)
   gl.compileShader(s)
-  if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) {
-    gl.deleteShader(s)
-    return null
-  }
+  if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) { gl.deleteShader(s); return null }
   return s
 }
 
@@ -149,14 +172,11 @@ function linkProgram(gl: WebGL2RenderingContext, vs: WebGLShader, fs: WebGLShade
   gl.attachShader(p, vs)
   gl.attachShader(p, fs)
   gl.linkProgram(p)
-  if (!gl.getProgramParameter(p, gl.LINK_STATUS)) {
-    gl.deleteProgram(p)
-    return null
-  }
+  if (!gl.getProgramParameter(p, gl.LINK_STATUS)) { gl.deleteProgram(p); return null }
   return p
 }
 
-function activateFallback(el: HTMLDivElement, canvas?: HTMLCanvasElement) {
+function useFallback(el: HTMLDivElement, canvas?: HTMLCanvasElement) {
   if (canvas?.parentNode === el) el.removeChild(canvas)
   el.classList.add("shader-fallback")
   return () => { el.classList.remove("shader-fallback") }
@@ -169,14 +189,16 @@ export function ShaderBackground() {
     const el = ref.current
     if (!el) return
 
-    if (window.matchMedia("(max-width: 768px)").matches) return activateFallback(el)
+    // CSS fallback only on very small/old devices
+    const mobile = window.matchMedia("(max-width: 768px)").matches
+    if (mobile && !window.WebGL2RenderingContext) return useFallback(el)
 
     const canvas = document.createElement("canvas")
     canvas.style.cssText = "width:100%;height:100%"
     el.appendChild(canvas)
 
     const ctx = canvas.getContext("webgl2", { antialias: false, alpha: false })
-    if (!ctx) return activateFallback(el, canvas)
+    if (!ctx) return useFallback(el, canvas)
     const gl = ctx
 
     const vs = compileShader(gl, gl.VERTEX_SHADER, VERT)
@@ -185,15 +207,14 @@ export function ShaderBackground() {
       if (vs) gl.deleteShader(vs)
       if (fs) gl.deleteShader(fs)
       gl.getExtension("WEBGL_lose_context")?.loseContext()
-      return activateFallback(el, canvas)
+      return useFallback(el, canvas)
     }
 
     const prog = linkProgram(gl, vs, fs)
     if (!prog) {
-      gl.deleteShader(vs)
-      gl.deleteShader(fs)
+      gl.deleteShader(vs); gl.deleteShader(fs)
       gl.getExtension("WEBGL_lose_context")?.loseContext()
-      return activateFallback(el, canvas)
+      return useFallback(el, canvas)
     }
 
     gl.useProgram(prog)
@@ -208,7 +229,7 @@ export function ShaderBackground() {
     let mx = 0.5, my = 0.5, tx = 0.5, ty = 0.5
 
     function resize() {
-      const dpr = Math.min(window.devicePixelRatio, 2)
+      const dpr = Math.min(window.devicePixelRatio, mobile ? 1 : 1.5)
       canvas.width = window.innerWidth * dpr
       canvas.height = window.innerHeight * dpr
       gl.viewport(0, 0, canvas.width, canvas.height)
