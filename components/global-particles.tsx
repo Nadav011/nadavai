@@ -71,14 +71,10 @@ export function GlobalParticles() {
     const onScroll = () => { scrollRef.current = window.scrollY }
     window.addEventListener("scroll", onScroll, { passive: true })
 
-    let lastTime = performance.now()
-
-    const animate = (now: number) => {
+    const animate = () => {
       frameRef.current = requestAnimationFrame(animate)
       if (document.hidden) return
 
-      const _dt = Math.min((now - lastTime) / 1000, 0.05)
-      lastTime = now
       ctx.clearRect(0, 0, cw, ch)
 
       const mouse = mouseRef.current
