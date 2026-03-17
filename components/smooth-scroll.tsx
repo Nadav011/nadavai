@@ -1,38 +1,42 @@
 "use client"
 
-import { ReactLenis, useLenis } from "lenis/react"
 import type { ReactNode } from "react"
-import { useEffect, useRef } from "react"
+import { useEffect, useState } from "react"
 
-// Lazily sync Lenis with ScrollTrigger — avoids pulling gsap/ScrollTrigger into the initial bundle
-function LenisGSAPSync() {
-  const stRef = useRef<{ update: () => void } | null>(null)
-
+// Native CSS-only smooth scroll using scroll-behavior
+function SmoothScrollCSS({ children }: { children: ReactNode }) {
   useEffect(() => {
-    // Dynamically import ScrollTrigger so it's deferred from the critical bundle
-    import("gsap/ScrollTrigger").then(({ ScrollTrigger }) => {
-      stRef.current = ScrollTrigger
-    })
+    // Enable native smooth scrolling
+    document.documentElement.style.scrollBehavior = "smooth"
+    return () => {
+      document.documentElement.style.scrollBehavior = "auto"
+    }
   }, [])
+  return <>{children}</>
+}
 
-  useLenis(() => {
-    stRef.current?.update()
-  })
-  return null
+// Check for reduced motion preference — lazy initializer avoids synchronous setState in effect
+function usePrefersReducedMotion() {
+  const [reduced, setReduced] = useState(
+    () =>
+      typeof window !== "undefined" &&
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches,
+  )
+  useEffect(() => {
+    const mq = window.matchMedia("(prefers-reduced-motion: reduce)")
+    const handler = (e: MediaQueryListEvent) => setReduced(e.matches)
+    mq.addEventListener("change", handler)
+    return () => mq.removeEventListener("change", handler)
+  }, [])
+  return reduced
 }
 
 export function SmoothScroll({ children }: { children: ReactNode }) {
-  return (
-    <ReactLenis
-      root
-      options={{
-        lerp: 0.1,
-        duration: 1.2,
-        smoothWheel: true,
-      }}
-    >
-      <LenisGSAPSync />
-      {children}
-    </ReactLenis>
-  )
+  const reducedMotion = usePrefersReducedMotion()
+  
+  if (reducedMotion) {
+    return <>{children}</>
+  }
+  
+  return <SmoothScrollCSS>{children}</SmoothScrollCSS>
 }
