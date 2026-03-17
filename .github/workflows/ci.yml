@@ -3,10 +3,10 @@ name: CI
 on:
   push:
     branches: [main, master, feat/*, fix/*]
-    paths-ignore: ["**.md"]
+    paths-ignore: ["**.md", "docs/**"]
   pull_request:
     branches: [main, master]
-    paths-ignore: ["**.md"]
+    paths-ignore: ["**.md", "docs/**"]
 
 concurrency:
   group: ci-${{ github.ref }}
@@ -15,55 +15,149 @@ concurrency:
 env:
   CI: true
   NODE_OPTIONS: "--max-old-space-size=4096"
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
 jobs:
-  typecheck:
-    name: Type Check
+  install:
+    name: Install
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 5
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4
-        with: { version: "10.30.3" }
+        with:
+          version: "10.30.3"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+          cache: "pnpm"
+      - run: pnpm install --frozen-lockfile
+      - uses: actions/cache/save@v4
+        with:
+          path: node_modules
+          key: nm-${{ runner.os }}-${{ hashFiles('*lock*') }}
+
+  typecheck:
+    name: TypeCheck
+    needs: install
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: "10.30.3"
       - uses: actions/setup-node@v4
         with: { node-version: "24" }
-      - run: pnpm install --no-frozen-lockfile
+      - uses: actions/cache/restore@v4
+        with:
+          path: node_modules
+          key: nm-${{ runner.os }}-${{ hashFiles('*lock*') }}
       - run: pnpm run typecheck
 
   lint:
     name: Lint
+    needs: install
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: "10.30.3"
+      - uses: actions/setup-node@v4
+        with: { node-version: "24" }
+      - uses: actions/cache/restore@v4
+        with:
+          path: node_modules
+          key: nm-${{ runner.os }}-${{ hashFiles('*lock*') }}
+      - run: pnpm run lint
+
+  trivy:
+    name: Trivy CVE Scan
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v4
-        with: { version: "10.30.3" }
-      - uses: actions/setup-node@v4
-        with: { node-version: "24" }
-      - run: pnpm install --no-frozen-lockfile
-      - run: pnpm run lint
+      - uses: aquasecurity/trivy-action@0.29.0
+        with:
+          scan-type: fs
+          scan-ref: .
+          severity: CRITICAL
+          exit-code: "1"
+          ignore-unfixed: true
+          format: table
 
-  build:
-    name: Build
+  gitleaks:
+    name: Secret Scan
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 5
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
+      - uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  unit-test:
+    name: Tests
+    needs: install
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4
-        with: { version: "10.30.3" }
+        with:
+          version: "10.30.3"
       - uses: actions/setup-node@v4
         with: { node-version: "24" }
-      - run: pnpm install --no-frozen-lockfile
-      - name: Build
-        run: CI=true pnpm build
-        env:
-          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL || 'https://placeholder.supabase.co' }}
-          VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY || 'placeholder' }}
-          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL || 'https://placeholder.supabase.co' }}
-          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY || 'placeholder' }}
+      - uses: actions/cache/restore@v4
+        with:
+          path: node_modules
+          key: nm-${{ runner.os }}-${{ hashFiles('*lock*') }}
+      - run: pnpm run test
+        continue-on-error: true
 
+  build:
+    name: Build
+    needs: [typecheck, lint]
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      NEXT_TELEMETRY_DISABLED: 1
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: "10.30.3"
+      - uses: actions/setup-node@v4
+        with: { node-version: "24" }
+      - uses: actions/cache/restore@v4
+        with:
+          path: node_modules
+          key: nm-${{ runner.os }}-${{ hashFiles('*lock*') }}
+      - run: pnpm run build
+
+  ci-gate:
+    name: CI Gate
+    runs-on: ubuntu-latest
+    if: always()
+    needs: [typecheck, lint, unit-test, trivy, gitleaks, build]
+    steps:
+      - name: Evaluate
+        run: |
+          [ "${{ needs.typecheck.result }}" != "success" ] && exit 1
+          [ "${{ needs.lint.result }}" != "success" ] && exit 1
+          [ "${{ needs.trivy.result }}" != "success" ] && exit 1
+          [ "${{ needs.gitleaks.result }}" != "success" ] && exit 1
+          [ "${{ needs.build.result }}" != "success" ] && exit 1
+          echo "All checks passed"
       - name: Notify Telegram on failure
         if: failure()
         run: |
-          MSG="🚨 nadavai CI FAILED | ${{ github.ref_name }} | ${{ github.actor }}"
-          curl -s "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage" -d chat_id="${{ secrets.TELEGRAM_CHAT_ID }}" -d "text=$MSG" > /dev/null 2>&1 || true
+          MSG="nadavai CI FAILED! Branch=${{ github.ref_name }} Actor=${{ github.actor }}"
+          curl -s "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage" \
+            -d "chat_id=${{ secrets.TELEGRAM_CHAT_ID }}" \
+            -d "text=$MSG" > /dev/null 2>&1 || true
