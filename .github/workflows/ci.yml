@@ -24,9 +24,10 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
       - name: Enable pnpm via corepack
         run: corepack enable pnpm
-        with: { node-version: "24" }
       - run: pnpm install --no-frozen-lockfile
       - run: pnpm run typecheck
 
@@ -37,9 +38,10 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
       - name: Enable pnpm via corepack
         run: corepack enable pnpm
-        with: { node-version: "24" }
       - run: pnpm install --no-frozen-lockfile
       - run: pnpm run lint
 
@@ -51,9 +53,10 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
       - name: Enable pnpm via corepack
         run: corepack enable pnpm
-        with: { node-version: "24" }
       - run: pnpm install --no-frozen-lockfile
       - name: Build
         run: ROLLUP_NATIVE_THREADS=0 CI=true pnpm build
