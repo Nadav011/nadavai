@@ -1,6 +1,6 @@
 "use client"
 
-import { useRef, useCallback, useEffect, useState } from "react"
+import { useRef, useCallback, useState } from "react"
 
 interface SpotlightProps {
   className?: string
@@ -11,11 +11,9 @@ export function Spotlight({ className = "", fill = "#06d6e0" }: SpotlightProps) 
   const containerRef = useRef<HTMLDivElement>(null)
   const gradientRef = useRef<HTMLDivElement>(null)
   const trailRef = useRef<HTMLDivElement>(null)
-  const [isMobile, setIsMobile] = useState(false)
-
-  useEffect(() => {
-    setIsMobile(window.matchMedia("(max-width: 768px)").matches)
-  }, [])
+  const [isMobile] = useState(() => 
+    typeof window !== 'undefined' && window.matchMedia("(max-width: 768px)").matches
+  )
 
   const handleMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
     if (!containerRef.current || !gradientRef.current || !trailRef.current) return
