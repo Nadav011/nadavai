@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useState } from "react"
 
 interface Orb {
   id: number
@@ -13,13 +13,11 @@ interface Orb {
 }
 
 export function AmbientOrbs() {
-  const [orbs, setOrbs] = useState<Orb[]>([])
-
-  useEffect(() => {
+  const [orbs] = useState<Orb[]>(() => {
+    if (typeof window === 'undefined') return []
     const isMobile = window.matchMedia("(max-width: 768px)").matches
     const count = isMobile ? 4 : 8
-
-    const generated: Orb[] = Array.from({ length: count }, (_, i) => ({
+    return Array.from({ length: count }, (_, i) => ({
       id: i,
       x: Math.random() * 100,
       y: Math.random() * 100,
@@ -28,8 +26,7 @@ export function AmbientOrbs() {
       duration: 12 + Math.random() * 20,
       delay: Math.random() * -15,
     }))
-    setOrbs(generated)
-  }, [])
+  })
 
   if (orbs.length === 0) return null
 
