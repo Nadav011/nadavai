@@ -148,9 +148,9 @@ export function Services() {
   ]
 
   return (
-    <section ref={sectionRef} id="services" aria-label={t("badge")} className="relative py-24 md:py-32 overflow-hidden">
+    <section ref={sectionRef} id="services" aria-label={t("badge")} className="relative py-16 md:py-32 overflow-hidden">
       <div className="absolute inset-0 bg-[hsl(222,47%,3%)]" />
-      <div className="absolute w-[1000px] h-[600px] bg-[#e84393]/4 rounded-full blur-[150px]" style={{ top: 0, left: "50%", transform: "translateX(-50%)" }} />
+      <div className="absolute w-[1000px] h-[600px] bg-[#06d6e0]/3 rounded-full blur-[150px]" style={{ top: 0, left: "50%", transform: "translateX(-50%)" }} />
       <div className="absolute bottom-0 end-0 w-[600px] h-[400px] bg-[#06d6e0]/3 rounded-full blur-[120px]" />
 
       <div className="relative max-w-7xl mx-auto px-4 md:px-8">
@@ -162,7 +162,7 @@ export function Services() {
         />
 
         <ScrollReveal>
-          <div className="flex flex-wrap items-center justify-center gap-6 md:gap-10 mb-16">
+          <div className="flex flex-wrap items-center justify-center gap-4 md:gap-10 mb-10 md:mb-16">
             {trustSignals.map((signal, i) => (
               <div key={i} className="trust-indicator flex items-center gap-2.5 text-[hsl(215,20%,50%)]">
                 <signal.icon className="w-4 h-4 text-[#06d6e0]" />
@@ -172,7 +172,7 @@ export function Services() {
           </div>
         </ScrollReveal>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-16">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6 mb-8 md:mb-16">
           {services.map((service, i) => (
             <ScrollReveal key={i} delay={i * 120} direction={i === 1 ? "up" : i === 0 ? "right" : "left"}>
               <div
@@ -198,7 +198,7 @@ export function Services() {
                         : "bg-[hsl(215,28%,16%)]"
                   }`}
                 >
-                  <div className={`relative h-full rounded-[15px] p-7 ${
+                  <div className={`relative h-full rounded-[15px] p-5 md:p-7 ${
                     service.popular ? "bg-[hsl(222,47%,4%)]" : "bg-[hsl(222,47%,5%)]"
                   }`}>
                     <div className="flex items-start justify-between mb-6">
@@ -277,7 +277,7 @@ export function Services() {
         </div>
 
         <ScrollReveal delay={200} direction="left">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-4">
             {additionalServices.map((service, i) => (
               <a
                 key={i}
