@@ -2,10 +2,10 @@ name: CI
 
 on:
   push:
-    branches: [main, feat/*, fix/*]
+    branches: [main, master, feat/*, fix/*]
     paths-ignore: ["**.md"]
   pull_request:
-    branches: [main]
+    branches: [main, master]
     paths-ignore: ["**.md"]
 
 concurrency:
@@ -15,13 +15,17 @@ concurrency:
 jobs:
   ci:
     uses: Nadav011/ci-standards/.github/workflows/ci-nextjs.yml@main
+    secrets: inherit
     with:
       node-version: "24"
       package-manager: pnpm
-    secrets: inherit
 
+  notify:
+    needs: ci
+    if: always() && needs.ci.result == 'failure'
+    runs-on: ubuntu-latest
+    steps:
       - name: Notify Telegram on failure
-        if: failure()
         run: |
           MSG="🚨 nadavai CI FAILED! Branch=${{ github.ref_name }} Actor=${{ github.actor }}"
           curl -s "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage" \
