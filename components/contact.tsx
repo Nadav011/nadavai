@@ -70,7 +70,7 @@ export function Contact() {
   )
 
   return (
-    <section ref={sectionRef} id="contact" aria-label={t("title")} className="relative py-24 md:py-32 overflow-hidden">
+    <section ref={sectionRef} id="contact" aria-label={t("title")} className="relative py-16 md:py-32 overflow-hidden">
       <div className="absolute top-0 w-[800px] h-[400px] bg-[#06d6e0]/5 rounded-full blur-[120px]" style={{ left: "50%", transform: "translateX(-50%)" }} />
 
       <div className="relative max-w-4xl mx-auto px-4 md:px-8 text-center">
@@ -79,17 +79,21 @@ export function Contact() {
           <span className="text-xs font-mono text-[#e84393] tracking-wider uppercase">{t("badge")}</span>
         </div>
 
-        <h2 ref={headingRef} className="text-4xl md:text-6xl lg:text-7xl font-bold text-[hsl(210,40%,98%)] mb-6 leading-[1.1]">
+        <h2 ref={headingRef} className="text-2xl md:text-6xl lg:text-7xl font-bold text-[hsl(210,40%,98%)] mb-4 md:mb-6 leading-[1.1]">
           {t("heading1")}
           <br />
           <span className="text-gradient-animated">{t("heading2")}</span>
         </h2>
 
-        <p ref={descRef} className="text-lg text-[hsl(215,20%,55%)] max-w-xl mx-auto mb-10 leading-relaxed">
+        <p ref={descRef} className="text-base md:text-lg text-[hsl(215,20%,55%)] max-w-xl mx-auto mb-8 md:mb-10 leading-relaxed px-2 md:px-0">
           {t("description")}
         </p>
 
-        <div ref={terminalRef} className="relative mx-auto max-w-2xl rounded-xl overflow-hidden border border-[hsl(215,28%,16%)] bg-[hsl(222,47%,5%)]">
+        <div ref={terminalRef} className="relative mx-auto max-w-2xl rounded-xl overflow-hidden border border-[hsl(215,28%,16%)] bg-[hsl(222,47%,5%)] group/terminal">
+          {/* Terminal scan line */}
+          <div className="absolute inset-0 pointer-events-none overflow-hidden rounded-xl z-10">
+            <div className="w-full h-[1px] bg-gradient-to-r from-transparent via-[#06d6e0]/20 to-transparent" style={{ animation: "scan-line 6s linear infinite" }} />
+          </div>
           <div className="flex items-center justify-between px-4 py-3 border-b border-[hsl(215,28%,16%)] bg-[hsl(222,47%,6%)]">
             <div className="flex items-center gap-1.5">
               <div className="w-3 h-3 rounded-full bg-[#ff5f56]" />
@@ -100,14 +104,14 @@ export function Contact() {
             <div className="w-12" />
           </div>
 
-          <div className="p-6 md:p-8 space-y-4 text-end">
+          <div className="p-4 md:p-8 space-y-3 md:space-y-4 text-end">
             <div className="flex items-center gap-3 font-mono text-sm">
               <span className="text-[#06d6e0]">$</span>
               <span className="text-[hsl(215,20%,60%)]">echo</span>
               <span className="text-[#e84393]">{`"${t("terminalCmd")}"`}</span>
             </div>
 
-            <div className="space-y-3 me-6">
+            <div className="space-y-2 md:space-y-3 me-2 md:me-6">
               <a
                 href="https://wa.me/972504401760"
                 target="_blank"
@@ -169,13 +173,13 @@ export function Contact() {
           </a>
         </div>
 
-        <div ref={ctaRef} className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
+        <div ref={ctaRef} className="mt-8 md:mt-10 flex flex-col sm:flex-row items-center justify-center gap-3 md:gap-4">
           <Magnetic strength={0.2}>
             <a
               href="https://wa.me/972504401760"
               target="_blank"
               rel="noreferrer"
-              className="group relative inline-flex items-center gap-3 px-10 py-5 rounded-xl text-lg font-bold text-[hsl(222,47%,4%)] bg-gradient-to-l from-[#27ca40] to-[#22a838] hover:shadow-[0_0_50px_hsl(135,65%,45%,0.4)] transition-all duration-500"
+              className="group relative inline-flex items-center justify-center gap-3 px-8 py-4 md:px-10 md:py-5 rounded-xl text-base md:text-lg font-bold text-[hsl(222,47%,4%)] bg-gradient-to-l from-[#27ca40] to-[#22a838] hover:shadow-[0_0_50px_hsl(135,65%,45%,0.4)] transition-all duration-500 w-full sm:w-auto"
             >
               <Phone className="w-5 h-5" />
               {t("ctaWhatsapp")}
@@ -184,7 +188,7 @@ export function Contact() {
           <Magnetic strength={0.2}>
             <a
               href="mailto:hello@nadavc.ai"
-              className="group relative inline-flex items-center gap-3 px-8 py-4 rounded-xl text-base font-medium text-[hsl(210,40%,98%)] border border-[hsl(215,28%,20%)] bg-[hsl(222,47%,7%)] hover:border-[#06d6e0]/40 transition-all duration-500"
+              className="group relative inline-flex items-center justify-center gap-3 px-8 py-4 rounded-xl text-base font-medium text-[hsl(210,40%,98%)] border border-[hsl(215,28%,20%)] bg-[hsl(222,47%,7%)] hover:border-[#06d6e0]/40 transition-all duration-500 w-full sm:w-auto"
             >
               <Send className="w-4 h-4 text-[#06d6e0]" />
               {t("ctaEmail")}
