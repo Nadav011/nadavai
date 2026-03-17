@@ -1,0 +1,61 @@
+name: Lighthouse CI
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+
+concurrency:
+  group: lighthouse-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  lhci:
+    name: Lighthouse CI
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10.30.3
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24.14.0"
+      - run: pnpm install --no-frozen-lockfile
+      - name: Build
+        run: pnpm build
+        continue-on-error: true
+        env:
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL || 'https://placeholder.supabase.co' }}
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'placeholder' }}
+          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL || 'https://placeholder.supabase.co' }}
+          VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY || 'placeholder' }}
+      - name: Run Lighthouse CI
+        continue-on-error: true
+        run: npx @lhci/cli@0.15.1 autorun
+        env:
+          LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
+      - name: Lighthouse score summary
+        if: always()
+        run: |
+          RESULT_FILE=$(ls .lighthouseci/*.json 2>/dev/null | head -1)
+          if [ -n "$RESULT_FILE" ]; then
+            PERF=$(jq 'del(.audits) | .categories.performance.score * 100 | round' "$RESULT_FILE" 2>/dev/null || echo "?")
+            A11Y=$(jq 'del(.audits) | .categories.accessibility.score * 100 | round' "$RESULT_FILE" 2>/dev/null || echo "?")
+            BP=$(jq 'del(.audits) | .categories["best-practices"].score * 100 | round' "$RESULT_FILE" 2>/dev/null || echo "?")
+            SEO=$(jq 'del(.audits) | .categories.seo.score * 100 | round' "$RESULT_FILE" 2>/dev/null || echo "?")
+            echo "## Lighthouse Results" >> "$GITHUB_STEP_SUMMARY"
+            echo "| Category | Score |" >> "$GITHUB_STEP_SUMMARY"
+            echo "|---|---|" >> "$GITHUB_STEP_SUMMARY"
+            echo "| Performance | ${PERF} |" >> "$GITHUB_STEP_SUMMARY"
+            echo "| Accessibility | ${A11Y} |" >> "$GITHUB_STEP_SUMMARY"
+            echo "| Best Practices | ${BP} |" >> "$GITHUB_STEP_SUMMARY"
+            echo "| SEO | ${SEO} |" >> "$GITHUB_STEP_SUMMARY"
+            echo "" >> "$GITHUB_STEP_SUMMARY"
+            echo "View full report: https://googlechrome.github.io/lighthouse-ci/viewer/" >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "## Lighthouse Results" >> "$GITHUB_STEP_SUMMARY"
+            echo "No result files found — build may have failed or lhci did not run." >> "$GITHUB_STEP_SUMMARY"
+          fi

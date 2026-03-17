@@ -79,8 +79,8 @@ export function Projects() {
       featured: true,
       color: "#06d6e0",
       metrics: { pages: "149", tables: "111" },
-      github: "",
-      demo: "https://mexicani.vercel.app",
+      github: "https://github.com/Nadav011/Mexicani",
+      demo: "",
     },
     {
       title: "Cash",
@@ -94,8 +94,8 @@ export function Projects() {
       featured: true,
       color: "#e84393",
       metrics: { offline: "100%", sync: "Real-time" },
-      github: "",
-      demo: "https://deliverycash.vercel.app",
+      github: "https://github.com/Nadav011/cash",
+      demo: "https://cash-ashy-zeta.vercel.app",
     },
     {
       title: "Shifts",
@@ -109,7 +109,7 @@ export function Projects() {
       featured: false,
       color: "#4f46e5",
       metrics: { components: "154", hooks: "25" },
-      github: "",
+      github: "https://github.com/Nadav011/mexicani-shifts",
       demo: "",
     },
     {
@@ -124,8 +124,8 @@ export function Projects() {
       featured: false,
       color: "#06d6e0",
       metrics: { platform: "iOS", patterns: "Clean" },
-      github: "",
-      demo: "https://hatumdigital.com",
+      github: "https://github.com/Nadav011/hatumdigital",
+      demo: "",
     },
     {
       title: "Z",
@@ -139,7 +139,7 @@ export function Projects() {
       featured: false,
       color: "#e84393",
       metrics: { offline: "100%", currency: "ILS" },
-      github: "",
+      github: "https://github.com/Nadav011/Z",
       demo: "",
     },
     {
@@ -169,7 +169,7 @@ export function Projects() {
       featured: true,
       color: "#4f46e5",
       metrics: { gates: "579", matrix: "10x7" },
-      github: "",
+      github: "https://github.com/Nadav011",
       demo: "",
     },
     {
@@ -184,7 +184,7 @@ export function Projects() {
       featured: false,
       color: "#06d6e0",
       metrics: { platform: "iOS/Android", lang: "Hebrew" },
-      github: "",
+      github: "https://github.com/Nadav011/israeli-finance-app",
       demo: "",
     },
   ]
@@ -199,7 +199,7 @@ export function Projects() {
   }
 
   return (
-    <section ref={sectionRef} id="projects" aria-label={t("title")} className="relative py-24 md:py-32">
+    <section ref={sectionRef} id="projects" aria-label={t("title")} className="relative py-16 md:py-32">
       <div className="absolute inset-0 dot-grid-subtle opacity-[0.15] pointer-events-none" aria-hidden="true" />
       <div className="max-w-7xl mx-auto px-4 md:px-8">
         <SectionHeader
@@ -210,7 +210,7 @@ export function Projects() {
         />
 
         {/* Bento Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-5">
           {projects.map((project, i) => (
             <ScrollReveal key={i} delay={i * 80} direction={i % 2 === 0 ? "right" : "left"}>
               <TiltCard className={project.featured ? "md:row-span-1" : ""}>
@@ -229,7 +229,7 @@ export function Projects() {
                     style={{ background: `linear-gradient(to right, transparent, ${project.color}, transparent)` }}
                   />
 
-                  <div className="p-6">
+                  <div className="p-4 md:p-6">
                     {/* Header row */}
                     <div className="flex items-start justify-between mb-5">
                       <div className="flex items-center gap-3">
@@ -337,7 +337,7 @@ export function Projects() {
 
         {/* View more CTA */}
         <ScrollReveal delay={300}>
-          <div className="flex justify-center mt-12">
+          <div className="flex justify-center mt-8 md:mt-12">
             <a href="https://github.com/Nadav011" target="_blank" rel="noreferrer" className="group flex items-center gap-2 px-6 py-3 rounded-xl border border-[hsl(215,28%,20%)] bg-[hsl(222,47%,6%)] text-sm font-medium text-[hsl(215,20%,65%)] hover:text-[#06d6e0] hover:border-[#06d6e0]/30 transition-all duration-500">
               {t("viewMore")}
               <ArrowDown className="w-4 h-4 group-hover:translate-y-1 transition-transform" />

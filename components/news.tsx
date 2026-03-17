@@ -63,7 +63,7 @@ export function News() {
   )
 
   return (
-    <section ref={sectionRef} id="news" aria-label={t("title")} className="relative py-24 md:py-32">
+    <section ref={sectionRef} id="news" aria-label={t("title")} className="relative py-16 md:py-32">
       <div className="absolute inset-0 dot-grid-subtle opacity-[0.12] pointer-events-none" aria-hidden="true" />
       <div className="max-w-7xl mx-auto px-4 md:px-8">
         <SectionHeader
@@ -73,7 +73,7 @@ export function News() {
           description={t("description")}
         />
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
           {news.map((item, i) => (
             <div key={i} className="news-card">
               <CodeCard

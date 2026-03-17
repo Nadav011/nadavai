@@ -75,7 +75,7 @@ export function Social() {
   )
 
   return (
-    <section ref={sectionRef} id="social" aria-label={t("title")} className="relative py-24 md:py-32 bg-[hsl(222,47%,3%)]">
+    <section ref={sectionRef} id="social" aria-label={t("title")} className="relative py-16 md:py-32 bg-[hsl(222,47%,3%)]">
       <div className="absolute inset-0 grid-bg opacity-15" />
       <div className="relative max-w-7xl mx-auto px-4 md:px-8">
         <SectionHeader
@@ -85,14 +85,14 @@ export function Social() {
           description={t("description")}
         />
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
           {socialLinks.map((link, i) => (
             <a
               key={i}
               href={link.href}
               target="_blank"
               rel="noreferrer"
-              className="social-card group relative block h-full p-6 rounded-xl border border-[hsl(215,28%,16%)] bg-[hsl(222,47%,5%)] hover:border-opacity-50 transition-all duration-500"
+              className="social-card group relative block h-full p-4 md:p-6 rounded-xl border border-[hsl(215,28%,16%)] bg-[hsl(222,47%,5%)] hover:border-opacity-50 transition-all duration-500"
               style={{
                 borderColor: undefined,
               }}

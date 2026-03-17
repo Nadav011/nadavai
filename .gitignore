@@ -39,10 +39,4 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
-
-# backup files
-*.bak
-
-# stray lockfiles — project uses pnpm exclusively (pnpm-lock.yaml is the source of truth)
-package-lock.json
-yarn.lock
+.env*.local
