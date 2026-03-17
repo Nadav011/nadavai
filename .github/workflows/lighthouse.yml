@@ -17,11 +17,11 @@ jobs:
     timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
-      - name: Enable pnpm via corepack
-        run: corepack enable pnpm
       - uses: actions/setup-node@v4
         with:
           node-version: "24.14.0"
+      - name: Enable pnpm via corepack
+        run: corepack enable pnpm
       - run: pnpm install --no-frozen-lockfile
       - name: Build
         run: pnpm build
