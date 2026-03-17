@@ -2,20 +2,68 @@ name: CI
 
 on:
   push:
-    branches: [main, feat/*, fix/*]
+    branches: [main, master, feat/*, fix/*]
     paths-ignore: ["**.md"]
   pull_request:
-    branches: [main]
+    branches: [main, master]
     paths-ignore: ["**.md"]
 
 concurrency:
   group: ci-${{ github.ref }}
   cancel-in-progress: true
 
+env:
+  CI: true
+  NODE_OPTIONS: "--max-old-space-size=4096"
+
 jobs:
-  ci:
-    uses: Nadav011/ci-standards/.github/workflows/ci-nextjs.yml@main
-    with:
-      node-version: "24"
-      package-manager: pnpm@10.30.3
-    secrets: inherit
+  typecheck:
+    name: Type Check
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with: { version: "10.30.3" }
+      - uses: actions/setup-node@v4
+        with: { node-version: "24" }
+      - run: pnpm install --no-frozen-lockfile
+      - run: pnpm run typecheck
+
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with: { version: "10.30.3" }
+      - uses: actions/setup-node@v4
+        with: { node-version: "24" }
+      - run: pnpm install --no-frozen-lockfile
+      - run: pnpm run lint
+
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with: { version: "10.30.3" }
+      - uses: actions/setup-node@v4
+        with: { node-version: "24" }
+      - run: pnpm install --no-frozen-lockfile
+      - name: Build
+        run: ROLLUP_NATIVE_THREADS=0 CI=true pnpm build
+        env:
+          VITE_SUPABASE_URL: "https://placeholder.supabase.co"
+          VITE_SUPABASE_ANON_KEY: "placeholder"
+          NEXT_PUBLIC_SUPABASE_URL: "https://placeholder.supabase.co"
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: "placeholder"
+
+      - name: Notify Telegram on failure
+        if: failure()
+        run: |
+          MSG="🚨 nadavai CI FAILED | ${{ github.ref_name }} | ${{ github.actor }}"
+          curl -s "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage" -d chat_id="${{ secrets.TELEGRAM_CHAT_ID }}" -d "text=$MSG" > /dev/null 2>&1 || true
