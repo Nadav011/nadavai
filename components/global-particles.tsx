@@ -77,7 +77,6 @@ export function GlobalParticles() {
       frameRef.current = requestAnimationFrame(animate)
       if (document.hidden) return
 
-      const dt = Math.min((now - lastTime) / 1000, 0.05)
       lastTime = now
       ctx.clearRect(0, 0, cw, ch)
 
