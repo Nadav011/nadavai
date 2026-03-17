@@ -176,7 +176,7 @@ function linkProgram(gl: WebGL2RenderingContext, vs: WebGLShader, fs: WebGLShade
   return p
 }
 
-function useFallback(el: HTMLDivElement, canvas?: HTMLCanvasElement) {
+function applyFallback(el: HTMLDivElement, canvas?: HTMLCanvasElement) {
   if (canvas?.parentNode === el) el.removeChild(canvas)
   el.classList.add("shader-fallback")
   return () => { el.classList.remove("shader-fallback") }
@@ -191,14 +191,14 @@ export function ShaderBackground() {
 
     // CSS fallback only on very small/old devices
     const mobile = window.matchMedia("(max-width: 768px)").matches
-    if (mobile && !window.WebGL2RenderingContext) return useFallback(el)
+    if (mobile && !window.WebGL2RenderingContext) return applyFallback(el)
 
     const canvas = document.createElement("canvas")
     canvas.style.cssText = "width:100%;height:100%"
     el.appendChild(canvas)
 
     const ctx = canvas.getContext("webgl2", { antialias: false, alpha: false })
-    if (!ctx) return useFallback(el, canvas)
+    if (!ctx) return applyFallback(el, canvas)
     const gl = ctx
 
     const vs = compileShader(gl, gl.VERTEX_SHADER, VERT)
@@ -207,14 +207,14 @@ export function ShaderBackground() {
       if (vs) gl.deleteShader(vs)
       if (fs) gl.deleteShader(fs)
       gl.getExtension("WEBGL_lose_context")?.loseContext()
-      return useFallback(el, canvas)
+      return applyFallback(el, canvas)
     }
 
     const prog = linkProgram(gl, vs, fs)
     if (!prog) {
       gl.deleteShader(vs); gl.deleteShader(fs)
       gl.getExtension("WEBGL_lose_context")?.loseContext()
-      return useFallback(el, canvas)
+      return applyFallback(el, canvas)
     }
 
     gl.useProgram(prog)
