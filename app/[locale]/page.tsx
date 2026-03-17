@@ -1,12 +1,10 @@
-import { Suspense } from "react"
 import dynamic from "next/dynamic"
 import { Navbar } from "@/components/navbar"
 import { Hero } from "@/components/hero"
-
-const Footer = dynamic(() => import("@/components/footer").then(mod => ({ default: mod.Footer })))
+import { Footer } from "@/components/footer"
 import { ScrollProgress } from "@/components/scroll-progress"
 import { SmoothScroll } from "@/components/smooth-scroll"
-import { GSAPSetupLazy } from "@/components/gsap-setup-lazy"
+import { GSAPSetup } from "@/components/gsap-setup"
 import { NonCritical } from "@/components/non-critical"
 
 // Lazy load below-the-fold sections (code splitting)
@@ -25,29 +23,26 @@ const Contact = dynamic(() => import("@/components/contact").then(mod => ({ defa
 
 export default function Page() {
   return (
-    <>
-      <Suspense fallback={null}>
-        <NonCritical />
-      </Suspense>
-      <SmoothScroll>
-        <GSAPSetupLazy />
-        <ScrollProgress />
-        <div className="relative z-10">
-        <Navbar />
+    <SmoothScroll>
+      <GSAPSetup />
+      <ScrollProgress />
+      <NonCritical />
+      <Navbar />
+      <div className="relative z-10">
         <main id="main-content">
           <Hero />
           <div className="section-divider-animated" />
           <TechMarquee />
           <div className="section-divider-animated" />
-          <div className="section-glow-cyan">
+          <div className="section-glow-cyan section-glow-top">
             <Projects />
           </div>
           <div className="section-divider-animated" />
-          <div className="section-glow-pink">
+          <div className="section-glow-cyan section-glow-bottom">
             <Services />
           </div>
           <div className="section-divider-animated" />
-          <div className="section-glow-indigo">
+          <div className="section-glow-top">
             <Process />
           </div>
           <div className="section-divider-animated" />
@@ -55,31 +50,36 @@ export default function Page() {
             <Testimonials />
           </div>
           <div className="section-divider-animated" />
-          <Blog />
+          <div className="section-glow-top">
+            <Blog />
+          </div>
           <div className="section-divider-animated" />
-          <div className="section-glow-pink">
+          <div className="section-glow-cyan section-glow-bottom">
             <YouTube />
           </div>
           <div className="section-divider-animated" />
-          <Guides />
+          <div className="section-glow-top">
+            <Guides />
+          </div>
           <div className="section-divider-animated" />
-          <div className="section-glow-indigo">
+          <div className="section-glow-cyan">
             <Resources />
           </div>
           <div className="section-divider-animated" />
-          <News />
+          <div className="section-glow-top">
+            <News />
+          </div>
           <div className="section-divider-animated" />
-          <div className="section-glow-cyan">
+          <div className="section-glow-cyan section-glow-bottom">
             <Social />
           </div>
           <div className="section-divider-animated" />
-          <div className="section-glow-pink">
+          <div className="section-glow-cyan section-glow-top">
             <Contact />
           </div>
         </main>
         <Footer />
       </div>
     </SmoothScroll>
-    </>
   )
 }
