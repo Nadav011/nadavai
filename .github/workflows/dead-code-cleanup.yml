@@ -37,3 +37,12 @@ jobs:
           git add -A && git commit -m "chore: remove unused $FILE"
           git push origin "$BRANCH"
           gh pr create --title "chore: remove unused $(basename $FILE)" --body "Detected by Knip" --base main --head "$BRANCH"
+      - name: Notify Telegram
+        if: always()
+        run: |
+          STATUS="${{ job.status }}"
+          [ "$STATUS" = "success" ] && ICON="✅" || ICON="🚨"
+          curl -s "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage" \
+            -d "chat_id=${{ secrets.TELEGRAM_CHAT_ID }}" \
+            --data-urlencode "text=${ICON} nadavai | dead-code-cleanup: ${STATUS} | $(date +'%d/%m %H:%M')" \
+            > /dev/null 2>&1 || true
