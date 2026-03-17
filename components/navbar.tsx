@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect, useRef } from "react"
+import { useState, useEffect, useRef, useMemo } from "react"
 import { Zap, ExternalLink } from "lucide-react"
 import { Magnetic } from "./magnetic"
 import { CommandPalette } from "./command-palette"
@@ -19,7 +19,7 @@ export function Navbar() {
   const mobileMenuRef = useRef<HTMLDivElement>(null)
   const hamburgerButtonRef = useRef<HTMLButtonElement>(null)
 
-  const navLinks = [
+  const navLinks = useMemo(() => [
     { label: t("projects"), href: "#projects", badge: "8" },
     { label: t("services"), href: "#services", hot: true },
     { label: t("blog"), href: "#blog" },
@@ -28,7 +28,7 @@ export function Navbar() {
     { label: t("resources"), href: "#resources", badge: "FREE" },
     { label: t("news"), href: "#news" },
     { label: t("contact"), href: "#contact" },
-  ]
+  ], [t])
 
   useEffect(() => {
     const handleScroll = () => {
