@@ -89,3 +89,99 @@ jobs:
           curl -s "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage" \
             -d chat_id="${{ secrets.TELEGRAM_CHAT_ID }}" \
             -d "text=$MSG" -d "parse_mode=Markdown" > /dev/null 2>&1 || true
+
+  semgrep:
+    name: Semgrep (SAST)
+    runs-on: [self-hosted, linux, x64, pop-os]
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: semgrep/semgrep-action@v1
+        with:
+          config: auto
+        continue-on-error: true
+        env:
+          SEMGREP_APP_TOKEN: ${{ secrets.SEMGREP_APP_TOKEN }}
+
+  trivy:
+    name: Trivy (CVE + Secrets)
+    runs-on: [self-hosted, linux, x64, pop-os]
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Trivy scan
+        uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: fs
+          scan-ref: .
+          severity: CRITICAL,HIGH
+          exit-code: "1"
+          ignore-unfixed: true
+          format: table
+
+  gitleaks:
+    name: Secret Scan
+    runs-on: [self-hosted, linux, x64, pop-os]
+    timeout-minutes: 5
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
+      - name: Run gitleaks
+        run: |
+          if [ -f ".gitleaks.toml" ]; then
+            gitleaks detect --source . --config .gitleaks.toml --verbose --exit-code 1
+          else
+            gitleaks detect --source . --verbose --exit-code 1
+          fi
+
+  ci-gate:
+    name: CI Gate
+    runs-on: [self-hosted, linux, x64, pop-os]
+    if: always()
+    needs: [push, pull_request, group, cancel-in-progress, CI, NODE_OPTIONS, typecheck, lint, build, semgrep, trivy, gitleaks]
+    steps:
+      - name: Evaluate
+        run: |
+          echo "## CI Results" >> $GITHUB_STEP_SUMMARY
+          echo "| push | ${{ needs.push.result }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| pull_request | ${{ needs.pull_request.result }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| group | ${{ needs.group.result }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| cancel-in-progress | ${{ needs.cancel-in-progress.result }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| CI | ${{ needs.CI.result }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| NODE_OPTIONS | ${{ needs.NODE_OPTIONS.result }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| typecheck | ${{ needs.typecheck.result }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| lint | ${{ needs.lint.result }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| build | ${{ needs.build.result }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| semgrep | ${{ needs.semgrep.result }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| trivy | ${{ needs.trivy.result }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| gitleaks | ${{ needs.gitleaks.result }} |" >> $GITHUB_STEP_SUMMARY
+
+          # Block on critical jobs
+          [ "${{ needs.push.result }}" = "failure" ] && echo "push failed" && exit 1 || true
+          [ "${{ needs.pull_request.result }}" = "failure" ] && echo "pull_request failed" && exit 1 || true
+          [ "${{ needs.group.result }}" = "failure" ] && echo "group failed" && exit 1 || true
+          [ "${{ needs.cancel-in-progress.result }}" = "failure" ] && echo "cancel-in-progress failed" && exit 1 || true
+          [ "${{ needs.CI.result }}" = "failure" ] && echo "CI failed" && exit 1 || true
+          [ "${{ needs.NODE_OPTIONS.result }}" = "failure" ] && echo "NODE_OPTIONS failed" && exit 1 || true
+          [ "${{ needs.typecheck.result }}" = "failure" ] && echo "typecheck failed" && exit 1 || true
+          [ "${{ needs.lint.result }}" = "failure" ] && echo "lint failed" && exit 1 || true
+          [ "${{ needs.build.result }}" = "failure" ] && echo "build failed" && exit 1 || true
+          [ "${{ needs.trivy.result }}" = "failure" ] && echo "trivy failed" && exit 1 || true
+          [ "${{ needs.gitleaks.result }}" = "failure" ] && echo "gitleaks failed" && exit 1 || true
+          echo "All checks passed"
+
+      - name: Notify Telegram on failure
+        if: failure()
+        run: |
+          MSG="CI FAILED - ${{ github.repository }} (${{ github.ref_name }}) - ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          curl -s "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage" \
+            -d chat_id="${{ secrets.TELEGRAM_CHAT_ID }}" -d "text=$MSG" > /dev/null 2>&1 || true
+
+      - name: Notify Telegram on success
+        if: success()
+        run: |
+          MSG="CI PASSED - ${{ github.repository }} (${{ github.ref_name }})"
+          curl -s "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage" \
+            -d chat_id="${{ secrets.TELEGRAM_CHAT_ID }}" -d "text=$MSG" > /dev/null 2>&1 || true
