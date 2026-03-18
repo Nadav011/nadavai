@@ -30,8 +30,8 @@ jobs:
         run: corepack enable pnpm
       - name: Enable pnpm via corepack
         run: corepack enable pnpm
-      - run: ppnpm install --no-frozen-lockfile
-      - run: ppnpm run typecheck
+      - run: pnpm install --no-frozen-lockfile
+      - run: pnpm run typecheck
 
   lint:
     name: Lint
@@ -46,8 +46,8 @@ jobs:
         run: corepack enable pnpm
       - name: Enable pnpm via corepack
         run: corepack enable pnpm
-      - run: ppnpm install --no-frozen-lockfile
-      - run: ppnpm run lint
+      - run: pnpm install --no-frozen-lockfile
+      - run: pnpm run lint
 
   test:
     name: Tests
@@ -76,7 +76,7 @@ jobs:
         run: corepack enable pnpm
       - name: Enable pnpm via corepack
         run: corepack enable pnpm
-      - run: ppnpm install --no-frozen-lockfile
+      - run: pnpm install --no-frozen-lockfile
       - name: Build
         run: ROLLUP_NATIVE_THREADS=0 CI=true pnpm build
         env:
@@ -153,7 +153,7 @@ jobs:
     name: CI Gate
     runs-on: [self-hosted, linux, x64, pop-os]
     if: always()
-    needs: [push, pull_request, group, cancel-in-progress, CI, NODE_OPTIONS, typecheck, lint, build, semgrep, trivy, gitleaks]
+    needs: [typecheck, lint, build, semgrep, trivy, gitleaks]
     steps:
       - name: Evaluate
         run: |
