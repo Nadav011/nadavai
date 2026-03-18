@@ -43,11 +43,24 @@ jobs:
       - run: pnpm install --no-frozen-lockfile
       - run: pnpm run lint
 
+  test:
+    name: Tests
+    runs-on: [self-hosted, linux, x64, pop-os]
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with: { version: "10.30.3" }
+      - uses: actions/setup-node@v4
+        with: { node-version: "24" }
+      - run: pnpm install --no-frozen-lockfile
+      - run: pnpm vitest run --reporter=verbose
+
   build:
     name: Build
     runs-on: [self-hosted, linux, x64, pop-os]
     timeout-minutes: 15
-    needs: [typecheck, lint]
+    needs: [typecheck, lint, test]
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4
