@@ -27,7 +27,7 @@ const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 export async function POST(request: Request) {
   // Rate limiting
   const forwarded = request.headers.get("x-forwarded-for")
-  const ip = forwarded ? forwarded.split(",")[0].trim() : "unknown"
+  const ip = forwarded ? (forwarded.split(",")[0]?.trim() ?? "unknown") : "unknown"
   if (isRateLimited(ip)) {
     return NextResponse.json(
       { error: "יותר מדי בקשות. נסה שוב עוד דקה." },

@@ -31,7 +31,7 @@ export function Hero() {
   const contentRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    const current = roles[roleIndex]
+    const current = roles[roleIndex] ?? ""
     const timeout = setTimeout(
       () => {
         if (!isDeleting && charIndex < current.length) {
@@ -162,7 +162,7 @@ export function Hero() {
             <div className="inline-flex items-center gap-2 md:gap-3 px-4 md:px-6 py-2.5 md:py-3 rounded-xl border border-[hsl(215,28%,16%)] bg-[hsl(222,47%,5%)] font-mono max-w-full overflow-hidden">
               <span className="text-[#06d6e0]">{">"}</span>
               <span className="text-[hsl(215,20%,65%)] text-sm md:text-base">
-                {roles[roleIndex].slice(0, charIndex)}
+                {(roles[roleIndex] ?? "").slice(0, charIndex)}
               </span>
               <span className="w-[2px] h-5 bg-[#06d6e0]" style={{ animation: "typing-cursor 1s step-end infinite" }} />
             </div>

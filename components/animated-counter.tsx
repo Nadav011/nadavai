@@ -18,7 +18,7 @@ export function AnimatedCounter({ end, suffix = "", prefix = "", duration = 2000
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting && !started.current) {
+        if (entry?.isIntersecting && !started.current) {
           started.current = true
           const start = 0
           const startTime = performance.now()

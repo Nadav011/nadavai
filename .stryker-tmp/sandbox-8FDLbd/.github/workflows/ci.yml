@@ -1,0 +1,95 @@
+name: CI
+
+on:
+  push:
+    branches: [main, master, feat/*, fix/*]
+    paths-ignore: ["**.md"]
+  pull_request:
+    branches: [main, master]
+    paths-ignore: ["**.md"]
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  CI: true
+  NODE_OPTIONS: "--max-old-space-size=4096"
+
+jobs:
+  typecheck:
+    name: Type Check
+    runs-on: [self-hosted, linux, x64, pop-os]
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with: { version: "10.30.3" }
+      - uses: actions/setup-node@v4
+        with: { node-version: "24" }
+      - run: pnpm install --no-frozen-lockfile
+      - run: pnpm run typecheck
+
+  lint:
+    name: Lint
+    runs-on: [self-hosted, linux, x64, pop-os]
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with: { version: "10.30.3" }
+      - uses: actions/setup-node@v4
+        with: { node-version: "24" }
+      - run: pnpm install --no-frozen-lockfile
+      - run: pnpm run lint
+
+  test:
+    name: Tests
+    runs-on: [self-hosted, linux, x64, pop-os]
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with: { version: "10.30.3" }
+      - uses: actions/setup-node@v4
+        with: { node-version: "24" }
+      - run: pnpm install --no-frozen-lockfile
+      - run: pnpm vitest run --reporter=verbose --maxWorkers=2
+
+  build:
+    name: Build
+    runs-on: [self-hosted, linux, x64, pop-os]
+    timeout-minutes: 15
+    needs: [typecheck, lint, test]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with: { version: "10.30.3" }
+      - uses: actions/setup-node@v4
+        with: { node-version: "24" }
+      - run: pnpm install --no-frozen-lockfile
+      - name: Build
+        run: ROLLUP_NATIVE_THREADS=0 CI=true pnpm build
+        env:
+          VITE_SUPABASE_URL: "https://placeholder.supabase.co"
+          VITE_SUPABASE_ANON_KEY: "placeholder"
+          NEXT_PUBLIC_SUPABASE_URL: "https://placeholder.supabase.co"
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: "placeholder"
+
+      - name: Notify Telegram on failure
+        if: failure()
+        run: |
+          FAILED_JOBS=""
+          [ "${{ needs.typecheck.result }}" = "failure" ] && FAILED_JOBS="${FAILED_JOBS}❌TypeCheck " || true
+          [ "${{ needs.lint.result }}" = "failure" ] && FAILED_JOBS="${FAILED_JOBS}❌Lint " || true
+          MSG="🚨 *Nadavai CI FAILED*%0A%0ABranch: \`${{ github.ref_name }}\`%0ABy: ${{ github.actor }}%0AFailed: ${FAILED_JOBS}%0A%0A🔗 ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          curl -s "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage" \
+            -d chat_id="${{ secrets.TELEGRAM_CHAT_ID }}" \
+            -d "text=$MSG" -d "parse_mode=Markdown" > /dev/null 2>&1 || true
+      - name: Notify Telegram on success
+        if: success()
+        run: |
+          MSG="✅ *Nadavai CI PASSED*%0A%0ABranch: \`${{ github.ref_name }}\`%0ABy: ${{ github.actor }}%0A%0A🔗 ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          curl -s "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage" \
+            -d chat_id="${{ secrets.TELEGRAM_CHAT_ID }}" \
+            -d "text=$MSG" -d "parse_mode=Markdown" > /dev/null 2>&1 || true

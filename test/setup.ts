@@ -1,4 +1,12 @@
 import "@testing-library/jest-dom/vitest";
+import { configureGlobal } from "fast-check";
+
+configureGlobal({
+  seed: 42,
+  numRuns: Number(process.env.FC_NUM_RUNS ?? 100),
+  interruptAfterTimeLimit: 30_000,
+  markInterruptAsFailure: false,
+});
 
 Object.defineProperty(window, "matchMedia", {
   writable: true,

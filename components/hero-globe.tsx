@@ -85,7 +85,9 @@ export function HeroGlobe() {
     const onTouch = (e: TouchEvent) => {
       if (!e.touches.length) return
       const rect = canvas.getBoundingClientRect()
-      mouseRef.current = { x: e.touches[0].clientX - rect.left, y: e.touches[0].clientY - rect.top, active: true }
+      const touch = e.touches[0]
+      if (!touch) return
+      mouseRef.current = { x: touch.clientX - rect.left, y: touch.clientY - rect.top, active: true }
     }
     const onTouchEnd = () => { mouseRef.current.active = false }
     if (mobile) {
@@ -156,7 +158,7 @@ export function HeroGlobe() {
       activeLinks.length = 0
       for (let i = 0; i < particles.length; i++) {
         for (let j = i + 1; j < particles.length; j++) {
-          const a = particles[i], b = particles[j]
+          const a = particles[i]!, b = particles[j]!
           const zDiff = Math.abs(a.z - b.z)
           if (zDiff > 0.5) continue // don't connect far/near particles
           const dx = a.x - b.x, dy = a.y - b.y
@@ -170,7 +172,8 @@ export function HeroGlobe() {
 
       // Spawn data streams
       if (streams.length < MAX_STREAMS && activeLinks.length > 0 && Math.random() < 0.025) {
-        const [fi, fj] = activeLinks[Math.floor(Math.random() * activeLinks.length)]
+        const link = activeLinks[Math.floor(Math.random() * activeLinks.length)]!
+        const [fi, fj] = link
         streams.push({ fromIdx: fi, toIdx: fj, progress: 0, speed: 0.5 + Math.random() * 1 })
       }
 
@@ -191,7 +194,7 @@ export function HeroGlobe() {
 
       // Draw connections -- color/width based on average z-depth
       for (const [i, j, rawOp] of activeLinks) {
-        const a = particles[i], b = particles[j]
+        const a = particles[i]!, b = particles[j]!
         const avgZ = (a.z + b.z) / 2
         let op = rawOp * (0.08 + avgZ * 0.22)
 
@@ -213,11 +216,11 @@ export function HeroGlobe() {
 
       // Draw data streams
       for (let s = streams.length - 1; s >= 0; s--) {
-        const st = streams[s]
+        const st = streams[s]!
         st.progress += st.speed * dt
         if (st.progress >= 1) { streams.splice(s, 1); continue }
 
-        const a = particles[st.fromIdx], b = particles[st.toIdx]
+        const a = particles[st.fromIdx]!, b = particles[st.toIdx]!
         const sx = a.x + (b.x - a.x) * st.progress
         const sy = a.y + (b.y - a.y) * st.progress
         const avgZ = (a.z + b.z) / 2
