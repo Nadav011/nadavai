@@ -1,0 +1,51 @@
+name: Medusa Security Scan
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+
+concurrency:
+  group: medusa-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  medusa-scan:
+    name: Medusa AI Security Scan
+    runs-on: [self-hosted, linux, x64, pop-os]
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install medusa-security
+        run: pip install medusa-security --quiet
+
+      - name: Run Medusa scan
+        run: |
+          medusa scan . \
+            --fail-on high \
+            --format json \
+            --output medusa-report \
+            -e node_modules/ \
+            -e .next/ \
+            -e dist/ \
+            -e build/ \
+            -e coverage/ \
+            -e .dart_tool/ \
+            -e .flutter-plugins
+
+      - name: Upload Medusa report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: medusa-report-${{ github.sha }}
+          path: medusa-report/
+          retention-days: 14
