@@ -17,19 +17,15 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Enable pnpm via corepack
-        run: corepack enable pnpm
 
       - name: Add Node.js (fnm) to PATH
         run: echo "$HOME/.local/share/fnm/node-versions/v24.14.0/installation/bin" >> $GITHUB_PATH
 
-      - name: Enable pnpm via corepack
-        run: corepack enable pnpm
 
-      - run: ppnpm install --no-frozen-lockfile
+      - run: pnpm install --no-frozen-lockfile
 
       - name: Build
-        run: ppnpm run build
+        run: pnpm run build
         env:
           NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL || 'https://placeholder.supabase.co' }}
           NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'placeholder' }}
