@@ -108,7 +108,7 @@ export function Process() {
                   <div
                     className="process-line w-[2px] flex-1 mt-3"
                     style={{
-                      background: `linear-gradient(to bottom, ${step.color}40, ${steps[index + 1].color}40)`,
+                      background: `linear-gradient(to bottom, ${step.color}40, ${steps[index + 1]?.color ?? step.color}40)`,
                     }}
                   />
                 )}

@@ -1,0 +1,4 @@
+{
+  "installCommand": "pnpm install --frozen-lockfile",
+  "ignoreCommand": "[ \"$VERCEL_ENV\" = \"preview\" ] && exit 0 || exit 1"
+}

@@ -35,7 +35,7 @@ export function Services() {
           stagger: 0.15,
           ease: "power3.out",
           scrollTrigger: {
-            trigger: trustIndicators[0],
+            trigger: trustIndicators[0]!,
             start: "top 85%",
             once: true,
           },
