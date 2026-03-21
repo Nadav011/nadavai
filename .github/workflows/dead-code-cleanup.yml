@@ -19,7 +19,7 @@ jobs:
       - name: Enable pnpm via corepack
         run: corepack enable pnpm
         with: { node-version: "24", cache: "pnpm" }
-      - run: ppnpm install --frozen-lockfile
+      - run: pnpm install --frozen-lockfile
       - name: Knip unused file PR
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -37,7 +37,7 @@ jobs:
           BRANCH="chore/remove-unused-$(date +%Y%m%d-%H%M)"
           git checkout -b "$BRANCH"
           rm "$FILE"
-          ppnpm run typecheck || { git checkout main; exit 0; }
+          pnpm run typecheck || { git checkout main; exit 0; }
           git add -A && git commit -m "chore: remove unused $FILE"
           git push origin "$BRANCH"
           gh pr create --title "chore: remove unused $(basename $FILE)" --body "Detected by Knip" --base main --head "$BRANCH"
