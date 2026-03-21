@@ -24,7 +24,7 @@ jobs:
         run: corepack enable pnpm
       - name: Enable pnpm via corepack
         run: corepack enable pnpm
-      - run: ppnpm install --no-frozen-lockfile
+      - run: pnpm install --no-frozen-lockfile
       - name: Build
         run: pnpm build
         continue-on-error: true
