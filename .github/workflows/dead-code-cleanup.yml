@@ -1,7 +1,7 @@
 name: dead-code-cleanup
 on:
   schedule:
-    - cron: "0 4 * * 1"
+    - cron: "40 5 * * 1"
   workflow_dispatch:
 jobs:
   cleanup:
