@@ -2,7 +2,7 @@ name: Mutation Testing
 
 on:
   schedule:
-    - cron: '23 3 * * 0'  # Sunday 3:23 AM (off-minute per CLAUDE.md)
+    - cron: '3 4 * * 0'  # Sunday 3:23 AM (off-minute per CLAUDE.md)
   pull_request:
     paths:
       - 'src/lib/**'
