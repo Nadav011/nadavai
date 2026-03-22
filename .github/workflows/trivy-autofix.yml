@@ -2,7 +2,7 @@ name: Weekly Trivy CVE Auto-Fix
 
 on:
   schedule:
-    - cron: '0 3 * * 1'
+    - cron: '40 3 * * 1'
   workflow_dispatch:
 
 jobs:
