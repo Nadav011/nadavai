@@ -2,7 +2,7 @@ name: Mutation Testing
 
 on:
   schedule:
-    - cron: '3 4 * * 0'  # Sunday 3:23 AM (off-minute per CLAUDE.md)
+    - cron: '23 3 * * 0'  # Sunday 3:23 AM (off-minute per CLAUDE.md)
   pull_request:
     paths:
       - 'src/lib/**'
@@ -15,20 +15,24 @@ concurrency:
   group: mutation-${{ github.ref }}
   cancel-in-progress: true
 
+permissions:
+  contents: read
+
 jobs:
   mutation:
     runs-on: [self-hosted, linux, x64, pop-os]
     timeout-minutes: 30
     steps:
+      - uses: step-security/harden-runner@v2.16.0
+        with:
+          egress-policy: audit
       - uses: actions/checkout@v4
 
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: 24
+      - name: Add Node.js (fnm) to PATH
+        run: echo "$HOME/.local/share/fnm/node-versions/v24.14.0/installation/bin" >> $GITHUB_PATH
 
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
+      - name: Enable pnpm via corepack
+        run: corepack enable pnpm
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
@@ -55,3 +59,11 @@ jobs:
           name: mutation-report-${{ github.run_number }}
           path: reports/
           retention-days: 30
+
+      - name: Notify Telegram on failure
+        if: failure()
+        run: |
+          curl -s "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage" \
+            -d "chat_id=${{ secrets.TELEGRAM_CHAT_ID }}" \
+            --data-urlencode "text=🧬 Mutation Testing FAILED | ${{ github.repository }} | ${{ github.ref_name }}" \
+            > /dev/null 2>&1 || true
