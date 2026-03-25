@@ -49,6 +49,9 @@ jobs:
       - uses: step-security/harden-runner@v2.16.0
         with:
           egress-policy: audit
+      - name: Repair workspace permissions
+        run: |
+          [ -d "$GITHUB_WORKSPACE/.git" ] && chmod -R u+rwX "$GITHUB_WORKSPACE/.git" || true
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
@@ -103,6 +106,9 @@ jobs:
       - uses: step-security/harden-runner@v2.16.0
         with:
           egress-policy: audit
+      - name: Repair workspace permissions
+        run: |
+          [ -d "$GITHUB_WORKSPACE/.git" ] && chmod -R u+rwX "$GITHUB_WORKSPACE/.git" || true
       - uses: actions/checkout@v4
 
       - name: Trivy — CRITICAL findings block merge
@@ -146,6 +152,9 @@ jobs:
       - uses: step-security/harden-runner@v2.16.0
         with:
           egress-policy: audit
+      - name: Repair workspace permissions
+        run: |
+          [ -d "$GITHUB_WORKSPACE/.git" ] && chmod -R u+rwX "$GITHUB_WORKSPACE/.git" || true
       - uses: actions/checkout@v4
       - uses: semgrep/semgrep-action@v1
         with:
@@ -174,6 +183,9 @@ jobs:
       - uses: step-security/harden-runner@v2.16.0
         with:
           egress-policy: audit
+      - name: Repair workspace permissions
+        run: |
+          [ -d "$GITHUB_WORKSPACE/.git" ] && chmod -R u+rwX "$GITHUB_WORKSPACE/.git" || true
       - uses: actions/checkout@v4
         with: { fetch-depth: 0 }
       - name: Run gitleaks
@@ -193,6 +205,9 @@ jobs:
       - uses: step-security/harden-runner@v2.16.0
         with:
           egress-policy: audit
+      - name: Repair workspace permissions
+        run: |
+          [ -d "$GITHUB_WORKSPACE/.git" ] && chmod -R u+rwX "$GITHUB_WORKSPACE/.git" || true
       - uses: actions/checkout@v4
 
       - name: Add Node.js (fnm) to PATH
@@ -208,7 +223,7 @@ jobs:
         continue-on-error: true
 
       - name: Generate SBOM (CycloneDX)
-        run: npx --yes @cyclonedx/cyclonedx-npm@6 --output-file sbom.json --output-format JSON
+        run: npx --yes @cyclonedx/cyclonedx-npm@4.2.1 --output-file sbom.json --output-format JSON
         continue-on-error: true
 
       - uses: actions/upload-artifact@v4
