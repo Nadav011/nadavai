@@ -2,7 +2,7 @@
 
 ## Project Overview
 Personal portfolio and AI showcase website. i18n (next-intl), GSAP+Lenis animations.
-Stack: Next.js App Router, React, Tailwind, GSAP, Lenis, next-intl, Vercel Analytics
+Stack: Next.js App Router, React, Tailwind, GSAP, Lenis, next-intl, edge analytics
 
 ## Rules
 - RTL-first (Hebrew is primary language)

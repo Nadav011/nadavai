@@ -29,8 +29,8 @@ To learn more about Next.js, take a look at the following resources:
 
 You can check out the official [Next.js documentation](https://nextjs.org/docs) for framework details and upstream changes.
 
-## Deploy on Vercel
+## Deploy
 
-Deploy this project using its active Cloudflare or Netlify target instead of a Vercel workflow.
+Deploy this project using its active Cloudflare or Netlify target.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.

@@ -14,7 +14,7 @@ const row1Items = [
 ]
 
 const row2Items = [
-  "Next.js", "React", "TypeScript", "Supabase", "Tailwind", "Vercel", "Node.js",
+  "Next.js", "React", "TypeScript", "Supabase", "Tailwind", "Cloudflare", "Node.js",
   "Flutter", "Dart", "Firebase", "React Native", "Expo", "AI SDK", "Python",
   "CrewAI", "Docker", "Ollama", "ChromaDB", "Bun", "Prisma",
 ]
