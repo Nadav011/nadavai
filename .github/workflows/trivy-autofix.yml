@@ -51,8 +51,6 @@ jobs:
       - name: Enable pnpm via corepack
         run: corepack enable pnpm
         if: steps.check.outputs.count != '0'
-        with:
-          node-version: "24.14.0"
 
       - name: Auto-fix CVEs in pnpm.overrides
         if: steps.check.outputs.count != '0'
