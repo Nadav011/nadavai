@@ -25,7 +25,7 @@
 - *(a11y)* Enforce 44px touch targets and remove unused types
 - *(layout)* Move html/body to root layout for Next.js 16 compliance
 - *(routing)* Add root page redirect and update domain to nadavc.ai
-- Add vercel.json with legacy-peer-deps install command
+- Add deployment config with legacy-peer-deps install command
 - Update WhatsApp number and social links with real values
 - *(i18n)* Add missing news titles and escape angle brackets in translations
 - A11y aria-labels, aria-pressed on filters, remove unused React imports

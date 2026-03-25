@@ -181,8 +181,6 @@ jobs:
   #         name: dist-${{ github.sha }}
   #         path: ./dist
   #
-  #     - name: Deploy to Vercel
+  #     - name: Deploy to target platform
   #       run: |
-  #         vercel deploy --prod --prebuilt ./dist \
-  #           --token=${{ secrets.VERCEL_TOKEN }} \
-  #           --scope=${{ secrets.VERCEL_ORG_ID }}
+  #         echo "Add the active Cloudflare/Netlify deployment command here"

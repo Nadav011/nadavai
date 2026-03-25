@@ -95,7 +95,7 @@ export function Projects() {
       color: "#e84393",
       metrics: { offline: "100%", sync: "Real-time" },
       github: "https://github.com/Nadav011/cash",
-      demo: "https://cash-ashy-zeta.vercel.app",
+      demo: "https://github.com/Nadav011/cash",
     },
     {
       title: "Shifts",

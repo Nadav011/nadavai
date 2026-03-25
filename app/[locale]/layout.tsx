@@ -330,7 +330,7 @@ export default async function LocaleLayout({
                 operatingSystem: "Web, iOS, Android",
                 description: "Delivery management PWA with full offline support, smart sync, IndexedDB, and operation queuing.",
                 author: { "@type": "Person", name: "Nadav Cohen" },
-                url: "https://cash-ashy-zeta.vercel.app",
+                url: "https://github.com/Nadav011/cash",
                 offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
               },
               {
