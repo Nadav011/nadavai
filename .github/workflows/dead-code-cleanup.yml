@@ -11,7 +11,6 @@ jobs:
       pull-requests: write
     steps:
       - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v4
         with: { version: "10" }
       - name: Add Node.js (fnm) to PATH
         run: echo "$HOME/.local/share/fnm/node-versions/v24.14.0/installation/bin" >> $GITHUB_PATH
