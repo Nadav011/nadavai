@@ -35,7 +35,7 @@ jobs:
           BRANCH="chore/remove-unused-$(date +%Y%m%d-%H%M)"
           git checkout -b "$BRANCH"
           rm "$FILE"
-          pnpm run typecheck || { git checkout main; exit 0; }
+          pnpm run typecheck || { git checkout main; exit 1; }
           git add -A && git commit -m "chore: remove unused $FILE"
           git push origin "$BRANCH"
           gh pr create --title "chore: remove unused $(basename $FILE)" --body "Detected by Knip" --base main --head "$BRANCH"
