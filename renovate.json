@@ -3,9 +3,21 @@
   "extends": ["config:recommended"],
   "schedule": ["before 6am on Monday"],
   "prCreation": "not-pending",
-  "automerge": false,
+  "automerge": true,
+  "automergeType": "pr",
+  "automergeStrategy": "squash",
   "labels": ["dependencies"],
+  "minimumReleaseAge": "3 days",
+  "ignoreDeps": [],
   "packageRules": [
+    {
+      "matchUpdateTypes": ["patch", "minor"],
+      "automerge": true
+    },
+    {
+      "matchUpdateTypes": ["major"],
+      "automerge": false
+    },
     {
       "matchUpdateTypes": ["minor", "patch"],
       "matchCurrentVersion": "!/^0/",
@@ -28,7 +40,5 @@
       "groupName": "Testing",
       "matchPackagePatterns": ["^vitest", "^@vitest", "^playwright", "^@playwright"]
     }
-  ],
-  "ignoreDeps": [],
-  "minimumReleaseAge": "3 days"
+  ]
 }
