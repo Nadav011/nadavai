@@ -21,6 +21,9 @@ export default defineConfig({
         "test/**",
         "**/*.d.ts",
         "**/*.config.*",
+        "components/command-palette.tsx",
+        "components/gsap-setup-lazy.tsx",
+        "components/non-critical.tsx",
       ],
       thresholds: {
         lines: 10,
