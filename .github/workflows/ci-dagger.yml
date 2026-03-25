@@ -20,19 +20,12 @@ name: CI (Dagger)
 #   dagger call build export --path=./dist-output
 
 on:
-  push:
-    branches: [main]           # PLACEHOLDER: MAIN_BRANCH
-    paths-ignore:
-      - "**.md"
-      - "docs/**"
-      - ".github/CODEOWNERS"
-  pull_request:
-    branches: [main]           # PLACEHOLDER: MAIN_BRANCH
-    paths-ignore:
-      - "**.md"
-      - "docs/**"
-      - ".github/CODEOWNERS"
   workflow_dispatch:
+    inputs:
+      reason:
+        description: "Reason for manual run"
+        required: false
+
 
 concurrency:
   group: ci-dagger-${{ github.ref }}
