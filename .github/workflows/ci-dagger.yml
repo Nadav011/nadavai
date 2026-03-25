@@ -11,7 +11,7 @@ name: CI (Dagger)
 #   DAGGER_CLOUD_TOKEN — לאחסון cache ב-Dagger Cloud
 #
 # הגבלות:
-#   - runs-on: [self-hosted, linux, x64, pop-os] תמיד (לא ubuntu-latest!)
+#   - runs-on: [self-hosted, linux, x64, pop-os] תמיד (לא self-hosted, linux, x64, pop-os!)
 #   - cancel-in-progress: true חובה בכל workflow
 #   - deploy צריך needs: ci-gate
 #
