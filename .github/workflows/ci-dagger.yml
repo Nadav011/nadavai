@@ -53,12 +53,12 @@ jobs:
     if: github.event_name == 'pull_request' || github.event_name == 'workflow_dispatch'
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5  # v4
         with:
           fetch-depth: 1
 
       - name: Set up Dagger
-        uses: dagger/dagger-for-github@v6
+        uses: dagger/dagger-for-github@11569d757d716331433172d27b85beb58ab93351  # v6
         with:
           version: ${{ env.DAGGER_VERSION }}
           # cloud-token: ${{ secrets.DAGGER_CLOUD_TOKEN }}  # uncomment לבדיקות מואצות
@@ -104,12 +104,12 @@ jobs:
     if: github.event_name == 'push'
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5  # v4
         with:
           fetch-depth: 1
 
       - name: Set up Dagger
-        uses: dagger/dagger-for-github@v6
+        uses: dagger/dagger-for-github@11569d757d716331433172d27b85beb58ab93351  # v6
         with:
           version: ${{ env.DAGGER_VERSION }}
           # cloud-token: ${{ secrets.DAGGER_CLOUD_TOKEN }}
@@ -121,7 +121,7 @@ jobs:
         timeout-minutes: 35
 
       - name: Upload dist artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02  # v4
         with:
           name: dist-${{ github.sha }}
           path: ./dist-output/
@@ -176,7 +176,7 @@ jobs:
   #   timeout-minutes: 15
   #   steps:
   #     - name: Download dist artifact
-  #       uses: actions/download-artifact@v4
+  #       uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093  # v4
   #       with:
   #         name: dist-${{ github.sha }}
   #         path: ./dist
