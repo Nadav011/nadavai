@@ -156,44 +156,91 @@ export function YouTube() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
           {filtered.map((video) => (
-            <div key={video.title} className="video-card group relative h-full rounded-2xl border border-border bg-bg-surface overflow-hidden hover:border-opacity-50 transition-all duration-500">
-              <div className="relative aspect-video bg-bg-elevated overflow-hidden">
+            <div
+              key={video.title}
+              className="video-card group relative h-full rounded-2xl border border-border bg-bg-surface overflow-hidden transition-all duration-500"
+              onMouseEnter={(e) => {
+                e.currentTarget.style.borderColor = `${video.color}35`
+                e.currentTarget.style.boxShadow = `0 0 40px ${video.color}10, 0 20px 50px oklch(0 0 0 / 0.25)`
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.borderColor = ""
+                e.currentTarget.style.boxShadow = ""
+              }}
+            >
+              {/* Thumbnail area — vivid mesh-gradient background */}
+              <div className="relative aspect-video overflow-hidden">
+                {/* Multi-layer vivid bg */}
+                <div className="absolute inset-0 bg-bg-elevated" />
                 <div
-                  className="absolute inset-0 opacity-20"
-                  style={{ background: `linear-gradient(135deg, ${video.color}30, transparent)` }}
+                  className="absolute inset-0"
+                  style={{
+                    background: `
+                      radial-gradient(ellipse 70% 60% at 20% 40%, ${video.color}25, transparent 60%),
+                      radial-gradient(ellipse 50% 70% at 80% 20%, ${video.color}12, transparent 50%),
+                      radial-gradient(ellipse 80% 40% at 50% 90%, ${video.color}08, transparent 60%)
+                    `,
+                  }}
+                />
+                <div className="absolute inset-0 grid-bg opacity-30" />
+                {/* Scanline shimmer on hover */}
+                <div
+                  className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none"
+                  style={{
+                    background: `linear-gradient(180deg, transparent 0%, ${video.color}06 50%, transparent 100%)`, /* rtl-ok: vertical */
+                  }}
                 />
 
-                <div className="absolute inset-0 grid-bg opacity-20" />
-
+                {/* Play button with pulse rings */}
                 <div className="absolute inset-0 flex items-center justify-center">
-                  <div
-                    className="w-16 h-16 rounded-full flex items-center justify-center transition-all duration-500 group-hover:scale-110"
-                    style={{
-                      background: `${video.color}20`,
-                      border: `2px solid ${video.color}40`,
-                      boxShadow: `0 0 30px ${video.color}15`,
-                    }}
-                  >
-                    <Play className="w-6 h-6 ms-0.5" style={{ color: video.color }} fill="currentColor" />
+                  <div className="relative">
+                    {/* Pulse rings */}
+                    <div
+                      className="absolute inset-0 rounded-full opacity-0 group-hover:opacity-100 animate-ping"
+                      style={{ background: `${video.color}20`, transform: "scale(1.5)" }}
+                    />
+                    <div
+                      className="absolute inset-0 rounded-full opacity-0 group-hover:opacity-60 animate-ping [animation-delay:0.3s]"
+                      style={{ background: `${video.color}15`, transform: "scale(2)" }}
+                    />
+                    {/* Core button */}
+                    <div
+                      className="relative w-16 h-16 rounded-full flex items-center justify-center transition-all duration-500 group-hover:scale-110"
+                      style={{
+                        background: `linear-gradient(135deg, ${video.color}30, ${video.color}15)`,
+                        border: `2px solid ${video.color}50`,
+                        boxShadow: `0 0 30px ${video.color}20, inset 0 1px 0 ${video.color}30`,
+                      }}
+                    >
+                      <Play className="w-6 h-6 ms-0.5" style={{ color: video.color, filter: `drop-shadow(0 0 6px ${video.color}80)` }} fill="currentColor" />
+                    </div>
                   </div>
                 </div>
 
-                <div className="absolute bottom-3 end-3 px-2 py-1 rounded-md bg-black/70 backdrop-blur-sm">
-                  <span className="text-[11px] font-mono text-white" dir="ltr">{video.duration}</span>
+                {/* Duration badge */}
+                <div className="absolute bottom-3 end-3 px-2 py-1 rounded-md bg-black/75 backdrop-blur-sm border border-white/10">
+                  <span className="text-[11px] font-mono text-white tabular-nums" dir="ltr">{video.duration}</span>
                 </div>
 
+                {/* Category badge */}
                 <div className="absolute top-3 start-3">
                   <span
-                    className="text-[10px] font-mono px-2 py-1 rounded-md tracking-wider uppercase backdrop-blur-sm"
-                    style={{ background: `${video.color}25`, color: video.color }}
+                    className="text-[10px] font-mono px-2.5 py-1 rounded-full tracking-wider uppercase backdrop-blur-sm font-semibold"
+                    style={{ background: `${video.color}25`, color: video.color, border: `1px solid ${video.color}30` }}
                   >
                     {tCat(video.category)}
                   </span>
                 </div>
+
+                {/* Bottom fade into card */}
+                <div className="absolute bottom-0 start-0 end-0 h-8 bg-gradient-to-t from-bg-surface to-transparent" /* rtl-ok: vertical */ />
               </div>
 
               <div className="p-5">
-                <h3 className="text-sm font-bold text-text mb-2 leading-snug group-hover:text-text transition-colors line-clamp-2">
+                <h3
+                  className="text-sm font-bold text-text mb-2 leading-snug line-clamp-2 transition-colors duration-300"
+                  style={{ color: "var(--color-text)" }}
+                >
                   {video.title}
                 </h3>
 
@@ -201,20 +248,28 @@ export function YouTube() {
                   {video.description}
                 </p>
 
-                <div className="flex items-center justify-between pt-3 border-t border-border/60">
+                <div className="flex items-center justify-between pt-3 border-t border-border/40">
                   <div className="flex items-center gap-3">
-                    <div className="flex items-center gap-1 text-text-muted">
+                    <div className="flex items-center gap-1 text-text-muted group-hover:text-text-secondary transition-colors">
                       <Eye className="w-3.5 h-3.5" />
-                      <span className="text-[11px] font-mono" dir="ltr">{video.views}</span>
+                      <span className="text-[11px] font-mono tabular-nums" dir="ltr">{video.views}</span>
                     </div>
                     <div className="flex items-center gap-1 text-text-muted">
                       <Clock className="w-3.5 h-3.5" />
-                      <span className="text-[11px] font-mono" dir="ltr">{video.date}</span>
+                      <span className="text-[11px] font-mono tabular-nums" dir="ltr">{video.date}</span>
                     </div>
                   </div>
-                  <ExternalLink className="w-3.5 h-3.5 text-text-muted group-hover:text-pink transition-colors" />
+                  <ExternalLink
+                    className="w-3.5 h-3.5 text-text-muted group-hover:text-pink group-hover:scale-110 transition-all duration-300"
+                  />
                 </div>
               </div>
+
+              {/* Full card background glow on hover */}
+              <div
+                className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none"
+                style={{ background: `radial-gradient(ellipse 60% 30% at 50% 0%, ${video.color}06, transparent)` }}
+              />
             </div>
           ))}
         </div>

@@ -146,8 +146,12 @@ export function Services() {
   return (
     <section ref={sectionRef} id="services" aria-label={t("title")} className="relative py-16 md:py-32 overflow-hidden">
       <div className="absolute inset-0 bg-bg-deep" />
-      <div className="absolute top-0 start-1/2 -translate-x-1/2 w-full max-w-5xl aspect-[5/3] bg-[#06d6e0]/3 rounded-full blur-[150px]" />
+      {/* Section glow top — symmetric center-fade, rtl-ok */}
+      <div className="absolute top-0 start-0 end-0 h-px bg-gradient-to-r from-transparent via-cyan/30 to-transparent rtl:bg-gradient-to-l" />
+      <div className="absolute top-0 start-1/2 -translate-x-1/2 w-full max-w-5xl h-[400px] bg-cyan/[0.04] rounded-full blur-[120px] pointer-events-none" />
+      <div className="absolute top-0 start-1/4 w-64 h-64 bg-pink/[0.04] rounded-full blur-[100px] pointer-events-none" />
       <div className="absolute bottom-0 end-0 w-full max-w-xl aspect-[3/2] bg-[#06d6e0]/3 rounded-full blur-[120px]" />
+      <div className="absolute inset-0 dot-grid opacity-[0.06] pointer-events-none" aria-hidden="true" />
 
       <div className="relative max-w-7xl mx-auto px-4 md:px-8">
         <SectionHeader
@@ -188,25 +192,39 @@ export function Services() {
                 <div
                   className={`relative h-full rounded-2xl p-[1px] transition-all duration-700 ${
                     service.popular
-                      ? `bg-gradient-to-b ${service.gradient} shadow-[0_0_40px_oklch(0.65_0.26_350_/_0.15)]`
+                      ? `bg-gradient-to-b ${service.gradient} shadow-[0_0_60px_oklch(0.65_0.26_350_/_0.20)]`
                       : hoveredIdx === i
-                        ? "bg-gradient-to-b from-border/60 to-border"
-                        : "bg-border"
+                        ? "bg-gradient-to-b from-border/80 to-border/40"
+                        : "bg-border/60"
                   }`}
+                  style={hoveredIdx === i && !service.popular ? { boxShadow: `0 0 40px ${service.color}12, 0 20px 60px oklch(0 0 0 / 0.3)` } : undefined}
                 >
-                  <div className={`relative h-full rounded-[15px] p-5 md:p-7 ${
-                    service.popular ? "bg-bg-deep" : "bg-bg-surface"
+                  <div className={`relative h-full rounded-[15px] p-5 md:p-7 transition-all duration-700 ${
+                    service.popular ? "bg-bg-deep" : hoveredIdx === i ? "bg-bg-elevated/80 backdrop-blur-sm" : "bg-bg-surface"
                   }`}>
                     <div className="flex items-start justify-between mb-6">
                       <div
-                        className="w-14 h-14 rounded-2xl flex items-center justify-center transition-all duration-500"
+                        className="relative w-14 h-14 rounded-2xl flex items-center justify-center transition-all duration-500 group/icon"
                         style={{
-                          background: `linear-gradient(135deg, ${service.color}15, ${service.color}05)`,
-                          border: `1px solid ${service.color}25`,
-                          boxShadow: hoveredIdx === i ? `0 0 25px ${service.color}15` : "none",
+                          background: `linear-gradient(135deg, ${service.color}20, ${service.color}08)`,
+                          border: `1px solid ${service.color}30`,
+                          boxShadow: hoveredIdx === i ? `0 0 30px ${service.color}25, inset 0 0 20px ${service.color}08` : `0 0 10px ${service.color}08`,
                         }}
                       >
-                        <service.icon className="w-7 h-7" style={{ color: service.color }} />
+                        <service.icon
+                          className="w-7 h-7 transition-all duration-500"
+                          style={{
+                            color: service.color,
+                            filter: hoveredIdx === i ? `drop-shadow(0 0 8px ${service.color}80)` : "none",
+                          }}
+                        />
+                        {/* Animated ring on hover */}
+                        {hoveredIdx === i && (
+                          <span
+                            className="absolute inset-0 rounded-2xl animate-ping opacity-20"
+                            style={{ background: `${service.color}30` }}
+                          />
+                        )}
                       </div>
                       {service.popular && (
                         <Sparkles className="w-5 h-5 text-pink animate-pulse" />
@@ -278,10 +296,12 @@ export function Services() {
               <a
                 key={i}
                 href="#contact"
-                className="additional-service group flex items-center gap-4 p-5 rounded-xl border border-border bg-bg-surface hover:border-cyan/20 hover:bg-bg-elevated transition-all duration-500"
+                className="additional-service group relative flex items-center gap-4 p-5 rounded-xl border border-border bg-bg-surface hover:border-cyan/30 hover:bg-bg-elevated hover:shadow-[0_0_20px_oklch(0.81_0.17_193_/_0.06)] transition-all duration-500 overflow-hidden"
               >
-                <div className="flex-shrink-0 w-11 h-11 rounded-xl flex items-center justify-center bg-border/50 border border-border group-hover:border-cyan/20 transition-colors">
-                  <service.icon className="w-5 h-5 text-text-muted group-hover:text-cyan transition-colors" />
+                {/* hover sweep glow */}
+                <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none bg-gradient-to-r from-cyan/[0.03] via-transparent to-transparent rtl:bg-gradient-to-l" /* rtl-ok */ />
+                <div className="flex-shrink-0 w-11 h-11 rounded-xl flex items-center justify-center bg-border/50 border border-border group-hover:border-cyan/30 group-hover:bg-cyan/[0.08] group-hover:shadow-[0_0_15px_oklch(0.81_0.17_193_/_0.15)] transition-all duration-500">
+                  <service.icon className="w-5 h-5 text-text-muted group-hover:text-cyan transition-colors duration-300" />
                 </div>
                 <div>
                   <h4 className="text-sm font-semibold text-text mb-0.5">{service.title}</h4>

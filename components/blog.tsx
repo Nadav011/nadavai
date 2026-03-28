@@ -231,13 +231,19 @@ export function Blog() {
               href={post.href}
               target="_blank"
               rel="noreferrer"
-              className="blog-card group relative block h-full rounded-2xl border border-border bg-bg-surface overflow-hidden hover:border-opacity-50 transition-all duration-500"
-              onMouseEnter={(e) => { e.currentTarget.style.borderColor = `${post.color}30` }}
-              onMouseLeave={(e) => { e.currentTarget.style.borderColor = "" }}
+              className="blog-card group relative block h-full rounded-2xl border border-border bg-bg-surface overflow-hidden hover:shadow-[0_0_30px_oklch(0_0_0_/_0.3)] transition-all duration-500"
+              onMouseEnter={(e) => {
+                e.currentTarget.style.borderColor = `${post.color}40`
+                e.currentTarget.style.boxShadow = `0 0 35px ${post.color}10, 0 20px 40px oklch(0 0 0 / 0.2)`
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.borderColor = ""
+                e.currentTarget.style.boxShadow = ""
+              }}
             >
-              {/* Top accent */}
+              {/* Top accent — always faintly visible, bright on hover */}
               <div
-                className="h-[2px] opacity-0 group-hover:opacity-100 transition-opacity duration-700"
+                className="h-[2px] opacity-30 group-hover:opacity-100 transition-opacity duration-500"
                 style={{ background: `linear-gradient(to right, transparent, ${post.color}, transparent)` /* rtl-ok: symmetric center-fade */ }}
               />
 
@@ -245,19 +251,28 @@ export function Blog() {
                 {/* Meta row */}
                 <div className="flex items-center justify-between mb-4">
                   <span
-                    className="text-[10px] font-mono px-2.5 py-1 rounded-full tracking-wider uppercase"
-                    style={{ background: `${post.color}12`, color: post.color, border: `1px solid ${post.color}25` }}
+                    className="text-[10px] font-mono px-2.5 py-1 rounded-full tracking-wider uppercase font-semibold"
+                    style={{ background: `${post.color}15`, color: post.color, border: `1px solid ${post.color}30` }}
                   >
                     {tCat(post.category)}
                   </span>
-                  <div className="flex items-center gap-1.5 text-text-muted">
-                    <Calendar className="w-3 h-3" />
-                    <span className="text-[11px] font-mono" dir="ltr">{formatDate(post.date)}</span>
+                  {/* Reading time chip — prominent */}
+                  <div
+                    className="flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-mono font-semibold"
+                    style={{ background: `${post.color}10`, color: post.color, border: `1px solid ${post.color}20` }}
+                  >
+                    <Clock className="w-3 h-3" />
+                    <span dir="ltr">{post.readTime} min</span>
                   </div>
                 </div>
 
                 {/* Title */}
-                <h3 className="text-base font-bold text-text mb-3 leading-snug transition-colors line-clamp-2">
+                <h3
+                  className="text-base font-bold mb-3 leading-snug line-clamp-2 transition-colors duration-300"
+                  style={{ color: "var(--color-text)" }}
+                  onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.color = post.color }}
+                  onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.color = "" }}
+                >
                   {post.title}
                 </h3>
 
@@ -267,29 +282,34 @@ export function Blog() {
                 </p>
 
                 {/* Footer */}
-                <div className="flex items-center justify-between pt-4 border-t border-border/60">
+                <div className="flex items-center justify-between pt-4 border-t border-border/40">
                   <div className="flex items-center gap-4">
-                    <div className="flex items-center gap-1.5 text-text-muted">
+                    <div className="flex items-center gap-1.5 text-text-muted group-hover:text-text-secondary transition-colors">
                       <ThumbsUp className="w-3.5 h-3.5" />
-                      <span className="text-xs font-mono" dir="ltr">{post.likes}</span>
+                      <span className="text-xs font-mono tabular-nums" dir="ltr">{post.likes}</span>
                     </div>
-                    <div className="flex items-center gap-1.5 text-text-muted">
+                    <div className="flex items-center gap-1.5 text-text-muted group-hover:text-text-secondary transition-colors">
                       <MessageSquare className="w-3.5 h-3.5" />
-                      <span className="text-xs font-mono" dir="ltr">{post.comments}</span>
+                      <span className="text-xs font-mono tabular-nums" dir="ltr">{post.comments}</span>
                     </div>
                     <div className="flex items-center gap-1.5 text-text-muted">
-                      <Clock className="w-3.5 h-3.5" />
-                      <span className="text-xs font-mono" dir="ltr">{post.readTime} min</span>
+                      <Calendar className="w-3 h-3" />
+                      <span className="text-[10px] font-mono" dir="ltr">{formatDate(post.date)}</span>
                     </div>
                   </div>
-                  <ExternalLink className="w-4 h-4 text-text-muted group-hover:text-cyan transition-colors" />
+                  <ExternalLink
+                    className="w-4 h-4 text-text-muted transition-all duration-300 group-hover:scale-110"
+                    style={{ color: undefined }}
+                    onMouseEnter={(e) => { (e.currentTarget as SVGElement).style.color = post.color }}
+                    onMouseLeave={(e) => { (e.currentTarget as SVGElement).style.color = "" }}
+                  />
                 </div>
               </div>
 
-              {/* Background hover glow */}
+              {/* Background hover glow — stronger */}
               <div
-                className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-1000 pointer-events-none"
-                style={{ background: `radial-gradient(ellipse at top, ${post.color}06, transparent 70%)` }}
+                className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none"
+                style={{ background: `radial-gradient(ellipse 80% 50% at 50% 0%, ${post.color}08, transparent 70%)` }}
               />
             </a>
           ))}

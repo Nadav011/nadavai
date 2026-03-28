@@ -115,13 +115,15 @@ export function Hero() {
   ]
 
   return (
-    <section aria-labelledby="hero-heading" className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20">
-      {/* 3D scene placeholder — will be replaced with Spline embed */}
-      <div className="absolute inset-0 mesh-gradient opacity-60" aria-hidden="true" />
+    <section id="hero" aria-labelledby="hero-heading" className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20">
+      {/* Layered background: mesh gradient + dot grid + noise */}
+      <div className="absolute inset-0 mesh-gradient" aria-hidden="true" />
+      <div className="absolute inset-0 dot-grid opacity-[0.08]" aria-hidden="true" />
+      <div className="absolute inset-0 noise-bg" aria-hidden="true" />
       <Spotlight />
 
       <div className="absolute inset-0" style={{ zIndex: 0 }}>
-        <div className="absolute inset-0 grid-bg opacity-20" />
+        <div className="absolute inset-0 grid-bg opacity-15" />
         <div className="absolute w-[800px] h-[800px] bg-[#06d6e0]/4 rounded-full blur-[180px] animate-pulse-glow" style={{ top: "30%", left: "50%", transform: "translate(-50%, -50%)" }} />
         <div className="absolute w-[500px] h-[500px] bg-[#06d6e0]/3 rounded-full blur-[150px] animate-pulse-glow" style={{ bottom: "20%", insetInlineStart: "30%", animationDelay: "2s" }} />
         <div className="absolute inset-0 overflow-hidden pointer-events-none">

@@ -72,6 +72,11 @@ export function Process() {
       aria-label={t("badge")}
       className="relative py-16 md:py-32 overflow-hidden"
     >
+      {/* Subtle dot-grid texture */}
+      <div className="absolute inset-0 dot-grid opacity-[0.07] pointer-events-none" aria-hidden="true" />
+      {/* Decorative ambient glow behind the timeline — uses inset positioning, not fixed height */}
+      <div className="absolute inset-y-0 start-1/2 -translate-x-1/2 w-96 bg-cyan/[0.025] rounded-full blur-[120px] pointer-events-none" />
+
       <div className="max-w-7xl mx-auto px-4 md:px-8">
         {/* Section Header */}
         <div className="text-center mb-10 md:mb-20">
@@ -79,51 +84,69 @@ export function Process() {
             <span className="text-sm font-medium text-cyan">{t("badge")}</span>
           </div>
           <h2 className="text-2xl md:text-4xl lg:text-5xl font-bold text-text mb-3 md:mb-4 text-balance">
-            {t("title")} <span className="text-gradient">{t("highlight")}</span>
+            {t("title")} <span className="text-gradient-animated">{t("highlight")}</span>
           </h2>
           <p className="text-base md:text-lg text-text-muted max-w-2xl mx-auto leading-relaxed px-2 md:px-0">
             {t("description")}
           </p>
         </div>
 
-        {/* Steps - vertical timeline layout, mobile-first */}
+        {/* Steps — vertical timeline layout, mobile-first */}
         <div className="relative max-w-2xl mx-auto">
           {steps.map((step, index) => (
             <div key={index} className="process-step relative flex gap-4 md:gap-8 pb-10 md:pb-12 last:pb-0">
               {/* Timeline column */}
               <div className="flex flex-col items-center flex-shrink-0">
-                {/* Step number circle */}
+                {/* Step icon circle with gradient background */}
                 <div
-                  className="relative w-12 h-12 md:w-16 md:h-16 rounded-xl md:rounded-2xl flex items-center justify-center border-2 transition-all duration-500 flex-shrink-0"
+                  className="relative w-12 h-12 md:w-16 md:h-16 rounded-xl md:rounded-2xl flex items-center justify-center flex-shrink-0 transition-all duration-500"
                   style={{
-                    borderColor: step.color,
-                    backgroundColor: "var(--color-bg-surface)",
-                    boxShadow: `0 0 20px ${step.color}20`,
+                    background: `linear-gradient(135deg, ${step.color}25, ${step.color}10)`,
+                    border: `2px solid ${step.color}50`,
+                    boxShadow: `0 0 25px ${step.color}20, inset 0 1px 0 ${step.color}20`,
                   }}
                 >
-                  <step.icon className="w-6 h-6 md:w-7 md:h-7" style={{ color: step.color }} />
+                  {/* Step number badge — top-start corner */}
+                  <span
+                    className="absolute -top-2 -start-2 w-5 h-5 rounded-full flex items-center justify-center text-[9px] font-mono font-bold text-bg-deep"
+                    style={{ background: step.color, boxShadow: `0 0 10px ${step.color}60` }}
+                  >
+                    {step.step}
+                  </span>
+                  <step.icon
+                    className="w-6 h-6 md:w-7 md:h-7"
+                    style={{ color: step.color, filter: `drop-shadow(0 0 6px ${step.color}60)` }}
+                  />
                 </div>
-                {/* Connecting line */}
+                {/* Connecting line — gradient with glow */}
                 {index < steps.length - 1 && (
                   <div
-                    className="process-line w-[2px] flex-1 mt-3"
+                    className="process-line w-[2px] flex-1 mt-3 rounded-full"
                     style={{
-                      background: `linear-gradient(to bottom, ${step.color}40, ${steps[index + 1]?.color ?? step.color}40)`,
+                      background: `linear-gradient(to bottom, ${step.color}60, ${steps[index + 1]?.color ?? step.color}30)`, /* rtl-ok: vertical gradient */
+                      boxShadow: `0 0 8px ${step.color}20`,
                     }}
                   />
                 )}
               </div>
 
-              {/* Content column */}
-              <div className="flex-1 pt-1 pb-4">
-                <div className="flex items-center gap-3 mb-3">
-                  <span
-                    className="text-3xl md:text-4xl font-bold font-mono tracking-tighter"
-                    style={{ color: step.color }}
-                  >
-                    {step.step}
-                  </span>
-                </div>
+              {/* Content area — subtle hover tint */}
+              <div
+                className="flex-1 pt-1 pb-4 ps-4 md:ps-6 rounded-xl transition-colors duration-500 group/step"
+                onMouseEnter={(e) => {
+                  ;(e.currentTarget as HTMLElement).style.background = `${step.color}04`
+                }}
+                onMouseLeave={(e) => {
+                  ;(e.currentTarget as HTMLElement).style.background = ""
+                }}
+              >
+                {/* Step number — large display */}
+                <span
+                  className="block text-4xl md:text-5xl font-bold font-mono tracking-tighter tabular-nums leading-none mb-2 transition-all duration-300"
+                  style={{ color: step.color, textShadow: `0 0 30px ${step.color}30` }}
+                >
+                  {step.step}
+                </span>
                 <h3 className="text-xl md:text-2xl font-bold text-text mb-3">
                   {step.title}
                 </h3>

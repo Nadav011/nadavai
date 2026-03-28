@@ -228,7 +228,9 @@
     "ghDesc": "Open repositories - Singularity Forge, VibeCoder, and more. Real code, in production.",
     "ghLabel": "Open Source",
     "waDesc": "The fastest way to get in touch. Questions, ideas, or just to say hello.",
-    "waLabel": "Message Me"
+    "waLabel": "Message Me",
+    "tgLabel": "Telegram Bot",
+    "tgDesc": "@NadavAGIbot — AI Dev Bot"
   },
   "contact": {
     "title": "Contact",

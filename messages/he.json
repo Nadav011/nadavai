@@ -228,7 +228,9 @@
     "ghDesc": "ריפוזיטוריז פתוחים - Singularity Forge, VibeCoder, ועוד. קוד אמיתי, בפרודקשן.",
     "ghLabel": "Open Source",
     "waDesc": "הדרך הכי מהירה ליצור קשר. שאלות, רעיונות, או סתם להגיד שלום.",
-    "waLabel": "כתוב לי"
+    "waLabel": "כתוב לי",
+    "tgLabel": "בוט טלגרם",
+    "tgDesc": "@NadavAGIbot — בוט AI פיתוח"
   },
   "contact": {
     "title": "צור קשר",
