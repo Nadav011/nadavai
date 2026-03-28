@@ -18,7 +18,21 @@ jobs:
         with:
           egress-policy: audit
       - uses: actions/checkout@v4
+      - name: Check feature availability
+        id: feature_check
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          if gh api repos/${{ github.repository }} --jq '.security_and_analysis // empty' | grep -q .; then
+            echo "supported=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "supported=false" >> "$GITHUB_OUTPUT"
+          fi
+      - name: Skip unsupported dependency review
+        if: steps.feature_check.outputs.supported != 'true'
+        run: echo "Dependency review is not supported on this repository."
       - uses: actions/dependency-review-action@v4
+        if: steps.feature_check.outputs.supported == 'true'
         with:
           fail-on-severity: high
           deny-licenses: GPL-3.0, GPL-3.0-only, AGPL-3.0, AGPL-3.0-only, SSPL-1.0, EUPL-1.1
