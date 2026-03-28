@@ -49,8 +49,11 @@ jobs:
 
       - name: Ratchet — auto-raise threshold if coverage improved
         if: success() && github.event_name == 'pull_request' && steps.coverage-check.outputs.lines != ''
+        env:
+          STEP_LINES: ${{ steps.coverage-check.outputs.lines }}
+          HEAD_REF: ${{ github.head_ref }}
         run: |
-          LINES="${{ steps.coverage-check.outputs.lines }}"
+          LINES="$STEP_LINES"
           THRESHOLD_FILE=".coverage-threshold"
 
           # Read current threshold (default 50 if file missing)
@@ -72,7 +75,7 @@ jobs:
             git config user.email "github-actions[bot]@users.noreply.github.com"
             git add "$THRESHOLD_FILE"
             git diff --cached --quiet || git commit -m "chore(ci): ratchet coverage threshold to ${NEW_THRESHOLD}% (was ${CURRENT}%)"
-            git push origin HEAD:"${{ github.head_ref }}" 2>/dev/null || true
+            git push origin HEAD:"$HEAD_REF" 2>/dev/null || true
             echo "::notice::Coverage threshold raised from ${CURRENT}% to ${NEW_THRESHOLD}%"
           else
             echo "Threshold stays at ${CURRENT}% (coverage ${LINES}% not high enough to ratchet)"
