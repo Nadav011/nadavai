@@ -198,6 +198,7 @@ export function CommandPalette() {
         open={open}
         onOpenChange={handleOpenChange}
       >
+        <span className="sr-only" role="heading" aria-level={2}>Command Palette</span>
         {/* Premium gradient border wrapper */}
         <div
           className="relative rounded-2xl p-[1px]"

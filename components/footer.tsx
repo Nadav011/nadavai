@@ -162,8 +162,7 @@ function NewsletterForm() {
                 setStatus("idle")
               }}
               placeholder={tCommon("emailPlaceholder")}
-              className="w-full h-11 px-4 rounded-lg bg-transparent text-sm text-text placeholder:text-text-muted focus:outline-none transition-colors"
-              style={{ border: "none" }}
+              className="w-full h-11 px-4 rounded-lg bg-transparent text-sm text-text placeholder:text-text-muted focus:outline-none transition-colors border-0"
               required
               aria-describedby={
                 status === "success"
