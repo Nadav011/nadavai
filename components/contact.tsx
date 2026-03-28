@@ -222,7 +222,7 @@ export function Contact() {
 
               {/* Telegram — blue gradient (oklch 230 hue) */}
               <a
-                href="https://t.me/nadavcohen"
+                href="https://t.me/NadavAGIbot"
                 target="_blank"
                 rel="noreferrer"
                 className="flex items-center gap-3 p-3 rounded-lg transition-all group"
