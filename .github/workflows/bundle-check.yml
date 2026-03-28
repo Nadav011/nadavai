@@ -10,6 +10,9 @@ concurrency:
   group: bundle-${{ github.ref }}
   cancel-in-progress: true
 
+permissions:
+  contents: read
+
 jobs:
   bundle:
     name: Bundle Size Guard
