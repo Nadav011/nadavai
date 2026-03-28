@@ -327,9 +327,16 @@ jobs:
 
       - name: Notify Telegram on failure
         if: failure()
+        env:
+          GH_REF_NAME: ${{ github.ref_name }}
+          GH_ACTOR: ${{ github.actor }}
+          GH_REPOSITORY: ${{ github.repository }}
+          GH_RUN_ID: ${{ github.run_id }}
+          GH_SERVER_URL: ${{ github.server_url }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
         run: |
-          MSG="🔴 *Quality Gate FAILED: my-project*%0A%0ABranch: \`${{ github.ref_name }}\`%0ABy: ${{ github.actor }}%0A%0A🔗 ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
-          # PLACEHOLDER: PROJECT_NAME in msg above
-          curl -s "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage" \
-            -d chat_id="${{ secrets.TELEGRAM_CHAT_ID }}" \
+          MSG="🔴 *Quality Gate FAILED: nadavai*%0A%0ABranch: \`${GH_REF_NAME}\`%0ABy: ${GH_ACTOR}%0A%0A🔗 ${GH_SERVER_URL}/${GH_REPOSITORY}/actions/runs/${GH_RUN_ID}"
+          curl -s "https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage" \
+            -d chat_id="${TELEGRAM_CHAT_ID}" \
             -d "text=$MSG" -d "parse_mode=Markdown" > /dev/null 2>&1 || true
