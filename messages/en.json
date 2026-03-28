@@ -2,8 +2,8 @@
   "layout": {
     "skipToContent": "Skip to main content",
     "title": "NADAV.AI | Full-Stack AI Developer",
-    "description": "AI-powered development in Israel. 8+ production systems, 80 AI tools, 38+ automation agents. Expert Full-Stack developer in React, Next.js, TypeScript, Supabase & Flutter.",
-    "ogDescription": "Building everything with AI. 8+ production apps, 80 AI Skills, 38+ agents. Advanced Full-Stack development with artificial intelligence."
+    "description": "AI-powered development in Israel. 10+ production systems, 86 AI tools, 52 automation agents. Expert Full-Stack developer in React, Next.js, TypeScript, Supabase & Flutter.",
+    "ogDescription": "Building everything with AI. 10+ production apps, 86 AI Skills, 52 agents. Advanced Full-Stack development with artificial intelligence."
   },
   "nav": {
     "projects": "Projects",
@@ -38,8 +38,8 @@
     "highlight": "Services",
     "description": "Every service is AI-powered - what takes others weeks, I do in days. No compromises on quality.",
     "trust1": "Response time < 24 hours",
-    "trust2": "8+ production apps",
-    "trust3": "80 AI Skills in use",
+    "trust2": "10+ production apps",
+    "trust3": "86 AI Skills in use",
     "s1Title": "App Development",
     "s1Subtitle": "Full-Stack AI Development",
     "s1Description": "Full web apps from scratch with AI. What a full team builds in months - I build in days. Frontend, Backend, Database, Deploy - all included.",
@@ -91,7 +91,10 @@
     "p5": "Cash register management system - register closing, deposits, branch management. PWA with Offline-first, IndexedDB, and full Hebrew support.",
     "p6": "Mobile sports chat app - Flutter with 28 modules: chats, voice rooms, watch parties, predictions and games.",
     "p7": "Code audit engine with 579 gates, auto-healing, automatic technology detection, and 10x7 visual matrix. TypeScript + Bun.",
-    "p8": "Israeli finance app with full Hebrew RTL support. Expense management, budgets, and interactive charts."
+    "p8": "Israeli finance app with full Hebrew RTL support. Expense management, budgets, and interactive charts.",
+    "p9": "APEX Command Center - full management dashboard for the AI Dev Stack. 32 pages, PWA, real-time monitoring, Hydra v2 management, and 86 Skills. React + Cloudflare Pages.",
+    "p10": "APEX CLI - command-line interface for 13 management commands. Full integration with Hydra v2, LangGraph, and 86 Skills. TypeScript + Bun.",
+    "p11": "RTL First Dev Kit - RTL-first component library for Hebrew development. Tailwind logical properties, a11y tests, and CSS custom properties. Open Source."
   },
   "process": {
     "badge": "process",
@@ -117,10 +120,10 @@
     "t1Text": "Nadav built me a full Enterprise-level management system - 149 pages, 111 tables. What a team of 5 would do in months, he delivered in days. Impressive.",
     "t2Name": "CTO",
     "t2Role": "Startup",
-    "t2Text": "We added a PWA app with full Offline-first - smart sync, IndexedDB, everything works perfectly even without connection. 8+ production apps speak for themselves.",
+    "t2Text": "We added a PWA app with full Offline-first - smart sync, IndexedDB, everything works perfectly even without connection. 10+ production apps speak for themselves.",
     "t3Name": "Entrepreneur",
     "t3Role": "AI Project",
-    "t3Text": "80 AI Skills, 38+ agents, a code audit engine with 579 gates - Nadav's understanding of AI is on another level. Our project went live within a week."
+    "t3Text": "86 AI Skills, 52 agents, a code audit engine with 579 gates - Nadav's understanding of AI is on another level. Our project went live within a week."
   },
   "blog": {
     "badge": "blog",
@@ -135,8 +138,8 @@
     "catCareer": "Career",
     "b1Title": "Why AI is changing the game for freelancers",
     "b1Excerpt": "A year ago I was building apps in 3 months. Today? Same quality level in 3 days. This is how AI changed my life as a developer.",
-    "b2Title": "8 production apps in one year - how I did it",
-    "b2Excerpt": "The secret? Not traditional code. Using 80 AI Skills, smart agents, and the APEX engine with 579 gates ensuring everything is top quality.",
+    "b2Title": "10+ production apps - how I did it with AI",
+    "b2Excerpt": "The secret? Not traditional code. Using 86 AI Skills, 52 smart agents, and the APEX engine with 579 gates ensuring everything is top quality.",
     "b3Title": "Claude Code vs Cursor - what's really better for developers?",
     "b3Excerpt": "I tried both in depth. Here are the real differences, what works better, and where each one wins.",
     "b4Title": "5 mistakes every AI beginner makes",
@@ -177,13 +180,16 @@
     "description": "Practical guides, videos, and tips - all free. So you can build with AI too.",
     "g1Title": "How I built a 149-page system with AI",
     "g1Desc": "Case Study: Mexicani system - 149 pages, 111 tables, 38 Edge Functions. How AI changed the building process.",
+    "g1Status": "live",
     "g2Title": "PWA with full Offline support",
     "g2Desc": "How I built a PWA app with IndexedDB, smart sync, and an operation queue - that works even without internet.",
+    "g2Status": "live",
     "g3Title": "Claude Code Skills - Complete guide",
-    "g3Desc": "How I built 73 skills for Claude Code: architecture, 70-Gate Matrix, auto-heal, and research workflows.",
+    "g3Desc": "How I built 86 skills for Claude Code: architecture, 70-Gate Matrix, auto-heal, and research workflows.",
     "g4Title": "From Flutter to Production",
     "g4Desc": "The path from idea to live app in Flutter: Clean Architecture, Riverpod, Firebase, and Capacitor.",
-    "comingSoon": "Coming Soon"
+    "comingSoon": "Coming Soon",
+    "live": "Live"
   },
   "resources": {
     "badge": "open source",
@@ -192,7 +198,7 @@
     "description": "Repositories, templates, and tools I give away for free. Take, use, enjoy.",
     "r1Desc": "Engine for building Claude Code skills with 70-Gate matrix, auto-heal, and research-first workflows. Web + Mobile.",
     "r2Desc": "Project management app for vibe coders. React Native, Expo, 14 OMEGA Skills, Glassmorphism UI.",
-    "r3Desc": "80 skills system: 20 APEX (Web), 25 Flutter (Mobile), 10 Utility, 5 Agent Skills. Full development automation.",
+    "r3Desc": "86 skills system: 20 APEX (Web), 25 Flutter (Mobile), 10 Utility, 5 Agent Skills, and more. Full development automation.",
     "r4Desc": "AI agent system with CrewAI, Ollama (local models), ChromaDB for memory, and Docker. Local AGI on your computer.",
     "r5Desc": "Code audit engine with 579 gates, auto-healing, automatic technology detection, and 10x7 visual matrix."
   },
@@ -201,12 +207,14 @@
     "title": "News",
     "highlight": "& Updates",
     "description": "What's new in the AI world, new tools, important updates, and what I'm using now.",
-    "n1Title": "80 AI Skills for Claude Code",
-    "n1Desc": "Reached 80 custom skills for Claude Code: 20 APEX (Web), 25 Flutter (Mobile), 10 Utility, 5 Agent Skills, and more.",
-    "n2Title": "APEX Engine v23",
-    "n2Desc": "Code audit engine with 579 gates and 10x7 visual matrix. Auto-healing, automatic technology detection, and detailed reports.",
-    "n3Title": "Singularity Forge - Open Source",
-    "n3Desc": "Released Singularity Forge - an engine for building skills with 70-Gate Matrix, auto-heal, and research workflows. Open to everyone."
+    "n1Title": "APEX Dashboard - Command Center is Live",
+    "n1Desc": "Launched APEX Command Center - full management dashboard for the AI Dev Stack. 32 pages, PWA, real-time monitoring, Hydra v2 management. March 2026.",
+    "n2Title": "86 AI Skills and 52 Agents",
+    "n2Desc": "March 2026 update: reached 86 custom skills and 52 automation agents. Hydra v2 with LangGraph, LanceDB memory, and Bayesian routing.",
+    "n3Title": "RTL First Dev Kit - Open Source",
+    "n3Desc": "Released RTL First Dev Kit - RTL-first component library with Tailwind 4.2 logical properties, a11y, and i18n. Open to everyone.",
+    "n4Title": "Hydra v2 - New Orchestration Engine",
+    "n4Desc": "Hydra v2.0 with LangGraph Python, LanceDB cognitive memory, Bayesian provider routing, and SqliteSaver checkpointing. Production-ready."
   },
   "social": {
     "badge": "social",
@@ -220,7 +228,9 @@
     "ghDesc": "Open repositories - Singularity Forge, VibeCoder, and more. Real code, in production.",
     "ghLabel": "Open Source",
     "waDesc": "The fastest way to get in touch. Questions, ideas, or just to say hello.",
-    "waLabel": "Message Me"
+    "waLabel": "Message Me",
+    "tgLabel": "Telegram Bot",
+    "tgDesc": "@NadavAGIbot — AI Dev Bot"
   },
   "contact": {
     "title": "Contact",

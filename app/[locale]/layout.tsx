@@ -4,6 +4,7 @@ import { Space_Grotesk, JetBrains_Mono, Heebo } from "next/font/google"
 import { NextIntlClientProvider } from "next-intl"
 import { getMessages, getTranslations } from "next-intl/server"
 import { notFound } from "next/navigation"
+import { ViewTransitions } from "next-view-transitions"
 import { routing } from "@/i18n/routing"
 import "../globals.css"
 
@@ -126,10 +127,11 @@ export default async function LocaleLayout({
   const dir = getDirection(locale)
 
   return (
-    <html lang={locale} dir={dir} className="dark" style={{ backgroundColor: "#070a13", colorScheme: "dark" }}>
+    <ViewTransitions>
+    <html lang={locale} dir={dir} className="dark" style={{ backgroundColor: "oklch(0.085 0.025 245)", colorScheme: "dark" }}>
       <body
         className={`${spaceGrotesk.variable} ${jetbrainsMono.variable} ${heebo.variable} font-sans antialiased overflow-x-hidden`}
-        style={{ backgroundColor: "#070a13", color: "#f8fafc" }}
+        style={{ backgroundColor: "oklch(0.085 0.025 245)", color: "oklch(0.95 0.01 260)" }}
       >
         {/* security-ok: JSON-LD structured data — hardcoded values, no user input */}
         <script
@@ -142,7 +144,7 @@ export default async function LocaleLayout({
               url: `https://nadavc.ai/${locale}`,
               name: locale === "he" ? "נדב כהן — מפתח Full-Stack AI" : "Nadav Cohen — Full-Stack AI Developer",
               dateCreated: "2024-01-01",
-              dateModified: "2026-03-28",
+              dateModified: "2026-03-29",
               inLanguage: locale === "he" ? "he-IL" : "en-US",
               mainEntity: {
                 "@type": "Person",
@@ -160,11 +162,13 @@ export default async function LocaleLayout({
                   height: 630,
                 },
                 jobTitle: "Full-Stack AI Developer",
-                description: "Full-Stack Developer who builds everything with AI. 8+ production apps, 80 AI Skills, 38+ automation agents. Specializing in React, Next.js, TypeScript, Supabase, Flutter, and multi-agent AI orchestration.",
+                description: "Full-Stack Developer who builds everything with AI. 10+ production apps, 86 AI Skills, 52 automation agents. Specializing in React 19, Next.js 16, TypeScript, Supabase, Flutter, Tailwind 4.2, and multi-agent AI orchestration with LangGraph.",
                 knowsAbout: [
                   "Artificial Intelligence", "Full-Stack Development", "React", "Next.js",
                   "TypeScript", "Supabase", "Flutter", "Claude Code", "AI Agents",
                   "Multi-Agent Orchestration", "LangGraph", "Enterprise Software",
+                  "Tailwind CSS 4.2", "GSAP", "Hydra v2", "OKLCH Color System",
+                  "PWA Development", "CI/CD Automation", "Bento Grid Design",
                 ],
                 knowsLanguage: [
                   { "@type": "Language", name: "Hebrew", alternateName: "he" },
@@ -303,7 +307,7 @@ export default async function LocaleLayout({
                 "Mobile App Development",
                 "Automation Solutions",
               ],
-              description: "Professional AI development services: Full-Stack web & mobile apps, enterprise systems, AI agents, automation. 8+ production applications, 80+ AI skills.",
+              description: "Professional AI development services: Full-Stack web & mobile apps, enterprise systems, AI agents, automation. 10+ production applications, 86 AI skills, 52 automation agents.",
               slogan: "Building everything with AI",
               founder: {
                 "@type": "Person",
@@ -393,6 +397,39 @@ export default async function LocaleLayout({
                 author: { "@type": "Person", "@id": "https://nadavc.ai/#person", name: "Nadav Cohen" },
                 offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
               },
+              {
+                "@context": "https://schema.org",
+                "@type": "SoftwareApplication",
+                name: "APEX Dashboard",
+                applicationCategory: "DeveloperApplication",
+                operatingSystem: "Web",
+                description: "AI infrastructure command center — 32 pages, real-time monitoring, PWA, deployed on Cloudflare Pages.",
+                author: { "@type": "Person", "@id": "https://nadavc.ai/#person", name: "Nadav Cohen" },
+                url: "https://dashboard.nadavc.ai",
+                offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
+              },
+              {
+                "@context": "https://schema.org",
+                "@type": "SoftwareApplication",
+                name: "APEX CLI",
+                applicationCategory: "DeveloperApplication",
+                operatingSystem: "Cross-platform",
+                description: "AI-powered code quality CLI with 13 commands, skill system, and multi-agent orchestration.",
+                author: { "@type": "Person", "@id": "https://nadavc.ai/#person", name: "Nadav Cohen" },
+                url: "https://github.com/Nadav011/apex-cli",
+                offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
+              },
+              {
+                "@context": "https://schema.org",
+                "@type": "SoftwareApplication",
+                name: "RTL Dev Kit",
+                applicationCategory: "DeveloperApplication",
+                operatingSystem: "Cross-platform",
+                description: "Open-source RTL-first development toolkit for React and Tailwind CSS — automatic class conversion and validation.",
+                author: { "@type": "Person", "@id": "https://nadavc.ai/#person", name: "Nadav Cohen" },
+                url: "https://github.com/Nadav011/rtl-first-dev-kit",
+                offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
+              },
             ]).replace(/</g, "\u003c"),
           }}
         />
@@ -417,7 +454,7 @@ export default async function LocaleLayout({
                   name: "מה נדב כהן בונה?",
                   acceptedAnswer: {
                     "@type": "Answer",
-                    text: "נדב כהן בונה אפליקציות Full-Stack עם AI — כולל אפליקציות web, מערכות enterprise, סוכני AI ואוטומציה. יותר מ-8 אפליקציות production פעילות, 80 כלי AI ו-38+ סוכני אוטומציה.",
+                    text: "נדב כהן בונה אפליקציות Full-Stack עם AI — כולל אפליקציות web, מערכות enterprise, סוכני AI ואוטומציה. יותר מ-10 אפליקציות production פעילות, 86 כלי AI ו-52 סוכני אוטומציה.",
                   },
                 },
                 {
@@ -442,7 +479,7 @@ export default async function LocaleLayout({
                   name: "Who is Nadav Cohen?",
                   acceptedAnswer: {
                     "@type": "Answer",
-                    text: "Nadav Cohen is an Israeli full-stack AI developer who builds everything with AI. He created Mexicani (enterprise franchise management — 149 pages, 111 tables), APEX Engine (code audit with 579 gates), and 8+ production applications with 80 AI skills and 38+ automation agents.",
+                    text: "Nadav Cohen is an Israeli full-stack AI developer who builds everything with AI. He created Mexicani (enterprise franchise management — 149 pages, 111 tables), APEX Engine (code audit with 579 gates), APEX Dashboard (32 pages, real-time AI monitoring), and 10+ production applications with 86 AI skills and 52 automation agents.",
                   },
                 },
                 {
@@ -475,14 +512,19 @@ export default async function LocaleLayout({
         />
         <a
           href="#main-content"
-          className="sr-only focus:not-sr-only focus:absolute focus:z-[100] focus:top-4 focus:start-4 focus:px-4 focus:py-2 focus:rounded-lg focus:bg-[#06d6e0] focus:text-[hsl(222,47%,4%)] focus:font-bold focus:text-sm"
+          className="sr-only focus:not-sr-only focus:absolute focus:z-[100] focus:top-4 focus:start-4 focus:px-4 focus:py-2 focus:rounded-lg focus:bg-cyan focus:text-bg-deep focus:font-bold focus:text-sm"
         >
           {t("skipToContent")}
         </a>
         <NextIntlClientProvider messages={messages}>
           {children}
         </NextIntlClientProvider>
+        {/* Cloudflare Web Analytics — cookie-free, no consent needed */}
+        {process.env.NODE_ENV === "production" && (
+          <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token":"nadavai"}' />
+        )}
       </body>
     </html>
+    </ViewTransitions>
   )
 }

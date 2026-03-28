@@ -187,6 +187,51 @@ export function Projects() {
       github: "https://github.com/Nadav011/israeli-finance-app",
       demo: "",
     },
+    {
+      title: "APEX Dashboard",
+      description: t("p9"),
+      tech: ["React", "TypeScript", "Tailwind 4.2", "Hydra v2", "PWA"],
+      category: "Dev Tool",
+      icon: Cpu,
+      status: "production",
+      statusColor: "#27ca40",
+      stars: 0,
+      featured: true,
+      color: "#06d6e0",
+      metrics: { pages: "32", agents: "52" },
+      github: "https://github.com/Nadav011/apex-dashboard",
+      demo: "https://dashboard.nadavc.ai",
+    },
+    {
+      title: "APEX CLI",
+      description: t("p10"),
+      tech: ["TypeScript", "Bun", "LangGraph", "Claude Code"],
+      category: "Dev Tool",
+      icon: Shield,
+      status: "production",
+      statusColor: "#27ca40",
+      stars: 0,
+      featured: false,
+      color: "#e84393",
+      metrics: { commands: "13", skills: "86" },
+      github: "https://github.com/Nadav011/apex-cli",
+      demo: "",
+    },
+    {
+      title: "RTL Dev Kit",
+      description: t("p11"),
+      tech: ["TypeScript", "Tailwind 4.2", "React", "Open Source"],
+      category: "Open Source",
+      icon: Globe,
+      status: "production",
+      statusColor: "#27ca40",
+      stars: 0,
+      featured: false,
+      color: "#4f46e5",
+      metrics: { rules: "50+", framework: "TW 4.2" },
+      github: "https://github.com/Nadav011/rtl-first-dev-kit",
+      demo: "",
+    },
   ]
 
   const statusLabels: Record<string, string> = {
@@ -215,7 +260,7 @@ export function Projects() {
             <ScrollReveal key={i} delay={i * 80} direction={i % 2 === 0 ? "right" : "left"}>
               <TiltCard className={project.featured ? "md:row-span-1" : ""}>
                 <div
-                  className="project-card group relative h-full rounded-2xl border border-[hsl(215,28%,16%)] bg-[hsl(222,47%,5%)] overflow-hidden transition-all duration-700 hover:border-opacity-50"
+                  className="project-card group relative h-full rounded-2xl border border-border bg-bg-surface overflow-hidden transition-all duration-700 hover:border-opacity-50"
                   onMouseEnter={() => setActiveProject(i)}
                   onMouseLeave={() => setActiveProject(null)}
                   style={{
@@ -226,7 +271,7 @@ export function Projects() {
                   {/* Top accent line */}
                   <div
                     className="absolute top-0 inset-x-0 h-[2px] opacity-0 group-hover:opacity-100 transition-opacity duration-700"
-                    style={{ background: `linear-gradient(to right, transparent, ${project.color}, transparent)` }}
+                    style={{ background: `linear-gradient(to right, transparent, ${project.color}, transparent)` /* rtl-ok: symmetric center-fade */ }}
                   />
 
                   <div className="p-4 md:p-6">
@@ -243,7 +288,7 @@ export function Projects() {
                           <project.icon className="w-5 h-5" style={{ color: project.color }} />
                         </div>
                         <div>
-                          <span className="text-[10px] font-mono tracking-wider uppercase text-[hsl(215,20%,45%)]">
+                          <span className="text-[10px] font-mono tracking-wider uppercase text-text-muted">
                             {project.category}
                           </span>
                         </div>
@@ -259,19 +304,19 @@ export function Projects() {
                     </div>
 
                     {/* Title */}
-                    <h3 className="text-lg font-bold text-[hsl(210,40%,98%)] mb-2 group-hover:text-[hsl(210,40%,100%)] transition-colors">
+                    <h3 className="text-lg font-bold text-text mb-2 transition-colors">
                       {project.title}
                     </h3>
 
                     {/* Description */}
-                    <p className="text-sm text-[hsl(215,20%,55%)] leading-relaxed mb-5">{project.description}</p>
+                    <p className="text-sm text-text-muted leading-relaxed mb-5">{project.description}</p>
 
                     {/* Metrics */}
                     <div className="flex items-center gap-4 mb-5">
                       {Object.entries(project.metrics).map(([key, val]) => (
                         <div key={key} className="flex items-center gap-1.5">
-                          <span className="text-sm font-bold text-[hsl(210,40%,98%)]">{val}</span>
-                          <span className="text-[10px] font-mono text-[hsl(215,20%,48%)] uppercase">{key}</span>
+                          <span className="text-sm font-bold text-text">{val}</span>
+                          <span className="text-[10px] font-mono text-text-muted uppercase">{key}</span>
                         </div>
                       ))}
                     </div>
@@ -281,7 +326,7 @@ export function Projects() {
                       {project.tech.map((t) => (
                         <span
                           key={t}
-                          className="text-[11px] font-mono px-2.5 py-1 rounded-md bg-[hsl(215,28%,10%)] text-[hsl(215,20%,55%)] border border-[hsl(215,28%,16%)] group-hover:border-[hsl(215,28%,20%)] transition-colors"
+                          className="text-[11px] font-mono px-2.5 py-1 rounded-md bg-border/40 text-text-muted border border-border group-hover:border-border/60 transition-colors"
                         >
                           {t}
                         </span>
@@ -289,14 +334,14 @@ export function Projects() {
                     </div>
 
                     {/* Footer */}
-                    <div className="flex items-center justify-between pt-4 border-t border-[hsl(215,28%,12%)]">
+                    <div className="flex items-center justify-between pt-4 border-t border-border/60">
                       <div className="flex items-center gap-1.5">
                         <Star className="w-4 h-4 fill-amber-400 text-amber-400" />
-                        <span className="text-sm font-mono font-semibold text-[hsl(210,40%,98%)]">AI Built</span>
+                        <span className="text-sm font-mono font-semibold text-text">AI Built</span>
                       </div>
                       <div className="flex items-center gap-2">
                         {project.github && (
-                          <a href={project.github} target="_blank" rel="noreferrer" className="p-2 rounded-lg hover:bg-[hsl(215,28%,12%)] text-[hsl(215,20%,45%)] hover:text-[hsl(210,40%,98%)] transition-all" aria-label={tCommon("githubAriaLabel")}>
+                          <a href={project.github} target="_blank" rel="noreferrer" className="p-2 rounded-lg hover:bg-border/50 text-text-muted hover:text-text transition-all" aria-label={tCommon("githubAriaLabel")}>
                             <Github className="w-4 h-4" />
                           </a>
                         )}
@@ -338,7 +383,7 @@ export function Projects() {
         {/* View more CTA */}
         <ScrollReveal delay={300}>
           <div className="flex justify-center mt-8 md:mt-12">
-            <a href="https://github.com/Nadav011" target="_blank" rel="noreferrer" className="group flex items-center gap-2 px-6 py-3 rounded-xl border border-[hsl(215,28%,20%)] bg-[hsl(222,47%,6%)] text-sm font-medium text-[hsl(215,20%,65%)] hover:text-[#06d6e0] hover:border-[#06d6e0]/30 transition-all duration-500">
+            <a href="https://github.com/Nadav011" target="_blank" rel="noreferrer" className="group flex items-center gap-2 px-6 py-3 rounded-xl border border-border/80 bg-bg-elevated text-sm font-medium text-text-secondary hover:text-cyan hover:border-cyan/30 transition-all duration-500">
               {t("viewMore")}
               <ArrowDown className="w-4 h-4 group-hover:translate-y-1 transition-transform" />
             </a>

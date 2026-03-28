@@ -34,7 +34,7 @@ const socialLinks = [
   },
   {
     platform: "GitHub",
-    icon: <Github className="w-5 h-5 text-[hsl(210,40%,98%)]" />,
+    icon: <Github className="w-5 h-5 text-text" />,
     descKey: "ghDesc",
     href: "https://github.com/Nadav011",
     color: "#f0f6fc",
@@ -48,9 +48,21 @@ const socialLinks = [
       </svg>
     ),
     descKey: "waDesc",
-    href: "https://wa.me/972504401760",
+    href: "https://wa.me/972505245677",
     color: "#27ca40",
     labelKey: "waLabel",
+  },
+  {
+    platform: "Telegram",
+    icon: (
+      <svg className="w-5 h-5 text-[#2AABEE]" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.96 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/>
+      </svg>
+    ),
+    descKey: "tgDesc",
+    href: "https://t.me/NadavAGIbot",
+    color: "#2AABEE",
+    labelKey: "tgLabel",
   },
 ]
 
@@ -75,7 +87,7 @@ export function Social() {
   )
 
   return (
-    <section ref={sectionRef} id="social" aria-label={t("title")} className="relative py-16 md:py-32 bg-[hsl(222,47%,3%)]">
+    <section ref={sectionRef} id="social" aria-label={t("title")} className="relative py-16 md:py-32 bg-bg-deep">
       <div className="absolute inset-0 grid-bg opacity-15" />
       <div className="relative max-w-7xl mx-auto px-4 md:px-8">
         <SectionHeader
@@ -92,30 +104,64 @@ export function Social() {
               href={link.href}
               target="_blank"
               rel="noreferrer"
-              className="social-card group relative block h-full p-4 md:p-6 rounded-xl border border-[hsl(215,28%,16%)] bg-[hsl(222,47%,5%)] hover:border-opacity-50 transition-all duration-500"
-              style={{
-                borderColor: undefined,
+              className="social-card group relative block h-full p-4 md:p-6 rounded-xl border border-border bg-bg-surface overflow-hidden transition-all duration-500"
+              onMouseEnter={(e) => {
+                e.currentTarget.style.borderColor = `${link.color}40`
+                e.currentTarget.style.boxShadow = `0 0 35px ${link.color}10, 0 15px 40px oklch(0 0 0 / 0.2)`
               }}
-              onMouseEnter={(e) => { e.currentTarget.style.borderColor = `${link.color}30` }}
-              onMouseLeave={(e) => { e.currentTarget.style.borderColor = "" }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.borderColor = ""
+                e.currentTarget.style.boxShadow = ""
+              }}
             >
-              <div className="flex items-center gap-3 mb-4">
+              {/* Brand-colored radial background sweep on hover */}
+              <div
+                className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none"
+                style={{ background: `radial-gradient(ellipse 80% 60% at 0% 50%, ${link.color}06, transparent 60%)` }}
+              />
+              {/* Top accent bar */}
+              <div
+                className="absolute top-0 start-0 end-0 h-[2px] opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                style={{ background: `linear-gradient(to right, ${link.color}80, ${link.color}30, transparent)` /* rtl-ok: brand accent from start */ }}
+              />
+
+              <div className="relative flex items-center gap-3 mb-4">
                 <div
-                  className="w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-500"
-                  style={{ background: `${link.color}10`, border: `1px solid ${link.color}20` }}
+                  className="w-12 h-12 rounded-xl flex items-center justify-center transition-all duration-500 group-hover:scale-105"
+                  style={{ background: `${link.color}12`, border: `1px solid ${link.color}25` }}
+                  onMouseEnter={(e) => {
+                    ;(e.currentTarget as HTMLElement).style.boxShadow = `0 0 20px ${link.color}30`
+                    ;(e.currentTarget as HTMLElement).style.background = `${link.color}20`
+                  }}
+                  onMouseLeave={(e) => {
+                    ;(e.currentTarget as HTMLElement).style.boxShadow = ""
+                    ;(e.currentTarget as HTMLElement).style.background = `${link.color}12`
+                  }}
                 >
                   {link.icon}
                 </div>
-                <div>
-                  <div className="text-sm font-semibold text-[hsl(210,40%,98%)]">{link.platform}</div>
-                  <div className="text-[10px] font-mono text-[hsl(215,20%,45%)]">{t(link.labelKey)}</div>
+                <div className="flex-1 min-w-0">
+                  <div className="text-sm font-semibold text-text">{link.platform}</div>
+                  <div className="text-[10px] font-mono" style={{ color: link.color }}>{t(link.labelKey)}</div>
                 </div>
+                {/* Arrow fades in on hover */}
+                <ExternalLink
+                  className="w-4 h-4 opacity-0 group-hover:opacity-100 -translate-x-2 group-hover:translate-x-0 rtl:translate-x-2 rtl:group-hover:translate-x-0 transition-all duration-300"
+                  style={{ color: link.color }}
+                />
               </div>
 
-              <p className="text-sm text-[hsl(215,20%,60%)] leading-relaxed mb-4">{t(link.descKey)}</p>
+              <p className="relative text-sm text-text-secondary leading-relaxed mb-4">{t(link.descKey)}</p>
 
-              <div className="flex items-center justify-end pt-3 border-t border-[hsl(215,28%,14%)]">
-                <span className="inline-flex items-center gap-1.5 text-xs font-mono transition-colors" style={{ color: link.color }}>
+              <div className="relative flex items-center justify-between pt-3 border-t border-border/40">
+                <div className="flex items-center gap-1.5">
+                  <span className="w-1.5 h-1.5 rounded-full animate-pulse" style={{ backgroundColor: link.color }} />
+                  <span className="text-[10px] font-mono text-text-muted">active</span>
+                </div>
+                <span
+                  className="inline-flex items-center gap-1.5 text-xs font-mono font-semibold transition-all duration-300 group-hover:translate-x-1 rtl:group-hover:-translate-x-1"
+                  style={{ color: link.color }}
+                >
                   <ExternalLink className="w-3 h-3" />
                   {">> open"}
                 </span>

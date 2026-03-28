@@ -31,6 +31,27 @@ const PROJECTS = [
       "Shift management system with Drag & Drop, Push notifications, and interactive scheduling. 154 components, 25 hooks.",
     date: "2025-09-15",
   },
+  {
+    title: "APEX Dashboard — AI Infrastructure Command Center",
+    slug: "apex-dashboard",
+    description:
+      "Real-time AI infrastructure monitoring with 32 pages, PWA support, deployed on Cloudflare Pages. Monitors 52 agents, 86 skills, and multi-model dispatch.",
+    date: "2026-03-28",
+  },
+  {
+    title: "APEX CLI — AI-Powered Code Quality Tool",
+    slug: "apex-cli",
+    description:
+      "Developer CLI with 13 commands, skill system, and multi-agent orchestration for automated code quality enforcement.",
+    date: "2026-03-25",
+  },
+  {
+    title: "RTL Dev Kit — RTL-First Development Toolkit",
+    slug: "rtl-dev-kit",
+    description:
+      "Open-source toolkit for RTL-first React and Tailwind CSS development. Automatic class conversion, validation, and best practices enforcement.",
+    date: "2026-03-20",
+  },
 ]
 
 function generateRssXml(): string {
@@ -55,12 +76,12 @@ function generateRssXml(): string {
   <channel>
     <title>NADAV.AI — Nadav Cohen | נדב כהן</title>
     <link>${SITE_URL}</link>
-    <description>Full-Stack AI Developer building enterprise systems, AI agents, and automation solutions. 8+ production apps, 80 AI skills, 38+ agents.</description>
+    <description>Full-Stack AI Developer building enterprise systems, AI agents, and automation solutions. 10+ production apps, 86 AI skills, 52 agents.</description>
     <language>he</language>
     <managingEditor>nadav@nadavc.ai (Nadav Cohen)</managingEditor>
     <webMaster>nadav@nadavc.ai (Nadav Cohen)</webMaster>
     <atom:link href="${SITE_URL}/feed.xml" rel="self" type="application/rss+xml"/>
-    <lastBuildDate>${new Date("2026-03-28").toUTCString()}</lastBuildDate>
+    <lastBuildDate>${new Date("2026-03-29").toUTCString()}</lastBuildDate>
     <image>
       <url>${SITE_URL}/opengraph-image</url>
       <title>NADAV.AI</title>

@@ -3,13 +3,35 @@
 import { useEffect } from "react"
 import gsap from "gsap"
 import { ScrollTrigger } from "gsap/dist/ScrollTrigger"
+import { SplitText } from "gsap/dist/SplitText"
+import Lenis from "lenis"
 
 if (typeof window !== "undefined") {
-  gsap.registerPlugin(ScrollTrigger)
+  gsap.registerPlugin(ScrollTrigger, SplitText)
+}
+
+let lenisInstance: Lenis | null = null
+
+export function getLenis() {
+  return lenisInstance
 }
 
 export function GSAPSetup() {
   useEffect(() => {
+    // Lenis smooth scroll init
+    const lenis = new Lenis({
+      duration: 1.2,
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      touchMultiplier: 1.5,
+    })
+    lenisInstance = lenis
+
+    // 3 required Lenis <-> GSAP/ScrollTrigger sync lines
+    lenis.on("scroll", ScrollTrigger.update)
+    gsap.ticker.add((t) => lenis.raf(t * 1000))
+    gsap.ticker.lagSmoothing(0)
+
+    // Reduced motion
     const mq = window.matchMedia("(prefers-reduced-motion: reduce)")
 
     if (mq.matches) {
@@ -28,7 +50,12 @@ export function GSAPSetup() {
     }
 
     mq.addEventListener("change", handleChange)
-    return () => mq.removeEventListener("change", handleChange)
+
+    return () => {
+      mq.removeEventListener("change", handleChange)
+      lenis.destroy()
+      lenisInstance = null
+    }
   }, [])
 
   return null

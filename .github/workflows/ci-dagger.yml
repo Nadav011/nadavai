@@ -35,7 +35,6 @@ permissions:
   contents: read
   id-token: write
   attestations: write
-  security-events: write       # לדיווח SARIF אם יתווסף בעתיד
 
 env:
   CI: "true"

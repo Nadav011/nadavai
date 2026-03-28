@@ -119,9 +119,9 @@ export default async function Image() {
         {/* Stats row */}
         <div style={{ display: "flex", gap: 48 }}>
           {[
-            { value: "8+", label: "Production Apps" },
-            { value: "80", label: "AI Skills" },
-            { value: "38+", label: "AI Agents" },
+            { value: "10+", label: "Production Apps" },
+            { value: "86", label: "AI Skills" },
+            { value: "52", label: "AI Agents" },
           ].map((stat) => (
             <div key={stat.label} style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
               <span style={{ fontSize: 36, fontWeight: 800, color: "#06d6e0" }}>{stat.value}</span>

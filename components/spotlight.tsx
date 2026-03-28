@@ -1,47 +1,75 @@
 "use client"
 
-import { useRef, useCallback, useState } from "react"
+import { useRef, useCallback, useState, useEffect } from "react"
 
 interface SpotlightProps {
   className?: string
+  /** OKLCH color string, e.g. "oklch(0.81 0.17 193)" */
   fill?: string
 }
 
-export function Spotlight({ className = "", fill = "#06d6e0" }: SpotlightProps) {
+export function Spotlight({
+  className = "",
+  fill = "oklch(0.81 0.17 193)",
+}: SpotlightProps) {
   const containerRef = useRef<HTMLDivElement>(null)
   const gradientRef = useRef<HTMLDivElement>(null)
   const trailRef = useRef<HTMLDivElement>(null)
-  const [isMobile] = useState(() => 
-    typeof window !== 'undefined' && window.matchMedia("(max-width: 768px)").matches
+  const inViewport = useRef(false)
+
+  const [isMobile] = useState(() =>
+    typeof window !== "undefined" && window.matchMedia("(max-width: 768px)").matches
   )
 
-  const handleMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
-    if (!containerRef.current || !gradientRef.current || !trailRef.current) return
-    const rect = containerRef.current.getBoundingClientRect()
-    const x = e.clientX - rect.left
-    const y = e.clientY - rect.top
+  // Only animate when element is visible — saves GPU on sections scrolled past
+  useEffect(() => {
+    const el = containerRef.current
+    if (!el || isMobile) return
 
-    // Main spotlight - larger, multi-layered
-    gradientRef.current.style.background = `
-      radial-gradient(800px circle at ${x}px ${y}px, ${fill}06, transparent 40%),
-      radial-gradient(400px circle at ${x}px ${y}px, ${fill}0a, transparent 30%),
-      radial-gradient(150px circle at ${x}px ${y}px, ${fill}10, transparent 20%)
+    const observer = new IntersectionObserver(
+      (entries) => { inViewport.current = entries[0]?.isIntersecting ?? false },
+      { threshold: 0.01 }
+    )
+    observer.observe(el)
+    return () => observer.disconnect()
+  }, [isMobile])
+
+  const handleMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
+    if (!inViewport.current) return
+    const el = containerRef.current
+    const grad = gradientRef.current
+    const trail = trailRef.current
+    if (!el || !grad || !trail) return
+
+    const rect = el.getBoundingClientRect()
+    const x = e.clientX - rect.left // rtl-ok — pixel coordinate within element bounds
+    const y = e.clientY - rect.top  // rtl-ok
+
+    // Three-layer spotlight: tight core (OKLCH), mid ring, soft bloom
+    grad.style.background = `
+      radial-gradient(180px circle at ${x}px ${y}px, ${fill} / 0.10, transparent 100%),
+      radial-gradient(420px circle at ${x}px ${y}px, ${fill} / 0.06, transparent 60%),
+      radial-gradient(800px circle at ${x}px ${y}px, ${fill} / 0.03, transparent 50%)
     `
 
-    // Trail effect - softer, delayed
-    trailRef.current.style.background = `radial-gradient(600px circle at ${x}px ${y}px, ${fill}04, transparent 50%)`
+    // Trail is the desaturated bloom — moves at CSS transition speed (~200ms lag)
+    trail.style.background = `radial-gradient(650px circle at ${x}px ${y}px, ${fill} / 0.025, transparent 55%)`
   }, [fill])
 
   const handleMouseEnter = useCallback(() => {
-    if (!gradientRef.current || !trailRef.current) return
-    gradientRef.current.style.opacity = "1"
-    trailRef.current.style.opacity = "1"
+    const grad = gradientRef.current
+    const trail = trailRef.current
+    if (!grad || !trail) return
+    grad.style.opacity = "1"
+    trail.style.opacity = "1"
   }, [])
 
   const handleMouseLeave = useCallback(() => {
-    if (!gradientRef.current || !trailRef.current) return
-    gradientRef.current.style.opacity = "0"
-    trailRef.current.style.opacity = "0"
+    const grad = gradientRef.current
+    const trail = trailRef.current
+    if (!grad || !trail) return
+    grad.style.opacity = "0"
+    trail.style.opacity = "0"
   }, [])
 
   if (isMobile) return null
@@ -53,23 +81,26 @@ export function Spotlight({ className = "", fill = "#06d6e0" }: SpotlightProps) 
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
       className={`absolute inset-0 overflow-hidden ${className}`}
+      aria-hidden="true"
     >
-      {/* Trail layer - slower transition */}
+      {/* Trail layer — delayed via CSS transition */}
       <div
         ref={trailRef}
         className="pointer-events-none absolute -inset-px"
         style={{
           opacity: 0,
-          transition: "opacity 0.6s, background 0.3s ease-out",
+          transition: "opacity 0.6s ease-out, background 0.25s ease-out",
+          willChange: "background",
         }}
       />
-      {/* Main spotlight layer */}
+      {/* Main spotlight — snappy */}
       <div
         ref={gradientRef}
         className="pointer-events-none absolute -inset-px"
         style={{
           opacity: 0,
-          transition: "opacity 0.4s, background 0.1s",
+          transition: "opacity 0.4s ease-out, background 0.08s linear",
+          willChange: "background",
         }}
       />
     </div>
