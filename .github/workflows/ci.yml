@@ -22,7 +22,7 @@ jobs:
     runs-on: [self-hosted, linux, x64, pop-os]
     timeout-minutes: 10
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5  # v4
       - name: Add Node.js (fnm) to PATH
         run: echo "$HOME/.local/share/fnm/node-versions/v24.14.0/installation/bin" >> $GITHUB_PATH
 
@@ -38,7 +38,7 @@ jobs:
     runs-on: [self-hosted, linux, x64, pop-os]
     timeout-minutes: 10
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5  # v4
       - name: Add Node.js (fnm) to PATH
         run: echo "$HOME/.local/share/fnm/node-versions/v24.14.0/installation/bin" >> $GITHUB_PATH
 
@@ -54,9 +54,9 @@ jobs:
     runs-on: [self-hosted, linux, x64, pop-os]
     timeout-minutes: 15
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5  # v4
         with: { version: "10.30.3" }
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020  # v4
         with: { node-version: "24" }
       - run: pnpm install --no-frozen-lockfile
       - run: pnpm vitest run --reporter=verbose --maxWorkers=2
@@ -67,7 +67,7 @@ jobs:
     timeout-minutes: 15
     needs: [typecheck, lint, test]
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5  # v4
       - name: Add Node.js (fnm) to PATH
         run: echo "$HOME/.local/share/fnm/node-versions/v24.14.0/installation/bin" >> $GITHUB_PATH
 
@@ -126,8 +126,8 @@ jobs:
     runs-on: [self-hosted, linux, x64, pop-os]
     timeout-minutes: 15
     steps:
-      - uses: actions/checkout@v4
-      - uses: semgrep/semgrep-action@v1
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5  # v4
+      - uses: semgrep/semgrep-action@713efdd345f3035192eaa63f56867b88e63e4e5d  # v1
         with:
           config: auto
         continue-on-error: true
@@ -139,7 +139,7 @@ jobs:
     runs-on: [self-hosted, linux, x64, pop-os]
     timeout-minutes: 10
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5  # v4
       - name: Trivy scan
         uses: aquasecurity/trivy-action@57a97c7e7821a5776cebc9bb87c984fa69cba8f1 # v0.35.0
         with:
@@ -157,7 +157,7 @@ jobs:
     permissions:
       contents: read
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5  # v4
         with: { fetch-depth: 0 }
       - name: Run gitleaks
         run: |
