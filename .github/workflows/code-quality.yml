@@ -53,16 +53,16 @@ jobs:
     runs-on: [self-hosted, linux, x64, pop-os]
     timeout-minutes: 10
     steps:
-      - uses: step-security/harden-runner@v2.16.0
+      - uses: step-security/harden-runner@fa2e9d605c4eeb9fcad4c99c224cee0c6c7f3594  # v2.16.0
         with:
           egress-policy: audit
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5  # v4
       - name: Add Node.js (fnm) to PATH
         run: echo "$HOME/.local/share/fnm/node-versions/v24.14.0/installation/bin" >> $GITHUB_PATH
       - name: Enable pnpm via corepack
         run: corepack enable pnpm                # PLACEHOLDER: remove for npm projects
       - run: pnpm install --frozen-lockfile      # PLACEHOLDER: npm ci for npm projects
-      - uses: actions/cache/save@v4
+      - uses: actions/cache/save@0057852bfaa89a56745cba8c7296529d2fc39830  # v4
         with:
           path: node_modules
           key: nm-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}  # PLACEHOLDER: LOCKFILE
@@ -74,15 +74,15 @@ jobs:
     runs-on: [self-hosted, linux, x64, pop-os]
     timeout-minutes: 10
     steps:
-      - uses: step-security/harden-runner@v2.16.0
+      - uses: step-security/harden-runner@fa2e9d605c4eeb9fcad4c99c224cee0c6c7f3594  # v2.16.0
         with:
           egress-policy: audit
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5  # v4
       - name: Add Node.js (fnm) to PATH
         run: echo "$HOME/.local/share/fnm/node-versions/v24.14.0/installation/bin" >> $GITHUB_PATH
       - name: Enable pnpm via corepack
         run: corepack enable pnpm
-      - uses: actions/cache/restore@v4
+      - uses: actions/cache/restore@0057852bfaa89a56745cba8c7296529d2fc39830  # v4
         with:
           path: node_modules
           key: nm-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}  # PLACEHOLDER: LOCKFILE
@@ -101,15 +101,15 @@ jobs:
     runs-on: [self-hosted, linux, x64, pop-os]
     timeout-minutes: 5
     steps:
-      - uses: step-security/harden-runner@v2.16.0
+      - uses: step-security/harden-runner@fa2e9d605c4eeb9fcad4c99c224cee0c6c7f3594  # v2.16.0
         with:
           egress-policy: audit
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5  # v4
       - name: Add Node.js (fnm) to PATH
         run: echo "$HOME/.local/share/fnm/node-versions/v24.14.0/installation/bin" >> $GITHUB_PATH
       - name: Enable pnpm via corepack
         run: corepack enable pnpm
-      - uses: actions/cache/restore@v4
+      - uses: actions/cache/restore@0057852bfaa89a56745cba8c7296529d2fc39830  # v4
         with:
           path: node_modules
           key: nm-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}  # PLACEHOLDER: LOCKFILE
@@ -126,10 +126,10 @@ jobs:
     runs-on: [self-hosted, linux, x64, pop-os]
     timeout-minutes: 5
     steps:
-      - uses: step-security/harden-runner@v2.16.0
+      - uses: step-security/harden-runner@fa2e9d605c4eeb9fcad4c99c224cee0c6c7f3594  # v2.16.0
         with:
           egress-policy: audit
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5  # v4
         with:
           fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -137,7 +137,7 @@ jobs:
         run: echo "$HOME/.local/share/fnm/node-versions/v24.14.0/installation/bin" >> $GITHUB_PATH
       - name: Enable pnpm via corepack
         run: corepack enable pnpm
-      - uses: actions/cache/restore@v4
+      - uses: actions/cache/restore@0057852bfaa89a56745cba8c7296529d2fc39830  # v4
         with:
           path: node_modules
           key: nm-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}  # PLACEHOLDER: LOCKFILE
@@ -149,7 +149,7 @@ jobs:
         run: pnpm exec eslint . || echo "::warning::Some issues remain after autofix — manual review needed"
         continue-on-error: true
       - name: Commit autofix if changes present
-        uses: stefanzweifel/git-auto-commit-action@v5
+        uses: stefanzweifel/git-auto-commit-action@b863ae1933cb653a53c021fe36dbb774e1fb9403  # v5
         with:
           commit_message: "style: eslint auto-fix"
           file_pattern: "app/**/*.ts app/**/*.tsx components/**/*.ts components/**/*.tsx lib/**/*.ts lib/**/*.tsx"
@@ -163,15 +163,15 @@ jobs:
     runs-on: [self-hosted, linux, x64, pop-os]
     timeout-minutes: 15
     steps:
-      - uses: step-security/harden-runner@v2.16.0
+      - uses: step-security/harden-runner@fa2e9d605c4eeb9fcad4c99c224cee0c6c7f3594  # v2.16.0
         with:
           egress-policy: audit
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5  # v4
       - name: Add Node.js (fnm) to PATH
         run: echo "$HOME/.local/share/fnm/node-versions/v24.14.0/installation/bin" >> $GITHUB_PATH
       - name: Enable pnpm via corepack
         run: corepack enable pnpm
-      - uses: actions/cache/restore@v4
+      - uses: actions/cache/restore@0057852bfaa89a56745cba8c7296529d2fc39830  # v4
         with:
           path: node_modules
           key: nm-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}  # PLACEHOLDER: LOCKFILE
@@ -189,15 +189,15 @@ jobs:
     runs-on: [self-hosted, linux, x64, pop-os]
     timeout-minutes: 20
     steps:
-      - uses: step-security/harden-runner@v2.16.0
+      - uses: step-security/harden-runner@fa2e9d605c4eeb9fcad4c99c224cee0c6c7f3594  # v2.16.0
         with:
           egress-policy: audit
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5  # v4
       - name: Add Node.js (fnm) to PATH
         run: echo "$HOME/.local/share/fnm/node-versions/v24.14.0/installation/bin" >> $GITHUB_PATH
       - name: Enable pnpm via corepack
         run: corepack enable pnpm
-      - uses: actions/cache/restore@v4
+      - uses: actions/cache/restore@0057852bfaa89a56745cba8c7296529d2fc39830  # v4
         with:
           path: node_modules
           key: nm-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}  # PLACEHOLDER: LOCKFILE
@@ -230,7 +230,7 @@ jobs:
             echo "No coverage report found"
           fi
         continue-on-error: true
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02  # v4
         if: always()
         with:
           name: coverage-report
@@ -244,10 +244,10 @@ jobs:
     timeout-minutes: 15
     if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
     steps:
-      - uses: step-security/harden-runner@v2.16.0
+      - uses: step-security/harden-runner@fa2e9d605c4eeb9fcad4c99c224cee0c6c7f3594  # v2.16.0
         with:
           egress-policy: audit
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5  # v4
       - name: Add Node.js (fnm) to PATH
         run: echo "$HOME/.local/share/fnm/node-versions/v24.14.0/installation/bin" >> $GITHUB_PATH
       - name: Enable pnpm via corepack
@@ -257,7 +257,7 @@ jobs:
         run: npx knip@5.87.0 --reporter compact
         continue-on-error: true                  # Warn — fix manually after reviewing output
       - name: Upload knip report
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02  # v4
         if: always()
         with:
           name: knip-dead-code
@@ -272,15 +272,15 @@ jobs:
     timeout-minutes: 5
     if: github.event_name != 'schedule'
     steps:
-      - uses: step-security/harden-runner@v2.16.0
+      - uses: step-security/harden-runner@fa2e9d605c4eeb9fcad4c99c224cee0c6c7f3594  # v2.16.0
         with:
           egress-policy: audit
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5  # v4
       - name: Add Node.js (fnm) to PATH
         run: echo "$HOME/.local/share/fnm/node-versions/v24.14.0/installation/bin" >> $GITHUB_PATH
       - name: Enable pnpm via corepack
         run: corepack enable pnpm
-      - uses: actions/cache/restore@v4
+      - uses: actions/cache/restore@0057852bfaa89a56745cba8c7296529d2fc39830  # v4
         with:
           path: node_modules
           key: nm-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}
@@ -304,7 +304,7 @@ jobs:
     if: always()
     needs: [typecheck, lint, test, coverage]
     steps:
-      - uses: step-security/harden-runner@v2.16.0
+      - uses: step-security/harden-runner@fa2e9d605c4eeb9fcad4c99c224cee0c6c7f3594  # v2.16.0
         with:
           egress-policy: audit
       - name: Evaluate quality results
