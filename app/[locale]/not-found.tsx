@@ -51,7 +51,7 @@ export default function NotFound() {
             className="inline-flex items-center gap-2.5 px-8 py-4 rounded-xl text-base font-medium text-[hsl(210,40%,98%)] border border-[hsl(215,28%,20%)] bg-[hsl(222,47%,7%)] hover:border-[#e84393]/40 transition-all duration-500"
           >
             {t('contact')}
-            <ArrowRight className="w-4 h-4" aria-hidden="true" />
+            <ArrowRight className="w-4 h-4 rtl:rotate-180" aria-hidden="true" />
           </Link>
         </div>
 

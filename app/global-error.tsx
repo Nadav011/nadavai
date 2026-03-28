@@ -3,6 +3,13 @@
 import { useEffect } from 'react'
 import { AlertTriangle, RefreshCw } from 'lucide-react'
 
+function getLocaleFromUrl() {
+  if (typeof window !== 'undefined') {
+    return window.location.pathname.startsWith('/en') ? 'en' : 'he'
+  }
+  return 'he'
+}
+
 export default function GlobalError({
   error,
   reset,
@@ -16,7 +23,7 @@ export default function GlobalError({
   }, [error])
 
   return (
-    <html lang="he" dir="rtl">
+    <html lang={getLocaleFromUrl()} dir={getLocaleFromUrl() === "he" ? "rtl" : "ltr"}>
       <body className="bg-[hsl(222,47%,4%)] text-[hsl(210,40%,98%)] font-sans antialiased">
         <div className="min-h-screen flex items-center justify-center px-4">
           <div className="max-w-md w-full text-center">
@@ -31,9 +38,9 @@ export default function GlobalError({
             </div>
 
             {/* Error Message */}
-            <h1 className="text-3xl md:text-4xl font-bold mb-3">משהו השתבש</h1>
+            <h1 className="text-3xl md:text-4xl font-bold mb-3">{getLocaleFromUrl() === "he" ? "משהו השתבש" : "Something went wrong"}</h1>
             <p className="text-base text-[hsl(215,20%,55%)] mb-8 leading-relaxed">
-              אופס! קרתה שגיאה בלתי צפויה. נא לנסות שוב.
+              {getLocaleFromUrl() === "he" ? "אופס! קרתה שגיאה בלתי צפויה. נא לנסות שוב." : "Oops! An unexpected error occurred. Please try again."}
             </p>
 
             {/* Error Details (only in development) */}
@@ -59,7 +66,7 @@ export default function GlobalError({
 
             {/* Footer hint */}
             <p className="mt-8 text-xs font-mono text-[hsl(215,20%,45%)]">
-              אם הבעיה נמשכת, צור קשר דרך WhatsApp
+              {getLocaleFromUrl() === "he" ? "אם הבעיה נמשכת, צור קשר דרך WhatsApp" : "If the problem persists, contact us via WhatsApp"}
             </p>
           </div>
         </div>

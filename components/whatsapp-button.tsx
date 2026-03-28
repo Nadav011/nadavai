@@ -84,7 +84,7 @@ export function WhatsAppButton() {
                   })
                 }
               }}
-              className="p-0.5 rounded hover:bg-[hsl(215,28%,14%)] transition-colors"
+              className="p-2 rounded hover:bg-[hsl(215,28%,14%)] transition-colors"
               aria-label={t("close")}
             >
               <X className="w-3 h-3 text-[hsl(215,20%,45%)]" />
