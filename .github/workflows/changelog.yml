@@ -26,30 +26,40 @@ jobs:
           fetch-depth: 0
 
       - name: Generate changelog
-        run: git-cliff -o CHANGELOG.md --tag ${{ github.ref_name }}
+        env:
+          GH_REF_NAME: ${{ github.ref_name }}
+        run: git-cliff -o CHANGELOG.md --tag "$GH_REF_NAME"
 
       - name: Create GitHub Release
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REF_NAME: ${{ github.ref_name }}
         run: |
           NOTES=$(git-cliff --latest --strip header)
-          gh release create ${{ github.ref_name }} \
-            --title "${{ github.ref_name }}" \
+          gh release create "$GH_REF_NAME" \
+            --title "$GH_REF_NAME" \
             --notes "$NOTES" \
             --verify-tag
 
       - name: Commit CHANGELOG.md
+        env:
+          GH_REF_NAME: ${{ github.ref_name }}
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add CHANGELOG.md
-          git diff --cached --quiet || git commit -m "docs: update CHANGELOG for ${{ github.ref_name }}"
+          git diff --cached --quiet || git commit -m "docs: update CHANGELOG for ${GH_REF_NAME}"
           git push origin HEAD:main || git push origin HEAD:master
 
       - name: Notify Telegram on failure
         if: failure()
+        env:
+          GH_REF_NAME: ${{ github.ref_name }}
+          GH_REPOSITORY: ${{ github.repository }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
         run: |
-          curl -s "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage" \
-            -d "chat_id=${{ secrets.TELEGRAM_CHAT_ID }}" \
-            --data-urlencode "text=📋 Changelog/Release FAILED | ${{ github.repository }} | ${{ github.ref_name }}" \
+          curl -s "https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage" \
+            -d "chat_id=${TELEGRAM_CHAT_ID}" \
+            --data-urlencode "text=📋 Changelog/Release FAILED | ${GH_REPOSITORY} | ${GH_REF_NAME}" \
             > /dev/null 2>&1 || true

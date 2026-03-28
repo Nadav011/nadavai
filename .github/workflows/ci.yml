@@ -89,29 +89,30 @@ jobs:
         env:
           GH_REF_NAME: ${{ github.ref_name }}
           GH_ACTOR: ${{ github.actor }}
+          GH_SERVER_URL: ${{ github.server_url }}
           GH_REPOSITORY: ${{ github.repository }}
           GH_RUN_ID: ${{ github.run_id }}
-          GH_SERVER_URL: ${{ github.server_url }}
-          TYPECHECK_RESULT: ${{ needs.typecheck.result }}
-          LINT_RESULT: ${{ needs.lint.result }}
+          NEEDS_TYPECHECK: ${{ needs.typecheck.result }}
+          NEEDS_LINT: ${{ needs.lint.result }}
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
         run: |
           FAILED_JOBS=""
-          [ "$TYPECHECK_RESULT" = "failure" ] && FAILED_JOBS="${FAILED_JOBS}❌TypeCheck " || true
-          [ "$LINT_RESULT" = "failure" ] && FAILED_JOBS="${FAILED_JOBS}❌Lint " || true
+          [ "$NEEDS_TYPECHECK" = "failure" ] && FAILED_JOBS="${FAILED_JOBS}❌TypeCheck " || true
+          [ "$NEEDS_LINT" = "failure" ] && FAILED_JOBS="${FAILED_JOBS}❌Lint " || true
           MSG="🚨 *Nadavai CI FAILED*%0A%0ABranch: \`${GH_REF_NAME}\`%0ABy: ${GH_ACTOR}%0AFailed: ${FAILED_JOBS}%0A%0A🔗 ${GH_SERVER_URL}/${GH_REPOSITORY}/actions/runs/${GH_RUN_ID}"
           curl -s "https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage" \
             -d chat_id="${TELEGRAM_CHAT_ID}" \
             -d "text=$MSG" -d "parse_mode=Markdown" > /dev/null 2>&1 || true
+
       - name: Notify Telegram on success
         if: success()
         env:
           GH_REF_NAME: ${{ github.ref_name }}
           GH_ACTOR: ${{ github.actor }}
+          GH_SERVER_URL: ${{ github.server_url }}
           GH_REPOSITORY: ${{ github.repository }}
           GH_RUN_ID: ${{ github.run_id }}
-          GH_SERVER_URL: ${{ github.server_url }}
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
         run: |
