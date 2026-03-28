@@ -67,5 +67,15 @@
     "typescript": "5.9.3",
     "vitest": "^4.1.0"
   },
-  "_buildTimestamp": "2026-03-17T10:55"
+  "_buildTimestamp": "2026-03-17T10:55",
+  "pnpm": {
+    "overrides": {
+      "picomatch": ">=4.0.4",
+      "brace-expansion": ">=2.0.3",
+      "serialize-javascript": ">=7.0.5",
+      "flatted": ">=3.4.2",
+      "minimatch": ">=10.2.3",
+      "ajv": ">=8.18.0"
+    }
+  }
 }
