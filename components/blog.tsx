@@ -214,8 +214,8 @@ export function Blog() {
               aria-pressed={activeCategory === cat.key}
               className={`px-4 py-2 rounded-lg text-sm font-mono transition-all duration-300 min-h-11 ${
                 activeCategory === cat.key
-                  ? "bg-[#06d6e0]/15 text-[#06d6e0] border border-[#06d6e0]/30"
-                  : "bg-[hsl(222,47%,6%)] text-[hsl(215,20%,50%)] border border-[hsl(215,28%,16%)] hover:border-[hsl(215,28%,22%)] hover:text-[hsl(215,20%,65%)]"
+                  ? "bg-cyan/15 text-cyan border border-cyan/30"
+                  : "bg-bg-elevated text-text-secondary border border-border hover:border-border/60 hover:text-text-secondary"
               }`}
             >
               {cat.display}
@@ -231,14 +231,14 @@ export function Blog() {
               href={post.href}
               target="_blank"
               rel="noreferrer"
-              className="blog-card group relative block h-full rounded-2xl border border-[hsl(215,28%,16%)] bg-[hsl(222,47%,5%)] overflow-hidden hover:border-opacity-50 transition-all duration-500"
+              className="blog-card group relative block h-full rounded-2xl border border-border bg-bg-surface overflow-hidden hover:border-opacity-50 transition-all duration-500"
               onMouseEnter={(e) => { e.currentTarget.style.borderColor = `${post.color}30` }}
               onMouseLeave={(e) => { e.currentTarget.style.borderColor = "" }}
             >
               {/* Top accent */}
               <div
                 className="h-[2px] opacity-0 group-hover:opacity-100 transition-opacity duration-700"
-                style={{ background: `linear-gradient(to right, transparent, ${post.color}, transparent)` }}
+                style={{ background: `linear-gradient(to right, transparent, ${post.color}, transparent)` /* rtl-ok: symmetric center-fade */ }}
               />
 
               <div className="p-4 md:p-6">
@@ -250,39 +250,39 @@ export function Blog() {
                   >
                     {tCat(post.category)}
                   </span>
-                  <div className="flex items-center gap-1.5 text-[hsl(215,20%,48%)]">
+                  <div className="flex items-center gap-1.5 text-text-muted">
                     <Calendar className="w-3 h-3" />
                     <span className="text-[11px] font-mono" dir="ltr">{formatDate(post.date)}</span>
                   </div>
                 </div>
 
                 {/* Title */}
-                <h3 className="text-base font-bold text-[hsl(210,40%,98%)] mb-3 leading-snug group-hover:text-[hsl(210,40%,100%)] transition-colors line-clamp-2">
+                <h3 className="text-base font-bold text-text mb-3 leading-snug transition-colors line-clamp-2">
                   {post.title}
                 </h3>
 
                 {/* Excerpt */}
-                <p className="text-sm text-[hsl(215,20%,55%)] leading-relaxed mb-5 line-clamp-3">
+                <p className="text-sm text-text-muted leading-relaxed mb-5 line-clamp-3">
                   {post.excerpt}
                 </p>
 
                 {/* Footer */}
-                <div className="flex items-center justify-between pt-4 border-t border-[hsl(215,28%,12%)]">
+                <div className="flex items-center justify-between pt-4 border-t border-border/60">
                   <div className="flex items-center gap-4">
-                    <div className="flex items-center gap-1.5 text-[hsl(215,20%,45%)]">
+                    <div className="flex items-center gap-1.5 text-text-muted">
                       <ThumbsUp className="w-3.5 h-3.5" />
                       <span className="text-xs font-mono" dir="ltr">{post.likes}</span>
                     </div>
-                    <div className="flex items-center gap-1.5 text-[hsl(215,20%,45%)]">
+                    <div className="flex items-center gap-1.5 text-text-muted">
                       <MessageSquare className="w-3.5 h-3.5" />
                       <span className="text-xs font-mono" dir="ltr">{post.comments}</span>
                     </div>
-                    <div className="flex items-center gap-1.5 text-[hsl(215,20%,45%)]">
+                    <div className="flex items-center gap-1.5 text-text-muted">
                       <Clock className="w-3.5 h-3.5" />
                       <span className="text-xs font-mono" dir="ltr">{post.readTime} min</span>
                     </div>
                   </div>
-                  <ExternalLink className="w-4 h-4 text-[hsl(215,20%,45%)] group-hover:text-[#06d6e0] transition-colors" />
+                  <ExternalLink className="w-4 h-4 text-text-muted group-hover:text-cyan transition-colors" />
                 </div>
               </div>
 
@@ -301,7 +301,7 @@ export function Blog() {
             href="https://www.facebook.com/nadav.cohen.167"
             target="_blank"
             rel="noreferrer"
-            className="group flex items-center gap-2 px-6 py-3 rounded-xl border border-[hsl(215,28%,20%)] bg-[hsl(222,47%,6%)] text-sm font-medium text-[hsl(215,20%,65%)] hover:text-[#06d6e0] hover:border-[#06d6e0]/30 transition-all duration-500 min-h-11"
+            className="group flex items-center gap-2 px-6 py-3 rounded-xl border border-border/80 bg-bg-elevated text-sm font-medium text-text-secondary hover:text-cyan hover:border-cyan/30 transition-all duration-500 min-h-11"
           >
             {t("allPosts")}
             <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 rtl:group-hover:translate-x-1 transition-transform rtl:rotate-180" />

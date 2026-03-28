@@ -93,21 +93,21 @@ export function Guides() {
                 lang={guide.lang}
                 badge={guide.badge}
                 badgeColor={guide.badgeColor}
-                icon={guide.type === "video" ? <Play className="w-3.5 h-3.5 text-emerald-400" /> : <BookOpen className="w-3.5 h-3.5 text-[#06d6e0]" />}
+                icon={guide.type === "video" ? <Play className="w-3.5 h-3.5 text-emerald-400" /> : <BookOpen className="w-3.5 h-3.5 text-cyan" />}
               >
                 <div className="space-y-3">
                   <div className="flex items-start gap-3">
-                    <span className="text-xs font-mono text-[hsl(215,20%,45%)] select-none leading-5">02</span>
-                    <p className="text-sm text-[hsl(215,20%,60%)] leading-relaxed">{t(guide.description)}</p>
+                    <span className="text-xs font-mono text-text-muted select-none leading-5">02</span>
+                    <p className="text-sm text-text-secondary leading-relaxed">{t(guide.description)}</p>
                   </div>
-                  <div className="flex items-center justify-between pt-3 border-t border-[hsl(215,28%,14%)]">
+                  <div className="flex items-center justify-between pt-3 border-t border-border">
                     <div className="flex items-center gap-4">
-                      <div className="flex items-center gap-1.5 text-[hsl(215,20%,45%)]">
+                      <div className="flex items-center gap-1.5 text-text-muted">
                         <Clock className="w-3.5 h-3.5" />
                         <span className="text-xs font-mono">{t(guide.readTime)}</span>
                       </div>
                     </div>
-                    <button aria-label={t(guide.title)} className="text-xs font-mono text-[#06d6e0] hover:text-[#e84393] transition-colors">
+                    <button aria-label={t(guide.title)} className="text-xs font-mono text-cyan hover:text-pink transition-colors">
                       {guide.type === "video" ? ">> play" : ">> read"}
                     </button>
                   </div>

@@ -75,13 +75,13 @@ export function Process() {
       <div className="max-w-7xl mx-auto px-4 md:px-8">
         {/* Section Header */}
         <div className="text-center mb-10 md:mb-20">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-[#06d6e0]/20 bg-[#06d6e0]/5 mb-6">
-            <span className="text-sm font-medium text-[#06d6e0]">{t("badge")}</span>
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-cyan/20 bg-cyan/5 mb-6">
+            <span className="text-sm font-medium text-cyan">{t("badge")}</span>
           </div>
-          <h2 className="text-2xl md:text-4xl lg:text-5xl font-bold text-[hsl(210,40%,98%)] mb-3 md:mb-4 text-balance">
+          <h2 className="text-2xl md:text-4xl lg:text-5xl font-bold text-text mb-3 md:mb-4 text-balance">
             {t("title")} <span className="text-gradient">{t("highlight")}</span>
           </h2>
-          <p className="text-base md:text-lg text-[hsl(215,20%,50%)] max-w-2xl mx-auto leading-relaxed px-2 md:px-0">
+          <p className="text-base md:text-lg text-text-muted max-w-2xl mx-auto leading-relaxed px-2 md:px-0">
             {t("description")}
           </p>
         </div>
@@ -97,7 +97,7 @@ export function Process() {
                   className="relative w-12 h-12 md:w-16 md:h-16 rounded-xl md:rounded-2xl flex items-center justify-center border-2 transition-all duration-500 flex-shrink-0"
                   style={{
                     borderColor: step.color,
-                    backgroundColor: "hsl(222,47%,5%)",
+                    backgroundColor: "var(--color-bg-surface)",
                     boxShadow: `0 0 20px ${step.color}20`,
                   }}
                 >
@@ -124,10 +124,10 @@ export function Process() {
                     {step.step}
                   </span>
                 </div>
-                <h3 className="text-xl md:text-2xl font-bold text-[hsl(210,40%,98%)] mb-3">
+                <h3 className="text-xl md:text-2xl font-bold text-text mb-3">
                   {step.title}
                 </h3>
-                <p className="text-base text-[hsl(215,20%,50%)] leading-relaxed">
+                <p className="text-base text-text-muted leading-relaxed">
                   {step.description}
                 </p>
               </div>

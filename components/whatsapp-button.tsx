@@ -70,8 +70,8 @@ export function WhatsAppButton() {
       {/* Tooltip */}
       {tooltip && (
         <div ref={tooltipRef} className="relative opacity-0">
-          <div className="relative flex items-center gap-2 px-3 md:px-4 py-2 md:py-2.5 rounded-xl bg-[hsl(222,47%,7%)] border border-[hsl(215,28%,16%)] shadow-lg max-w-[200px] md:max-w-none">
-            <span className="text-xs md:text-sm text-[hsl(210,40%,98%)] leading-snug">{t("tooltip")}</span>
+          <div className="relative flex items-center gap-2 px-3 md:px-4 py-2 md:py-2.5 rounded-xl bg-bg-elevated border border-border shadow-lg max-w-[200px] md:max-w-none">
+            <span className="text-xs md:text-sm text-text leading-snug">{t("tooltip")}</span>
             <button
               onClick={() => {
                 if (tooltipRef.current) {
@@ -84,21 +84,21 @@ export function WhatsAppButton() {
                   })
                 }
               }}
-              className="p-2 rounded hover:bg-[hsl(215,28%,14%)] transition-colors"
+              className="p-2 rounded hover:bg-bg-surface transition-colors"
               aria-label={t("close")}
             >
-              <X className="w-3 h-3 text-[hsl(215,20%,45%)]" />
+              <X className="w-3 h-3 text-text-muted" />
             </button>
           </div>
           {/* Arrow */}
-          <div className="absolute bottom-2 -start-2 w-3 h-3 rotate-45 bg-[hsl(222,47%,7%)] border-b border-s border-[hsl(215,28%,16%)]" />
+          <div className="absolute bottom-2 -start-2 w-3 h-3 rotate-45 bg-bg-elevated border-b border-s border-border" />
         </div>
       )}
 
       {/* Button */}
       <a
         ref={buttonRef}
-        href="https://wa.me/972504401760"
+        href="https://wa.me/972505245677"
         target="_blank"
         rel="noreferrer"
         className="group relative flex items-center justify-center w-12 h-12 md:w-14 md:h-14 rounded-full bg-[#25D366] shadow-[0_4px_20px_rgba(37,211,102,0.4)] hover:shadow-[0_4px_30px_rgba(37,211,102,0.6)] hover:scale-110 transition-all duration-300 opacity-0"

@@ -127,7 +127,7 @@ export function YouTube() {
   )
 
   return (
-    <section ref={sectionRef} id="youtube" aria-label={t("title")} className="relative py-16 md:py-32 bg-[hsl(222,47%,3%)]">
+    <section ref={sectionRef} id="youtube" aria-label={t("title")} className="relative py-16 md:py-32 bg-bg-deep">
       <div className="absolute inset-0 dot-grid-subtle opacity-30" />
       <div className="relative max-w-7xl mx-auto px-4 md:px-8">
         <SectionHeader
@@ -145,8 +145,8 @@ export function YouTube() {
               aria-pressed={activeCategory === cat.key}
               className={`yt-category-btn px-4 py-2 rounded-lg text-sm font-mono transition-all duration-300 min-h-11 ${
                 activeCategory === cat.key
-                  ? "bg-[#e84393]/15 text-[#e84393] border border-[#e84393]/30"
-                  : "bg-[hsl(222,47%,6%)] text-[hsl(215,20%,50%)] border border-[hsl(215,28%,16%)] hover:border-[hsl(215,28%,22%)] hover:text-[hsl(215,20%,65%)]"
+                  ? "bg-pink/15 text-pink border border-pink/30"
+                  : "bg-bg-elevated text-text-secondary border border-border hover:border-border/60 hover:text-text-secondary"
               }`}
             >
               {cat.display}
@@ -156,8 +156,8 @@ export function YouTube() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
           {filtered.map((video) => (
-            <div key={video.title} className="video-card group relative h-full rounded-2xl border border-[hsl(215,28%,16%)] bg-[hsl(222,47%,5%)] overflow-hidden hover:border-opacity-50 transition-all duration-500">
-              <div className="relative aspect-video bg-[hsl(222,47%,7%)] overflow-hidden">
+            <div key={video.title} className="video-card group relative h-full rounded-2xl border border-border bg-bg-surface overflow-hidden hover:border-opacity-50 transition-all duration-500">
+              <div className="relative aspect-video bg-bg-elevated overflow-hidden">
                 <div
                   className="absolute inset-0 opacity-20"
                   style={{ background: `linear-gradient(135deg, ${video.color}30, transparent)` }}
@@ -193,26 +193,26 @@ export function YouTube() {
               </div>
 
               <div className="p-5">
-                <h3 className="text-sm font-bold text-[hsl(210,40%,98%)] mb-2 leading-snug group-hover:text-[hsl(210,40%,100%)] transition-colors line-clamp-2">
+                <h3 className="text-sm font-bold text-text mb-2 leading-snug group-hover:text-text transition-colors line-clamp-2">
                   {video.title}
                 </h3>
 
-                <p className="text-xs text-[hsl(215,20%,50%)] leading-relaxed mb-4 line-clamp-2">
+                <p className="text-xs text-text-muted leading-relaxed mb-4 line-clamp-2">
                   {video.description}
                 </p>
 
-                <div className="flex items-center justify-between pt-3 border-t border-[hsl(215,28%,12%)]">
+                <div className="flex items-center justify-between pt-3 border-t border-border/60">
                   <div className="flex items-center gap-3">
-                    <div className="flex items-center gap-1 text-[hsl(215,20%,48%)]">
+                    <div className="flex items-center gap-1 text-text-muted">
                       <Eye className="w-3.5 h-3.5" />
                       <span className="text-[11px] font-mono" dir="ltr">{video.views}</span>
                     </div>
-                    <div className="flex items-center gap-1 text-[hsl(215,20%,48%)]">
+                    <div className="flex items-center gap-1 text-text-muted">
                       <Clock className="w-3.5 h-3.5" />
                       <span className="text-[11px] font-mono" dir="ltr">{video.date}</span>
                     </div>
                   </div>
-                  <ExternalLink className="w-3.5 h-3.5 text-[hsl(215,20%,45%)] group-hover:text-[#e84393] transition-colors" />
+                  <ExternalLink className="w-3.5 h-3.5 text-text-muted group-hover:text-pink transition-colors" />
                 </div>
               </div>
             </div>
@@ -224,7 +224,7 @@ export function YouTube() {
             href="https://youtube.com/@nadavai"
             target="_blank"
             rel="noreferrer"
-            className="yt-cta group flex items-center gap-3 px-8 py-4 rounded-xl bg-gradient-to-l from-[#FF0000] to-[#cc0000] text-white font-bold text-sm hover:shadow-[0_0_40px_rgba(255,0,0,0.3)] transition-all duration-500 min-h-11"
+            className="yt-cta group flex items-center gap-3 px-8 py-4 rounded-xl bg-gradient-to-l rtl:bg-gradient-to-r from-[#FF0000] to-[#cc0000] text-white font-bold text-sm hover:shadow-[0_0_40px_rgba(255,0,0,0.3)] transition-all duration-500 min-h-11"
           >
             <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
               <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />

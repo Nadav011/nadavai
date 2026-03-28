@@ -24,7 +24,6 @@ export function Services() {
     () => {
       if (!sectionRef.current) return
 
-      // Animate trust indicators with stagger
       const trustIndicators = sectionRef.current.querySelectorAll(".trust-indicator")
       if (trustIndicators.length > 0) {
         gsap.set(trustIndicators, { opacity: 0, y: 20 })
@@ -42,7 +41,6 @@ export function Services() {
         })
       }
 
-      // Animate service cards with batch
       const serviceCards = sectionRef.current.querySelectorAll(".service-card")
       if (serviceCards.length > 0) {
         gsap.set(serviceCards, { opacity: 0, y: 40 })
@@ -61,7 +59,6 @@ export function Services() {
         })
       }
 
-      // Animate feature lists inside cards
       const featureLists = sectionRef.current.querySelectorAll(".service-feature")
       if (featureLists.length > 0) {
         gsap.set(featureLists, { opacity: 0, x: -10 })
@@ -80,7 +77,6 @@ export function Services() {
         })
       }
 
-      // Animate additional services
       const additionalServices = sectionRef.current.querySelectorAll(".additional-service")
       if (additionalServices.length > 0) {
         gsap.set(additionalServices, { opacity: 0, y: 20 })
@@ -148,10 +144,10 @@ export function Services() {
   ]
 
   return (
-    <section ref={sectionRef} id="services" aria-label={t("badge")} className="relative py-16 md:py-32 overflow-hidden">
-      <div className="absolute inset-0 bg-[hsl(222,47%,3%)]" />
-      <div className="absolute w-[1000px] h-[600px] bg-[#06d6e0]/3 rounded-full blur-[150px]" style={{ top: 0, left: "50%", transform: "translateX(-50%)" }} />
-      <div className="absolute bottom-0 end-0 w-[600px] h-[400px] bg-[#06d6e0]/3 rounded-full blur-[120px]" />
+    <section ref={sectionRef} id="services" aria-label={t("title")} className="relative py-16 md:py-32 overflow-hidden">
+      <div className="absolute inset-0 bg-bg-deep" />
+      <div className="absolute top-0 start-1/2 -translate-x-1/2 w-full max-w-5xl aspect-[5/3] bg-[#06d6e0]/3 rounded-full blur-[150px]" />
+      <div className="absolute bottom-0 end-0 w-full max-w-xl aspect-[3/2] bg-[#06d6e0]/3 rounded-full blur-[120px]" />
 
       <div className="relative max-w-7xl mx-auto px-4 md:px-8">
         <SectionHeader
@@ -164,8 +160,8 @@ export function Services() {
         <ScrollReveal>
           <div className="flex flex-wrap items-center justify-center gap-4 md:gap-10 mb-10 md:mb-16">
             {trustSignals.map((signal, i) => (
-              <div key={i} className="trust-indicator flex items-center gap-2.5 text-[hsl(215,20%,50%)]">
-                <signal.icon className="w-4 h-4 text-[#06d6e0]" />
+              <div key={i} className="trust-indicator flex items-center gap-2.5 text-text-secondary">
+                <signal.icon className="w-4 h-4 text-cyan" />
                 <span className="text-sm font-mono">{signal.text}</span>
               </div>
             ))}
@@ -181,8 +177,8 @@ export function Services() {
                 onMouseLeave={() => setHoveredIdx(null)}
               >
                 {service.popular && (
-                  <div className="absolute -top-3 z-20" style={{ left: "50%", transform: "translateX(-50%)" }}>
-                    <div className={`flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-gradient-to-l ${service.gradient} text-[11px] font-bold text-[hsl(222,47%,4%)] tracking-wide uppercase shadow-[0_0_30px_hsl(330,85%,60%,0.3)]`}>
+                  <div className="absolute -top-3 z-20 start-1/2 -translate-x-1/2">
+                    <div className={`flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-gradient-to-l rtl:bg-gradient-to-r ${service.gradient} text-[11px] font-bold text-bg-deep tracking-wide uppercase shadow-[0_0_30px_oklch(0.65_0.26_350_/_0.3)]`}>
                       <Crown className="w-3.5 h-3.5" />
                       {t("popular")}
                     </div>
@@ -192,14 +188,14 @@ export function Services() {
                 <div
                   className={`relative h-full rounded-2xl p-[1px] transition-all duration-700 ${
                     service.popular
-                      ? `bg-gradient-to-b ${service.gradient} shadow-[0_0_40px_hsl(330,85%,60%,0.15)]`
+                      ? `bg-gradient-to-b ${service.gradient} shadow-[0_0_40px_oklch(0.65_0.26_350_/_0.15)]`
                       : hoveredIdx === i
-                        ? "bg-gradient-to-b from-[hsl(215,28%,25%)] to-[hsl(215,28%,16%)]"
-                        : "bg-[hsl(215,28%,16%)]"
+                        ? "bg-gradient-to-b from-border/60 to-border"
+                        : "bg-border"
                   }`}
                 >
                   <div className={`relative h-full rounded-[15px] p-5 md:p-7 ${
-                    service.popular ? "bg-[hsl(222,47%,4%)]" : "bg-[hsl(222,47%,5%)]"
+                    service.popular ? "bg-bg-deep" : "bg-bg-surface"
                   }`}>
                     <div className="flex items-start justify-between mb-6">
                       <div
@@ -213,18 +209,18 @@ export function Services() {
                         <service.icon className="w-7 h-7" style={{ color: service.color }} />
                       </div>
                       {service.popular && (
-                        <Sparkles className="w-5 h-5 text-[#e84393] animate-pulse" />
+                        <Sparkles className="w-5 h-5 text-pink animate-pulse" />
                       )}
                     </div>
 
-                    <h3 className="text-xl font-bold text-[hsl(210,40%,98%)] mb-1">{service.title}</h3>
+                    <h3 className="text-xl font-bold text-text mb-1">{service.title}</h3>
                     <span className="text-xs font-mono tracking-wider uppercase mb-4 block" style={{ color: service.color }}>
                       {service.subtitle}
                     </span>
 
-                    <p className="text-sm text-[hsl(215,20%,55%)] leading-relaxed mb-6">{service.description}</p>
+                    <p className="text-sm text-text-muted leading-relaxed mb-6">{service.description}</p>
 
-                    <div className="h-[1px] w-full bg-gradient-to-l from-transparent via-[hsl(215,28%,20%)] to-transparent mb-6" />
+                    <div className="h-[1px] w-full bg-gradient-to-l rtl:bg-gradient-to-r from-transparent via-border/80 to-transparent mb-6" />
 
                     <div className="space-y-3 mb-8">
                       {service.features.map((f) => (
@@ -232,7 +228,7 @@ export function Services() {
                           <div className="flex-shrink-0 w-5 h-5 rounded-full flex items-center justify-center" style={{ background: `${service.color}15` }}>
                             <Check className="w-3 h-3" style={{ color: service.color }} />
                           </div>
-                          <span className="text-sm text-[hsl(215,20%,60%)]">{f}</span>
+                          <span className="text-sm text-text-secondary">{f}</span>
                         </div>
                       ))}
                     </div>
@@ -242,8 +238,8 @@ export function Services() {
                         href="#contact"
                         className={`flex items-center justify-center gap-2 w-full py-3.5 rounded-xl text-sm font-bold transition-all duration-500 ${
                           service.popular
-                            ? `bg-gradient-to-l ${service.gradient} text-[hsl(222,47%,4%)] hover:shadow-[0_0_35px_${service.color}40]`
-                            : "border border-[hsl(215,28%,20%)] bg-[hsl(222,47%,7%)] text-[hsl(210,40%,98%)] hover:border-opacity-60"
+                            ? `bg-gradient-to-l rtl:bg-gradient-to-r ${service.gradient} text-bg-deep hover:shadow-[0_0_35px_${service.color}40]`
+                            : "border border-border/80 bg-bg-surface text-text hover:border-opacity-60"
                         }`}
                         style={!service.popular ? { ["--hover-border" as string]: service.color } : {}}
                         onMouseEnter={(e) => { if (!service.popular) e.currentTarget.style.borderColor = `${service.color}60` }}
@@ -282,16 +278,16 @@ export function Services() {
               <a
                 key={i}
                 href="#contact"
-                className="additional-service group flex items-center gap-4 p-5 rounded-xl border border-[hsl(215,28%,16%)] bg-[hsl(222,47%,5%)] hover:border-[#06d6e0]/20 hover:bg-[hsl(222,47%,6%)] transition-all duration-500"
+                className="additional-service group flex items-center gap-4 p-5 rounded-xl border border-border bg-bg-surface hover:border-cyan/20 hover:bg-bg-elevated transition-all duration-500"
               >
-                <div className="flex-shrink-0 w-11 h-11 rounded-xl flex items-center justify-center bg-[hsl(215,28%,12%)] border border-[hsl(215,28%,18%)] group-hover:border-[#06d6e0]/20 transition-colors">
-                  <service.icon className="w-5 h-5 text-[hsl(215,20%,55%)] group-hover:text-[#06d6e0] transition-colors" />
+                <div className="flex-shrink-0 w-11 h-11 rounded-xl flex items-center justify-center bg-border/50 border border-border group-hover:border-cyan/20 transition-colors">
+                  <service.icon className="w-5 h-5 text-text-muted group-hover:text-cyan transition-colors" />
                 </div>
                 <div>
-                  <h4 className="text-sm font-semibold text-[hsl(210,40%,98%)] mb-0.5">{service.title}</h4>
-                  <p className="text-xs text-[hsl(215,20%,45%)]">{service.description}</p>
+                  <h4 className="text-sm font-semibold text-text mb-0.5">{service.title}</h4>
+                  <p className="text-xs text-text-muted">{service.description}</p>
                 </div>
-                <ArrowLeft className="w-4 h-4 text-[hsl(215,20%,45%)] group-hover:text-[#06d6e0] me-auto opacity-0 group-hover:opacity-100 -translate-x-2 group-hover:translate-x-0 transition-all rtl:rotate-180" />
+                <ArrowLeft className="w-4 h-4 text-text-muted group-hover:text-cyan me-auto opacity-0 group-hover:opacity-100 -translate-x-2 group-hover:translate-x-0 transition-all rtl:rotate-180" />
               </a>
             ))}
           </div>

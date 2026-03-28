@@ -44,3 +44,6 @@ reports/
 
 # Local Netlify folder
 .netlify
+.netlify/
+.vercel/
+.open-next/

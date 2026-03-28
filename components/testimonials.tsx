@@ -1,19 +1,13 @@
 "use client"
 
-import { useRef } from "react"
+import useEmblaCarousel from "embla-carousel-react"
 import { Quote, Star } from "lucide-react"
 import { useTranslations } from "next-intl"
 import { SectionHeader } from "./section-header"
-import { gsap } from "gsap"
-import { ScrollTrigger } from "gsap/ScrollTrigger"
-import { useGSAP } from "@gsap/react"
-
-gsap.registerPlugin(ScrollTrigger)
 
 export function Testimonials() {
   const t = useTranslations("testimonials")
-  const sectionRef = useRef<HTMLElement>(null)
-  const headerRef = useRef<HTMLDivElement>(null)
+  const [emblaRef] = useEmblaCarousel({ loop: true, align: "start" })
 
   const testimonials = [
     {
@@ -36,93 +30,73 @@ export function Testimonials() {
     },
   ]
 
-  useGSAP(() => {
-    if (!sectionRef.current) return
-
-    // Animate section header
-    if (headerRef.current) {
-      gsap.fromTo(
-        headerRef.current,
-        { opacity: 0, y: 20 },
-        {
-          opacity: 1,
-          y: 0,
-          duration: 0.7,
-          ease: "expo.out",
-          scrollTrigger: {
-            trigger: headerRef.current,
-            start: "top 85%",
-            once: true,
-          },
-        }
-      )
-    }
-
-    // Animate testimonial cards with batch
-    ScrollTrigger.batch(".testimonial-card", {
-      onEnter: (elements) => {
-        gsap.fromTo(
-          elements,
-          { opacity: 0, y: 25 },
-          {
-            opacity: 1,
-            y: 0,
-            stagger: 0.1,
-            ease: "expo.out",
-            duration: 0.7,
-          }
-        )
-      },
-      start: "top 85%",
-      once: true,
-    })
-  }, { scope: sectionRef })
-
   return (
-    <section ref={sectionRef} id="testimonials" aria-label={t("title")} className="relative py-16 md:py-32 bg-[hsl(222,47%,3%)]">
+    <section id="testimonials" aria-label={t("title")} className="relative py-16 md:py-32 bg-bg-deep">
       <div className="absolute inset-0 grid-bg opacity-15" />
       <div className="relative max-w-7xl mx-auto px-4 md:px-8">
-        <div ref={headerRef}>
-          <SectionHeader
-            badge={t("badge")}
-            title={t("title")}
-            highlight={t("highlight")}
-            description={t("description")}
-          />
+        <SectionHeader
+          badge={t("badge")}
+          title={t("title")}
+          highlight={t("highlight")}
+          description={t("description")}
+        />
+
+        {/* Embla carousel on mobile, grid on md+ */}
+        <div className="hidden md:grid md:grid-cols-3 gap-6">
+          {testimonials.map((item, i) => (
+            <TestimonialCard key={i} item={item} />
+          ))}
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-6">
-          {testimonials.map((t, i) => (
-            <div key={i} className="testimonial-card group relative h-full p-4 md:p-6 rounded-xl border border-[hsl(215,28%,16%)] bg-[hsl(222,47%,5%)] hover:border-[#06d6e0]/20 transition-all duration-500">
-              {/* Quote icon */}
-              <Quote className="w-8 h-8 text-[#06d6e0]/20 mb-4" />
-
-              {/* Stars */}
-              <div className="flex items-center gap-1 mb-4">
-                {Array.from({ length: t.rating }).map((_, j) => (
-                  <Star key={j} className="w-4 h-4 fill-amber-400 text-amber-400" />
-                ))}
+        <div className="md:hidden overflow-hidden" ref={emblaRef}>
+          <div className="flex gap-4">
+            {testimonials.map((item, i) => (
+              <div key={i} className="flex-[0_0_85%] min-w-0">
+                <TestimonialCard item={item} />
               </div>
-
-              {/* Text */}
-              <p className="text-[hsl(215,20%,65%)] text-sm leading-relaxed mb-6">
-                {'"'}{t.text}{'"'}
-              </p>
-
-              {/* Author */}
-              <div className="flex items-center gap-3 pt-4 border-t border-[hsl(215,28%,14%)]">
-                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#06d6e0] to-[#e84393] flex items-center justify-center">
-                  <span className="text-sm font-bold text-[hsl(222,47%,4%)]">{t.name.charAt(0)}</span>
-                </div>
-                <div>
-                  <div className="text-sm font-semibold text-[hsl(210,40%,98%)]">{t.name}</div>
-                  <div className="text-xs font-mono text-[hsl(215,20%,45%)]">{t.role}</div>
-                </div>
-              </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       </div>
     </section>
+  )
+}
+
+interface TestimonialItem {
+  name: string
+  role: string
+  text: string
+  rating: number
+}
+
+function TestimonialCard({ item }: { item: TestimonialItem }) {
+  return (
+    <div className="testimonial-card group relative h-full p-4 md:p-6 rounded-xl border border-border bg-bg-surface hover:border-cyan/20 transition-all duration-500">
+      <Quote className="w-8 h-8 text-cyan/20 mb-4" />
+
+      <div className="flex items-center gap-1 mb-4">
+        {Array.from({ length: item.rating }).map((_, j) => (
+          <Star key={j} className="w-4 h-4 fill-amber-400 text-amber-400" />
+        ))}
+      </div>
+
+      <p className="text-text-secondary text-sm leading-relaxed mb-6">
+        {'"'}{item.text}{'"'}
+      </p>
+
+      <div className="flex items-center gap-3 pt-4 border-t border-border">
+        {/* Avatar: radial gradient is non-directional — rtl-ok */}
+        <div
+          className="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0"
+          style={{ background: "radial-gradient(circle at 30% 30%, oklch(0.81 0.17 193), oklch(0.65 0.26 350))" }}
+        >
+          <span className="text-sm font-bold text-bg-deep">{item.name.charAt(0)}</span>
+        </div>
+        <div>
+          <div className="text-sm font-semibold text-text">{item.name}</div>
+          <div className="text-xs font-mono text-text-muted">{item.role}</div>
+        </div>
+      </div>
+    </div>
   )
 }

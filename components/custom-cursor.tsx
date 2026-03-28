@@ -60,8 +60,8 @@ export function CustomCursor() {
           width: hovering ? 48 : 12,
           height: hovering ? 48 : 12,
           borderRadius: "50%",
-          background: hovering ? "transparent" : "#06d6e0",
-          border: hovering ? "2px solid #06d6e0" : "none",
+          background: hovering ? "transparent" : "oklch(0.81 0.17 193)",
+          border: hovering ? "2px solid oklch(0.81 0.17 193)" : "none",
           transform: "translate(-50%, -50%)",
           transition: "width 0.2s ease, height 0.2s ease, background 0.2s ease, border 0.2s ease",
         }}
@@ -76,7 +76,7 @@ export function CustomCursor() {
           width: 200,
           height: 200,
           borderRadius: "50%",
-          background: "radial-gradient(circle, hsl(187 92% 55% / 0.06), transparent 70%)",
+          background: "radial-gradient(circle, oklch(0.81 0.17 193 / 0.06), transparent 70%)",
           transform: "translate(-50%, -50%)",
           transition: "left 0.15s ease-out, top 0.15s ease-out",
         }}

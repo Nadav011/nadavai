@@ -36,13 +36,13 @@ function NewsletterForm() {
   }
 
   return (
-    <div className="newsletter-section py-8 border-t border-[hsl(215,28%,14%)]">
+    <div className="newsletter-section py-8 border-t border-border">
       <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
         <div>
-          <h4 className="text-sm font-semibold text-[hsl(210,40%,98%)] mb-1">
+          <h4 className="text-sm font-semibold text-text mb-1">
             {t("newsletterTitle")}
           </h4>
-          <p className="text-xs text-[hsl(215,20%,45%)]">
+          <p className="text-xs text-text-muted">
             {t("newsletterDesc")}
           </p>
         </div>
@@ -56,14 +56,14 @@ function NewsletterForm() {
               value={email}
               onChange={(e) => { setEmail(e.target.value); setStatus("idle") }}
               placeholder={tCommon("emailPlaceholder")}
-              className="w-full h-11 px-4 rounded-lg bg-[hsl(222,47%,6%)] border border-[hsl(215,28%,16%)] text-sm text-[hsl(210,40%,98%)] placeholder:text-[hsl(215,20%,45%)] focus:outline-none focus:border-[#06d6e0]/50 transition-colors"
+              className="w-full h-11 px-4 rounded-lg bg-bg-elevated border border-border text-sm text-text placeholder:text-text-muted focus:outline-none focus:border-cyan/50 transition-colors"
               required
               aria-describedby={status === "success" ? "newsletter-success" : status === "error" ? "newsletter-error" : undefined}
             />
           </div>
           <button
             type="submit"
-            className="h-11 px-5 rounded-lg bg-gradient-to-l from-[#06d6e0] to-[#0abfca] text-[hsl(222,47%,4%)] text-sm font-bold flex items-center gap-2 hover:shadow-[0_0_20px_hsl(187,92%,55%,0.3)] transition-shadow"
+            className="h-11 px-5 rounded-lg bg-gradient-to-l rtl:bg-gradient-to-r from-cyan to-[#0abfca] text-bg-deep text-sm font-bold flex items-center gap-2 hover:shadow-[0_0_20px_oklch(0.81_0.17_193_/_0.3)] transition-shadow"
             aria-label={t("newsletterBtn")}
           >
             <Send className="w-3.5 h-3.5" aria-hidden="true" />
@@ -72,10 +72,10 @@ function NewsletterForm() {
         </form>
       </div>
       {status === "success" && (
-        <p id="newsletter-success" role="status" className="mt-3 text-xs text-[#06d6e0]">{t("newsletterSuccess")}</p>
+        <p id="newsletter-success" role="status" className="mt-3 text-xs text-cyan">{t("newsletterSuccess")}</p>
       )}
       {status === "error" && (
-        <p id="newsletter-error" role="alert" className="mt-3 text-xs text-[#e84393]">{t("newsletterError")}</p>
+        <p id="newsletter-error" role="alert" className="mt-3 text-xs text-pink">{t("newsletterError")}</p>
       )}
     </div>
   )
@@ -174,40 +174,40 @@ export function Footer() {
   }, [])
 
   return (
-    <footer ref={sectionRef} className="relative border-t border-[hsl(215,28%,16%)] bg-[hsl(222,47%,3%)]">
+    <footer ref={sectionRef} className="relative border-t border-border bg-bg-deep">
       <div className="max-w-7xl mx-auto px-4 md:px-8">
         {/* Main footer */}
         <div className="py-8 md:py-16 grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-10">
           {/* Brand */}
           <div className="footer-brand col-span-2 md:col-span-1">
-            <a href="#" className="flex items-center gap-2.5 mb-4">
-              <div className="relative flex items-center justify-center w-9 h-9 rounded-lg bg-gradient-to-br from-[#06d6e0] to-[#e84393] p-[1px]">
-                <div className="flex items-center justify-center w-full h-full rounded-[6px] bg-[hsl(222,47%,3%)]">
-                  <Zap className="w-4 h-4 text-[#06d6e0]" />
+            <a href="#" className="flex items-center gap-2.5 mb-4" aria-label="NADAV.AI — Back to top">
+              <div className="relative flex items-center justify-center w-9 h-9 rounded-lg bg-gradient-to-br rtl:bg-gradient-to-bl from-cyan to-pink p-[1px]">
+                <div className="flex items-center justify-center w-full h-full rounded-[6px] bg-bg-deep">
+                  <Zap className="w-4 h-4 text-cyan" />
                 </div>
               </div>
-              <span className="text-lg font-bold text-[hsl(210,40%,98%)]">NADAV<span className="text-gradient">.AI</span></span>
+              <span className="text-lg font-bold text-text">NADAV<span className="text-gradient">.AI</span></span>
             </a>
-            <p className="text-sm text-[hsl(215,20%,45%)] leading-relaxed mb-4">
+            <p className="text-sm text-text-muted leading-relaxed mb-4">
               {t("brand")}
             </p>
             <div className="flex items-center gap-2">
               <div className="w-1.5 h-1.5 rounded-full bg-[#27ca40] animate-pulse" />
-              <span className="text-xs font-mono text-[hsl(215,20%,48%)]">{t("available")}</span>
+              <span className="text-xs font-mono text-text-muted">{t("available")}</span>
             </div>
           </div>
 
           {/* Links */}
           {footerLinks.map((group) => (
             <div key={group.title} className="footer-link-group">
-              <h4 className="text-sm font-semibold text-[hsl(210,40%,98%)] mb-4">{group.title}</h4>
+              <h4 className="text-sm font-semibold text-text mb-4">{group.title}</h4>
               <div className="flex flex-col gap-2.5">
                 {group.links.map((link) => (
                   <a
                     key={link.label}
                     href={link.href}
                     {...(link.href.startsWith("http") ? { target: "_blank", rel: "noreferrer" } : {})}
-                    className="text-sm text-[hsl(215,20%,50%)] hover:text-[#06d6e0] transition-colors"
+                    className="text-sm text-text-secondary hover:text-cyan transition-colors"
                   >
                     {link.label}
                   </a>
@@ -221,16 +221,16 @@ export function Footer() {
         <NewsletterForm />
 
         {/* Bottom bar */}
-        <div className="footer-bottom py-6 border-t border-[hsl(215,28%,14%)] flex flex-col md:flex-row items-center justify-between gap-4">
-          <div className="flex items-center gap-3 font-mono text-xs text-[hsl(215,20%,45%)]">
+        <div className="footer-bottom py-6 border-t border-border flex flex-col md:flex-row items-center justify-between gap-4">
+          <div className="flex items-center gap-3 font-mono text-xs text-text-muted">
             <span>{">"}</span>
             <span>NADAV.AI</span>
-            <span className="text-[hsl(215,20%,25%)]">|</span>
+            <span className="text-border">|</span>
             <span>2026</span>
-            <span className="text-[hsl(215,20%,25%)]">|</span>
+            <span className="text-border">|</span>
             <span>{"Built with AI"}</span>
           </div>
-          <div className="flex items-center gap-2 text-xs text-[hsl(215,20%,45%)]">
+          <div className="flex items-center gap-2 text-xs text-text-muted">
             <span className="font-mono">{"powered by"}</span>
             <span className="text-gradient font-mono font-semibold">{"artificial intelligence"}</span>
           </div>

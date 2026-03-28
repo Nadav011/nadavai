@@ -41,7 +41,7 @@ export function AmbientOrbs() {
             top: `${orb.y}%`,
             width: orb.size,
             height: orb.size,
-            background: `radial-gradient(circle, hsl(187 92% 55% / ${orb.opacity}), transparent 70%)`,
+            background: `radial-gradient(circle, oklch(0.81 0.17 193 / ${orb.opacity}), transparent 70%)`,
             animation: `ambient-drift-${orb.id % 3} ${orb.duration}s ease-in-out infinite`,
             animationDelay: `${orb.delay}s`,
             transform: "translate(-50%, -50%)",

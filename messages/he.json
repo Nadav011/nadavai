@@ -2,8 +2,8 @@
   "layout": {
     "skipToContent": "דלג לתוכן הראשי",
     "title": "NADAV.AI | Full-Stack AI Developer",
-    "description": "פיתוח אפליקציות עם בינה מלאכותית בישראל. 8+ מערכות production, 80 כלי AI, 38+ סוכני אוטומציה. מפתח Full-Stack מומחה ב-React, Next.js, TypeScript, Supabase ו-Flutter.",
-    "ogDescription": "בונה הכל עם AI. 8+ אפליקציות production, 80 AI Skills, 38+ סוכנים. פיתוח Full-Stack מתקדם עם בינה מלאכותית."
+    "description": "פיתוח אפליקציות עם בינה מלאכותית בישראל. 10+ מערכות production, 86 כלי AI, 52 סוכני אוטומציה. מפתח Full-Stack מומחה ב-React, Next.js, TypeScript, Supabase ו-Flutter.",
+    "ogDescription": "בונה הכל עם AI. 10+ אפליקציות production, 86 AI Skills, 52 סוכנים. פיתוח Full-Stack מתקדם עם בינה מלאכותית."
   },
   "nav": {
     "projects": "פרויקטים",
@@ -38,8 +38,8 @@
     "highlight": "פרימיום",
     "description": "כל שירות מגובה ב-AI - מה שלוקח לאחרים שבועות, אני עושה בימים. בלי פשרות על איכות.",
     "trust1": "זמן תגובה < 24 שעות",
-    "trust2": "8+ אפליקציות production",
-    "trust3": "80 AI Skills בשימוש",
+    "trust2": "10+ אפליקציות production",
+    "trust3": "86 AI Skills בשימוש",
     "s1Title": "בניית אפליקציות",
     "s1Subtitle": "Full-Stack AI Development",
     "s1Description": "אפליקציות web מלאות מאפס עם AI. מה שצוות שלם בונה בחודשים - אני בונה בימים. Frontend, Backend, Database, Deploy - הכל כלול.",
@@ -91,7 +91,10 @@
     "p5": "מערכת ניהול קופות - סגירת קופה, הפקדות, ניהול סניפים. PWA עם Offline-first, IndexedDB, ותמיכה מלאה בעברית.",
     "p6": "אפליקציית צ'אט ספורט מובייל - Flutter עם 28 מודולים: צ'אטים, חדרי קול, מסיבות צפייה, תחזיות ומשחקים.",
     "p7": "מנוע ביקורת קוד עם 579 gates, auto-healing, זיהוי טכנולוגיה אוטומטי, ומטריצה ויזואלית 10x7. TypeScript + Bun.",
-    "p8": "אפליקציית פיננסים ישראלית עם תמיכה מלאה בעברית RTL. ניהול הוצאות, תקציבים, וגרפים אינטראקטיביים."
+    "p8": "אפליקציית פיננסים ישראלית עם תמיכה מלאה בעברית RTL. ניהול הוצאות, תקציבים, וגרפים אינטראקטיביים.",
+    "p9": "APEX Command Center - דשבורד ניהול מלא ל-AI Dev Stack. 32 עמודים, PWA, ניטור real-time, ניהול Hydra v2 ו-86 Skills. React + Cloudflare Pages.",
+    "p10": "APEX CLI - ממשק שורת פקודה ל-13 פקודות ניהול. אינטגרציה מלאה עם Hydra v2, LangGraph, ו-86 Skills. TypeScript + Bun.",
+    "p11": "RTL First Dev Kit - ספריית קומפוננטות RTL-first לפיתוח עברי. Tailwind logical properties, בדיקות a11y, ו-CSS custom properties. Open Source."
   },
   "process": {
     "badge": "process",
@@ -117,10 +120,10 @@
     "t1Text": "נדב בנה לי מערכת ניהול מלאה ב-Enterprise level - 149 עמודים, 111 טבלאות. מה שצוות של 5 אנשים היה עושה בחודשים, הוא סיפק בימים. מרשים.",
     "t2Name": "מנהל טכנולוגיה",
     "t2Role": "סטארטאפ",
-    "t2Text": "הוספנו אפליקציית PWA עם Offline-first מלא - סנכרון חכם, IndexedDB, הכל עובד מושלם גם בלי חיבור. 8+ אפליקציות production מדברות בעד עצמן.",
+    "t2Text": "הוספנו אפליקציית PWA עם Offline-first מלא - סנכרון חכם, IndexedDB, הכל עובד מושלם גם בלי חיבור. 10+ אפליקציות production מדברות בעד עצמן.",
     "t3Name": "יזם",
     "t3Role": "פרויקט AI",
-    "t3Text": "80 AI Skills, 38+ סוכנים, מנוע ביקורת קוד עם 579 gates - רמת ההבנה של נדב ב-AI היא מדרגה אחרת. הפרויקט שלנו עלה לאוויר תוך שבוע."
+    "t3Text": "86 AI Skills, 52 סוכנים, מנוע ביקורת קוד עם 579 gates - רמת ההבנה של נדב ב-AI היא מדרגה אחרת. הפרויקט שלנו עלה לאוויר תוך שבוע."
   },
   "blog": {
     "badge": "blog",
@@ -135,8 +138,8 @@
     "catCareer": "קריירה",
     "b1Title": "למה AI משנה את כללי המשחק לפרילנסרים",
     "b1Excerpt": "לפני שנה בניתי אפליקציות ב-3 חודשים. היום? אותה רמת איכות ב-3 ימים. ככה AI שינה לי את החיים כמפתח.",
-    "b2Title": "8 אפליקציות production בשנה אחת - איך עשיתי את זה",
-    "b2Excerpt": "הסוד? לא קוד מסורתי. שימוש ב-80 AI Skills, סוכנים חכמים, ומנוע APEX עם 579 gates שמוודא שהכל ברמה הכי גבוהה.",
+    "b2Title": "10+ אפליקציות production - איך עשיתי את זה עם AI",
+    "b2Excerpt": "הסוד? לא קוד מסורתי. שימוש ב-86 AI Skills, 52 סוכנים חכמים, ומנוע APEX עם 579 gates שמוודא שהכל ברמה הכי גבוהה.",
     "b3Title": "Claude Code vs Cursor - מה באמת עדיף למפתחים?",
     "b3Excerpt": "ניסיתי את שניהם לעומק. הנה ההבדלים האמיתיים, מה עובד יותר טוב, ואיפה כל אחד מנצח.",
     "b4Title": "5 טעויות שכל מתחיל עם AI עושה",
@@ -177,13 +180,16 @@
     "description": "מדריכים מעשיים, סרטונים, וטיפים - הכל חינם. כדי שגם אתה תוכל לבנות עם AI.",
     "g1Title": "איך בניתי מערכת 149 עמודים עם AI",
     "g1Desc": "Case Study: מערכת Mexicani - 149 עמודים, 111 טבלאות, 38 Edge Functions. איך AI שינה את תהליך הבנייה.",
+    "g1Status": "live",
     "g2Title": "PWA עם תמיכת Offline מלאה",
     "g2Desc": "איך בניתי אפליקציית PWA עם IndexedDB, סנכרון חכם, ותור פעולות - שעובדת גם בלי אינטרנט.",
+    "g2Status": "live",
     "g3Title": "Claude Code Skills - מדריך מלא",
-    "g3Desc": "איך בניתי 73 סקילים ל-Claude Code: ארכיטקטורה, 70-Gate Matrix, auto-heal, ו-research workflows.",
+    "g3Desc": "איך בניתי 86 סקילים ל-Claude Code: ארכיטקטורה, 70-Gate Matrix, auto-heal, ו-research workflows.",
     "g4Title": "מ-Flutter ל-Production",
     "g4Desc": "הדרך מרעיון לאפליקציה חיה ב-Flutter: Clean Architecture, Riverpod, Firebase, ו-Capacitor.",
-    "comingSoon": "בקרוב"
+    "comingSoon": "בקרוב",
+    "live": "פעיל"
   },
   "resources": {
     "badge": "open source",
@@ -192,7 +198,7 @@
     "description": "ריפוזיטוריז, templates, וכלים שאני נותן במתנה. קח, השתמש, תהנה.",
     "r1Desc": "מנוע לבניית skills ל-Claude Code עם מטריצת 70-Gate, auto-heal, ו-research-first workflows. Web + Mobile.",
     "r2Desc": "אפליקציית ניהול פרויקטים ל-vibe coders. React Native, Expo, 14 OMEGA Skills, Glassmorphism UI.",
-    "r3Desc": "מערכת של 80 סקילים: 20 APEX (Web), 25 Flutter (Mobile), 10 Utility, 5 Agent Skills. אוטומציה מלאה לפיתוח.",
+    "r3Desc": "מערכת של 86 סקילים: 20 APEX (Web), 25 Flutter (Mobile), 10 Utility, 5 Agent Skills, ועוד. אוטומציה מלאה לפיתוח.",
     "r4Desc": "מערכת סוכני AI עם CrewAI, Ollama (מודלים לוקליים), ChromaDB לזיכרון, ו-Docker. AGI מקומי על המחשב שלך.",
     "r5Desc": "מנוע ביקורת קוד עם 579 gates, auto-healing, זיהוי טכנולוגיה אוטומטי, ומטריצה ויזואלית 10x7."
   },
@@ -201,12 +207,14 @@
     "title": "חדשות",
     "highlight": "ועדכונים",
     "description": "מה חדש בעולם ה-AI, כלים חדשים, עדכונים חשובים, ובמה אני משתמש עכשיו.",
-    "n1Title": "80 AI Skills ל-Claude Code",
-    "n1Desc": "הגענו ל-80 סקילים מותאמים אישית ל-Claude Code: 20 APEX (Web), 25 Flutter (Mobile), 10 Utility, 5 Agent Skills, ועוד.",
-    "n2Title": "APEX Engine v23",
-    "n2Desc": "מנוע ביקורת קוד עם 579 gates ומטריצה ויזואלית 10x7. Auto-healing, זיהוי טכנולוגיה אוטומטי, ודוחות מפורטים.",
-    "n3Title": "Singularity Forge - Open Source",
-    "n3Desc": "שחררתי את Singularity Forge - מנוע לבניית skills עם 70-Gate Matrix, auto-heal, ו-research workflows. פתוח לכולם."
+    "n1Title": "APEX Dashboard - Command Center עלה לאוויר",
+    "n1Desc": "השקת APEX Command Center - דשבורד ניהול מלא ל-AI Dev Stack. 32 עמודים, PWA, ניטור real-time, ניהול Hydra v2. מרץ 2026.",
+    "n2Title": "86 AI Skills ו-52 סוכנים",
+    "n2Desc": "עדכון מרץ 2026: הגענו ל-86 סקילים מותאמים ו-52 סוכני אוטומציה. Hydra v2 עם LangGraph, LanceDB זיכרון, ו-Bayesian routing.",
+    "n3Title": "RTL First Dev Kit - Open Source",
+    "n3Desc": "שחררתי את RTL First Dev Kit - ספריית קומפוננטות RTL-first עם Tailwind 4.2 logical properties, a11y, ו-i18n. פתוח לכולם.",
+    "n4Title": "Hydra v2 - מנוע אורקסטרציה חדש",
+    "n4Desc": "Hydra v2.0 עם LangGraph Python, LanceDB cognitive memory, Bayesian provider routing, ו-SqliteSaver checkpointing. Production-ready."
   },
   "social": {
     "badge": "social",

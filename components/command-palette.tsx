@@ -47,8 +47,8 @@ export function CommandPalette() {
   const links = [
     { label: "GitHub", href: "https://github.com/Nadav011", icon: Github, external: true },
     { label: "Facebook", href: "https://www.facebook.com/nadav.cohen.167", icon: Facebook, external: true },
-    { label: "WhatsApp", href: "https://wa.me/972504401760", icon: Phone, external: true },
-    { label: t("email"), href: "mailto:hello@nadavc.ai", icon: Mail, external: true },
+    { label: "WhatsApp", href: "https://wa.me/972505245677", icon: Phone, external: true },
+    { label: t("email"), href: "mailto:nadav@nadavc.ai", icon: Mail, external: true },
   ]
 
   const [open, setOpen] = useState(false)
@@ -96,11 +96,11 @@ export function CommandPalette() {
       {/* Keyboard hint in navbar */}
       <button
         onClick={() => setOpen(true)}
-        className="hidden lg:flex items-center gap-2 px-3 py-1.5 rounded-lg border border-[hsl(215,28%,16%)] bg-[hsl(222,47%,5%)] text-[hsl(215,20%,45%)] hover:border-[#06d6e0]/30 hover:text-[hsl(215,20%,60%)] transition-all text-xs font-mono"
+        className="hidden lg:flex items-center gap-2 px-3 py-1.5 rounded-lg border border-border bg-bg-surface text-text-muted hover:border-cyan/30 hover:text-text-secondary transition-all text-xs font-mono"
       >
         <Terminal className="w-3 h-3" />
         <span className="hidden xl:inline">{t("search")}</span>
-        <kbd className="px-1.5 py-0.5 rounded bg-[hsl(215,28%,12%)] border border-[hsl(215,28%,18%)] text-[10px] font-mono">
+        <kbd className="px-1.5 py-0.5 rounded bg-bg-deep border border-border text-[10px] font-mono">
           {isMac ? "⌘K" : "Ctrl+K"}
         </kbd>
       </button>
@@ -125,10 +125,10 @@ export function CommandPalette() {
                 onSelect={() => handleSelect(item.href)}
                 className={`flex items-center gap-3 ${locale === "he" ? "flex-row-reverse" : ""}`}
               >
-                <item.icon className="w-4 h-4 text-[#06d6e0]" />
+                <item.icon className="w-4 h-4 text-cyan" />
                 <div className={`flex flex-col ${locale === "he" ? "items-end" : "items-start"}`}>
                   <span>{item.label}</span>
-                  <span className="text-xs text-[hsl(215,20%,45%)]">{item.description}</span>
+                  <span className="text-xs text-text-muted">{item.description}</span>
                 </div>
               </CommandItem>
             ))}
@@ -144,7 +144,7 @@ export function CommandPalette() {
                 onSelect={() => handleSelect(item.href)}
                 className={`flex items-center gap-3 ${locale === "he" ? "flex-row-reverse" : ""}`}
               >
-                <item.icon className="w-4 h-4 text-[#e84393]" />
+                <item.icon className="w-4 h-4 text-pink" />
                 <span>{item.label}</span>
               </CommandItem>
             ))}

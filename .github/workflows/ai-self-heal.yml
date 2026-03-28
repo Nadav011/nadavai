@@ -39,7 +39,7 @@ jobs:
       branch: ${{ steps.check.outputs.branch }}
       run_id: ${{ steps.check.outputs.run_id }}
     steps:
-      - uses: step-security/harden-runner@v2.16.0
+      - uses: step-security/harden-runner@fa2e9d605c4eeb9fcad4c99c224cee0c6c7f3594  # v2.16.0
         with:
           egress-policy: audit
       - name: Determine heal eligibility
@@ -85,7 +85,7 @@ jobs:
       FAILED_RUN_ID: ${{ needs.guard.outputs.run_id }}
       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
-      - uses: step-security/harden-runner@v2.16.0
+      - uses: step-security/harden-runner@fa2e9d605c4eeb9fcad4c99c224cee0c6c7f3594  # v2.16.0
         with:
           egress-policy: audit
       - name: Reset isolated checkout path

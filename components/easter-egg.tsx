@@ -40,13 +40,13 @@ export function EasterEgg() {
 
   return (
     <div className="fixed inset-0 z-[9999] pointer-events-none overflow-hidden">
-      <div className="absolute inset-0 bg-[hsl(222,47%,3%)/0.85]" />
+      <div className="absolute inset-0 bg-bg-deep/85" />
       <div className="absolute inset-0 flex items-center justify-center">
         <div className="text-center space-y-4 animate-fade-up">
           <div className="text-6xl md:text-8xl font-bold text-gradient-animated">
             {"🤖 AI MODE"}
           </div>
-          <div className="font-mono text-[#06d6e0] text-lg">
+          <div className="font-mono text-cyan text-lg">
             {"> sudo nadav --unlock-potential"}
           </div>
           <div className="font-mono text-[#27ca40] text-sm animate-pulse">
@@ -57,7 +57,7 @@ export function EasterEgg() {
       {columns.map((col, i) => (
         <div
           key={i}
-          className="absolute top-0 text-[#06d6e0]/30 font-mono text-sm"
+          className="absolute top-0 text-cyan/30 font-mono text-sm"
           style={{
             insetInlineStart: col.left,
             animation: col.animation,

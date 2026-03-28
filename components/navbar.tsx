@@ -111,28 +111,28 @@ export function Navbar() {
       >
         <div className={`absolute inset-0 transition-all duration-700 ${
           scrolled
-            ? "bg-[hsl(222,47%,4%)/0.88] backdrop-blur-2xl shadow-[0_4px_40px_rgba(0,0,0,0.4)] border-b border-[hsl(215,28%,16%)/0.5]"
+            ? "bg-[oklch(0.085_0.025_245/0.88)] backdrop-blur-2xl shadow-[0_4px_40px_rgba(0,0,0,0.4)] border-b border-[var(--color-border)/0.5]"
             : "bg-transparent"
         }`} />
 
         <div className="relative max-w-7xl mx-auto px-4 md:px-8 flex items-center justify-between">
-          <a href="#" className="flex items-center gap-3 group relative">
+          <a href="#" className="flex items-center gap-3 group relative" aria-label="NADAV.AI — Back to top">
             <div className="relative">
-              <div className="absolute inset-0 bg-[#06d6e0]/20 rounded-xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
-              <div className="relative flex items-center justify-center w-11 h-11 rounded-xl bg-gradient-to-br from-[#06d6e0] to-[#e84393] p-[1.5px] group-hover:shadow-[0_0_25px_hsl(187,92%,55%,0.3)] transition-shadow duration-500">
-                <div className="flex items-center justify-center w-full h-full rounded-[9px] bg-[hsl(222,47%,4%)] group-hover:bg-[hsl(222,47%,5%)] transition-colors">
-                  <Zap className="w-5 h-5 text-[#06d6e0] group-hover:text-[#e84393] transition-colors duration-500" />
+              <div className="absolute inset-0 bg-cyan/20 rounded-xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+              <div className="relative flex items-center justify-center w-11 h-11 rounded-xl bg-gradient-to-br rtl:bg-gradient-to-bl from-cyan to-pink p-[1.5px] group-hover:shadow-[0_0_25px_oklch(0.81_0.17_193_/_0.3)] transition-shadow duration-500">
+                <div className="flex items-center justify-center w-full h-full rounded-[9px] bg-bg-deep group-hover:bg-bg-surface transition-colors">
+                  <Zap className="w-5 h-5 text-cyan group-hover:text-pink transition-colors duration-500" />
                 </div>
               </div>
-              <div className="absolute -bottom-0.5 -end-0.5 w-3 h-3 rounded-full bg-[hsl(222,47%,4%)] flex items-center justify-center">
+              <div className="absolute -bottom-0.5 -end-0.5 w-3 h-3 rounded-full bg-bg-deep flex items-center justify-center">
                 <div className="w-2 h-2 rounded-full bg-[#27ca40] animate-pulse" />
               </div>
             </div>
             <div className="flex flex-col">
-              <span className="text-lg font-bold tracking-tight text-[hsl(210,40%,98%)] leading-none">
+              <span className="text-lg font-bold tracking-tight text-text leading-none">
                 NADAV<span className="text-gradient">.AI</span>
               </span>
-              <span className="text-[9px] font-mono text-[hsl(215,20%,48%)] tracking-[0.25em] uppercase mt-0.5">
+              <span className="text-[9px] font-mono text-text-muted tracking-[0.25em] uppercase mt-0.5">
                 {t("logoSubtitle")}
               </span>
             </div>
@@ -140,10 +140,10 @@ export function Navbar() {
 
           <div ref={navRef} className="hidden lg:flex items-center gap-0.5 relative">
             <div
-              className="absolute bottom-0 h-[2px] rounded-full bg-gradient-to-l from-[#06d6e0] to-[#e84393] transition-all duration-500 ease-out"
+              className="absolute bottom-0 h-[2px] rounded-full bg-gradient-to-l rtl:bg-gradient-to-r from-cyan to-pink transition-all duration-500 ease-out"
               style={{
                 width: `${indicatorStyle.width}px`,
-                left: `${indicatorStyle.left}px`,
+                insetInlineStart: `${indicatorStyle.left}px`,
                 opacity: activeSection ? 1 : 0,
               }}
             />
@@ -158,19 +158,19 @@ export function Navbar() {
                     data-section={section}
                     className={`relative px-4 py-2.5 text-sm transition-all duration-300 group/link ${
                       isActive
-                        ? "text-[hsl(210,40%,98%)]"
-                        : "text-[hsl(215,20%,55%)] hover:text-[hsl(210,40%,90%)]"
+                        ? "text-text"
+                        : "text-text-muted hover:text-text"
                     }`}
                   >
                     <span className="relative">
                       {link.label}
                       {link.badge && (
-                        <span className="absolute -top-2.5 -start-3 text-[8px] font-mono font-bold px-1.5 py-0.5 rounded-full bg-[#06d6e0]/15 text-[#06d6e0] border border-[#06d6e0]/25 leading-none">
+                        <span className="absolute -top-2.5 -start-3 text-[8px] font-mono font-bold px-1.5 py-0.5 rounded-full bg-cyan/15 text-cyan border border-cyan/25 leading-none">
                           {link.badge}
                         </span>
                       )}
                       {link.hot && (
-                        <span className="absolute -top-1.5 -start-1.5 w-2 h-2 rounded-full bg-[#e84393] animate-pulse" />
+                        <span className="absolute -top-1.5 -start-1.5 w-2 h-2 rounded-full bg-pink animate-pulse" />
                       )}
                     </span>
                   </a>
@@ -185,11 +185,11 @@ export function Navbar() {
             <Link
               href="/"
               locale={locale === "he" ? "en" : "he"}
-              className="px-2.5 py-1.5 rounded-lg border border-[hsl(215,28%,16%)] bg-[hsl(222,47%,5%)] text-[hsl(215,20%,50%)] hover:border-[#06d6e0]/30 hover:text-[hsl(210,40%,98%)] transition-all text-xs font-mono font-bold"
+              className="px-2.5 py-1.5 rounded-lg border border-border bg-bg-surface text-text-secondary hover:border-cyan/30 hover:text-text transition-all text-xs font-mono font-bold"
             >
               {tCommon("langSwitch")}
             </Link>
-            <a href="https://github.com/Nadav011" target="_blank" rel="noreferrer" className="p-2.5 rounded-lg text-[hsl(215,20%,50%)] hover:text-[hsl(210,40%,98%)] hover:bg-[hsl(215,28%,12%)] transition-all" aria-label={tCommon("githubAriaLabel")}>
+            <a href="https://github.com/Nadav011" target="_blank" rel="noreferrer" className="p-2.5 rounded-lg text-text-secondary hover:text-text hover:bg-border transition-all" aria-label={tCommon("githubAriaLabel")}>
               <ExternalLink className="w-4 h-4" />
             </a>
             <Magnetic strength={0.2}>
@@ -197,12 +197,12 @@ export function Navbar() {
                 href="#contact"
                 className="relative group/cta inline-flex items-center gap-2.5 px-6 py-2.5 rounded-xl text-sm font-bold overflow-hidden"
               >
-                <div className="absolute inset-0 bg-gradient-to-l from-[#06d6e0] to-[#0abfca] transition-all duration-500 group-hover/cta:shadow-[0_0_30px_hsl(187,92%,55%,0.4)]" />
+                <div className="absolute inset-0 bg-gradient-to-l rtl:bg-gradient-to-r from-cyan to-[#0abfca] transition-all duration-500 group-hover/cta:shadow-[0_0_30px_oklch(0.81_0.17_193_/_0.4)]" />
                 <div className="absolute inset-0 bg-gradient-to-l from-transparent via-white/20 to-transparent -translate-x-full group-hover/cta:translate-x-full transition-transform duration-1000" />
-                <span className="relative flex items-center gap-2.5 text-[hsl(222,47%,4%)]">
+                <span className="relative flex items-center gap-2.5 text-bg-deep">
                   <span className="relative w-2 h-2">
-                    <span className="absolute inset-0 rounded-full bg-[hsl(222,47%,4%)] animate-ping opacity-40" />
-                    <span className="relative block w-2 h-2 rounded-full bg-[hsl(222,47%,4%)]" />
+                    <span className="absolute inset-0 rounded-full bg-bg-deep animate-ping opacity-40" />
+                    <span className="relative block w-2 h-2 rounded-full bg-bg-deep" />
                   </span>
                   {t("cta")}
                 </span>
@@ -213,7 +213,7 @@ export function Navbar() {
           <button
             ref={hamburgerButtonRef}
             onClick={() => setMobileOpen(!mobileOpen)}
-            className="lg:hidden relative p-2.5 rounded-xl border border-[hsl(215,28%,16%)] bg-[hsl(222,47%,6%)] text-[hsl(210,40%,98%)] hover:border-[#06d6e0]/30 transition-all"
+            className="lg:hidden relative p-2.5 rounded-xl border border-border bg-bg-elevated text-text hover:border-cyan/30 transition-all"
             aria-label={mobileOpen ? t("closeMenu") : t("toggleMenu")}
             aria-expanded={mobileOpen}
             aria-controls="mobile-menu"
@@ -235,7 +235,7 @@ export function Navbar() {
         aria-label={t("mobileNavigation")}
         className={`fixed inset-0 z-40 lg:hidden transition-all duration-500 ${mobileOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"}`}
       >
-        <div className="absolute inset-0 bg-[hsl(222,47%,3%)/0.98] backdrop-blur-2xl" />
+        <div className="absolute inset-0 bg-bg-deep/98 backdrop-blur-2xl" />
         <div className="relative pt-24 px-6 h-full flex flex-col overflow-y-auto">
           <div className="flex flex-col gap-2 flex-1">
             {navLinks.map((link, i) => (
@@ -243,20 +243,20 @@ export function Navbar() {
                 key={link.href}
                 href={link.href}
                 onClick={() => setMobileOpen(false)}
-                className={`flex items-center justify-between p-4 rounded-xl border border-[hsl(215,28%,14%)] bg-[hsl(222,47%,5%)] text-[hsl(210,40%,98%)] hover:border-[#06d6e0]/30 transition-all duration-300 ${
+                className={`flex items-center justify-between p-4 rounded-xl border border-border bg-bg-surface text-text hover:border-cyan/30 transition-all duration-300 ${
                   mobileOpen ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0"
                 }`}
                 style={{ transitionDelay: mobileOpen ? `${i * 60 + 100}ms` : "0ms" }}
               >
                 <div className="flex items-center gap-4">
-                  <span className="text-xs font-mono text-[#06d6e0] w-6">0{i + 1}</span>
+                  <span className="text-xs font-mono text-cyan w-6">0{i + 1}</span>
                   <span className="font-medium">{link.label}</span>
                 </div>
                 {link.badge && (
-                  <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-[#06d6e0]/10 text-[#06d6e0] border border-[#06d6e0]/20">{link.badge}</span>
+                  <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-cyan/10 text-cyan border border-cyan/20">{link.badge}</span>
                 )}
                 {link.hot && (
-                  <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-[#e84393]/10 text-[#e84393] border border-[#e84393]/20">HOT</span>
+                  <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-pink/10 text-pink border border-pink/20">HOT</span>
                 )}
               </a>
             ))}
@@ -267,16 +267,16 @@ export function Navbar() {
               href="/"
               locale={locale === "he" ? "en" : "he"}
               onClick={() => setMobileOpen(false)}
-              className="flex items-center justify-center gap-2 w-full p-3 rounded-xl border border-[hsl(215,28%,16%)] bg-[hsl(222,47%,6%)] text-sm font-mono font-bold text-[hsl(215,20%,60%)]"
+              className="flex items-center justify-center gap-2 w-full p-3 rounded-xl border border-border bg-bg-elevated text-sm font-mono font-bold text-text-secondary"
             >
               {tCommon("langSwitch")}
             </Link>
             <a
               href="#contact"
               onClick={() => setMobileOpen(false)}
-              className="flex items-center justify-center gap-2.5 w-full p-4 rounded-xl bg-gradient-to-l from-[#06d6e0] to-[#0abfca] text-[hsl(222,47%,4%)] font-bold text-lg"
+              className="flex items-center justify-center gap-2.5 w-full p-4 rounded-xl bg-gradient-to-l rtl:bg-gradient-to-r from-cyan to-[#0abfca] text-bg-deep font-bold text-lg"
             >
-              <span className="w-2 h-2 rounded-full bg-[hsl(222,47%,4%)] animate-pulse" />
+              <span className="w-2 h-2 rounded-full bg-bg-deep animate-pulse" />
               {t("cta")}
             </a>
           </div>

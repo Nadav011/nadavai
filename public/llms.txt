@@ -7,7 +7,7 @@
 ## About
 Nadav Cohen (נדב כהן) is an Israeli full-stack developer who builds everything with AI.
 Based in Israel, he specializes in React, Next.js, TypeScript, Supabase, Flutter, and AI agent orchestration.
-He has built 8+ production applications, 80+ AI skills, and 38+ automation agents.
+He has built 10+ production applications, 86 AI skills, and 52 automation agents.
 
 ## Core Projects
 - [Mexicani](https://nadavc.ai/he#projects): Enterprise franchise management system — 149 pages, 111 database tables, 38 Edge Functions. Branch, order, inventory, and employee management.
@@ -15,12 +15,15 @@ He has built 8+ production applications, 80+ AI skills, and 38+ automation agent
 - [Shifts](https://github.com/Nadav011/mexicani-shifts): Shift management system with Drag & Drop, Push notifications, and interactive scheduling. 154 components, 25 hooks.
 - [APEX Engine](https://nadavc.ai/he#projects): Code audit engine with 579 gates, auto-healing, automatic technology detection, and a 10x7 visual matrix.
 - [SportChat](https://github.com/Nadav011/sportchat-ultimate): Real-time sports community app built with Flutter, featuring live chat, missions, and social features.
+- [APEX Dashboard](https://github.com/Nadav011/apex-dashboard): APEX Command Center — full management dashboard for AI Dev Stack. 32 pages, PWA, real-time monitoring, Hydra v2. React + Cloudflare Pages.
+- [APEX CLI](https://github.com/Nadav011/apex-cli): Command-line interface for 13 management commands, integrating Hydra v2, LangGraph, and 86 Skills. TypeScript + Bun.
+- [RTL First Dev Kit](https://github.com/Nadav011/rtl-first-dev-kit): RTL-first component library for Hebrew development. Tailwind 4.2 logical properties, a11y, i18n. Open Source.
 
 ## Technical Expertise
 - Frontend: React 19, Next.js 16, TypeScript 5.9, Tailwind CSS 4
 - Backend: Supabase (PostgreSQL, RLS, Edge Functions), Hono
 - Mobile: Flutter 3.41, Capacitor
-- AI: Claude Code, Multi-agent orchestration (LangGraph), AI SDK 6
+- AI: Claude Code, Multi-agent orchestration (LangGraph, Hydra v2), AI SDK 6, LanceDB cognitive memory
 - DevOps: GitHub Actions, Cloudflare Pages, Docker
 
 ## Services

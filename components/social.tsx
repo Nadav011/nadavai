@@ -34,7 +34,7 @@ const socialLinks = [
   },
   {
     platform: "GitHub",
-    icon: <Github className="w-5 h-5 text-[hsl(210,40%,98%)]" />,
+    icon: <Github className="w-5 h-5 text-text" />,
     descKey: "ghDesc",
     href: "https://github.com/Nadav011",
     color: "#f0f6fc",
@@ -48,7 +48,7 @@ const socialLinks = [
       </svg>
     ),
     descKey: "waDesc",
-    href: "https://wa.me/972504401760",
+    href: "https://wa.me/972505245677",
     color: "#27ca40",
     labelKey: "waLabel",
   },
@@ -75,7 +75,7 @@ export function Social() {
   )
 
   return (
-    <section ref={sectionRef} id="social" aria-label={t("title")} className="relative py-16 md:py-32 bg-[hsl(222,47%,3%)]">
+    <section ref={sectionRef} id="social" aria-label={t("title")} className="relative py-16 md:py-32 bg-bg-deep">
       <div className="absolute inset-0 grid-bg opacity-15" />
       <div className="relative max-w-7xl mx-auto px-4 md:px-8">
         <SectionHeader
@@ -92,7 +92,7 @@ export function Social() {
               href={link.href}
               target="_blank"
               rel="noreferrer"
-              className="social-card group relative block h-full p-4 md:p-6 rounded-xl border border-[hsl(215,28%,16%)] bg-[hsl(222,47%,5%)] hover:border-opacity-50 transition-all duration-500"
+              className="social-card group relative block h-full p-4 md:p-6 rounded-xl border border-border bg-bg-surface hover:border-opacity-50 transition-all duration-500"
               style={{
                 borderColor: undefined,
               }}
@@ -107,14 +107,14 @@ export function Social() {
                   {link.icon}
                 </div>
                 <div>
-                  <div className="text-sm font-semibold text-[hsl(210,40%,98%)]">{link.platform}</div>
-                  <div className="text-[10px] font-mono text-[hsl(215,20%,45%)]">{t(link.labelKey)}</div>
+                  <div className="text-sm font-semibold text-text">{link.platform}</div>
+                  <div className="text-[10px] font-mono text-text-muted">{t(link.labelKey)}</div>
                 </div>
               </div>
 
-              <p className="text-sm text-[hsl(215,20%,60%)] leading-relaxed mb-4">{t(link.descKey)}</p>
+              <p className="text-sm text-text-secondary leading-relaxed mb-4">{t(link.descKey)}</p>
 
-              <div className="flex items-center justify-end pt-3 border-t border-[hsl(215,28%,14%)]">
+              <div className="flex items-center justify-end pt-3 border-t border-border">
                 <span className="inline-flex items-center gap-1.5 text-xs font-mono transition-colors" style={{ color: link.color }}>
                   <ExternalLink className="w-3 h-3" />
                   {">> open"}
