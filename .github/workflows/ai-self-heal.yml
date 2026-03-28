@@ -145,12 +145,14 @@ jobs:
       - name: Run Claude
         id: claude
         run: |
+          set +e
           timeout 900 claude -p "$(cat /tmp/self-heal-prompt.txt)" \
             --permission-mode bypassPermissions \
             --allowed-tools "Edit,Read,Grep,Glob,Bash(pnpm run typecheck),Bash(pnpm run lint),Bash(pnpm run test),Bash(pnpm run build),Bash(git status),Bash(git diff --stat)" \
             --output-format text \
             2>&1 | tee /tmp/claude-output.txt
           CLAUDE_EXIT=${PIPESTATUS[0]}
+          set -e
           echo "exit_code=$CLAUDE_EXIT" >> "$GITHUB_OUTPUT"
           if grep -q "STATUS: FIXED" /tmp/claude-output.txt; then
             echo "status=FIXED" >> "$GITHUB_OUTPUT"
@@ -178,6 +180,11 @@ jobs:
       - name: Open draft PR
         if: steps.commit.outputs.committed == 'true'
         run: |
+          EXISTING_PR=$(gh pr list --head "${{ steps.branch_state.outputs.fix_branch }}" --base "${BRANCH}" --json number --jq '.[0].number // empty')
+          if [ -n "$EXISTING_PR" ]; then
+            echo "Draft PR already exists: $EXISTING_PR"
+            exit 0
+          fi
           cat > /tmp/self-heal-pr-body.txt <<EOF
           Auto-fix for workflow run ${FAILED_RUN_ID}.
 
