@@ -23,10 +23,10 @@ jobs:
     runs-on: [self-hosted, linux, x64, pop-os]
     timeout-minutes: 15
     steps:
-      - uses: step-security/harden-runner@v2.16.0
+      - uses: step-security/harden-runner@fa2e9d605c4eeb9fcad4c99c224cee0c6c7f3594  # v2.16.0
         with:
           egress-policy: audit
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5  # v4
 
       - name: Add Node.js (fnm) to PATH
         run: echo "$HOME/.local/share/fnm/node-versions/v24.14.0/installation/bin" >> $GITHUB_PATH
@@ -88,7 +88,27 @@ jobs:
         run: |
           VIOLATIONS="$VIOLATIONS_COUNT"
           RUN_URL="${GH_SERVER_URL}/${GH_REPOSITORY}/actions/runs/${GH_RUN_ID}"
-          BODY="$(printf '## Accessibility Violations Detected\n\n**%s WCAG violations** found on `%s` by axe-core.\n\n**Branch:** `%s`  \n**Commit:** `%s`  \n**Run:** [View full report](%s)\n\n### What to check\n- Screen reader labels (aria-label, aria-labelledby)\n- Color contrast ratios (WCAG AA: 4.5:1 text, 3:1 UI)\n- Keyboard navigation and focus indicators\n- Alternative text for images\n- Form field associations\n\n### Next steps\n1. Download the accessibility-report artifact from the failed run\n2. Fix each violation in axe-results.json\n3. Re-run the workflow to verify\n\n*Auto-created by Accessibility CI workflow.*' "$VIOLATIONS" "$GH_REF_NAME" "$GH_REF_NAME" "$GH_SHA" "$RUN_URL")"
+          BODY="$(printf '## Accessibility Violations Detected
+
+**%s WCAG violations** found on `%s` by axe-core.
+
+**Branch:** `%s`  
+**Commit:** `%s`  
+**Run:** [View full report](%s)
+
+### What to check
+- Screen reader labels (aria-label, aria-labelledby)
+- Color contrast ratios (WCAG AA: 4.5:1 text, 3:1 UI)
+- Keyboard navigation and focus indicators
+- Alternative text for images
+- Form field associations
+
+### Next steps
+1. Download the accessibility-report artifact from the failed run
+2. Fix each violation in axe-results.json
+3. Re-run the workflow to verify
+
+*Auto-created by Accessibility CI workflow.*' "$VIOLATIONS" "$GH_REF_NAME" "$GH_REF_NAME" "$GH_SHA" "$RUN_URL")"
           gh issue create \
             --title "♿ Accessibility violations: ${VIOLATIONS} WCAG issues on \`${GH_REF_NAME}\`" \
             --body "$BODY" \
@@ -102,7 +122,7 @@ jobs:
 
       - name: Upload accessibility report
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02  # v4
         with:
           name: accessibility-report-${{ github.sha }}
           path: axe-results.json
