@@ -24,7 +24,7 @@ jobs:
           echo "Skipping bot-initiated run"
           exit 0
 
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5
         with:
           ref: ${{ github.event.workflow_run.head_sha }}
 
@@ -44,7 +44,7 @@ jobs:
           BRANCH="claude-auto-fix-ci-${{ github.event.workflow_run.id }}"
           git checkout -b "$BRANCH"
 
-      - uses: anthropics/claude-code-action@v1
+      - uses: anthropics/claude-code-action@e7b588b6eaa5263c2e7c6c7b34a29e190d32ee68
         with:
           model: claude-sonnet-4-6
           max_turns: 10
