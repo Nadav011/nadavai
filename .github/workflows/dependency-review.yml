@@ -14,10 +14,10 @@ jobs:
     runs-on: [self-hosted, linux, x64, pop-os]
     timeout-minutes: 10
     steps:
-      - uses: step-security/harden-runner@v2.16.0
+      - uses: step-security/harden-runner@fa2e9d605c4eeb9fcad4c99c224cee0c6c7f3594  # v2.16.0
         with:
           egress-policy: audit
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5  # v4
       - name: Check feature availability
         id: feature_check
         env:
@@ -31,7 +31,7 @@ jobs:
       - name: Skip unsupported dependency review
         if: steps.feature_check.outputs.supported != 'true'
         run: echo "Dependency review is not supported on this repository."
-      - uses: actions/dependency-review-action@v4
+      - uses: actions/dependency-review-action@2031cfc080254a8a887f58cffee85186f0e49e48  # v4
         if: steps.feature_check.outputs.supported == 'true'
         with:
           fail-on-severity: high
