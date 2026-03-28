@@ -1,0 +1,61 @@
+name: Lockfile Sync
+
+# Auto-regenerates pnpm-lock.yaml when pnpm.overrides in package.json drifts.
+# Fires on push to main when package.json changes. No-op if lockfile is current.
+# Without this, ERR_PNPM_LOCKFILE_CONFIG_MISMATCH blocks all other workflows.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'package.json'
+  workflow_dispatch:
+
+concurrency:
+  group: lockfile-sync-${{ github.ref }}
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    name: Sync Lockfile
+    runs-on: [self-hosted, linux, x64, pop-os]
+    timeout-minutes: 10
+    steps:
+      - uses: step-security/harden-runner@fa2e9d605c4eeb9fcad4c99c224cee0c6c7f3594  # v2.16.0
+        with:
+          egress-policy: audit
+
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5  # v4
+        with:
+          fetch-depth: 1
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Add Node.js (fnm) to PATH
+        run: echo "$HOME/.local/share/fnm/node-versions/v24.14.0/installation/bin" >> $GITHUB_PATH
+
+      - name: Enable pnpm
+        run: corepack enable pnpm
+
+      - name: Regenerate lockfile if overrides drifted
+        id: regenerate
+        run: |
+          if pnpm install --frozen-lockfile 2>&1 | grep -q "LOCKFILE_CONFIG_MISMATCH"; then
+            echo "Lockfile mismatch detected — regenerating..."
+            pnpm install --no-frozen-lockfile
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "Lockfile is up-to-date"
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Commit updated lockfile
+        if: steps.regenerate.outputs.changed == 'true'
+        uses: stefanzweifel/git-auto-commit-action@b863ae1933cb653a53c021fe36dbb774e1fb9403  # v5
+        with:
+          commit_message: "chore: sync pnpm-lock.yaml with pnpm.overrides [skip ci]"
+          file_pattern: "pnpm-lock.yaml"
+          commit_user_name: "github-actions[bot]"
+          commit_user_email: "github-actions[bot]@users.noreply.github.com"
