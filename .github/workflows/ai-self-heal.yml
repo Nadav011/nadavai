@@ -88,16 +88,20 @@ jobs:
       - uses: step-security/harden-runner@v2.16.0
         with:
           egress-policy: audit
+      - name: Reset isolated checkout path
+        run: rm -rf repo
       - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5
         with:
           ref: ${{ needs.guard.outputs.branch }}
           fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
+          path: repo
       - name: Check daily budget
         run: bash ~/.claude/scripts/ci-budget-check.sh
         env:
           SELF_HEALING_DAILY_BUDGET: "5.00"
       - name: Bootstrap workspace
+        working-directory: repo
         run: |
           echo "$HOME/.local/share/fnm/node-versions/v24.14.0/installation/bin" >> $GITHUB_PATH
           corepack enable pnpm
@@ -107,6 +111,7 @@ jobs:
           gh run view "$FAILED_RUN_ID" --log-failed 2>&1 | tail -500 > /tmp/failure-logs.txt || echo "No logs available" > /tmp/failure-logs.txt
       - name: Create draft branch
         id: branch_state
+        working-directory: repo
         run: |
           BASE_SHA=$(git rev-parse HEAD)
           FIX_BRANCH="claude-auto-fix-ci-${FAILED_RUN_ID}"
@@ -144,6 +149,7 @@ jobs:
           PY
       - name: Run Claude
         id: claude
+        working-directory: repo
         run: |
           set +e
           timeout 900 claude -p "$(cat /tmp/self-heal-prompt.txt)" \
@@ -167,6 +173,7 @@ jobs:
         if: steps.claude.outputs.status == 'FIXED'
         env:
           SELF_HEALING_COMMIT_MESSAGE: "fix(ci): auto-fix failure"
+        working-directory: repo
         run: |
           bash ~/.claude/scripts/ci-templates/commit-self-healing.sh
           if [ "$(git rev-parse HEAD)" != "${{ steps.branch_state.outputs.base_sha }}" ]; then
@@ -176,9 +183,11 @@ jobs:
           fi
       - name: Push fix branch
         if: steps.commit.outputs.committed == 'true'
+        working-directory: repo
         run: git push origin HEAD
       - name: Open draft PR
         if: steps.commit.outputs.committed == 'true'
+        working-directory: repo
         run: |
           EXISTING_PR=$(gh pr list --head "${{ steps.branch_state.outputs.fix_branch }}" --base "${BRANCH}" --json number --jq '.[0].number // empty')
           if [ -n "$EXISTING_PR" ]; then
