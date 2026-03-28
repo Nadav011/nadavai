@@ -90,6 +90,9 @@ export async function generateMetadata({
         en: "https://nadavc.ai/en",
         "x-default": "https://nadavc.ai/he",
       },
+      types: {
+        "application/rss+xml": "https://nadavc.ai/feed.xml",
+      },
     },
   }
 }
@@ -98,8 +101,7 @@ export const viewport: Viewport = {
   themeColor: "#06d6e0",
   width: "device-width",
   initialScale: 1,
-  maximumScale: 1,
-  userScalable: false,
+  maximumScale: 5,
 }
 
 export function generateStaticParams() {
@@ -129,26 +131,61 @@ export default async function LocaleLayout({
         className={`${spaceGrotesk.variable} ${jetbrainsMono.variable} ${heebo.variable} font-sans antialiased overflow-x-hidden`}
         style={{ backgroundColor: "#070a13", color: "#f8fafc" }}
       >
+        {/* security-ok: JSON-LD structured data — hardcoded values, no user input */}
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{
+          dangerouslySetInnerHTML={{ // security-ok
             __html: JSON.stringify({
               "@context": "https://schema.org",
-              "@type": "Person",
-              name: "Nadav Cohen",
-              alternateName: "נדב כהן",
-              url: "https://nadavc.ai",
-              jobTitle: "Full-Stack AI Developer",
-              description: "Full-Stack Developer who builds everything with AI. 8+ production apps, 80 AI Skills, 38+ agents.",
-              knowsAbout: [
-                "Artificial Intelligence", "Full-Stack Development", "React", "Next.js",
-                "TypeScript", "Supabase", "Flutter", "Claude Code", "AI Agents",
-              ],
-              sameAs: [
-                "https://github.com/Nadav011",
-                "https://www.facebook.com/nadav.cohen.167",
-              ],
-            }),
+              "@type": "ProfilePage",
+              "@id": "https://nadavc.ai/#profilepage",
+              url: `https://nadavc.ai/${locale}`,
+              name: locale === "he" ? "נדב כהן — מפתח Full-Stack AI" : "Nadav Cohen — Full-Stack AI Developer",
+              dateCreated: "2024-01-01",
+              dateModified: "2026-03-28",
+              inLanguage: locale === "he" ? "he-IL" : "en-US",
+              mainEntity: {
+                "@type": "Person",
+                "@id": "https://nadavc.ai/#person",
+                name: "Nadav Cohen",
+                alternateName: "נדב כהן",
+                givenName: "Nadav",
+                familyName: "Cohen",
+                disambiguatingDescription: "Israeli full-stack AI developer, creator of Mexicani franchise management system and APEX Engine. Not to be confused with Prof. Nadav Cohen, the deep learning researcher at Tel Aviv University.",
+                url: "https://nadavc.ai",
+                image: {
+                  "@type": "ImageObject",
+                  url: "https://nadavc.ai/opengraph-image",
+                  width: 1200,
+                  height: 630,
+                },
+                jobTitle: "Full-Stack AI Developer",
+                description: "Full-Stack Developer who builds everything with AI. 8+ production apps, 80 AI Skills, 38+ automation agents. Specializing in React, Next.js, TypeScript, Supabase, Flutter, and multi-agent AI orchestration.",
+                knowsAbout: [
+                  "Artificial Intelligence", "Full-Stack Development", "React", "Next.js",
+                  "TypeScript", "Supabase", "Flutter", "Claude Code", "AI Agents",
+                  "Multi-Agent Orchestration", "LangGraph", "Enterprise Software",
+                ],
+                knowsLanguage: [
+                  { "@type": "Language", name: "Hebrew", alternateName: "he" },
+                  { "@type": "Language", name: "English", alternateName: "en" },
+                ],
+                nationality: { "@type": "Country", name: "Israel" },
+                address: {
+                  "@type": "PostalAddress",
+                  addressCountry: "IL",
+                  addressRegion: "Israel",
+                },
+                email: "nadav@nadavc.ai",
+                telephone: "+972-50-524-5677",
+                sameAs: [
+                  "https://github.com/Nadav011",
+                  "https://www.facebook.com/nadav.cohen.167",
+                  "https://www.linkedin.com/in/nadav-cohen-dev",
+                ],
+                mainEntityOfPage: "https://nadavc.ai",
+              },
+            }).replace(/</g, "\u003c"),
           }}
         />
         <script
@@ -157,6 +194,7 @@ export default async function LocaleLayout({
             __html: JSON.stringify({
               "@context": "https://schema.org",
               "@type": "WebSite",
+              "@id": "https://nadavc.ai/#website",
               name: "NADAV.AI",
               alternateName: "נדב כהן - מפתח AI",
               url: "https://nadavc.ai",
@@ -168,7 +206,7 @@ export default async function LocaleLayout({
                 },
                 "query-input": "required name=search_term_string",
               },
-            }),
+            }).replace(/</g, "\u003c"),
           }}
         />
         <script
@@ -190,8 +228,8 @@ export default async function LocaleLayout({
               description: "AI Development Agency specializing in Full-Stack development, enterprise systems, AI agents, and automation solutions.",
               founder: {
                 "@type": "Person",
+                "@id": "https://nadavc.ai/#person",
                 name: "Nadav Cohen",
-                alternateName: "נדב כהן",
               },
               foundingDate: "2024",
               foundingLocation: {
@@ -206,6 +244,7 @@ export default async function LocaleLayout({
               sameAs: [
                 "https://github.com/Nadav011",
                 "https://www.facebook.com/nadav.cohen.167",
+                "https://www.linkedin.com/in/nadav-cohen-dev",
               ],
               contactPoint: {
                 "@type": "ContactPoint",
@@ -227,7 +266,7 @@ export default async function LocaleLayout({
                 "Enterprise Software",
                 "Web Applications",
               ],
-            }),
+            }).replace(/</g, "\u003c"),
           }}
         />
         <script
@@ -268,9 +307,10 @@ export default async function LocaleLayout({
               slogan: "Building everything with AI",
               founder: {
                 "@type": "Person",
+                "@id": "https://nadavc.ai/#person",
                 name: "Nadav Cohen",
               },
-            }),
+            }).replace(/</g, "\u003c"),
           }}
         />
         <script
@@ -283,7 +323,7 @@ export default async function LocaleLayout({
                 {
                   "@type": "ListItem",
                   position: 1,
-                  name: "Home",
+                  name: locale === "he" ? "דף הבית" : "Home",
                   item: `https://nadavc.ai/${locale}`,
                 },
                 {
@@ -305,7 +345,7 @@ export default async function LocaleLayout({
                   item: `https://nadavc.ai/${locale}#contact`,
                 },
               ],
-            }),
+            }).replace(/</g, "\u003c"),
           }}
         />
         <script
@@ -319,7 +359,7 @@ export default async function LocaleLayout({
                 applicationCategory: "BusinessApplication",
                 operatingSystem: "Web",
                 description: "Enterprise franchise management system - 149 pages, 111 tables, 38 Edge Functions. Branch, order, inventory, and employee management.",
-                author: { "@type": "Person", name: "Nadav Cohen" },
+                author: { "@type": "Person", "@id": "https://nadavc.ai/#person", name: "Nadav Cohen" },
                 offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
               },
               {
@@ -329,7 +369,7 @@ export default async function LocaleLayout({
                 applicationCategory: "BusinessApplication",
                 operatingSystem: "Web, iOS, Android",
                 description: "Delivery management PWA with full offline support, smart sync, IndexedDB, and operation queuing.",
-                author: { "@type": "Person", name: "Nadav Cohen" },
+                author: { "@type": "Person", "@id": "https://nadavc.ai/#person", name: "Nadav Cohen" },
                 url: "https://github.com/Nadav011/cash",
                 offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
               },
@@ -340,7 +380,7 @@ export default async function LocaleLayout({
                 applicationCategory: "BusinessApplication",
                 operatingSystem: "Web",
                 description: "Shift management system with Drag & Drop, Push notifications, and interactive scheduling. 154 components, 25 hooks.",
-                author: { "@type": "Person", name: "Nadav Cohen" },
+                author: { "@type": "Person", "@id": "https://nadavc.ai/#person", name: "Nadav Cohen" },
                 offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
               },
               {
@@ -350,25 +390,34 @@ export default async function LocaleLayout({
                 applicationCategory: "DeveloperApplication",
                 operatingSystem: "Cross-platform",
                 description: "Code audit engine with 579 gates, auto-healing, automatic technology detection, and a 10x7 visual matrix.",
-                author: { "@type": "Person", name: "Nadav Cohen" },
+                author: { "@type": "Person", "@id": "https://nadavc.ai/#person", name: "Nadav Cohen" },
                 offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
               },
-            ]),
+            ]).replace(/</g, "\u003c"),
           }}
         />
+        {/* security-ok: FAQ JSON-LD — hardcoded, locale-switched */}
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{
+          dangerouslySetInnerHTML={{ // security-ok
             __html: JSON.stringify({
               "@context": "https://schema.org",
               "@type": "FAQPage",
-              mainEntity: [
+              mainEntity: locale === "he" ? [
+                {
+                  "@type": "Question",
+                  name: "מי זה נדב כהן?",
+                  acceptedAnswer: {
+                    "@type": "Answer",
+                    text: "נדב כהן הוא מפתח Full-Stack ישראלי שבונה הכל עם AI. יוצר מערכת Mexicani לניהול זכיינות (149 עמודים, 111 טבלאות), מנוע APEX Engine לביקורת קוד, ועוד 8+ אפליקציות production.",
+                  },
+                },
                 {
                   "@type": "Question",
                   name: "מה נדב כהן בונה?",
                   acceptedAnswer: {
                     "@type": "Answer",
-                    text: "נדב כהן בונה אפליקציות Full-Stack עם AI - כולל אפליקציות web, מערכות enterprise, סוכני AI ואוטומציה. יותר מ-8 אפליקציות production פעילות.",
+                    text: "נדב כהן בונה אפליקציות Full-Stack עם AI — כולל אפליקציות web, מערכות enterprise, סוכני AI ואוטומציה. יותר מ-8 אפליקציות production פעילות, 80 כלי AI ו-38+ סוכני אוטומציה.",
                   },
                 },
                 {
@@ -376,7 +425,7 @@ export default async function LocaleLayout({
                   name: "איזה טכנולוגיות נדב משתמש?",
                   acceptedAnswer: {
                     "@type": "Answer",
-                    text: "React, Next.js, TypeScript, Supabase, Flutter, Claude Code, ועוד. נדב מתמחה בשילוב בינה מלאכותית בכל שלב של הפיתוח.",
+                    text: "React 19, Next.js 16, TypeScript, Supabase, Flutter, Claude Code, LangGraph ועוד. נדב מתמחה בשילוב בינה מלאכותית בכל שלב של הפיתוח — מתכנון ועד deployment.",
                   },
                 },
                 {
@@ -384,11 +433,44 @@ export default async function LocaleLayout({
                   name: "איך אפשר ליצור קשר עם נדב?",
                   acceptedAnswer: {
                     "@type": "Answer",
-                    text: "דרך WhatsApp, אימייל nadav@nadavc.ai, או דרך טופס יצירת קשר באתר. ניתן גם לעקוב בפייסבוק ובגיטהאב.",
+                    text: "דרך WhatsApp, אימייל nadav@nadavc.ai, או דרך טופס יצירת קשר באתר nadavc.ai. ניתן גם לעקוב בגיטהאב github.com/Nadav011.",
+                  },
+                },
+              ] : [
+                {
+                  "@type": "Question",
+                  name: "Who is Nadav Cohen?",
+                  acceptedAnswer: {
+                    "@type": "Answer",
+                    text: "Nadav Cohen is an Israeli full-stack AI developer who builds everything with AI. He created Mexicani (enterprise franchise management — 149 pages, 111 tables), APEX Engine (code audit with 579 gates), and 8+ production applications with 80 AI skills and 38+ automation agents.",
+                  },
+                },
+                {
+                  "@type": "Question",
+                  name: "What does Nadav Cohen build?",
+                  acceptedAnswer: {
+                    "@type": "Answer",
+                    text: "Nadav Cohen builds full-stack web applications, enterprise systems, AI agents, and automation solutions using React, Next.js, TypeScript, Supabase, Flutter, and multi-agent AI orchestration with LangGraph and Claude Code.",
+                  },
+                },
+                {
+                  "@type": "Question",
+                  name: "What technologies does Nadav Cohen use?",
+                  acceptedAnswer: {
+                    "@type": "Answer",
+                    text: "React 19, Next.js 16, TypeScript 5.9, Supabase (PostgreSQL, RLS, Edge Functions), Flutter 3.41, Claude Code, LangGraph for multi-agent orchestration, Tailwind CSS 4, and Cloudflare Pages for deployment.",
+                  },
+                },
+                {
+                  "@type": "Question",
+                  name: "How to contact Nadav Cohen?",
+                  acceptedAnswer: {
+                    "@type": "Answer",
+                    text: "Contact Nadav via email at nadav@nadavc.ai, WhatsApp, or through the contact form at nadavc.ai. Follow his work on GitHub at github.com/Nadav011.",
                   },
                 },
               ],
-            }),
+            }).replace(/</g, "\u003c"),
           }}
         />
         <a
