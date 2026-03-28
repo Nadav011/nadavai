@@ -70,7 +70,7 @@ jobs:
 
       - name: Notify Telegram on failure
         if: failure()
-        uses: appleboy/telegram-action@master
+        uses: appleboy/telegram-action@847a2d3240d33a6137191cc89b3ad7f53e427c06
         with:
           to: ${{ secrets.TELEGRAM_CHAT_ID }}
           token: ${{ secrets.TELEGRAM_BOT_TOKEN }}
@@ -144,7 +144,7 @@ jobs:
 
       - name: Notify Telegram on success
         if: success()
-        uses: appleboy/telegram-action@master
+        uses: appleboy/telegram-action@847a2d3240d33a6137191cc89b3ad7f53e427c06
         with:
           to: ${{ secrets.TELEGRAM_CHAT_ID }}
           token: ${{ secrets.TELEGRAM_BOT_TOKEN }}
@@ -156,7 +156,7 @@ jobs:
 
       - name: Notify Telegram on failure
         if: failure()
-        uses: appleboy/telegram-action@master
+        uses: appleboy/telegram-action@847a2d3240d33a6137191cc89b3ad7f53e427c06
         with:
           to: ${{ secrets.TELEGRAM_CHAT_ID }}
           token: ${{ secrets.TELEGRAM_BOT_TOKEN }}
