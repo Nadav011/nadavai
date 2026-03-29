@@ -350,6 +350,7 @@ export function Projects() {
                             href={project.demo}
                             target="_blank"
                             rel="noreferrer"
+                            aria-label={`Demo: ${project.title}`}
                             className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all duration-300"
                             style={{
                               background: `${project.color}10`,

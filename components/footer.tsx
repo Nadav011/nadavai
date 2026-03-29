@@ -37,7 +37,7 @@ const SOCIAL_PLATFORMS = [
   },
   {
     label: "Telegram",
-    href: "https://t.me/nadavcohen",
+    href: "https://t.me/NadavAGIbot",
     icon: null, // custom SVG
     // Telegram sky-blue
     color: "oklch(0.72 0.18 230)",
@@ -191,12 +191,12 @@ function NewsletterForm() {
       </div>
 
       {status === "success" && (
-        <p id="newsletter-success" role="status" className="mt-3 text-xs text-cyan">
+        <p id="newsletter-success" role="status" aria-live="polite" className="mt-3 text-xs text-cyan">
           {t("newsletterSuccess")}
         </p>
       )}
       {status === "error" && (
-        <p id="newsletter-error" role="alert" className="mt-3 text-xs text-pink">
+        <p id="newsletter-error" role="alert" aria-live="assertive" className="mt-3 text-xs text-pink">
           {t("newsletterError")}
         </p>
       )}

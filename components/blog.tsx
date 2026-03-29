@@ -231,6 +231,7 @@ export function Blog() {
               href={post.href}
               target="_blank"
               rel="noreferrer"
+              aria-label={post.title}
               className="blog-card group relative block h-full rounded-2xl border border-border bg-bg-surface overflow-hidden hover:shadow-[0_0_30px_oklch(0_0_0_/_0.3)] transition-all duration-500"
               onMouseEnter={(e) => {
                 e.currentTarget.style.borderColor = `${post.color}40`
