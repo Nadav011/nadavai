@@ -2,13 +2,11 @@
 
 import { useRef, type ReactNode } from "react"
 import { gsap } from "gsap"
-import { SplitText as GSAPSplitText } from "gsap/dist/SplitText"
-import { ScrollTrigger } from "gsap/dist/ScrollTrigger"
+import { SplitText as GSAPSplitText } from "gsap/SplitText"
+import type { ScrollTrigger as _ST } from "gsap/ScrollTrigger" // type-only — registered in gsap-setup
 import { useGSAP } from "@gsap/react"
 
-if (typeof window !== "undefined") {
-  gsap.registerPlugin(GSAPSplitText, ScrollTrigger)
-}
+// Plugins registered globally in gsap-setup.tsx — no re-registration needed
 
 export type SplitMode = "chars" | "words" | "lines" | "chars,words" | "words,lines"
 

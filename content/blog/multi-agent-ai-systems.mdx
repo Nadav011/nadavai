@@ -1,0 +1,180 @@
+---
+title: "מערכות Multi-Agent AI — המדריך המלא"
+titleEn: "Multi-Agent AI Systems — Complete Guide"
+date: "2026-03-29"
+description: "איך לבנות מערכת AI עם 52 סוכנים אוטונומיים"
+descriptionEn: "How to build an AI system with 52 autonomous agents"
+tags: ["AI", "Multi-Agent", "Automation"]
+readingTime: 8
+---
+
+## מה זה Multi-Agent AI?
+
+**מערכת Multi-Agent AI** היא ארכיטקטורה שבה מספר סוכני AI עצמאיים עובדים יחד לביצוע משימות מורכבות. כל סוכן מתמחה בתחום ספציפי — בדיוק כמו צוות אנושי.
+
+בניגוד לסוכן בודד שמנסה לעשות הכל, מערכת multi-agent מחלקת את העבודה:
+
+- **Planner** — מתכנן את האסטרטגיה
+- **Implementer** — כותב את הקוד
+- **Verifier** — בודק את התוצאות
+- **Reviewer** — מסקר ביקורת קוד
+
+---
+
+## הארכיטקטורה של APEX Engine
+
+בפרויקט **APEX Engine** שלי, בניתי מערכת עם **52 סוכנים אוטונומיים** שרצים על 4 ספקים שונים:
+
+```typescript
+// hydra-graph.ts — LangGraph StateGraph
+import { StateGraph, END } from "@langchain/langgraph"
+import type { HydraState } from "./types"
+
+const graph = new StateGraph<HydraState>({
+  channels: {
+    task: { value: (a, b) => b ?? a },
+    provider: { value: (a, b) => b ?? a },
+    attempt: { value: (a, b) => (b ?? 0) + (a ?? 0) },
+    result: { value: (a, b) => b ?? a },
+  },
+})
+
+graph
+  .addNode("decide", decideNode)
+  .addNode("execute", executeNode)
+  .addNode("verify", verifyNode)
+  .addEdge("decide", "execute")
+  .addEdge("execute", "verify")
+  .addConditionalEdges("verify", routeAfterVerify)
+```
+
+### ספקים שנתמכים
+
+| ספק | מודל | חוזקות |
+|-----|------|---------|
+| **Claude** | Opus 4.6 | ניתוח מורכב, ביקורת |
+| **Codex** | GPT-5.4 | כתיבת קוד, debugging |
+| **Gemini** | 3.1 Pro | קונטקסט ענק, 2M tokens |
+| **Kimi** | K2 | עיבוד מהיר, batch |
+| **MiniMax** | M2.7 | batch generation, 50 concurrent |
+
+---
+
+## Bayesian Routing — הלב של המערכת
+
+הסוכן הנכון לכל משימה נבחר באמצעות **Bayesian scoring**:
+
+```python
+# score_persistence.py
+def build_bayesian_score(successes: int, failures: int) -> float:
+    """Beta distribution with Laplace smoothing."""
+    alpha = successes + 1  # Laplace smoothing
+    beta = failures + 1
+    return alpha / (alpha + beta)
+
+# After 5 successes: score ≈ 0.857
+# After 5 failures:  score ≈ 0.143
+# New provider:       score = 0.500 (uniform prior)
+```
+
+המערכת לומדת מכל הרצה — ספק שנכשל מקבל ניקוד נמוך יותר בעתיד.
+
+---
+
+## LanceDB — זיכרון סמנטי
+
+כל סוכן מחובר ל-**LanceDB** לאחסון וחיפוש זיכרונות:
+
+```python
+# cognitive_memory.py
+async def encode(self, content: str, scope: str, importance: float = 0.5):
+    """Store a memory with semantic embedding."""
+    embedding = await self.embed(content)
+    await self.table.add([{
+        "content": content,
+        "embedding": embedding,
+        "scope": scope,
+        "importance": importance,
+        "timestamp": datetime.now().isoformat(),
+    }])
+
+async def recall(self, query: str, scope: str, top_k: int = 5):
+    """Cognitive recall with weighted scoring."""
+    # score = (similarity * 0.5) + (recency * 0.3) + (importance * 0.2)
+    results = await self.table.search(query).metric("cosine").limit(top_k * 3).to_list()
+    return self._apply_cognitive_weights(results)[:top_k]
+```
+
+---
+
+## כיצד מתבצע Dispatch?
+
+כל משימה עוברת **pipeline** מוגדר:
+
+```
+PENDING/ → IN-PROGRESS/ → DONE/ → FAILED/
+```
+
+הקובץ `plan.md` מכיל frontmatter עם metadata:
+
+```yaml
+---
+id: fix-auth-bug-2026-03-29
+priority: high
+project: mexicani
+stage: implement
+role: implementer
+---
+
+## המשימה
+
+תקן את באג האימות בדף הכניסה...
+```
+
+---
+
+## מה למדתי מ-52 סוכנים
+
+### 1. הפרד אחריויות
+
+כל סוכן חייב תחום **אחד** בלבד. סוכן שמנסה לעשות הכל נכשל.
+
+### 2. Context הוא הכל
+
+סוכן ללא context מספיק יפיק תוצאות גנריות. תמיד הכנס:
+- README הפרויקט
+- קבצים רלוונטיים
+- כלל עסקי ספציפיות
+
+### 3. Verify תמיד
+
+לעולם אל תאמין לסוכן שאומר "סיימתי". תמיד הרץ **בדיקות אוטומטיות**:
+
+```bash
+# verify-execution.sh
+pnpm run typecheck && pnpm run lint && pnpm run test
+echo "PASS: all checks passed"
+```
+
+### 4. SIGTERM — לא SIGKILL
+
+```bash
+# ✅ נכון — graceful shutdown
+kill $(pgrep -f run_hydra.py)
+
+# ❌ שגוי — no cleanup
+kill -9 $(pgrep -f run_hydra.py)
+```
+
+---
+
+## סיכום
+
+מערכת Multi-Agent AI היא לא עתיד — זה **ההווה**. עם 52 סוכנים, מנסיון של חודשים, למדתי:
+
+- **חלוקה** > מרכוזיות
+- **Verification** > אמון עיוור
+- **Bayesian learning** > hard-coded routing
+- **Memory** > stateless execution
+
+הקוד המלא: [github.com/Nadav011](https://github.com/Nadav011)

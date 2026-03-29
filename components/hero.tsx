@@ -8,6 +8,7 @@ import { Magnetic } from "./magnetic"
 import { AnimatedCounter } from "./animated-counter"
 import { Spotlight } from "./spotlight"
 import { useTranslations } from "next-intl"
+import { Hero3D } from "./hero-3d"
 
 // ScrollTrigger is registered in page.tsx - no need to register again
 
@@ -116,10 +117,10 @@ export function Hero() {
 
   return (
     <section id="hero" aria-labelledby="hero-heading" className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20">
-      {/* Layered background: mesh gradient + dot grid + noise */}
-      <div className="absolute inset-0 mesh-gradient" aria-hidden="true" />
-      <div className="absolute inset-0 dot-grid opacity-[0.08]" aria-hidden="true" />
-      <div className="absolute inset-0 noise-bg" aria-hidden="true" />
+      {/* Layered background: 3D scene (z-0) → dot grid → noise → spotlight */}
+      <Hero3D />
+      <div className="absolute inset-0 dot-grid opacity-[0.08]" style={{ zIndex: 1 }} aria-hidden="true" />
+      <div className="absolute inset-0 noise-bg" style={{ zIndex: 2 }} aria-hidden="true" />
       <Spotlight />
 
       <div className="absolute inset-0" style={{ zIndex: 0 }}>

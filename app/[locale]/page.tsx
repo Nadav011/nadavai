@@ -4,7 +4,7 @@ import { Hero } from "@/components/hero"
 import { Footer } from "@/components/footer"
 import { ScrollProgress } from "@/components/scroll-progress"
 import { SmoothScroll } from "@/components/smooth-scroll"
-import { GSAPSetup } from "@/components/gsap-setup"
+import { GSAPSetupLazy } from "@/components/gsap-setup-lazy"
 import { NonCritical } from "@/components/non-critical"
 
 // Lazy load below-the-fold sections (code splitting)
@@ -24,7 +24,7 @@ const Contact = dynamic(() => import("@/components/contact").then(mod => ({ defa
 export default function Page() {
   return (
     <SmoothScroll>
-      <GSAPSetup />
+      <GSAPSetupLazy />
       <ScrollProgress />
       <NonCritical />
       <Navbar />

@@ -131,7 +131,7 @@ function NewsletterForm() {
     <div className="newsletter-section py-8 border-t border-border">
       <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
         <div>
-          <h4 className="text-sm font-semibold text-text mb-1">{t("newsletterTitle")}</h4>
+          <h3 className="text-sm font-semibold text-text mb-1">{t("newsletterTitle")}</h3>
           <p className="text-xs text-text-muted">{t("newsletterDesc")}</p>
         </div>
 
@@ -349,7 +349,7 @@ export function Footer() {
             {/* Nav link groups */}
             {footerLinks.map((group) => (
               <div key={group.title} className="footer-link-group">
-                <h4 className="text-sm font-semibold text-text mb-4">{group.title}</h4>
+                <h3 className="text-sm font-semibold text-text mb-4">{group.title}</h3>
                 <div className="flex flex-col gap-2.5">
                   {group.links.map((link) => (
                     <a
@@ -369,7 +369,7 @@ export function Footer() {
 
             {/* "Built with AI" badge column */}
             <div className="footer-link-group flex flex-col gap-4">
-              <h4 className="text-sm font-semibold text-text">{t("socialTitle")}</h4>
+              <h3 className="text-sm font-semibold text-text">{t("socialTitle")}</h3>
 
               {/* Animated gradient "Built with AI" badge */}
               <div

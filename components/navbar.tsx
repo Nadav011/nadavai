@@ -152,7 +152,7 @@ export function Navbar() {
 
         <div className="relative max-w-7xl mx-auto px-4 md:px-8 flex items-center justify-between">
           {/* Logo */}
-          <a href="#" className="flex items-center gap-3 group relative" aria-label="NADAV.AI — Back to top">
+          <a href="#" className="flex items-center gap-3 group relative" aria-label="NADAV.AI">
             <div className="relative">
               <div className="absolute inset-0 bg-cyan/20 rounded-xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
               {/* bg-gradient-to-br rtl:bg-gradient-to-bl — paired RTL variant */}
