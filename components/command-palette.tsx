@@ -175,14 +175,18 @@ export function CommandPalette() {
   return (
     <>
       {/* Trigger button in navbar */}
+      {/* aria-label starts with visible text (t("search")) to satisfy label-content-name rule.
+          The shortcut hint is conveyed by the visible <kbd> element — no need to duplicate
+          it in aria-label, which would cause a label-content-name mismatch on non-xl screens. */}
       <button
         onClick={() => setOpen(true)}
         className="hidden lg:flex items-center gap-2 px-3 py-1.5 rounded-lg border border-border bg-bg-surface text-text-muted hover:border-cyan/40 hover:text-text-secondary transition-all text-xs font-mono group/trigger"
-        aria-label={`${t("search")} (${shortcutLabel})`}
+        aria-label={t("search")}
       >
-        <Terminal className="w-3 h-3 text-cyan/70 group-hover/trigger:text-cyan transition-colors" />
+        <Terminal className="w-3 h-3 text-cyan/70 group-hover/trigger:text-cyan transition-colors" aria-hidden="true" />
         <span className="hidden xl:inline">{t("search")}</span>
         <kbd
+          aria-hidden="true"
           className="px-1.5 py-0.5 rounded border border-border text-[10px] font-mono"
           style={{
             background: "oklch(0.085 0.025 245 / 0.8)",

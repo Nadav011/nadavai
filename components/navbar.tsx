@@ -162,7 +162,7 @@ export function Navbar() {
                 </div>
               </div>
               <div className="absolute -bottom-0.5 -end-0.5 w-3 h-3 rounded-full bg-bg-deep flex items-center justify-center">
-                <div className="w-2 h-2 rounded-full bg-[#27ca40] animate-pulse" />
+                <div className="w-2 h-2 rounded-full animate-pulse" style={{ background: "oklch(0.72 0.20 145)" }} />
               </div>
             </div>
             <div className="flex flex-col">
@@ -273,7 +273,7 @@ export function Navbar() {
                 className="relative group/cta inline-flex items-center gap-2.5 px-6 py-2.5 rounded-xl text-sm font-bold overflow-hidden"
               >
                 {/* bg-gradient-to-l rtl:bg-gradient-to-r — paired RTL variant */}
-                <div className="absolute inset-0 bg-gradient-to-l rtl:bg-gradient-to-r from-cyan to-[#0abfca] transition-all duration-500 group-hover/cta:shadow-[0_0_30px_oklch(0.81_0.17_193_/_0.4)]" />
+                <div className="absolute inset-0 bg-gradient-to-l rtl:bg-gradient-to-r from-cyan to-cyan-dim transition-all duration-500 group-hover/cta:shadow-[0_0_30px_oklch(0.81_0.17_193_/_0.4)]" />
                 <div
                   aria-hidden="true"
                   className="absolute inset-0 -translate-x-full group-hover/cta:translate-x-full transition-transform duration-1000 pointer-events-none"

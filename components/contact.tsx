@@ -17,7 +17,7 @@ async function fireConfetti() {
       particleCount: 120,
       spread: 80,
       origin: { y: 0.6 },
-      colors: ["oklch(0.81 0.17 193)", "oklch(0.65 0.25 350)", "#27ca40"],
+      colors: ["oklch(0.81 0.17 193)", "oklch(0.65 0.25 350)", "oklch(0.72 0.20 145)"],
     })
   } catch {}
 }
@@ -169,16 +169,16 @@ export function Contact() {
               className="absolute start-3 top-1/2 -translate-y-1/2 w-16 h-8 pointer-events-none"
               style={{
                 background:
-                  "radial-gradient(ellipse at 30% 50%, #ff5f56 0%, transparent 45%), radial-gradient(ellipse at 50% 50%, #ffbd2e 0%, transparent 40%), radial-gradient(ellipse at 70% 50%, #27ca40 0%, transparent 45%)",
+                  "radial-gradient(ellipse at 30% 50%, oklch(0.65 0.24 25) 0%, transparent 45%), radial-gradient(ellipse at 50% 50%, oklch(0.83 0.16 85) 0%, transparent 40%), radial-gradient(ellipse at 70% 50%, oklch(0.72 0.20 145) 0%, transparent 45%)",
                 filter: "blur(6px)",
                 opacity: 0.6,
               }}
               aria-hidden="true"
             />
             <div className="flex items-center gap-1.5 relative z-10">
-              <div className="w-3 h-3 rounded-full bg-[#ff5f56] shadow-[0_0_6px_#ff5f56]" />
-              <div className="w-3 h-3 rounded-full bg-[#ffbd2e] shadow-[0_0_6px_#ffbd2e]" />
-              <div className="w-3 h-3 rounded-full bg-[#27ca40] shadow-[0_0_6px_#27ca40]" />
+              <div className="w-3 h-3 rounded-full bg-[oklch(0.65 0.24 25)] shadow-[0_0_6px_oklch(0.65 0.24 25)]" />
+              <div className="w-3 h-3 rounded-full bg-[oklch(0.83 0.16 85)] shadow-[0_0_6px_oklch(0.83 0.16 85)]" />
+              <div className="w-3 h-3 rounded-full bg-[oklch(0.72 0.20 145)] shadow-[0_0_6px_oklch(0.72 0.20 145)]" />
             </div>
             <span className="text-xs font-mono text-text-muted">contact.sh</span>
             <div className="w-12" />
@@ -197,13 +197,13 @@ export function Contact() {
                 href="https://wa.me/972505245677"
                 target="_blank"
                 rel="noreferrer"
-                className="flex items-center gap-3 p-3 rounded-lg border border-[#27ca40]/30 bg-[#27ca40]/5 hover:border-[#27ca40]/60 hover:bg-[#27ca40]/10 transition-all group"
+                className="flex items-center gap-3 p-3 rounded-lg border border-[oklch(0.72 0.20 145)]/30 bg-[oklch(0.72 0.20 145)]/5 hover:border-[oklch(0.72 0.20 145)]/60 hover:bg-[oklch(0.72 0.20 145)]/10 transition-all group"
                 style={{ transition: "all 0.3s cubic-bezier(0.16, 1, 0.3, 1)" }}
               >
-                <Phone className="w-5 h-5 text-[#27ca40] group-hover:scale-110 transition-transform" />
+                <Phone className="w-5 h-5 text-[oklch(0.72 0.20 145)] group-hover:scale-110 transition-transform" />
                 <div className="text-end">
                   <div className="text-sm font-medium text-text">WhatsApp</div>
-                  <div className="text-xs text-[#27ca40]">{t("waSubtitle")}</div>
+                  <div className="text-xs text-[oklch(0.72 0.20 145)]">{t("waSubtitle")}</div>
                 </div>
               </a>
 
@@ -286,7 +286,7 @@ export function Contact() {
             </div>
 
             <div className="flex items-center gap-3 font-mono text-sm pt-2">
-              <span className="text-[#27ca40]">{">"}</span>
+              <span className="text-[oklch(0.72 0.20 145)]">{">"}</span>
               <span className="text-text-secondary">{t("avgResponseLabel")}</span>
               <span className="text-cyan">{t("avgResponseValue")}</span>
             </div>
@@ -299,10 +299,10 @@ export function Contact() {
             href="https://calendly.com/nadavcohen"
             target="_blank"
             rel="noreferrer"
-            className="flex items-center justify-center gap-3 p-4 rounded-xl border border-[#4f46e5]/30 bg-[#4f46e5]/5 hover:border-[#4f46e5]/50 hover:bg-[#4f46e5]/10 transition-all group"
+            className="flex items-center justify-center gap-3 p-4 rounded-xl border border-[oklch(0.50 0.15 270)]/30 bg-[oklch(0.50 0.15 270)]/5 hover:border-[oklch(0.50 0.15 270)]/50 hover:bg-[oklch(0.50 0.15 270)]/10 transition-all group"
           >
             <svg
-              className="w-5 h-5 text-[#4f46e5]"
+              className="w-5 h-5 text-[oklch(0.50 0.15 270)]"
               viewBox="0 0 24 24"
               fill="none"
               stroke="currentColor"
@@ -318,7 +318,7 @@ export function Contact() {
             </svg>
             <div className="text-end">
               <div className="text-sm font-medium text-text">{t("calendlyTitle")}</div>
-              <div className="text-xs text-[#4f46e5]">{t("calendlySubtitle")}</div>
+              <div className="text-xs text-[oklch(0.50 0.15 270)]">{t("calendlySubtitle")}</div>
             </div>
           </a>
         </div>
@@ -334,7 +334,7 @@ export function Contact() {
               target="_blank"
               rel="noreferrer"
               onClick={fireConfetti}
-              className="group relative inline-flex items-center justify-center gap-3 px-8 py-4 md:px-10 md:py-5 rounded-xl text-base md:text-lg font-bold text-bg-deep bg-gradient-to-l rtl:bg-gradient-to-r from-[#27ca40] to-[#22a838] hover:shadow-[0_0_50px_oklch(0.65_0.22_145_/_0.5),0_0_90px_oklch(0.65_0.22_145_/_0.2)] transition-all duration-500 w-full sm:w-auto overflow-hidden"
+              className="group relative inline-flex items-center justify-center gap-3 px-8 py-4 md:px-10 md:py-5 rounded-xl text-base md:text-lg font-bold text-bg-deep bg-gradient-to-l rtl:bg-gradient-to-r from-[oklch(0.72 0.20 145)] to-[oklch(0.60 0.18 145)] hover:shadow-[0_0_50px_oklch(0.65_0.22_145_/_0.5),0_0_90px_oklch(0.65_0.22_145_/_0.2)] transition-all duration-500 w-full sm:w-auto overflow-hidden"
             >
               {/* Inner shimmer sweep */}
               <span

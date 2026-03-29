@@ -13,11 +13,11 @@ gsap.registerPlugin(ScrollTrigger)
 
 // Language color dots — standard GitHub language colors
 const langColors: Record<string, string> = {
-  ts: "#3178c6",
-  tsx: "#3178c6",
-  py: "#3572A5",
-  dart: "#00B4AB",
-  js: "#f1e05a",
+  ts: "oklch(0.55 0.15 250)",
+  tsx: "oklch(0.55 0.15 250)",
+  py: "oklch(0.50 0.12 240)",
+  dart: "oklch(0.68 0.14 185)",
+  js: "oklch(0.88 0.14 95)",
 }
 
 const repos = [

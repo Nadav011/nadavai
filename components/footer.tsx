@@ -334,7 +334,7 @@ export function Footer() {
               <p className="text-sm text-text-muted leading-relaxed mb-4">{t("brand")}</p>
 
               <div className="flex items-center gap-2 mb-5">
-                <div className="w-1.5 h-1.5 rounded-full bg-[#27ca40] animate-pulse" />
+                <div className="w-1.5 h-1.5 rounded-full bg-[oklch(0.72_0.20_145)] animate-pulse" />
                 <span className="text-xs font-mono text-text-muted">{t("available")}</span>
               </div>
 

@@ -33,7 +33,7 @@ export function YouTube() {
       duration: "18:42",
       views: "2.1K",
       date: "2026-01",
-      color: "#06d6e0",
+      color: "oklch(0.81 0.17 193)",
     },
     {
       title: t("v2Title"),
@@ -43,7 +43,7 @@ export function YouTube() {
       duration: "24:15",
       views: "5.3K",
       date: "2026-01",
-      color: "#e84393",
+      color: "oklch(0.65 0.25 350)",
     },
     {
       title: t("v3Title"),
@@ -53,7 +53,7 @@ export function YouTube() {
       duration: "15:30",
       views: "3.8K",
       date: "2025-12",
-      color: "#4f46e5",
+      color: "oklch(0.50 0.15 270)",
     },
     {
       title: t("v4Title"),
@@ -63,7 +63,7 @@ export function YouTube() {
       duration: "8:45",
       views: "1.7K",
       date: "2025-12",
-      color: "#06d6e0",
+      color: "oklch(0.81 0.17 193)",
     },
     {
       title: t("v5Title"),
@@ -73,7 +73,7 @@ export function YouTube() {
       duration: "22:10",
       views: "4.2K",
       date: "2025-11",
-      color: "#e84393",
+      color: "oklch(0.65 0.25 350)",
     },
     {
       title: t("v6Title"),
@@ -83,7 +83,7 @@ export function YouTube() {
       duration: "19:55",
       views: "2.9K",
       date: "2025-11",
-      color: "#4f46e5",
+      color: "oklch(0.50 0.15 270)",
     },
   ]
 
@@ -279,7 +279,7 @@ export function YouTube() {
             href="https://youtube.com/@nadavai"
             target="_blank"
             rel="noreferrer"
-            className="yt-cta group flex items-center gap-3 px-8 py-4 rounded-xl bg-gradient-to-l rtl:bg-gradient-to-r from-[#FF0000] to-[#cc0000] text-white font-bold text-sm hover:shadow-[0_0_40px_rgba(255,0,0,0.3)] transition-all duration-500 min-h-11"
+            className="yt-cta group flex items-center gap-3 px-8 py-4 rounded-xl bg-gradient-to-l rtl:bg-gradient-to-r from-[oklch(0.55_0.26_27)] to-[oklch(0.45_0.22_27)] text-white font-bold text-sm hover:shadow-[0_0_40px_oklch(0.55_0.26_27_/_0.3)] transition-all duration-500 min-h-11"
           >
             <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
               <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />

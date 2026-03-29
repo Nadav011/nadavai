@@ -138,7 +138,11 @@ export function Guides() {
                         <span className="text-[10px] font-mono">soon</span>
                       </div>
                     </div>
-                    <button aria-label={t(guide.title)} className="text-xs font-mono text-cyan hover:text-pink transition-colors duration-300">
+                    {/* aria-label starts with visible text to satisfy label-content-name rule */}
+                    <button
+                      aria-label={`${guide.type === "video" ? ">> play" : ">> read"}: ${t(guide.title)}`}
+                      className="text-xs font-mono text-cyan hover:text-pink transition-colors duration-300"
+                    >
                       {guide.type === "video" ? ">> play" : ">> read"}
                     </button>
                   </div>

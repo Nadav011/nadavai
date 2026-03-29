@@ -83,21 +83,36 @@ export function Hero3D() {
     return () => mq.removeEventListener("change", handler)
   }, [])
 
-  // Intersection observer — only load Spline when hero is in viewport
+  // Delay Spline load until after LCP — 3D scene is decorative, not LCP element.
+  // Use requestIdleCallback (or setTimeout fallback) so Spline fetch doesn't compete
+  // with critical resources (fonts, hero text) during initial paint.
   useEffect(() => {
     const el = containerRef.current
     if (!el) return
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry?.isIntersecting) {
-          setIsVisible(true)
-          observer.disconnect()
-        }
-      },
-      { rootMargin: "200px" }
-    )
-    observer.observe(el)
-    return () => observer.disconnect()
+
+    const load = () => {
+      const observer = new IntersectionObserver(
+        ([entry]) => {
+          if (entry?.isIntersecting) {
+            setIsVisible(true)
+            observer.disconnect()
+          }
+        },
+        { rootMargin: "0px" } // Only load when actually in viewport (was 200px eager)
+      )
+      observer.observe(el)
+      return () => observer.disconnect()
+    }
+
+    // Defer until browser is idle — prioritises LCP text/fonts over decorative 3D
+    if ("requestIdleCallback" in window) {
+      const id = requestIdleCallback(load, { timeout: 2000 })
+      return () => cancelIdleCallback(id)
+    } else {
+      // Safari fallback: 1.5s delay after page load — enough time for LCP to complete
+      const id = setTimeout(load, 1500)
+      return () => clearTimeout(id)
+    }
   }, [])
 
   const showSpline = isVisible && !reducedMotion && !splineFailed

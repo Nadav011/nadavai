@@ -125,8 +125,9 @@ export function Hero() {
 
       <div className="absolute inset-0" style={{ zIndex: 0 }}>
         <div className="absolute inset-0 grid-bg opacity-15" />
-        <div className="absolute w-[800px] h-[800px] bg-[#06d6e0]/4 rounded-full blur-[180px] animate-pulse-glow" style={{ top: "30%", left: "50%", transform: "translate(-50%, -50%)" }} />
-        <div className="absolute w-[500px] h-[500px] bg-[#06d6e0]/3 rounded-full blur-[150px] animate-pulse-glow" style={{ bottom: "20%", insetInlineStart: "30%", animationDelay: "2s" }} />
+        {/* responsive-ok: decorative glow orbs, fixed size intentional */}
+        <div className="absolute rounded-full blur-[180px] animate-pulse-glow" style={{ width: "min(800px, 90vw)", height: "min(800px, 90vw)", top: "30%", insetInlineStart: "50%", transform: "translate(-50%, -50%)", background: "oklch(0.81 0.17 193 / 0.04)" }} />
+        <div className="absolute rounded-full blur-[150px] animate-pulse-glow" style={{ width: "min(500px, 70vw)", height: "min(500px, 70vw)", bottom: "20%", insetInlineStart: "30%", animationDelay: "2s", background: "oklch(0.81 0.17 193 / 0.03)" }} />
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
           <div className="w-full h-[1px] bg-gradient-to-l rtl:bg-gradient-to-r from-transparent via-cyan/15 to-transparent" style={{ animation: "scan-line 8s linear infinite" }} />
         </div>
@@ -139,8 +140,8 @@ export function Hero() {
             className="inline-flex items-center gap-3 px-5 py-2 rounded-full border border-cyan/20 bg-cyan/5"
           >
             <span className="relative flex h-2 w-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#27ca40] opacity-75" />
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-[#27ca40]" />
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[oklch(0.72_0.20_145)] opacity-75" />
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-[oklch(0.72_0.20_145)]" />
             </span>
             <span className="text-xs font-mono text-cyan tracking-wider">{t("badge")}</span>
           </div>
@@ -184,7 +185,7 @@ export function Hero() {
             <Magnetic strength={0.2}>
               <a
                 href="#projects"
-                className="group relative inline-flex items-center justify-center gap-3 px-8 py-4 rounded-xl text-base font-bold text-bg-deep bg-gradient-to-l rtl:bg-gradient-to-r from-[#06d6e0] to-[#0abfca] hover:shadow-[0_0_40px_oklch(0.81_0.17_193_/_0.4)] transition-all duration-500 w-full sm:w-auto"
+                className="group relative inline-flex items-center justify-center gap-3 px-8 py-4 rounded-xl text-base font-bold text-bg-deep bg-gradient-to-l rtl:bg-gradient-to-r from-cyan to-cyan-dim hover:shadow-[0_0_40px_oklch(0.81_0.17_193_/_0.4)] transition-all duration-500 w-full sm:w-auto"
               >
                 {t("cta1")}
                 <ArrowDown className="w-4 h-4 group-hover:translate-y-1 transition-transform" />
