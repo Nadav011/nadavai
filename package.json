@@ -91,7 +91,8 @@
       "serialize-javascript": ">=7.0.5",
       "flatted": ">=3.4.2",
       "minimatch@^3": ">=3.1.4",
-      "minimatch@^9": ">=9.0.7"
+      "minimatch@^9": ">=9.0.7",
+      "brace-expansion@^4": "5.0.5"
     }
   }
 }
