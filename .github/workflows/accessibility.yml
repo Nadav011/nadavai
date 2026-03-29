@@ -88,27 +88,30 @@ jobs:
         run: |
           VIOLATIONS="$VIOLATIONS_COUNT"
           RUN_URL="${GH_SERVER_URL}/${GH_REPOSITORY}/actions/runs/${GH_RUN_ID}"
-          BODY="$(printf '## Accessibility Violations Detected
+          BODY="$(cat <<EOF
+          ## Accessibility Violations Detected
 
-**%s WCAG violations** found on `%s` by axe-core.
+          **${VIOLATIONS} WCAG violations** found on \`${GH_REF_NAME}\` by axe-core.
 
-**Branch:** `%s`  
-**Commit:** `%s`  
-**Run:** [View full report](%s)
+          **Branch:** \`${GH_REF_NAME}\`  
+          **Commit:** \`${GH_SHA}\`  
+          **Run:** [View full report](${RUN_URL})
 
-### What to check
-- Screen reader labels (aria-label, aria-labelledby)
-- Color contrast ratios (WCAG AA: 4.5:1 text, 3:1 UI)
-- Keyboard navigation and focus indicators
-- Alternative text for images
-- Form field associations
+          ### What to check
+          - Screen reader labels (aria-label, aria-labelledby)
+          - Color contrast ratios (WCAG AA: 4.5:1 text, 3:1 UI)
+          - Keyboard navigation and focus indicators
+          - Alternative text for images
+          - Form field associations
 
-### Next steps
-1. Download the accessibility-report artifact from the failed run
-2. Fix each violation in axe-results.json
-3. Re-run the workflow to verify
+          ### Next steps
+          1. Download the accessibility-report artifact from the failed run
+          2. Fix each violation in axe-results.json
+          3. Re-run the workflow to verify
 
-*Auto-created by Accessibility CI workflow.*' "$VIOLATIONS" "$GH_REF_NAME" "$GH_REF_NAME" "$GH_SHA" "$RUN_URL")"
+          *Auto-created by Accessibility CI workflow.*
+          EOF
+          )"
           gh issue create \
             --title "♿ Accessibility violations: ${VIOLATIONS} WCAG issues on \`${GH_REF_NAME}\`" \
             --body "$BODY" \
