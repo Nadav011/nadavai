@@ -1,5 +1,4 @@
 import type { Metadata } from "next"
-import { getTranslations } from "next-intl/server"
 import { Link } from "@/i18n/routing"
 import { getAllPosts } from "@/lib/blog"
 import type { BlogPostMeta } from "@/lib/blog"
@@ -133,7 +132,6 @@ export default async function BlogPage({
 }) {
   const { locale } = await params
   const isHe = locale === "he"
-  await getTranslations({ locale, namespace: "layout" })
   const posts = getAllPosts()
 
   return (

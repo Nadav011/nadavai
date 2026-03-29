@@ -20,6 +20,8 @@ export interface BlogPost {
 export type BlogPostMeta = Omit<BlogPost, "content">
 
 function parseFrontmatter(slug: string): BlogPost | null {
+  // Prevent path traversal — only allow slug-safe characters
+  if (!/^[a-zA-Z0-9_-]+$/.test(slug)) return null
   const filePath = path.join(BLOG_DIR, `${slug}.mdx`)
 
   if (!fs.existsSync(filePath)) return null

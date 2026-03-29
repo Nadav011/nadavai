@@ -23,7 +23,7 @@ function FallbackOrbs() {
           width: "min(700px, 90vw)",
           height: "min(700px, 90vw)",
           top: "50%",
-          insetInlineStart: "50%",  // rtl-ok
+          left: "50%",  // rtl-ok: physical left is correct for symmetrical centering
           transform: "translate(-50%, -52%)",
           background:
             "radial-gradient(circle at 40% 40%, oklch(0.81 0.17 193 / 0.18) 0%, oklch(0.81 0.17 193 / 0.06) 50%, transparent 70%)",
@@ -84,34 +84,31 @@ export function Hero3D() {
   }, [])
 
   // Delay Spline load until after LCP — 3D scene is decorative, not LCP element.
-  // Use requestIdleCallback (or setTimeout fallback) so Spline fetch doesn't compete
-  // with critical resources (fonts, hero text) during initial paint.
   useEffect(() => {
     const el = containerRef.current
     if (!el) return
 
+    let observer: IntersectionObserver | null = null
+
     const load = () => {
-      const observer = new IntersectionObserver(
+      observer = new IntersectionObserver(
         ([entry]) => {
           if (entry?.isIntersecting) {
             setIsVisible(true)
-            observer.disconnect()
+            observer?.disconnect()
           }
         },
-        { rootMargin: "0px" } // Only load when actually in viewport (was 200px eager)
+        { rootMargin: "0px" }
       )
       observer.observe(el)
-      return () => observer.disconnect()
     }
 
-    // Defer until browser is idle — prioritises LCP text/fonts over decorative 3D
     if ("requestIdleCallback" in window) {
       const id = requestIdleCallback(load, { timeout: 2000 })
-      return () => cancelIdleCallback(id)
+      return () => { cancelIdleCallback(id); observer?.disconnect() }
     } else {
-      // Safari fallback: 1.5s delay after page load — enough time for LCP to complete
       const id = setTimeout(load, 1500)
-      return () => clearTimeout(id)
+      return () => { clearTimeout(id); observer?.disconnect() }
     }
   }, [])
 

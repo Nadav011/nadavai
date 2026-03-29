@@ -179,7 +179,7 @@ export default async function BlogPostPage({
           <div className="mt-12 pt-8 border-t border-border/40">
             <Link
               href="/blog"
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border border-border
+              className="inline-flex items-center gap-2 px-5 py-3 rounded-xl border border-border
                          bg-bg-elevated text-sm font-medium text-text-secondary
                          hover:text-cyan hover:border-cyan/30 transition-all duration-300 group"
             >

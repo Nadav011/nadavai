@@ -16,7 +16,7 @@ export default function NotFound() {
             width: "min(600px, 80vw)",
             height: "min(600px, 80vw)",
             top: "20%",
-            insetInlineStart: "50%", // rtl-ok: centered
+            left: "50%", // rtl-ok: physical left correct for symmetrical centering
             transform: "translateX(-50%)",
             background: "oklch(0.81 0.17 193 / 0.05)",
           }}

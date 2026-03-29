@@ -87,7 +87,7 @@ export default function Loading() {
       </div>
 
       {/* Loading text */}
-      <span className="sr-only">Loading...</span>
+      <span className="sr-only">טוען...</span>
     </div>
   )
 }
