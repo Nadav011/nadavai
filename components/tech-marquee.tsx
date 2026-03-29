@@ -28,6 +28,7 @@ function TechItem({ tech }: { tech: string }) {
 export function TechMarquee() {
   return (
     <section
+      id="tech-marquee"
       aria-label="Tech stack and tools"
       className="relative py-8 md:py-12 border-y border-border overflow-hidden bg-bg-deep"
     >

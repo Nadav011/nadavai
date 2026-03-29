@@ -287,6 +287,7 @@ export function Footer() {
 
   return (
     <footer
+      id="footer"
       ref={sectionRef}
       className="relative border-t border-border bg-bg-deep section-glow-top"
     >
