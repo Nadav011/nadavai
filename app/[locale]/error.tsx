@@ -1,9 +1,9 @@
-'use client'
+"use client"
 
-import { useEffect } from 'react'
-import { useTranslations } from 'next-intl'
-import { AlertTriangle, RefreshCw, Home } from 'lucide-react'
-import { Link } from '@/i18n/routing'
+import { useEffect } from "react"
+import { useTranslations } from "next-intl"
+import { AlertTriangle, RefreshCw, Home } from "lucide-react"
+import { Link } from "@/i18n/routing"
 
 export default function Error({
   error,
@@ -12,42 +12,48 @@ export default function Error({
   error: Error & { digest?: string }
   reset: () => void
 }) {
-  const t = useTranslations('error')
+  const t = useTranslations("error")
 
   useEffect(() => {
-    // Log error to monitoring service (e.g., Sentry)
-    console.error('Page Error:', error)
+    console.error("Page Error:", error) // DEBUG — error boundary logging
   }, [error])
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4 bg-[hsl(222,47%,4%)]">
-      <div className="max-w-md w-full text-center">
+    <div className="min-h-screen flex items-center justify-center px-4 bg-bg-deep">
+      {/* Background */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
+        <div className="absolute inset-0 dot-grid opacity-[0.04]" />
+      </div>
+
+      <div className="relative max-w-md w-full text-center">
         {/* Error Icon */}
         <div className="relative inline-flex items-center justify-center w-20 h-20 mb-6">
-          <div className="absolute inset-0 bg-[#e84393]/20 rounded-full blur-xl animate-pulse" />
-          <div className="relative flex items-center justify-center w-20 h-20 rounded-full bg-gradient-to-br from-[#e84393] to-[#ff5f56] p-[2px]">
-            <div className="flex items-center justify-center w-full h-full rounded-full bg-[hsl(222,47%,4%)]">
-              <AlertTriangle className="w-10 h-10 text-[#e84393]" aria-hidden="true" />
+          <div
+            className="absolute inset-0 rounded-full blur-xl animate-pulse"
+            style={{ background: "oklch(0.65 0.25 350 / 0.2)" }}
+          />
+          <div
+            className="relative flex items-center justify-center w-20 h-20 rounded-full p-[2px]"
+            style={{
+              background: "linear-gradient(135deg, oklch(0.65 0.25 350), oklch(0.55 0.22 25))", // rtl-ok: diagonal
+            }}
+          >
+            <div className="flex items-center justify-center w-full h-full rounded-full bg-bg-deep">
+              <AlertTriangle className="w-10 h-10 text-pink" aria-hidden="true" />
             </div>
           </div>
         </div>
 
         {/* Error Message */}
-        <h1 className="text-3xl md:text-4xl font-bold text-[hsl(210,40%,98%)] mb-3">
-          {t('title')}
-        </h1>
-        <p className="text-base text-[hsl(215,20%,55%)] mb-8 leading-relaxed">
-          {t('description')}
-        </p>
+        <h1 className="text-3xl md:text-4xl font-bold text-text mb-3">{t("title")}</h1>
+        <p className="text-base text-text-muted mb-8 leading-relaxed">{t("description")}</p>
 
         {/* Error Details (only in development) */}
-        {process.env.NODE_ENV === 'development' && error.message && (
-          <div className="mb-8 p-4 rounded-lg bg-[hsl(222,47%,6%)] border border-[hsl(215,28%,16%)] text-start">
-            <p className="text-xs font-mono text-[#e84393] break-words">{error.message}</p>
+        {process.env.NODE_ENV === "development" && error.message && (
+          <div className="mb-8 p-4 rounded-lg bg-bg-surface border border-border text-start">
+            <p className="text-xs font-mono text-pink break-words">{error.message}</p>
             {error.digest && (
-              <p className="text-[10px] font-mono text-[hsl(215,20%,45%)] mt-2">
-                Digest: {error.digest}
-              </p>
+              <p className="text-[10px] font-mono text-text-dim mt-2">Digest: {error.digest}</p>
             )}
           </div>
         )}
@@ -56,24 +62,25 @@ export default function Error({
         <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
           <button
             onClick={reset}
-            className="group relative inline-flex items-center gap-2.5 px-6 py-3 rounded-xl text-sm font-bold text-[hsl(222,47%,4%)] bg-gradient-to-l from-[#06d6e0] to-[#0abfca] hover:shadow-[0_0_30px_hsl(187,92%,55%,0.4)] transition-all duration-500"
+            className="group relative inline-flex items-center gap-2.5 px-6 py-3 rounded-xl text-sm font-bold text-bg-deep bg-gradient-to-l rtl:bg-gradient-to-r from-cyan to-cyan-dim hover:shadow-[0_0_30px_oklch(0.81_0.17_193_/_0.4)] transition-all duration-500"
           >
-            <RefreshCw className="w-4 h-4 group-hover:rotate-180 transition-transform duration-500" aria-hidden="true" />
-            {t('retry')}
+            <RefreshCw
+              className="w-4 h-4 group-hover:rotate-180 transition-transform duration-500"
+              aria-hidden="true"
+            />
+            {t("retry")}
           </button>
           <Link
             href="/"
-            className="inline-flex items-center gap-2.5 px-6 py-3 rounded-xl text-sm font-medium text-[hsl(210,40%,98%)] border border-[hsl(215,28%,20%)] bg-[hsl(222,47%,7%)] hover:border-[#06d6e0]/40 transition-all duration-500"
+            className="inline-flex items-center gap-2.5 px-6 py-3 rounded-xl text-sm font-medium text-text border border-border bg-bg-elevated hover:border-cyan/40 transition-all duration-500"
           >
             <Home className="w-4 h-4" aria-hidden="true" />
-            {t('home')}
+            {t("home")}
           </Link>
         </div>
 
         {/* Footer hint */}
-        <p className="mt-8 text-xs font-mono text-[hsl(215,20%,45%)]">
-          {t('hint')}
-        </p>
+        <p className="mt-8 text-xs font-mono text-text-dim">{t("hint")}</p>
       </div>
     </div>
   )

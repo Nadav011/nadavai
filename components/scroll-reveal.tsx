@@ -2,10 +2,9 @@
 
 import { useRef, type ReactNode } from "react"
 import { gsap } from "gsap"
-import { ScrollTrigger } from "gsap/ScrollTrigger"
 import { useGSAP } from "@gsap/react"
 
-gsap.registerPlugin(ScrollTrigger)
+// ScrollTrigger is registered globally in gsap-setup.tsx — no need to re-register here
 
 interface ScrollRevealProps {
   children: ReactNode

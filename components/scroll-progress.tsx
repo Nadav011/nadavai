@@ -1,5 +1,3 @@
-"use client"
-
 export function ScrollProgress() {
   return (
     <div className="fixed top-0 inset-x-0 z-[60] h-[2px]">

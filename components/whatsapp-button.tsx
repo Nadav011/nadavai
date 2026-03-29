@@ -101,11 +101,11 @@ export function WhatsAppButton() {
         href="https://wa.me/972505245677"
         target="_blank"
         rel="noreferrer"
-        className="group relative flex items-center justify-center w-12 h-12 md:w-14 md:h-14 rounded-full bg-[#25D366] shadow-[0_4px_20px_rgba(37,211,102,0.4)] hover:shadow-[0_4px_30px_rgba(37,211,102,0.6)] hover:scale-110 transition-all duration-300 opacity-0"
+        className="group relative flex items-center justify-center w-12 h-12 md:w-14 md:h-14 rounded-full bg-[oklch(0.72_0.20_155)] shadow-[0_4px_20px_oklch(0.72_0.20_155_/_0.4)] hover:shadow-[0_4px_30px_oklch(0.72_0.20_155_/_0.6)] hover:scale-110 transition-all duration-300 opacity-0"
         aria-label={t("ariaLabel")}
       >
         {/* Ping animation */}
-        <span className="absolute inset-0 rounded-full bg-[#25D366] animate-ping opacity-20" />
+        <span className="absolute inset-0 rounded-full bg-[oklch(0.72_0.20_155)] animate-ping opacity-20" />
         <Phone className="w-6 h-6 text-white relative z-10" />
       </a>
     </div>

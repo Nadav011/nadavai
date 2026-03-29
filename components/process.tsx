@@ -14,10 +14,10 @@ export function Process() {
   const sectionRef = useRef<HTMLElement>(null)
 
   const steps = [
-    { icon: Phone, step: "01", title: t("step1Title"), description: t("step1Desc"), color: "#06d6e0" },
-    { icon: Brain, step: "02", title: t("step2Title"), description: t("step2Desc"), color: "#e84393" },
-    { icon: Zap, step: "03", title: t("step3Title"), description: t("step3Desc"), color: "#06d6e0" },
-    { icon: Rocket, step: "04", title: t("step4Title"), description: t("step4Desc"), color: "#e84393" },
+    { icon: Phone, step: "01", title: t("step1Title"), description: t("step1Desc"), color: "oklch(0.81 0.17 193)" },
+    { icon: Brain, step: "02", title: t("step2Title"), description: t("step2Desc"), color: "oklch(0.65 0.25 350)" },
+    { icon: Zap, step: "03", title: t("step3Title"), description: t("step3Desc"), color: "oklch(0.81 0.17 193)" },
+    { icon: Rocket, step: "04", title: t("step4Title"), description: t("step4Desc"), color: "oklch(0.65 0.25 350)" },
   ]
 
   useGSAP(

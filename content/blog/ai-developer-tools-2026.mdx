@@ -1,0 +1,427 @@
+---
+title: "כלי AI למפתחים ב-2026 — המדריך המלא"
+titleEn: "AI Developer Tools in 2026 — Complete Guide"
+date: "2026-03-20"
+description: "סקירה מקיפה של כלי הפיתוח הכי חזקים: Claude Code, Cursor, Codex, Gemini CLI, Kimi"
+descriptionEn: "Comprehensive review of the most powerful dev tools: Claude Code, Cursor, Codex, Gemini CLI, Kimi"
+tags: ["AI Tools", "Developer Experience", "2026"]
+readingTime: 12
+---
+
+## שנת 2026 — AI הפך לתשתית, לא לכלי
+
+לפני שנתיים, AI assistants היו novelty. היום, מפתח שלא משתמש ב-AI מאבד **30-50% מפרודקטיביות** יחסית לעמיתיו. לא מדובר עוד בהשלמת קוד — אלא בסוכנים אוטונומיים שמבצעים משימות מלאות.
+
+בניתי מערכת עם **52 סוכנים** ו-**86 skills** תוך שימוש בכל הכלים הגדולים. הנה הסקירה הכנה ביותר שתמצאו.
+
+---
+
+## Claude Code — המוח של ה-Workflow
+
+**Claude Code** (Anthropic) הוא ה-CLI שהפך את הפיתוח שלי. זה לא autocomplete — זה agent מלא שרץ בטרמינל.
+
+### מה שמייחד אותו: Hooks
+
+**Hooks** הם מה ש-Claude Code עושה ייחודי. הם scripts שרצים אוטומטית לפני/אחרי כל פעולה:
+
+```json
+// ~/.claude/settings.json — PostToolUse hook
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash ~/.claude/hooks/post-edit-format.sh"
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+```bash
+# post-edit-format.sh — Biome format אוטומטי אחרי כל edit
+TOOL_FILE=$(echo "$STDIN" | python3 -c "import sys,json; print(json.load(sys.stdin)['tool_input']['path'])")
+EXT="${TOOL_FILE##*.}"
+
+if [[ "$EXT" =~ ^(ts|tsx|js|jsx)$ ]]; then
+  biome format --write "$TOOL_FILE" 2>/dev/null
+fi
+```
+
+**79 hook files** פעילים במערכת שלי — כל אחד עושה דבר אחד קטן, אבל ביחד הם יוצרים מערכת שמבצעת verification אוטומטי על כל שינוי.
+
+### Skills — שפה מותאמת אישית
+
+**Skills** הם slash commands מותאמים אישית. דוגמה:
+
+```bash
+# /rtl-fix — בדיקת RTL אוטומטית
+claude /rtl-fix src/components/
+
+# /test-gen — יצירת tests אוטומטית
+claude /test-gen src/hooks/useOrders.ts
+
+# /security-audit — audit RLS ו-API endpoints
+claude /security-audit
+```
+
+86 skills פעילים — כל workflow שחוזר על עצמו הפך ל-command.
+
+### Agents — Delegation מלאה
+
+```bash
+# שלח משימה ל-52 agents
+claude /dispatch "refactor the payment module to support multiple currencies"
+```
+
+**ה-agent בוחר** את הכלי הנכון (Codex/Gemini/Kimi/MiniMax) לפי סוג המשימה, מריץ את העבודה, ומחזיר תוצאות מאומתות.
+
+**מתי להשתמש:** כל משימה שלוקחת >5 דקות — dispatch ל-agent. תרוויח את הזמן.
+
+---
+
+## Cursor — ה-IDE שמבין Context
+
+**Cursor** הוא VS Code עם Claude/GPT מובנה. הוא לא מחליף Claude Code — הוא משלים אותו.
+
+### מה Cursor עושה טוב
+
+**Codebase-aware completions:**
+```typescript
+// Cursor יודע ש-useOrders מחזיר Order[]
+// ומציע completion מדויק בהתאם ל-types שלך
+const orders = useOrders() // → orders: Order[]
+orders.map(order => order.items) // → יודע ש-items הוא OrderItem[]
+```
+
+**Ctrl+K — Inline edits:**
+מסמן קוד + מתאר מה רוצים → Cursor כותב inline. מהיר מאוד לrewrites קטנים.
+
+**`@codebase` — שאלות על הפרויקט:**
+```
+@codebase how does authentication work in this project?
+```
+Cursor סורק את הקוד ומסביר את ה-flow — שימושי מאוד כשמצטרפים לפרויקט חדש.
+
+### מגבלות Cursor
+
+- **Context window קטן** — לא מתאים למשימות מורכבות שדורשות הבנת פרויקט שלם
+- **לא אוטונומי** — לא יריץ tests, לא יעשה verification, לא ינהל files בעצמו
+- **תלוי ב-IDE** — אין CLI, אין automation
+
+**מתי להשתמש:** קידוד פעיל ב-IDE, code review מהיר, שאלות על codebase.
+
+---
+
+## Codex — קוד בלבד, אבל מעולה
+
+**Codex CLI** (OpenAI) הוא GPT-5.4 עם model xhigh reasoning, ממוקד ב-code generation.
+
+### הגדרה אופטימלית
+
+```toml
+# ~/.codex/config.toml
+model = "gpt-5.4"
+model_reasoning_effort = "xhigh"
+approval_policy = "never"   # פועל בלי לשאול
+sandbox = "danger-full-access"
+multi_agent = true
+```
+
+### מה Codex עושה הכי טוב
+
+**Code generation מורכב:**
+```bash
+codex exec --dangerously-bypass-approvals-and-sandbox \
+  --ephemeral -C ~/Desktop/mexicani - <<'EOF'
+Create a comprehensive Zod schema for the orders table,
+including nested validation for items array and custom
+error messages in Hebrew
+EOF
+```
+
+Codex מחזיר קוד TypeScript מדויק עם Zod schemas, error messages, ו-runtime validation — ברמה שלוקחת מפתח 30-45 דקות לכתוב ידנית.
+
+**Debugging עמוק:**
+```bash
+# הדבק stack trace + קוד → Codex מאתר root cause
+codex exec -C ~/Desktop/mexicani - <<'EOF'
+Error: Cannot read properties of undefined (reading 'branch_id')
+at useOrders (hooks/useOrders.ts:23)
+
+Here is the hook code: [קוד]
+Find the bug and fix it.
+EOF
+```
+
+### מגבלות Codex
+
+- **Context = 1M tokens** — גדול, אבל לא 2M כמו Gemini
+- **אין real-time web search** — לא מתאים למחקר על packages חדשים
+- **יקר** — GPT-5.4 הוא המודל היקר ביותר
+
+**מתי להשתמש:** code generation מורכב, debugging, refactoring גדול.
+
+---
+
+## Gemini CLI — ה-Context המנצח
+
+**Gemini CLI** (Google) עם gemini-3.1-pro-preview הוא כלי אחד: **2 מיליון tokens context**.
+
+### המספרים שמשנים הכל
+
+| כלי | Context Window |
+|-----|---------------|
+| Claude Code | ~200K tokens |
+| Codex | 1M tokens |
+| **Gemini CLI** | **2M tokens** |
+| Kimi | ~128K tokens |
+
+2M tokens = **~1,500 קבצי TypeScript** בו-זמנית. זה מאפשר דברים שאחרים לא יכולים.
+
+### Use Case אמיתי — Codebase Analysis
+
+```bash
+# שלח את כל הפרויקט ל-Gemini
+find ~/Desktop/mexicani/src -name "*.ts" -o -name "*.tsx" | \
+  xargs cat | \
+  env -u GEMINI_API_KEY gemini \
+    -m gemini-3.1-pro-preview \
+    --yolo \
+    -p "Analyze this entire codebase. Find:
+    1. All security vulnerabilities
+    2. Performance bottlenecks
+    3. Missing error handling
+    4. RTL violations
+    Provide specific file:line references for each issue."
+```
+
+Gemini קרא **כל הפרויקט** ביחד וזיהה patterns שאף כלי אחר לא ראה — למשל, שני hooks שמבצעים אותה שאילתה בנפרד, שניתן למזג.
+
+### הגדרה קריטית
+
+```json
+// ~/.gemini/settings.json
+{
+  "model": { "name": "gemini-3.1-pro-preview" },
+  "thinkingConfig": {
+    "includeThoughts": true,
+    "thinkingBudget": 1024
+  },
+  "temperature": 0.7
+}
+```
+
+**אזהרה:** `thinkingBudget` גבוה מ-2048 גורם לתשובות איטיות מאוד. 1024 הוא ה-sweet spot.
+
+**מתי להשתמש:** analysis של codebase שלם, מחקר architecture, השוואות design patterns.
+
+---
+
+## Kimi — Batch Processing מהיר
+
+**Kimi** (Moonshot AI) מצטיין בפעולה מהירה על משימות מקבילות.
+
+### Batch Dispatch
+
+```bash
+# שלח 20 משימות בו-זמנית
+for file in src/components/*.tsx; do
+  kimi --quiet --yolo \
+    -p "Add comprehensive JSDoc comments to this component: $(cat $file)" \
+    -w ~/Desktop/mexicani &
+done
+wait
+```
+
+**Kimi מחזיר מהר** — אידיאלי כשצריך לעשות אותה פעולה על הרבה קבצים.
+
+### מה Kimi עושה טוב
+
+- **TS error fixes** בmass — 161 errors, 94% תיקון ב-batch אחד
+- **Documentation generation** — JSDoc לכל הcodebase
+- **Simple refactors** — rename, extract function, restructure
+
+### מגבלות Kimi
+
+- **Context קטן** יחסית (128K) — לא מתאים לניתוח פרויקט שלם
+- **Reasoning פחות עמוק** מCodex/Claude — לא לbug hunting מורכב
+- **EPIPE errors** ב-batch mode עם MCP — דורש הגדרה מיוחדת:
+
+```bash
+# Kimi batch mode — בלי MCP כדי למנוע EPIPE
+kimi --quiet --yolo --mcp-config '{}' -p "$prompt"
+```
+
+**מתי להשתמש:** עיבוד מקבילי של הרבה קבצים, משימות פשוטות ב-scale.
+
+---
+
+## MiniMax — 50 סוכנים בו-זמנית
+
+**MiniMax** עם מודל M2.7-highspeed הוא הכלי לbatch generation בmassive scale.
+
+```bash
+# 50 requests מקבילים עם 50ms stagger
+for i in $(seq 1 50); do
+  minimax --batch "Generate unit tests for: $(cat $file)" &
+  sleep 0.05  # 50ms stagger
+done
+wait
+```
+
+### המספרים האמיתיים
+
+| מדד | ערך |
+|-----|-----|
+| **Concurrent requests** | 50 |
+| **Throughput** | ~40-50 OK/min |
+| **Model speed** | 100 tokens/sec (highspeed) |
+| **Context** | 204K tokens |
+| **Success rate** | 100% (verified) |
+
+### Use Case — Test Generation
+
+בפרויקט Mexicani, הייתי צריך לכתוב tests ל-163 components. בMiniMax:
+
+```bash
+# generate_tests.sh
+FILES=($(find src/components -name "*.tsx"))
+TOTAL=${#FILES[@]}
+
+for file in "${FILES[@]}"; do
+  component=$(basename "$file" .tsx)
+  minimax --batch "Write comprehensive Vitest tests for this React component.
+  Include: render tests, user interaction tests, edge cases.
+  Component: $(cat $file)" > "src/__tests__/${component}.test.tsx" &
+  sleep 0.05
+done
+wait
+echo "Generated tests for $TOTAL components"
+```
+
+**זמן ריצה:** ~4 דקות ל-163 קבצים. ידנית: שבוע עבודה.
+
+**מתי להשתמש:** test generation בmass, documentation בmass, כל משימה שדורשת >20 parallel requests.
+
+---
+
+## השוואה — מתי להשתמש במה
+
+| משימה | הכלי הנכון | למה |
+|-------|-----------|-----|
+| **Architecture review** | Gemini CLI | 2M context — רואה הכל |
+| **Complex bug fix** | Codex | xhigh reasoning, deep analysis |
+| **Active coding** | Cursor | inline, IDE-native |
+| **Automation/Hooks** | Claude Code | agents, skills, hooks |
+| **Batch refactor** | Kimi | מהיר, parallel |
+| **Mass test generation** | MiniMax | 50 concurrent, highspeed |
+| **Orchestration** | Claude Code + Hydra | dispatch לכל השאר |
+
+---
+
+## ה-Workflow האמיתי שלי
+
+אני לא בוחר כלי — **Hydra v2 בוחר בשבילי**:
+
+```python
+# hydra_graph.py — Bayesian routing
+def decide_node(state: HydraState) -> HydraState:
+    """בחר את ה-provider הכי מתאים."""
+    task_type = classify_task(state["task"])
+    scores = state["bayesian_scores"]
+
+    # כל provider מקבל score לפי היסטוריית הצלחות
+    if task_type == "analysis":
+        # Gemini wins — 2M context
+        provider = max(["gemini", "codex"], key=lambda p: scores[p])
+    elif task_type == "generation":
+        # Codex/Kimi race
+        provider = max(["codex", "kimi"], key=lambda p: scores[p])
+    elif task_type == "batch":
+        provider = "minimax"  # תמיד
+    else:
+        provider = max(scores, key=scores.get)
+
+    return {**state, "provider": provider}
+```
+
+**המערכת לומדת** מכל הרצה — ספק שנכשל מקבל ניקוד נמוך, ספק שמצליח עולה.
+
+---
+
+## Security — מה שאף אחד לא מדבר עליו
+
+כלי AI רצים עם הרשאות רחבות. **חייבים** security practices:
+
+```bash
+# ✅ Codex — sandbox מוגדר
+sandbox = "danger-full-access"  # ← רק לאחר שמבינים את הסיכון
+approval_policy = "never"        # ← רק בסביבת פיתוח
+
+# ✅ Claude Code — tool guard
+# dispatch-command-guard.sh בודק כל bash command לפני ביצוע
+```
+
+**כלל:** אף agent לא צריך production credentials. רק read access ל-staging.
+
+---
+
+## עלויות — האמת
+
+| כלי | עלות חודשית (שלי) |
+|-----|------------------|
+| **Claude Code** | $200 (Max plan) |
+| **Gemini CLI** | $0 (Google AI Ultra — OAuth) |
+| **Codex** | ~$80 (usage based) |
+| **Kimi** | ~$40 (usage based) |
+| **MiniMax** | ~$30 (Direct API) |
+| **Cursor** | $20 (Pro plan) |
+| **סה"כ** | **~$370/חודש** |
+
+נשמע הרבה? המערכת שבניתי מייצרת **10x productivity** — החזר השקעה ברור.
+
+---
+
+## מה מגיע ב-2026?
+
+**Ambient agents** — סוכנים שרצים ברקע כל הזמן, לא רק כשמבקשים:
+- CI נכשל → agent מתקן אוטומטית
+- Production error → agent מאתר ומתקן
+- PR open → code review אוטומטי
+
+זה לא עתיד — זה כבר קורה במערכת שלי.
+
+```bash
+# ambient_receiver.py — webhooks שמפעילים agents
+@app.post("/webhook/ci-failure")
+async def handle_ci_failure(payload: CIPayload):
+    await dispatch_agent(
+        task=f"Fix CI failure: {payload.error}",
+        project=payload.project,
+        priority="urgent"
+    )
+```
+
+---
+
+## סיכום — ה-Stack שאני ממליץ
+
+**למפתח יחיד:**
+1. **Claude Code** — base layer, orchestration, hooks
+2. **Cursor** — IDE day-to-day
+3. **Gemini CLI** — analysis גדול (בחינם!)
+
+**לצוות קטן:**
+1. הכל למעלה, בנוסף:
+2. **Codex** — complex generation
+3. **MiniMax** — batch operations
+
+**לא ל-"בוחרים אחד"** — כל כלי חזק בתחומו. Hydra מחבר ביניהם.
+
+הבסיס: [github.com/Nadav011](https://github.com/Nadav011)

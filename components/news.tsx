@@ -135,9 +135,13 @@ export function News() {
                       <Calendar className="w-3.5 h-3.5 text-text-muted" />
                       <span className="text-xs font-mono text-text-muted tabular-nums">{item.date}</span>
                     </div>
-                    <button aria-label={t(item.title)} className="inline-flex items-center gap-1.5 text-xs font-mono text-cyan hover:text-pink transition-colors duration-300 group/btn">
+                    {/* aria-label starts with visible text to satisfy label-content-name rule */}
+                    <button
+                      aria-label={`>> read: ${t(item.title)}`}
+                      className="inline-flex items-center gap-1.5 text-xs font-mono text-cyan hover:text-pink transition-colors duration-300 group/btn"
+                    >
                       {">> read"}
-                      <ArrowLeft className="w-3 h-3 group-hover/btn:-translate-x-0.5 rtl:group-hover/btn:translate-x-0.5 transition-transform rtl:rotate-180" />
+                      <ArrowLeft className="w-3 h-3 group-hover/btn:-translate-x-0.5 rtl:group-hover/btn:translate-x-0.5 transition-transform rtl:rotate-180" aria-hidden="true" />
                     </button>
                   </div>
                 </div>

@@ -106,8 +106,8 @@ export function Services() {
       description: t("s1Description"),
       features: [t("s1f1"), t("s1f2"), t("s1f3"), t("s1f4"), t("s1f5"), t("s1f6")],
       popular: false,
-      color: "#06d6e0",
-      gradient: "from-[#06d6e0] to-[#0abfca]",
+      color: "oklch(0.81 0.17 193)",
+      gradient: "from-cyan to-cyan-dim",
     },
     {
       icon: Bot,
@@ -116,8 +116,8 @@ export function Services() {
       description: t("s2Description"),
       features: [t("s2f1"), t("s2f2"), t("s2f3"), t("s2f4"), t("s2f5"), t("s2f6")],
       popular: true,
-      color: "#e84393",
-      gradient: "from-[#e84393] to-[#d63384]",
+      color: "oklch(0.65 0.25 350)",
+      gradient: "from-pink to-pink-dim",
     },
     {
       icon: Rocket,
@@ -126,8 +126,8 @@ export function Services() {
       description: t("s3Description"),
       features: [t("s3f1"), t("s3f2"), t("s3f3"), t("s3f4"), t("s3f5"), t("s3f6")],
       popular: false,
-      color: "#4f46e5",
-      gradient: "from-[#4f46e5] to-[#6366f1]",
+      color: "oklch(0.50 0.15 270)",
+      gradient: "from-[oklch(0.50_0.15_270)] to-[oklch(0.55_0.20_270)]",
     },
   ]
 
@@ -150,7 +150,7 @@ export function Services() {
       <div className="absolute top-0 start-0 end-0 h-px bg-gradient-to-r from-transparent via-cyan/30 to-transparent rtl:bg-gradient-to-l" />
       <div className="absolute top-0 start-1/2 -translate-x-1/2 w-full max-w-5xl h-[400px] bg-cyan/[0.04] rounded-full blur-[120px] pointer-events-none" />
       <div className="absolute top-0 start-1/4 w-64 h-64 bg-pink/[0.04] rounded-full blur-[100px] pointer-events-none" />
-      <div className="absolute bottom-0 end-0 w-full max-w-xl aspect-[3/2] bg-[#06d6e0]/3 rounded-full blur-[120px]" />
+      <div className="absolute bottom-0 end-0 w-full max-w-xl aspect-[3/2] bg-cyan/[0.03] rounded-full blur-[120px]" />
       <div className="absolute inset-0 dot-grid opacity-[0.06] pointer-events-none" aria-hidden="true" />
 
       <div className="relative max-w-7xl mx-auto px-4 md:px-8">

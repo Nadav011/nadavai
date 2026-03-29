@@ -37,7 +37,7 @@ const SOCIAL_PLATFORMS = [
   },
   {
     label: "Telegram",
-    href: "https://t.me/nadavcohen",
+    href: "https://t.me/NadavAGIbot",
     icon: null, // custom SVG
     // Telegram sky-blue
     color: "oklch(0.72 0.18 230)",
@@ -131,7 +131,7 @@ function NewsletterForm() {
     <div className="newsletter-section py-8 border-t border-border">
       <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
         <div>
-          <h4 className="text-sm font-semibold text-text mb-1">{t("newsletterTitle")}</h4>
+          <h3 className="text-sm font-semibold text-text mb-1">{t("newsletterTitle")}</h3>
           <p className="text-xs text-text-muted">{t("newsletterDesc")}</p>
         </div>
 
@@ -191,12 +191,12 @@ function NewsletterForm() {
       </div>
 
       {status === "success" && (
-        <p id="newsletter-success" role="status" className="mt-3 text-xs text-cyan">
+        <p id="newsletter-success" role="status" aria-live="polite" className="mt-3 text-xs text-cyan">
           {t("newsletterSuccess")}
         </p>
       )}
       {status === "error" && (
-        <p id="newsletter-error" role="alert" className="mt-3 text-xs text-pink">
+        <p id="newsletter-error" role="alert" aria-live="assertive" className="mt-3 text-xs text-pink">
           {t("newsletterError")}
         </p>
       )}
@@ -287,6 +287,7 @@ export function Footer() {
 
   return (
     <footer
+      id="footer"
       ref={sectionRef}
       className="relative border-t border-border bg-bg-deep section-glow-top"
     >
@@ -334,7 +335,7 @@ export function Footer() {
               <p className="text-sm text-text-muted leading-relaxed mb-4">{t("brand")}</p>
 
               <div className="flex items-center gap-2 mb-5">
-                <div className="w-1.5 h-1.5 rounded-full bg-[#27ca40] animate-pulse" />
+                <div className="w-1.5 h-1.5 rounded-full bg-[oklch(0.72_0.20_145)] animate-pulse" />
                 <span className="text-xs font-mono text-text-muted">{t("available")}</span>
               </div>
 
@@ -349,7 +350,7 @@ export function Footer() {
             {/* Nav link groups */}
             {footerLinks.map((group) => (
               <div key={group.title} className="footer-link-group">
-                <h4 className="text-sm font-semibold text-text mb-4">{group.title}</h4>
+                <h3 className="text-sm font-semibold text-text mb-4">{group.title}</h3>
                 <div className="flex flex-col gap-2.5">
                   {group.links.map((link) => (
                     <a
@@ -369,7 +370,7 @@ export function Footer() {
 
             {/* "Built with AI" badge column */}
             <div className="footer-link-group flex flex-col gap-4">
-              <h4 className="text-sm font-semibold text-text">{t("socialTitle")}</h4>
+              <h3 className="text-sm font-semibold text-text">{t("socialTitle")}</h3>
 
               {/* Animated gradient "Built with AI" badge */}
               <div

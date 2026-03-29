@@ -17,7 +17,7 @@ const row2Items = [
 function TechItem({ tech }: { tech: string }) {
   return (
     <div className="flex items-center gap-4 md:gap-8 mx-4 md:mx-8">
-      <span className="tech-item text-xs md:text-sm font-mono text-text-muted hover:text-cyan transition-all duration-300 cursor-default">
+      <span className="tech-item text-xs md:text-sm font-mono text-text-secondary hover:text-cyan transition-all duration-300 cursor-default">
         {tech}
       </span>
       <span className="w-1 h-1 rounded-full bg-border flex-shrink-0" />
@@ -28,6 +28,7 @@ function TechItem({ tech }: { tech: string }) {
 export function TechMarquee() {
   return (
     <section
+      id="tech-marquee"
       aria-label="Tech stack and tools"
       className="relative py-8 md:py-12 border-y border-border overflow-hidden bg-bg-deep"
     >

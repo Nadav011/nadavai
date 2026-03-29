@@ -1,0 +1,377 @@
+---
+title: "איך בניתי את Mexicani — מערכת הזמנות עם AI"
+titleEn: "How I Built Mexicani — AI-Powered Restaurant Ordering System"
+date: "2026-03-15"
+description: "Case study: מ-0 לפרודקשן עם React, Supabase, ו-AI בתוך 3 חודשים"
+descriptionEn: "Case study: from zero to production with React, Supabase, and AI in 3 months"
+tags: ["Case Study", "React", "Supabase", "AI"]
+readingTime: 10
+---
+
+## הבעיה — מסעדה ב-2024 ללא מערכת הזמנות דיגיטלית
+
+Mexicani היא רשת מסעדות מקסיקניות ישראלית עם סניפים מרובים. כשהגעתי לפרויקט, הם עדיין עבדו עם:
+
+- הזמנות טלפוניות ידניות — טעויות, איחורים, לחץ על הצוות
+- אין מעקב real-time אחר הזמנות פתוחות
+- ניהול מלאי ידני בכל סניף בנפרד
+- ללא visibility לבעלים על הביצועים
+
+הפתרון: **מערכת הזמנות דיגיטלית מלאה** — לקוחות מזמינים דרך web, המסעדה מקבלת real-time, WhatsApp לאישורים, ו-dashboard לניהול.
+
+---
+
+## בחירת ה-Tech Stack
+
+### למה React 19 + Vite?
+
+לאחר בחינה של Next.js מול Vite, בחרתי **Vite** מסיבות ספציפיות:
+
+```typescript
+// vite.config.ts
+export default defineConfig({
+  plugins: [react()],
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          vendor: ["react", "react-dom"],
+          supabase: ["@supabase/supabase-js"],
+          ui: ["@radix-ui/react-dialog", "class-variance-authority"],
+        },
+      },
+    },
+  },
+})
+```
+
+**הסיבות:**
+- **SSR לא נדרש** — אפליקציית הזמנות היא SPA טהור, לא צריך SEO
+- **Build times מהירים** — Vite עם HMR מייעל פיתוח ב-60%
+- **Bundle קטן יותר** — ללא Next.js overhead (~109KB polyfill)
+- **Deployment פשוט** — static files ל-Cloudflare Pages, 0 server
+
+### למה Supabase?
+
+Supabase נתן לי **backend מלא** ביום אחד:
+
+| פיצ'ר | ספקים שנבחנו | הבחירה |
+|-------|-------------|--------|
+| **Database** | PostgreSQL, MySQL, MongoDB | Supabase (PostgreSQL) |
+| **Auth** | Firebase Auth, Auth0 | Supabase Auth |
+| **Real-time** | Pusher, Socket.io | Supabase Realtime |
+| **Storage** | S3, Cloudinary | Supabase Storage |
+
+---
+
+## הארכיטקטורה — Multi-Branch
+
+האתגר המרכזי: **מספר סניפים עם מסד נתונים אחד**.
+
+```sql
+-- כל שאילתה מסוננת לפי branch_id
+CREATE TABLE orders (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  branch_id UUID NOT NULL REFERENCES branches(id),
+  customer_name TEXT NOT NULL,
+  items JSONB NOT NULL,
+  status TEXT DEFAULT 'pending',
+  created_at TIMESTAMPTZ DEFAULT now()
+);
+
+-- RLS — כל סניף רואה רק את ההזמנות שלו
+CREATE POLICY "branch_isolation" ON orders
+  FOR ALL TO authenticated
+  USING (
+    branch_id IN (
+      SELECT branch_id FROM staff WHERE user_id = auth.uid()
+    )
+  );
+```
+
+**כלל ברזל שלמדתי:** כל query חייב `branch_id` — לא רק ב-RLS אלא גם ב-application layer:
+
+```typescript
+// hooks/useOrders.ts
+export function useOrders() {
+  const { branchId } = useBranch() // תמיד קיים ב-context
+
+  return useQuery({
+    queryKey: ["orders", branchId],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("orders")
+        .select("*, items(*), customer(*)")
+        .eq("branch_id", branchId) // ← לא לוותר על זה
+        .order("created_at", { ascending: false })
+
+      if (error) throw error
+      return data
+    },
+  })
+}
+```
+
+---
+
+## Real-Time Orders — הלב של המערכת
+
+הדרישה הקריטית: **הצוות רואה הזמנה חדשה תוך שניות**, ללא refresh.
+
+```typescript
+// hooks/useRealtimeOrders.ts
+export function useRealtimeOrders(branchId: string) {
+  const queryClient = useQueryClient()
+
+  useEffect(() => {
+    const channel = supabase
+      .channel(`orders:${branchId}`)
+      .on(
+        "postgres_changes",
+        {
+          event: "INSERT",
+          schema: "public",
+          table: "orders",
+          filter: `branch_id=eq.${branchId}`,
+        },
+        (payload) => {
+          // עדכון cache ישיר — ללא refetch מיותר
+          queryClient.setQueryData(["orders", branchId], (old: Order[]) => [
+            payload.new as Order,
+            ...(old ?? []),
+          ])
+
+          // Sound notification + vibration
+          playOrderSound()
+          navigator.vibrate?.(200)
+        }
+      )
+      .subscribe()
+
+    return () => {
+      supabase.removeChannel(channel)
+    }
+  }, [branchId, queryClient])
+}
+```
+
+**תוצאה:** הזמנה חדשה מופיעה על המסך של הצוות תוך **<500ms** מרגע שהלקוח לחץ "שלח".
+
+---
+
+## WhatsApp Integration
+
+אחד הפיצ'רים הכי ערכותיים: **אישור הזמנה ב-WhatsApp אוטומטי**.
+
+```typescript
+// supabase/functions/send-order-confirmation/index.ts
+Deno.serve(async (req) => {
+  const { orderId, customerPhone } = await req.json()
+
+  const order = await getOrderWithItems(orderId)
+
+  const message = buildWhatsAppMessage(order)
+  // "שלום! ההזמנה שלך התקבלה 🎉
+  //  #מקסיקני-1234
+  //  🌮 בוריטו עוף × 2
+  //  🌯 קסדיה ירקות × 1
+  //  סה"כ: ₪89
+  //  זמן משוער: 20-25 דקות"
+
+  await fetch(`https://api.whatsapp.com/v1/messages`, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${Deno.env.get("WHATSAPP_TOKEN")}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      messaging_product: "whatsapp",
+      to: customerPhone,
+      type: "text",
+      text: { body: message },
+    }),
+  })
+
+  return new Response(JSON.stringify({ success: true }))
+})
+```
+
+---
+
+## RTL — האתגר הישראלי
+
+בניית ממשק RTL עבור מסעדה ישראלית חשפה כמה בעיות:
+
+**הכלל הכי חשוב:** אף פעם לא `margin-left`/`margin-right` — תמיד logical properties:
+
+```css
+/* ❌ שגוי — נשבר ב-RTL */
+.order-card {
+  margin-left: 16px;
+  padding-right: 12px;
+  border-left: 2px solid var(--color-accent);
+}
+
+/* ✅ נכון — עובד ב-LTR וב-RTL */
+.order-card {
+  margin-inline-start: 16px;
+  padding-inline-end: 12px;
+  border-inline-start: 2px solid var(--color-accent);
+}
+```
+
+ב-Tailwind 4.2:
+```tsx
+// ❌ שגוי
+<div className="ml-4 pr-3 border-l-2">
+
+// ✅ נכון
+<div className="ms-4 pe-3 border-s-2">
+```
+
+**אייקונים דירקציונליים** — חץ שמאלה ב-LTR הוא חץ ימינה ב-RTL:
+
+```tsx
+import { ChevronRight } from "lucide-react"
+
+// ← הוסף rtl:rotate-180 לאייקונים אופקיים בלבד
+<ChevronRight className="rtl:rotate-180" />
+```
+
+---
+
+## PWA — מסעדה ללא אינטרנט?
+
+הצוות ביקש שהאפליקציה תעבוד גם כשה-WiFi נופל. הפתרון: **Progressive Web App** עם offline support.
+
+```typescript
+// service-worker.ts (Workbox)
+import { precacheAndRoute, cleanupOutdatedCaches } from "workbox-precaching"
+import { registerRoute } from "workbox-routing"
+import { NetworkFirst, CacheFirst } from "workbox-strategies"
+
+// Static assets — cache first
+registerRoute(
+  ({ request }) => request.destination === "image",
+  new CacheFirst({ cacheName: "images-v1" })
+)
+
+// API calls — network first, fallback to cache
+registerRoute(
+  ({ url }) => url.pathname.startsWith("/api/menu"),
+  new NetworkFirst({
+    cacheName: "menu-cache-v1",
+    networkTimeoutSeconds: 3,
+  })
+)
+```
+
+כשה-WiFi נופל, הצוות עדיין רואה את:
+- תפריט עדכני (מ-cache)
+- הזמנות שכבר נפתחו
+- הודעת "offline mode" ברורה
+
+---
+
+## AI Integration — Claude Code בפיתוח
+
+**86 skills** ו-**52 agents** עזרו לי לבנות את Mexicani מהר פי כמה:
+
+### מה ה-AI עשה בפועל
+
+**1. TypeScript types מ-database schema:**
+```bash
+# Claude Code גנרר אוטומטית
+supabase gen types typescript --local > src/types/supabase.ts
+```
+
+**2. RLS policies אוטומטיות:**
+שאלתי את Claude Code: "צור RLS policies ל-multi-tenant SaaS עם branches". קיבלתי policies מלאות עם SECURITY DEFINER functions וב-30 שניות.
+
+**3. Hook generation:**
+כל `useOrders`, `useMenu`, `useBranch` — Claude Code כתב את ה-boilerplate, אני עיצבתי את ה-API.
+
+**4. Bug detection:**
+Claude Code זיהה שאני שוכח `branch_id` ב-query מסוים לפני שהגיע ל-production.
+
+### הלקח: AI כ-Pair Programmer
+
+AI לא החליף אותי — הוא **הכפיל** את הפרודקטיביות. הוא כתב את ה-boilerplate, אני התמקדתי בלוגיקה עסקית.
+
+---
+
+## Performance — Bundle Optimization
+
+לאחר audit ראשוני, ה-bundle היה גדול מדי:
+
+```
+Initial bundle: 847KB gzipped
+Target:         < 300KB
+```
+
+**הפתרונות:**
+
+```typescript
+// 1. Lazy loading לאזורי admin
+const Dashboard = lazy(() => import("./pages/Dashboard"))
+const Analytics = lazy(() => import("./pages/Analytics"))
+
+// 2. סיר את Sentry (~270KB) — stub במקום
+// src/stubs/sentry-stub.ts
+export const captureException = (err: unknown) => {
+  fetch("/api/errors", {
+    method: "POST",
+    body: JSON.stringify({ error: String(err), ts: Date.now() }),
+  }).catch(() => {})
+}
+
+// 3. Recharts named imports — לא import *
+import { BarChart, Bar, XAxis, YAxis } from "recharts"
+// במקום: import * as Recharts from "recharts"
+```
+
+**תוצאה:** `847KB → 218KB` — חיסכון של **74%**.
+
+---
+
+## התוצאות — 3 חודשים לאחר Launch
+
+| מדד | לפני | אחרי |
+|-----|------|------|
+| **זמן עיבוד הזמנה** | 4-6 דקות | 45 שניות |
+| **טעויות הזמנה** | ~12% | <1% |
+| **שביעות רצון לקוחות** | 3.8/5 | 4.7/5 |
+| **הזמנות ביום** | 80-100 | 180-220 |
+| **Load time** | — | 1.2s |
+
+**הפרויקט הפך ל-10+ production apps** — Mexicani הוא template לרשתות מסעדות אחרות.
+
+---
+
+## מה הייתי עושה אחרת
+
+**1. GraphQL מהיום הראשון**
+
+Supabase תומך ב-PostgREST, אבל עם relations מורכבות (orders → items → products → categories) GraphQL היה חוסך queries מיותרים.
+
+**2. E2E tests מוקדם יותר**
+
+כתבתי Playwright tests רק לאחר 6 שבועות. כל bug שמצאתי ב-production יכול היה להיתפס קודם.
+
+**3. Design system ראשון**
+
+התחלתי עם components ad-hoc. לאחר מכן build design system בנפרד — ועדיין לא הסתיים migration מלא.
+
+---
+
+## סיכום
+
+**Mexicani לימד אותי** שה-stack הנכון + AI assistance + ארכיטקטורה נכונה מאפשרים לבנות מוצר production-grade ב-3 חודשים — לא שנה.
+
+הכלים שעבדו הכי טוב:
+- **React 19** + Concurrent Mode לאינטראקטיביות
+- **Supabase Realtime** לעדכונים מיידיים
+- **Workbox PWA** לאמינות
+- **Claude Code** לפרודקטיביות × 2-3
+
+הקוד (חלקי): [github.com/Nadav011](https://github.com/Nadav011)

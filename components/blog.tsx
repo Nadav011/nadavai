@@ -39,7 +39,7 @@ export function Blog() {
       comments: 12,
       platform: "Facebook",
       href: "https://www.facebook.com/nadav.cohen.167",
-      color: "#06d6e0",
+      color: "oklch(0.81 0.17 193)",
     },
     {
       title: t("b2Title"),
@@ -51,7 +51,7 @@ export function Blog() {
       comments: 24,
       platform: "Facebook",
       href: "https://www.facebook.com/nadav.cohen.167",
-      color: "#e84393",
+      color: "oklch(0.65 0.25 350)",
     },
     {
       title: t("b3Title"),
@@ -63,7 +63,7 @@ export function Blog() {
       comments: 42,
       platform: "Facebook",
       href: "https://www.facebook.com/nadav.cohen.167",
-      color: "#4f46e5",
+      color: "oklch(0.50 0.15 270)",
     },
     {
       title: t("b4Title"),
@@ -75,7 +75,7 @@ export function Blog() {
       comments: 18,
       platform: "Facebook",
       href: "https://www.facebook.com/nadav.cohen.167",
-      color: "#06d6e0",
+      color: "oklch(0.81 0.17 193)",
     },
     {
       title: t("b5Title"),
@@ -87,7 +87,7 @@ export function Blog() {
       comments: 56,
       platform: "Facebook",
       href: "https://www.facebook.com/nadav.cohen.167",
-      color: "#e84393",
+      color: "oklch(0.65 0.25 350)",
     },
     {
       title: t("b6Title"),
@@ -99,7 +99,7 @@ export function Blog() {
       comments: 31,
       platform: "Facebook",
       href: "https://www.facebook.com/nadav.cohen.167",
-      color: "#4f46e5",
+      color: "oklch(0.50 0.15 270)",
     },
   ]
 
@@ -231,6 +231,7 @@ export function Blog() {
               href={post.href}
               target="_blank"
               rel="noreferrer"
+              aria-label={post.title}
               className="blog-card group relative block h-full rounded-2xl border border-border bg-bg-surface overflow-hidden hover:shadow-[0_0_30px_oklch(0_0_0_/_0.3)] transition-all duration-500"
               onMouseEnter={(e) => {
                 e.currentTarget.style.borderColor = `${post.color}40`

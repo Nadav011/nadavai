@@ -78,12 +78,12 @@ export function CodeCard({
           <div className="flex items-center gap-3">
             {/* macOS traffic lights */}
             <div className="flex items-center gap-1.5" aria-hidden="true">
-              <div className="w-3 h-3 rounded-full transition-all duration-200 group-hover:shadow-[0_0_6px_#ff5f56]"
-                style={{ background: "#ff5f56" }} />
-              <div className="w-3 h-3 rounded-full transition-all duration-200 group-hover:shadow-[0_0_6px_#ffbd2e]"
-                style={{ background: "#ffbd2e" }} />
-              <div className="w-3 h-3 rounded-full transition-all duration-200 group-hover:shadow-[0_0_6px_#27ca40]"
-                style={{ background: "#27ca40" }} />
+              <div className="w-3 h-3 rounded-full transition-all duration-200 group-hover:shadow-[0_0_6px_oklch(0.65_0.24_25)]"
+                style={{ background: "oklch(0.65 0.24 25)" }} />
+              <div className="w-3 h-3 rounded-full transition-all duration-200 group-hover:shadow-[0_0_6px_oklch(0.83 0.16 85)]"
+                style={{ background: "oklch(0.83 0.16 85)" }} />
+              <div className="w-3 h-3 rounded-full transition-all duration-200 group-hover:shadow-[0_0_6px_oklch(0.72_0.20_145)]"
+                style={{ background: "oklch(0.72 0.20 145)" }} />
             </div>
             {/* File tab */}
             {filename && (
@@ -123,7 +123,7 @@ export function CodeCard({
           style={{ background: "oklch(0.10 0.02 243 / 0.9)" }}
         >
           <div className="flex items-center gap-2">
-            <div className="w-1.5 h-1.5 rounded-full bg-[#27ca40] animate-pulse" aria-hidden="true" />
+            <div className="w-1.5 h-1.5 rounded-full animate-pulse" style={{ background: "oklch(0.72 0.20 145)" }} aria-hidden="true" />
             <span className="text-[10px] font-mono text-text-muted">ready</span>
           </div>
           <span className="text-[10px] font-mono text-text-muted">UTF-8</span>

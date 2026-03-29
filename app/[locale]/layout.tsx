@@ -1,6 +1,7 @@
 import React from "react"
 import type { Metadata, Viewport } from "next"
 import { Space_Grotesk, JetBrains_Mono, Heebo } from "next/font/google"
+import Script from "next/script"
 import { NextIntlClientProvider } from "next-intl"
 import { getMessages, getTranslations } from "next-intl/server"
 import { notFound } from "next/navigation"
@@ -8,25 +9,31 @@ import { ViewTransitions } from "next-view-transitions"
 import { routing } from "@/i18n/routing"
 import "../globals.css"
 
+// Restrict to only the weights actually used — reduces font download size
 const spaceGrotesk = Space_Grotesk({
   subsets: ["latin"],
+  weight: ["500", "700"],
   variable: "--font-space-grotesk",
   display: "swap",
   preload: true,
 })
 
+// JetBrains Mono — used for code/mono snippets only, not critical path
 const jetbrainsMono = JetBrains_Mono({
   subsets: ["latin"],
+  weight: ["400", "500"],
   variable: "--font-jetbrains",
   display: "swap",
-  preload: false, // Only preload critical fonts
+  preload: false,
 })
 
+// Heebo — critical for Hebrew RTL content (primary locale)
 const heebo = Heebo({
   subsets: ["latin", "hebrew"],
+  weight: ["400", "700"],
   variable: "--font-heebo",
   display: "swap",
-  preload: true, // Critical for Hebrew content
+  preload: true,
 })
 
 function getDirection(locale: string): "rtl" | "ltr" {
@@ -129,6 +136,14 @@ export default async function LocaleLayout({
   return (
     <ViewTransitions>
     <html lang={locale} dir={dir} className="dark" style={{ backgroundColor: "oklch(0.085 0.025 245)", colorScheme: "dark" }}>
+      <head>
+        {/* Preconnect to font origins to eliminate render-blocking DNS/TLS round-trips */}
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        {/* dns-prefetch as fallback for browsers that don't support preconnect */}
+        <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
+        <link rel="dns-prefetch" href="https://fonts.gstatic.com" />
+      </head>
       <body
         className={`${spaceGrotesk.variable} ${jetbrainsMono.variable} ${heebo.variable} font-sans antialiased overflow-x-hidden`}
         style={{ backgroundColor: "oklch(0.085 0.025 245)", color: "oklch(0.95 0.01 260)" }}
@@ -520,8 +535,13 @@ export default async function LocaleLayout({
           {children}
         </NextIntlClientProvider>
         {/* Cloudflare Web Analytics — cookie-free, no consent needed */}
+        {/* strategy="afterInteractive" defers until after hydration — no render-blocking */}
         {process.env.NODE_ENV === "production" && (
-          <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token":"nadavai"}' />
+          <Script
+            src="https://static.cloudflareinsights.com/beacon.min.js"
+            data-cf-beacon='{"token":"nadavai"}'
+            strategy="afterInteractive"
+          />
         )}
       </body>
     </html>
