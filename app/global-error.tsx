@@ -58,10 +58,11 @@ export default function GlobalError({
             {/* Action */}
             <button
               onClick={reset}
-              className="group relative inline-flex items-center gap-2.5 px-8 py-4 rounded-xl text-base font-bold text-[oklch(0.085 0.025 245)] bg-gradient-to-l from-[#06d6e0] to-[#0abfca] hover:shadow-[0_0_30px_hsl(187,92%,55%,0.4)] transition-all duration-500"
+              aria-label={getLocaleFromUrl() === "he" ? "נסה שוב" : "Try again"}
+              className="group relative inline-flex items-center gap-2.5 px-8 py-4 rounded-xl text-base font-bold text-[oklch(0.085 0.025 245)] bg-gradient-to-l rtl:bg-gradient-to-r from-[#06d6e0] to-[#0abfca] hover:shadow-[0_0_30px_hsl(187,92%,55%,0.4)] transition-all duration-500"
             >
               <RefreshCw className="w-5 h-5 group-hover:rotate-180 transition-transform duration-500" aria-hidden="true" />
-              נסה שוב
+              {getLocaleFromUrl() === "he" ? "נסה שוב" : "Try again"}
             </button>
 
             {/* Footer hint */}

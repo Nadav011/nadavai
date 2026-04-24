@@ -3,7 +3,7 @@ import { getAllSlugs } from "@/lib/blog"
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = "https://nadavc.ai"
-  const lastModified = new Date("2026-03-29")
+  const lastModified = new Date("2026-04-24")
 
   const locales = ["he", "en"] as const
 
