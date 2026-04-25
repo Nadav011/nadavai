@@ -1,4 +1,5 @@
 import type { MDXComponents } from "mdx/types"
+import NextImage from "next/image"
 
 export function getMDXComponents(overrides?: MDXComponents): MDXComponents {
   return {
@@ -131,15 +132,18 @@ export function getMDXComponents(overrides?: MDXComponents): MDXComponents {
     ),
 
     // ── Image ─────────────────────────────────────────────────────────────────
+    // next/image requires width+height for static analysis; MDX images are
+    // inlined with unknown dimensions, so we use fill + a sized container.
     img: ({ src, alt }) => (
-      // eslint-disable-next-line @next/next/no-img-element
-      <img
-        src={src}
-        alt={alt ?? ""}
-        className="my-6 rounded-xl border border-border w-full object-cover"
-        loading="lazy"
-        decoding="async"
-      />
+      <span className="my-6 relative block w-full aspect-video rounded-xl overflow-hidden border border-border">
+        <NextImage
+          src={src ?? ""}
+          alt={alt ?? ""}
+          fill
+          className="object-cover"
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 75vw, 900px"
+        />
+      </span>
     ),
 
     ...overrides,
