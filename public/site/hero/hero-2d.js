@@ -162,11 +162,12 @@ export async function boot2d({ geo0, head, wordMask, rng, stage, canvas, INTRO_S
       let a = smooth(0, 0.18, t) * (1 - smooth(0.85, 1, G.b)) * (1 - 0.3 * dr);
       if (land > 0) {
         const ft = FT[i];
-        warm = warm * (1 - land) + land * 0.32 * smooth(0.28, 0.55, ft) * (1 - smooth(0.55, 0.85, ft));
-        bright = bright * (1 - land) + land * (0.07 + 0.99 * ft);
+        const dark = 1 - smooth(0.22, 0.5, ft); // two tones: ember code in the dark parts, light code in the light ones
+        warm = warm * (1 - land) + land * Math.max(dark, ry >= 0.9 ? 0.75 * (1 - dark) : 0);
+        bright = bright * (1 - land) + land * (dark > 0.5 ? 1 : 0.55 + 0.55 * ft);
         const sweep = Math.exp(-(((px * 0.8 + py * 0.45 - ((time * 150) % (W + H + 600)) + 300) / 55) ** 2));
         bright += sweep * land * 0.4 * (0.35 + 0.65 * ft);
-        a *= 1 - land + land * (0.25 + 0.75 * smooth(0.02, 0.35, ft));
+        a *= 1 - land + land * (0.72 + 0.28 * smooth(0, 0.5, ft));
       }
       if (a < 0.02) continue;
       const sz = base * (1 + f * 0.35) * (1 - land + land * Math.min(1, headK * 1.2)); // 2D sprites are softer than the shader's, so a little larger

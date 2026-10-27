@@ -88,10 +88,10 @@ export function samplePoints({ geo, mobile, mask, faceMask, rng }) {
     if (!m) { F[i * 2] = T[i * 2]; F[i * 2 + 1] = T[i * 2 + 1]; HF[i] = Hh[i]; FT[i] = 1; FG[i] = Gi[i]; continue; }
     const j = Math.floor(((i * 0.6180339887) % 1) * m); // golden-ratio spread: every head point is used
     F[i * 2] = fp[j * 4] + (r() - 0.5) * cell * 0.15; F[i * 2 + 1] = fp[j * 4 + 1] + (r() - 0.5) * cell * 0.15; HF[i] = fp[j * 4 + 2]; FT[i] = fp[j * 4 + 3];
-    FG[i] = rank[Math.max(0, Math.min(NG - 1, Math.round(FT[i] * (NG - 1) + (r() - 0.5) * 4)))];
+    FG[i] = FT[i] < 0.35 ? Gi[i] : rank[Math.max(0, Math.min(NG - 1, Math.round(FT[i] * (NG - 1) + (r() - 0.5) * 4)))];
   }
   // the portrait's glyph size, relative to the name's: it follows the head grid
-  const headK = Math.min(1, Math.max(0.55, fc / cell));
+  const headK = Math.min(1, Math.max(0.8, fc / cell * 1.25)); // bold like the first head, dense enough to read
   return { cell, T, Hh, R, Gi, E, F, HF, FT, FG, n, headK };
 }
 
@@ -171,13 +171,16 @@ export async function create({ THREE, U, geo, mobile, mask, faceMask, HALF_GLSL,
         // in the head, a glyph takes the brightness of its spot in the portrait: ink in the light, almost nothing in the
         // aviators and the beard, a warm touch in the mid-tones; it settles as it lands
         float land = smoothstep(0.82, 1.0, mk);
-        vec3 face = mix(uInk * 0.07, uInk * 1.06, aFT);
-        face = mix(face, uAcc * 1.1, 0.32 * smoothstep(0.28, 0.55, aFT) * (1.0 - smoothstep(0.55, 0.85, aFT)));
+        // two tones (Nadav, 2026-10-27: version A with the first head): the face and the shirt in light code, the hair,
+        // the aviators and the beard filled with ember code, the outline bright; sparks of ember in the light parts
+        float dark = 1.0 - smoothstep(0.22, 0.5, aFT);
+        vec3 face = mix(uInk * (0.55 + 0.55 * aFT), uAcc * (1.0 + 0.35 * aR.z), dark);
+        face = mix(face, uAcc * 1.25, step(0.9, aR.y) * 0.75 * (1.0 - dark));
         vCol = mix(vCol, face, land);
         // a band of light crosses the portrait every few seconds, like a scanner passing over it
         float sweep = exp(-pow((p.x * 0.8 + p.y * 0.45 - mod(uTime * 150.0, uRes.x + uRes.y + 600.0) + 300.0) / 55.0, 2.0));
         vCol += (uInk * 0.32 + uAcc * 0.12) * sweep * land * (0.35 + 0.65 * aFT);
-        vA *= mix(1.0, 0.25 + 0.75 * smoothstep(0.02, 0.35, aFT), land);
+        vA *= mix(1.0, 0.72 + 0.28 * smoothstep(0.0, 0.5, aFT), land); // everything filled, as in the first head
         gl_PointSize = uSize * uDpr * (1.0 + f * 0.35) * mix(1.0, ${headK.toFixed(3)}, smoothstep(0.82, 1.0, mk)); // in the portrait the glyphs follow its grid, so its features hold
       }`,
     fragmentShader: /* glsl */ `

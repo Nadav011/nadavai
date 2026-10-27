@@ -152,7 +152,9 @@ async function faceStencil() {
     const l = (0.299 * d[o] + 0.587 * d[o + 1] + 0.114 * d[o + 2]) / 255;
     const edge = [[-4, 0], [4, 0], [0, -4], [0, 4]].some(([dx, dy]) => A(sx + dx, sy + dy) < 40);
     // contrast: the aviators sink, the hair and the beard keep a texture, the face and the shirt come up; the outline is bright
-    const v = edge ? 0.95 : Math.min(1, Math.max(0, (l - 0.07) / 0.66)) ** 0.75; // hair keeps a texture, the aviators stay darkest
+    // an S-curve (Nadav liked the bold first head): light parts fill solid, features cut out clearly, hair keeps a little texture
+    const s = Math.min(1, Math.max(0, (l - 0.1) / 0.45)), pos = s * s * (3 - 2 * s);
+    const v = edge ? 1 : pos;
     const p = (y * hw + x) * 4;
     id.data[p] = id.data[p + 1] = id.data[p + 2] = 255; id.data[p + 3] = 255;
     td.data[p] = td.data[p + 1] = td.data[p + 2] = Math.round(v * 255); td.data[p + 3] = 255;
