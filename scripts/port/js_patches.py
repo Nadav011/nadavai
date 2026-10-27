@@ -31,6 +31,17 @@ JS_PATCHES: dict[str, list[tuple[str, str]]] = {
          "        sheet.appendChild(copy);\n"
          "      }\n"),
     ],
+    # the "text turns into particles" effect draws the typed text where the field shows it, in either direction
+    'js/check.js': [
+        ("g.direction = 'rtl'; g.textAlign = 'right';", "const ltr = getComputedStyle(input).direction === 'ltr'; g.direction = ltr ? 'ltr' : 'rtl'; g.textAlign = ltr ? 'left' : 'right';"),
+        ("g.fillText(text, ir.right - fr.left - parseFloat(cs.paddingInlineStart || 0),",
+         "g.fillText(text, ltr ? ir.left - fr.left + parseFloat(cs.paddingInlineStart || 0) : ir.right - fr.left - parseFloat(cs.paddingInlineStart || 0),"),
+    ],
+    'js/sales-pages.js': [
+        ("g.direction = 'rtl'; g.textAlign = 'right';", "const ltr = getComputedStyle(input).direction === 'ltr'; g.direction = ltr ? 'ltr' : 'rtl'; g.textAlign = ltr ? 'left' : 'right';"),
+        ("g.fillText(l, ir.right - fr.left - parseFloat(cs.paddingInlineStart || 0), top + i * lh)",
+         "g.fillText(l, ltr ? ir.left - fr.left + parseFloat(cs.paddingInlineStart || 0) : ir.right - fr.left - parseFloat(cs.paddingInlineStart || 0), top + i * lh)"),
+    ],
     'hero/zoom.js': [
         ('aria-label="לסגור את המסך המוגדל">', "aria-label=\"' + __t('home.hero.dialog.close') + '\">"),
         ('<a class="zd__go" href="work.html">לעמוד הפרויקט<svg', "<a class=\"zd__go\" href=\"' + __href('work') + '\">' + __t('home.hero.peek.go') + '<svg"),

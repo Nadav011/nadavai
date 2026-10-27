@@ -237,7 +237,7 @@ function initIndex() {
     acts.innerHTML = '';
     if (c.dataset.href) { const a = document.createElement('a'); a.className = 'btn btn--sm'; a.href = c.dataset.href; a.target = '_blank'; a.rel = 'noopener'; a.textContent = c.dataset.hrefLabel || 'לפתוח'; acts.appendChild(a); }
     const wa = document.createElement('a'); wa.className = 'btn btn--sm btn--ghost'; wa.target = '_blank'; wa.rel = 'noopener';
-    wa.href = 'https://wa.me/972504401760?text=' + encodeURIComponent(`היי נדב, ראיתי באתר את ${hEl.textContent} ואני רוצה לשמוע עוד`);
+    wa.href = 'https://wa.me/972504401760?text=' + encodeURIComponent(__t('wa.proto.generic', { project: hEl.textContent }));
     wa.textContent = __t('services.block.cta'); acts.appendChild(wa);
     const T = tgt(); place(T);
     const r = c.getBoundingClientRect(); from = { x: r.left, y: r.top, w: r.width, h: r.height };

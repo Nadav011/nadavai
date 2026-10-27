@@ -6,7 +6,7 @@
 import { SAMPLES, FIELDS, detectField } from './check-samples.js';
 
 const PROGRESS = [__t('check.progress.read'), __t('check.progress.field'), __t('check.progress.repeat'), __t('check.progress.first'), __t('check.progress.write')];
-const WA = (field) => 'https://wa.me/972504401760?text=' + encodeURIComponent(`היי נדב, עשיתי באתר את הבדיקה לעסק, בתחום ${field}. אשמח לדבר על מה בונים ראשון.`);
+const WA = (field) => 'https://wa.me/972504401760?text=' + encodeURIComponent(__t('wa.checkResult', { field: field }));
 
 export function initCheck({ gsap, lenis, reduce }) {
   const form = document.getElementById('ck');
@@ -37,8 +37,8 @@ export function initCheck({ gsap, lenis, reduce }) {
     const cs = getComputedStyle(input);
     g.font = `${cs.fontWeight} ${cs.fontSize} ${cs.fontFamily}`;
     const lk = getComputedStyle(document.documentElement), INK = lk.getPropertyValue('--lk-ink').trim() || '#EDE7DC', HOT = lk.getPropertyValue('--lk-acc-2').trim() || '#F2B36F'; // review looks (css/looks.css)
-    g.direction = 'rtl'; g.textAlign = 'right'; g.textBaseline = 'middle'; g.fillStyle = INK;
-    g.fillText(text, ir.right - fr.left - parseFloat(cs.paddingInlineStart || 0), ir.top - fr.top + ir.height / 2);
+    const ltr = getComputedStyle(input).direction === 'ltr'; g.direction = ltr ? 'ltr' : 'rtl'; g.textAlign = ltr ? 'left' : 'right'; g.textBaseline = 'middle'; g.fillStyle = INK;
+    g.fillText(text, ltr ? ir.left - fr.left + parseFloat(cs.paddingInlineStart || 0) : ir.right - fr.left - parseFloat(cs.paddingInlineStart || 0), ir.top - fr.top + ir.height / 2);
     const d = g.getImageData(0, 0, cv.width, cv.height).data;
     const P = [], step = Math.max(2, Math.round(2 * dpr));
     for (let y = 0; y < cv.height; y += step) for (let x = 0; x < cv.width; x += step) {

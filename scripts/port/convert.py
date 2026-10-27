@@ -85,6 +85,17 @@ class Converter:
             n = norm(he)
             if n and HEB.search(n):
                 self.index.setdefault(n, []).append(k)
+        # deck strings with placeholders ("שלב {n}"), tried when no string matches exactly
+        self.templates: list[tuple[str, re.Pattern, list[str]]] = []
+        for k, (he, _en) in copy.items():
+            n = norm(he)
+            names = re.findall(r'\{(\w+)\}', n)
+            if names and HEB.search(re.sub(r'\{\w+\}', '', n)):
+                rx = '^' + re.sub(r'\\\{(\w+)\\\}', lambda m: f'(?P<{m.group(1)}>.+?)', re.escape(n)) + '$'
+                try:
+                    self.templates.append((k, re.compile(rx), names))
+                except re.error:
+                    pass
         self.rich_he: dict[str, str] = {}      # deck id (or id~n variant) -> Hebrew message with tags
         self.variants: dict[str, str] = {}     # variant key -> base deck id (for the English)
         self.misses: list[tuple[str, str]] = []
@@ -116,6 +127,38 @@ class Converter:
         self.stats['hit'] += 1
         return best
 
+    def template(self, text: str) -> tuple[str, dict[str, str]] | None:
+        """A deck string with placeholders that text fills: (id, {name: value}), or None."""
+        t = self.norm(text)
+        hits = [(k, m.groupdict()) for k, rx, _ in self.templates if (m := rx.match(t))]
+        if not hits:
+            return None
+        def rank(h) -> tuple[int, int]:
+            k = h[0]
+            return (next((i for i, p in enumerate(self.ns) if k.startswith(p)), len(self.ns)), 1 if k in self.pending else 0)
+        k, vals = min(hits, key=rank)
+        if k in self.pending:
+            self.used_pending.add(k)
+        self.stats['hit'] += 1
+        return k, vals
+
+    def values(self, vals: dict[str, str], call: str) -> str:
+        """The values object of a template lookup: a value that is itself a deck string is looked up too."""
+        out = []
+        for name, v in vals.items():
+            sub = self.lookup(v) if HEB.search(v) else None
+            out.append(f'{name}: {call}({js(sub)})' if sub else f'{name}: {js(v)}')
+        return '{ ' + ', '.join(out) + ' }'
+
+    def tpl_call(self, text: str) -> str | None:
+        """c("<id>", { ... }) for text that fills a deck template, or None."""
+        hit = self.template(text)
+        if not hit:
+            return None
+        k, vals = hit
+        key = self.key_for(k, self.icu(self.norm(self.copy[k][0])).replace("'{'", '{').replace("'}'", '}'))
+        return f'c({js(key)}, {self.values(vals, "c")})'
+
     def key_for(self, deck_id: str, message: str) -> str:
         """One message key per distinct markup of a deck id: id, then id~2, id~3 ..."""
         n = 1
@@ -131,7 +174,7 @@ class Converter:
     def miss(self, text: str) -> None:
         t = self.norm(text)
         if HEB.search(t):
-            self.misses.append((self.where, t[:140]))
+            self.misses.append((self.where, t))
 
     # ── attributes ───────────────────────────────────────────────────────────
     def url(self, v: str) -> str:
@@ -168,9 +211,20 @@ class Converter:
                     if i:
                         out.append(f'{k}={{c({js(self.key_for(i, self.icu(self.norm(v))))})}}')
                         continue
+                    call = self.tpl_call(v)
+                    if call:
+                        out.append(f'{k}={{{call}}}')
+                        continue
                     self.miss(v)
             if k == 'style':
                 out.append(f'style={self.style(v)}')
+                continue
+            # the prototype marks Hebrew blocks as Hebrew; in the port they follow the page's language
+            if k == 'dir' and v == 'rtl':
+                out.append('dir={locale === "he" ? "rtl" : "ltr"}')
+                continue
+            if k == 'lang' and v == 'he':
+                out.append('lang={locale}')
                 continue
             if k == 'href' and v.startswith('https://wa.me/') and 'text=' in v:
                 from urllib.parse import unquote
@@ -178,6 +232,10 @@ class Converter:
                 i = self.lookup(text)
                 if i:
                     out.append(f'href={{wa({js(self.key_for(i, self.icu(self.norm(text))))})}}')
+                    continue
+                call = self.tpl_call(text)
+                if call:
+                    out.append(f'href={{wa{call[1:]}}}')
                     continue
                 self.miss(text)
             if k in ('href',):
@@ -266,6 +324,10 @@ class Converter:
             return None
         i = self.lookup(text)
         if not i:
+            if all(isinstance(n, NavigableString) for n in nodes) and (call := self.tpl_call(text)):
+                lead = '{" "}' if re.match(r'\s', text) else ''
+                trail = '{" "}' if re.search(r'\s$', text) else ''
+                return f'{lead}{{{call}}}{trail}'
             return None
         msg, facs = self.rich(nodes, svg)
         key = self.key_for(i, msg)
@@ -344,13 +406,19 @@ class Converter:
     def signature(self, el: Tag) -> str:
         return f'{el.name}#{el.get("id", "")}.{" ".join(el.get("class", []))}'
 
-    def module(self, comp: str, body: str, sha_note: str, props: str = '') -> str:
+    def module(self, comp: str, body: str, sha_note: str, props: tuple[str, str] = ('', ''), extra_import: str = '') -> str:
+        """props: the extra destructured names and their types, e.g. (', home', ', home?: boolean')."""
         imports = ''.join(f'import {{ {self.COMPONENT[k]} }} from "./{k}"\n' for k in self.COMPONENT if f'<{self.COMPONENT[k]}' in body)
+        helpers = ", ".join(h for h in ("c", "r", "href", "wa") if re.search(rf"\b{h}\(", body)) or "c"
         return (f'// Generated by scripts/port/sync.py from {sha_note}. Do not edit by hand: change the converter and re-run it.\n'
-                f'import {{ getSiteCopy }} from "@/lib/site/copy"\n{imports}\n'
-                f'export {"async function" if True else ""} {comp}({{ locale{props} }}: {{ locale: string{", home?: boolean" if props else ""} }}) {{\n'
-                f'  const {{ {", ".join(h for h in ("c", "r", "href", "wa") if re.search(rf"\b{h}\(", body)) or "c"} }} = await getSiteCopy(locale)\n'
+                f'import {{ getSiteCopy }} from "@/lib/site/copy"\n{extra_import}{imports}\n'
+                f'export async function {comp}({{ locale{props[0]} }}: {{ locale: string{props[1]} }}) {{\n'
+                f'  const {{ {helpers} }} = await getSiteCopy(locale)\n'
                 f'  return (\n    <>{body}</>\n  )\n}}\n')
+
+    # the language switch the prototype (Hebrew only) does not have: next to the calm switch, and in the phone menu
+    LANG = ('<a className="nav__lang" href={pathFor(other, page)} lang={other} hrefLang={other} '
+            'aria-label={c("global.lang.switch.aria")}>{c("global.lang.switch")}</a>{" "}')
 
     def page(self, page: str, html: str) -> dict[str, str]:
         out: dict[str, str] = {}
@@ -405,7 +473,8 @@ class Converter:
 
         jsx = self.children(body, False)
         for comp, name in self.COMPONENT.items():
-            jsx = re.sub(rf'<x-{comp}\s*/?>(</x-{comp}>)?', f'<{name} locale={{locale}}{" home" if page == "index" and comp == "chrome-dock" else ""} />', jsx)
+            extra = (' home' if page == 'index' and comp == 'chrome-dock' else '') + (f' page={js(page)}' if comp == 'chrome-header' else '')
+            jsx = re.sub(rf'<x-{comp}\s*/?>(</x-{comp}>)?', f'<{name} locale={{locale}}{extra} />', jsx)
         out[f'page-{page}'] = self.module(f'Page_{page.replace("-", "_")}', jsx, f'{page}.html at {self.sha}')
 
         if page == 'index':
@@ -414,9 +483,23 @@ class Converter:
                 self.ns = ['global.']
                 fsoup = BeautifulSoup(f'<body>{self.fragments[frag]}</body>', 'html.parser')
                 fj = self.children(fsoup.body, False)
+                props, extra_import = ('', ''), ''
                 if comp == 'chrome-dock':
                     fj = fj.replace(' data-home-href="#check"', '').replace('href={href("check")}', 'href={home ? "#check" : href("check")}')
-                out[comp] = self.module(self.COMPONENT[comp], fj, f'fragments/{frag} at {self.sha}', ', home' if comp == 'chrome-dock' else '')
+                    props = (', home', ', home?: boolean')
+                if comp == 'chrome-header':
+                    calm = '<button className="calm" id="calm"'
+                    sheet_calm = '<button className="btn btn--ghost sheet__calm"'
+                    assert calm in fj and sheet_calm in fj, 'header fragment changed: place the language switch again'
+                    fj = fj.replace(calm, self.LANG + calm).replace(sheet_calm, self.LANG.replace('nav__lang', 'nav__lang sheet__lang') + sheet_calm)
+                    fj = fj.replace('<>', '<>', 1)
+                    props = (', page', ', page: string')
+                    extra_import = 'import { pathFor } from "@/lib/site/routes"\n'
+                body_pre = 'const other = locale === "he" ? "en" : "he"\n  ' if comp == 'chrome-header' else ''
+                m = self.module(self.COMPONENT[comp], fj, f'fragments/{frag} at {self.sha}', props, extra_import)
+                if body_pre:
+                    m = m.replace('  return (\n', '  ' + body_pre + 'return (\n', 1)
+                out[comp] = m
         return out
 
     def composite(self, text: str) -> list[str] | None:
@@ -438,6 +521,35 @@ class Converter:
 
     # ── JS modules ───────────────────────────────────────────────────────────
     JS_STR = re.compile(r"'((?:[^'\\\n]|\\.)*)'|\"((?:[^\"\\\n]|\\.)*)\"|`((?:[^`\\$]|\\.|\$(?!\{))*)`")
+
+    JS_TPL = re.compile(r'`((?:[^`\\$]|\\.|\$(?!\{)|\$\{[^{}`]*\})*\$\{(?:[^`])*?)`')
+
+    def js_template(self, m: re.Match) -> str:
+        """A template literal with interpolations that fills a deck template: __t('<id>', { name: expr })."""
+        body = m.group(1)
+        if not HEB.search(body):
+            return m.group(0)
+        exprs: list[str] = []
+        def mark(x: re.Match) -> str:
+            exprs.append(x.group(1))
+            return f'\x00{len(exprs) - 1}\x00'
+        text = re.sub(r'\$\{([^{}`]*)\}', mark, body)
+        hit = self.template(text)
+        if hit:
+            k, vals = hit
+            pairs = []
+            for name, v in vals.items():
+                mm = re.fullmatch(r'\x00(\d+)\x00', v)
+                if not mm:
+                    break
+                pairs.append(f'{name}: {exprs[int(mm.group(1))]}')
+            else:
+                self.js_ids.add(k)
+                self.stats['js'] += 1
+                return f"__t('{k}', {{ {', '.join(pairs)} }})"
+            self.stats['hit'] -= 1
+        self.js_misses.append((self.where, self.norm(text.replace('\x00', '{…}'))))
+        return m.group(0)
 
     def js(self, rel: str, src: str) -> str:
         self.where = rel
@@ -483,7 +595,8 @@ class Converter:
                         self.js_ids.update(ids)
                         self.stats['js'] += 1
                         return " + ' · ' + ".join(f"__t('{x}')" for x in ids)
-                    self.js_misses.append((rel, self.norm(s)[:140]))
+                    self.js_misses.append((rel, self.norm(s)))
                 return m.group(0)
-            out.append(self.JS_STR.sub(sub, line))
+            line = self.JS_STR.sub(sub, line)
+            out.append(self.JS_TPL.sub(self.js_template, line))
         return '\n'.join(out)

@@ -180,8 +180,8 @@ function table(box, { reduce }) {
     b.in = true; b.vx = b.vy = 0;
     if (b.kind === 'cue') { cueGone = true; msg.textContent = __t('greenroom.try.table.msgCue'); return; }
     score += VAL[b.kind]; scoreEl.textContent = String(score);
-    msg.textContent = b.kind === 'red' ? __t('greenroom.try.table.msgRed') : `צבעוני בפנים: ${VAL[b.kind]} נקודות`;
-    if (!balls.some((x) => !x.in && x.kind !== 'cue')) { msg.textContent = `ניקיתם את השולחן: ${score} נקודות`; setTimeout(() => { rack(); loop.invalidate(); }, 1800); }
+    msg.textContent = b.kind === 'red' ? __t('greenroom.try.table.msgRed') : __t('greenroom.try.table.msgColor', { n: VAL[b.kind] });
+    if (!balls.some((x) => !x.in && x.kind !== 'cue')) { msg.textContent = __t('greenroom.try.table.msgClear', { n: score }); setTimeout(() => { rack(); loop.invalidate(); }, 1800); }
   }
   function shoot(a, power) {
     const c = cue(); if (!c || moving) return;

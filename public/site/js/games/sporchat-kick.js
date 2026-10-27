@@ -69,7 +69,7 @@ function liveRoom(el, { reduce }) {
     },
     stop() { clearTimeout(timer); clearInterval(clock); timer = 0; clock = 0; },
     react(kind) {
-      if (kind === 'goal') { tickScore(0); live.textContent = `גול! ${score[0]}–${score[1]} לכחולים`; }
+      if (kind === 'goal') { tickScore(0); live.textContent = __t('sporchat.try.live.goal', { a: score[0], b: score[1] }); }
       const set = REACT[kind]; if (!set) return;
       if (kind === 'miss') { post(set[missI++ % set.length]); return; }
       set.forEach((m, i) => setTimeout(() => post(m, !reduce), i * 650));

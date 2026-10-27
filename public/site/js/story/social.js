@@ -142,7 +142,7 @@ function buildFeed({ gsap, reduce }) {
     if (idx < 0) idx = 0;
     if (idx >= seq.length) { close(); return; }
     const s = seq[idx];
-    img.src = P(s.img); img.alt = `סטורי של ${s.name}`;
+    img.src = P(s.img); img.alt = __t('social.feed.story.alt', { name: s.name });
     who.querySelector('img').src = s.av; who.querySelector('span').textContent = s.name;
     [...bars.children].forEach((b, j) => { b.firstChild.style.width = j < idx ? '100%' : '0%'; });
     tween?.kill();

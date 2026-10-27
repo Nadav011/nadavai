@@ -156,7 +156,7 @@ function physics(M, arena, kid) {
     balls.forEach((b) => {
       if (armed && b.position.x < g.x1 + b.plugin.r * 0.4 && b.position.y > g.y0 && performance.now() - b.plugin.scored > 2000) {
         b.plugin.scored = performance.now(); goals++;
-        score.hidden = false; score.textContent = `שערים: ${goals}`;
+        score.hidden = false; score.textContent = __t('home.play.goals', { n: goals });
         gtxt.classList.remove('is-on'); void gtxt.offsetWidth; gtxt.classList.add('is-on');
         kid.play('celebrate');
         setTimeout(() => { Body.setPosition(b, { x: W * 0.55, y: 40 }); Body.setVelocity(b, { x: 0, y: 0 }); }, 700);

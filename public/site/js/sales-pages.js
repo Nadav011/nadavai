@@ -275,7 +275,7 @@ function initCheck() {
     const cs = getComputedStyle(input);
     g.font = `${cs.fontWeight} ${cs.fontSize} ${cs.fontFamily}`;
     const lk = getComputedStyle(document.documentElement), INK = lk.getPropertyValue('--lk-ink').trim() || '#EDE7DC', HOT = lk.getPropertyValue('--lk-acc-2').trim() || '#F2B36F'; // review looks (css/looks.css)
-    g.direction = 'rtl'; g.textAlign = 'right'; g.textBaseline = 'middle'; g.fillStyle = INK;
+    const ltr = getComputedStyle(input).direction === 'ltr'; g.direction = ltr ? 'ltr' : 'rtl'; g.textAlign = ltr ? 'left' : 'right'; g.textBaseline = 'middle'; g.fillStyle = INK;
     // wrap the way the field shows it, then draw each line where it sat
     const maxW = ir.width - parseFloat(cs.paddingInlineStart || 0) - parseFloat(cs.paddingInlineEnd || 0);
     const lines = [];
@@ -285,7 +285,7 @@ function initCheck() {
     });
     const lh = parseFloat(cs.lineHeight) || parseFloat(cs.fontSize) * 1.35;
     const top = ir.top - fr.top + parseFloat(cs.paddingTop || 0) - input.scrollTop + lh / 2;
-    lines.forEach((l, i) => g.fillText(l, ir.right - fr.left - parseFloat(cs.paddingInlineStart || 0), top + i * lh));
+    lines.forEach((l, i) => g.fillText(l, ltr ? ir.left - fr.left + parseFloat(cs.paddingInlineStart || 0) : ir.right - fr.left - parseFloat(cs.paddingInlineStart || 0), top + i * lh));
     const d = g.getImageData(0, 0, cv.width, cv.height).data;
     const P = [], step = Math.max(2, Math.round(2 * dpr));
     for (let y = 0; y < cv.height; y += step) for (let x = 0; x < cv.width; x += step) {
@@ -377,11 +377,11 @@ function initCheck() {
       <section class="ckr__sec" data-gate><h3>מה הייתי בונה ראשון</h3><p data-s="${esc(S.first)}"></p></section>`;
     $$('.asm', body).forEach((d) => {
       const t = $('[data-t]', d), m = $('[data-m]', d), o = $('.asm__out', d);
-      const upd = () => { o.textContent = `זה בערך ${hoursOf(+t.value || 0, +m.value || 0)} שעות בחודש.`; };
+      const upd = () => { o.textContent = __t('check.result.automate.saved', { hours: hoursOf(+t.value || 0, +m.value || 0) }); };
       t.addEventListener('input', upd); m.addEventListener('input', upd);
     });
     $('#ckrField').textContent = FIELDS[key];
-    $('#ckrWa').href = wa(`היי נדב, עשיתי באתר את הבדיקה לעסק, בתחום ${FIELDS[key]}. אשמח לדבר על מה בונים ראשון.`);
+    $('#ckrWa').href = wa(__t('wa.checkResult', { field: FIELDS[key] }));
     end.hidden = true; cut.hidden = true;
     resetSave();
     return $$('[data-s]', body);
@@ -435,7 +435,7 @@ function initCheck() {
   function doSave(focus = true) {
     saveBtn.hidden = true; saved.hidden = false;
     const dt = new Date(Date.now() + 30 * 864e5).toLocaleDateString('he-IL', { day: 'numeric', month: 'long', year: 'numeric' });
-    $('#ckrExp').textContent = `הקישור יעבוד עד ${dt}.`;
+    $('#ckrExp').textContent = __t('check.saved.expires', { date: dt });
     if (focus) saved.focus({ preventScroll: true });
   }
   saveBtn.addEventListener('click', () => doSave());

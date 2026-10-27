@@ -33,9 +33,10 @@ const motion = `(function () {
   window.__page = pageOf(location.pathname) || 'index';
   window.__pageOf = pageOf;
   var copy = null;
-  window.__t = function (id) {
+  window.__t = function (id, v) {
     if (!copy) { try { copy = JSON.parse(document.getElementById('__copy').textContent); } catch (e) { copy = {}; } }
-    return copy[id] != null ? copy[id] : id;
+    var s = copy[id] != null ? copy[id] : id;
+    return v ? s.replace(/\{(\w+)\}/g, function (m, k) { return v[k] != null ? v[k] : m; }) : s;
   };
 })();`
 

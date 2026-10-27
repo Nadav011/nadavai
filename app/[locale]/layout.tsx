@@ -5,6 +5,7 @@ import { routing } from "@/i18n/routing"
 import { getSiteCopy } from "@/lib/site/copy"
 import { HEAD_LOOKS, HEAD_MOTION } from "@/lib/site/head-script"
 import { jsCopy } from "@/lib/site/js-copy"
+import "./site-port.css"
 
 // The prototype's favicon: a dark tile with the orange cursor bar.
 const ICON = "data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 32 32%22%3E%3Crect width=%2232%22 height=%2232%22 rx=%227%22 fill=%22%230A0C0E%22/%3E%3Crect x=%2215%22 y=%226%22 width=%222%22 height=%2220%22 fill=%22%23E8913C%22/%3E%3C/svg%3E"

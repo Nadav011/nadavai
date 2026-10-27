@@ -2,8 +2,8 @@
 
 Prototype: `nadavc-ai` at `e7e75d0`. Deck ids: 977, draft ids (COPY-GAP, pending approval): 533.
 
-Markup strings mapped to an id: 1917; still literal (no id in either file): 260.
-Ids used that are still draft-only: 495. JS literals replaced: 274; JS literals left: 55.
+Markup strings mapped to an id: 1972; still literal (no id in either file): 232.
+Ids used that are still draft-only: 500. JS literals replaced: 284; JS literals left: 57.
 
 ## Literal strings without a deck id
 
@@ -18,10 +18,7 @@ Ids used that are still draft-only: 495. JS literals replaced: 274; JS literals 
 - `index`: מה זה נותן
 - `index`: הודעות
 - `index`: שיחות שלא נקראו
-- `index`: כמה מהמסך מציג את המצב לפני: כאוס בוואטסאפ
-- `index`: כמה מהמסך מציג את המצב לפני: נייר ואקסל
 - `index`: לקוח חדש · 23:41
-- `index`: כמה מהמסך מציג את המצב לפני: פניות שהולכות לאיבוד
 - `index`: שירות
 - `index`: קביעת תורים
 - `index`: עיצוב
@@ -32,30 +29,22 @@ Ids used that are still draft-only: 495. JS literals replaced: 274; JS literals 
 - `index`: בדיקות
 - `index`: עם שקיפות מלאה
 - `index`: מתוך 5
-- `index`: שלב 1
-- `index`: שלב 2
-- `index`: שלב 3
-- `index`: שלב 4
-- `index`: שלב 5
 - `index`: רחפו או הקישו על טלפון.
 - `index`: הקישו על טלפון.
 - `index`: צ'אט חי לכל משחק כדורגל. CTO. ב-App Store וב-Google Play.
 - `index`: ניהול קליניקות, עם בוט בוואטסאפ שקובע תורים. Co-Founder & CTO. עובד בקליניקות.
 - `index`: מועדון סנוקר שעובד בלי אף אחד בדלפק. בניתי את כל המערכת. ב-App Store וב-Google Play.
 - `index`: 08:00, משמרות
-- `index`: היי נדב, הגעתי מהאתר ורוצה לשמוע על החבילה שותף טכנולוגי.
 - `index`: שעות פיתוח קבועות כל חודש
 - `index`: מערכות וסוכני
 - `index`: לפי הצורך
 - `index`: עדיפות בזמינות
 - `index`: פגישת אסטרטגיה חודשית
-- `index`: היי נדב, הגעתי מהאתר ורוצה לשמוע על החבילה צוות AI.
 - `index`: סוכן
 - `index`: או אוטומציות
 - `index`: מערכת תוכן
 - `index`: שיפורים חודשיים
 - `index`: שירות ופיתוח
-- `index`: היי נדב, הגעתי מהאתר ורוצה לשמוע על החבילה תחזוקה וצמיחה.
 - `index`: תחזוקה
 - `index`: שעות פיתוח קטנות
 - `index`: ניטור
@@ -72,18 +61,6 @@ Ids used that are still draft-only: 495. JS literals replaced: 274; JS literals 
 - `services`: ניטור
 - `services`: בדיקות
 - `services`: עם שקיפות מלאה
-- `services`: היי נדב, הגעתי מדף השירותים, בנושא מערכות ואוטומציות לעסק.
-- `services`: היי נדב, הגעתי מדף השירותים, בנושא סוכני AI ובוטים לוואטסאפ.
-- `services`: היי נדב, הגעתי מדף השירותים, בנושא אפליקציות לחנויות.
-- `services`: היי נדב, הגעתי מדף השירותים, בנושא אתרים ועיצוב UI/UX.
-- `services`: היי נדב, הגעתי מדף השירותים, בנושא מערכת תוכן ותזמון.
-- `services`: היי נדב, הגעתי מדף השירותים, בנושא אבטחת מידע לעסקים.
-- `services`: היי נדב, הגעתי מדף השירותים, בנושא הטמעת AI לצוותים.
-- `services`: שלב 1
-- `services`: שלב 2
-- `services`: שלב 3
-- `services`: שלב 4
-- `services`: שלב 5
 - `services`: דמו לפני בנייה
 - `services`: שקיפות מלאה לאורך הדרך
 - `work`: מערכות
@@ -95,10 +72,10 @@ Ids used that are still draft-only: 495. JS literals replaced: 274; JS literals 
 - `work`: אפליקציה
 - `work`: משחק
 - `work`: קמפיין · לקוח
-- `work`: קמפיין פייסבוק לחשמלאי שמתקין עמדות טעינה לרכב חשמלי. מחקר, בריף, זהות לדף, מודעות בשני פורמטים, ותבנית שיחה שמסננת פניות. כל פנייה נוחתת יש
+- `work`: קמפיין פייסבוק לחשמלאי שמתקין עמדות טעינה לרכב חשמלי. מחקר, בריף, זהות לדף, מודעות בשני פורמטים, ותבנית שיחה שמסננת פניות. כל פנייה נוחתת ישר בוואטסאפ שלו.
 - `work`: מודעות
 - `work`: קריאייטיב · עסקים
-- `work`: פלאיירים, לוגואים, ערכות פוסטרים ותוכן לרשתות לעסקים מקומיים: Asian Bar, ברסלב פרויקטים, חשמלכה ועוד. חלק מהם נוצרו במערכת התוכן שבניתי, כדי
+- `work`: פלאיירים, לוגואים, ערכות פוסטרים ותוכן לרשתות לעסקים מקומיים: Asian Bar, ברסלב פרויקטים, חשמלכה ועוד. חלק מהם נוצרו במערכת התוכן שבניתי, כדי שהעסק יקבל עיצוב חדש בכל שבוע בלי מעצב.
 - `work`: מיתוג
 - `work`: הדמיות תלת-ממד
 - `work`: ההדמיות נוצרו ב-AI. המצגות עצמן נבנו בקוד.
@@ -109,7 +86,7 @@ Ids used that are still draft-only: 495. JS literals replaced: 274; JS literals 
 - `work`: כלי שממלא תוכנית DXF לפי מפרט: חדרים, מידות ותוויות, ישר לתוך AutoCAD.
 - `work`: כלי · קוד פתוח
 - `work`: מבוסס על פרויקט קוד פתוח (MIT), עם הדמות שלי ושינויים משלי.
-- `work`: חיית מחמד לשולחן העבודה שמראה מה סוכן הקוד עושה עכשיו: עובד, מחכה לאישור, תקוע או סיים. יש לה צ'אט מהיר והכתבה בעברית. אחד הדברים שהכי כיף ל
+- `work`: חיית מחמד לשולחן העבודה שמראה מה סוכן הקוד עושה עכשיו: עובד, מחכה לאישור, תקוע או סיים. יש לה צ'אט מהיר והכתבה בעברית. אחד הדברים שהכי כיף לי לבנות.
 - `work`: אפליקציה
 - `work`: חתום בנשיקה דיגיטל
 - `work`: סגירה
@@ -170,7 +147,6 @@ Ids used that are still draft-only: 495. JS literals replaced: 274; JS literals 
 - `my-branch`: שיא הערב
 - `my-branch`: סגירה
 - `my-branch`: Z: לפתוח את המסכים
-- `my-branch`: היי נדב, ראיתי באתר את מערכות הסניף. אשמח לשמוע מה אפשר לבנות לעסק שלי.
 - `mexicani-network`: סניפים
 - `mexicani-network`: ביקורות
 - `mexicani-network`: משימות
@@ -183,7 +159,6 @@ Ids used that are still draft-only: 495. JS literals replaced: 274; JS literals 
 - `mexicani-network`: ביקורת
 - `mexicani-network`: התוצאה
 - `mexicani-network`: התוצאה
-- `mexicani-network`: היי נדב, ראיתי באתר את אפליקציית רשת המקסיקני. אשמח לשמוע מה אפשר לבנות לעסק שלי.
 - `mexicani-network`: לסניף שלי
 - `social`: תוכן, מיתוג ותזמון
 - `social`: השירות
@@ -230,19 +205,16 @@ Ids used that are still draft-only: 495. JS literals replaced: 274; JS literals 
 - `about`: 250 שעות אקדמיות
 - `about`: נתיבות
 - `about`: תורכם
-- `plans`: היי נדב, הגעתי מהאתר ורוצה לשמוע על החבילה שותף טכנולוגי.
 - `plans`: שעות פיתוח קבועות כל חודש
 - `plans`: מערכות וסוכני
 - `plans`: לפי הצורך
 - `plans`: עדיפות בזמינות
 - `plans`: פגישת אסטרטגיה חודשית
-- `plans`: היי נדב, הגעתי מהאתר ורוצה לשמוע על החבילה צוות AI.
 - `plans`: סוכן
 - `plans`: או אוטומציות
 - `plans`: מערכת תוכן
 - `plans`: שיפורים חודשיים
 - `plans`: שירות ופיתוח
-- `plans`: היי נדב, הגעתי מהאתר ורוצה לשמוע על החבילה תחזוקה וצמיחה.
 - `plans`: תחזוקה
 - `plans`: שעות פיתוח קטנות
 - `plans`: ניטור
@@ -314,7 +286,9 @@ Ids used that are still draft-only: 495. JS literals replaced: 274; JS literals 
 - `js/story/social.js`: ברסלב
 - `js/story/social.js`: פוסט של ${w.name}
 - `js/story-pages.js`: <span class="st-ill">המחשה</span>
+- `js/story-pages.js`: {…}0{…}<figcaption><span></span>{…}1{…}</figcaption>
 - `js/story-pages.js`: אני
+- `js/work-pages.js`: {…}0{…} עבודות
 - `js/work-pages.js`: לפתוח
 - `hero/cloud.js`: אבגדהוזחטיכלמנסעפצקרשת
 - `hero/hero-a.js`: אבגדהוזחטיכלמנסעפצקרשת

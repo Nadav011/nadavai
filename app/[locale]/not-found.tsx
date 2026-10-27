@@ -10,7 +10,7 @@ export default async function NotFound() {
   return (
     <>
       {["/site/css/site.css", "/site/css/chrome.css"].map((h) => <link key={h} rel="stylesheet" href={h} />)}
-      <SiteHeader locale={locale} />
+      <SiteHeader locale={locale} page="index" />
       <main id="main" className="legal">
         <section className="sec">
           <h1 className="sec__h">{c("404.h1")}</h1>
