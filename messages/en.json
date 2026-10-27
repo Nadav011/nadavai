@@ -1755,6 +1755,9 @@
  "work/zoom/close": "Close",
  "work/zoom/open": "Open",
  "home/plans/aiTeam/name~2": "AI Team",
+ "home/services/agents/name~2": "AI agents and WhatsApp bots",
+ "home/services/web/name~2": "Websites and UI/UX design",
+ "home/services/enablement/name~2": "AI enablement for teams",
  "about/level01/title~2": "The kid with the HTC",
  "about/level06/title~2": "AI engineer"
 }

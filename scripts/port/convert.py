@@ -148,6 +148,8 @@ class Converter:
         out = []
         for name, v in vals.items():
             sub = self.lookup(v) if HEB.search(v) else None
+            if sub and call == 'c':
+                sub = self.key_for(sub, self.icu(self.norm(v)))  # plain text: never a key whose Hebrew carries tags
             out.append(f'{name}: {call}({js(sub)})' if sub else f'{name}: {js(v)}')
         return '{ ' + ', '.join(out) + ' }'
 
@@ -247,8 +249,11 @@ class Converter:
                 v = self.url(v)
             elif k in ('data-home-href',):
                 pass
-            elif k in ('src', 'poster', 'data-src') or (k.startswith('data-') and ASSET_PREFIX.match(v or '')):
+            elif k in ('src', 'poster'):
                 v = self.url(v)
+            elif k.startswith('data-') and v:
+                # a data attribute may list several assets ("a.webp,b.webp"): every path in it becomes /site/...
+                v = re.sub(r'(?<![\w/.-])((?:assets|hero|sections)/)', r'/site/\1', v)
             elif k in ('srcset', 'data-srcset'):
                 v = ', '.join(self.url(p.strip()) for p in v.split(','))
             if el.name in ('input', 'textarea') and k == 'value':

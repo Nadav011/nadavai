@@ -1755,6 +1755,9 @@
  "work/zoom/close": "סגירה",
  "work/zoom/open": "לפתוח",
  "home/plans/aiTeam/name~2": "צוות <t0>AI</t0>",
+ "home/services/agents/name~2": "סוכני AI ובוטים לוואטסאפ",
+ "home/services/web/name~2": "אתרים ועיצוב UI/UX",
+ "home/services/enablement/name~2": "הטמעת AI לצוותים",
  "about/level01/title~2": "הילד עם ה-HTC",
  "about/level06/title~2": "מהנדס AI"
 }

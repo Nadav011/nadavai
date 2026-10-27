@@ -39,7 +39,7 @@ MESSAGES = REPO / 'messages'
 
 # prototype folders served as static files; html pages, proofs and tools stay behind
 STATIC_DIRS = ['css', 'js', 'hero', 'sections', 'assets']
-SKIP = re.compile(r'(^|/)(proof|tools|fragments|__pycache__)(/|$)|\.(html|md|py|mp4|DS_Store)$')
+SKIP = re.compile(r'(^|/)(proof|tools|fragments|__pycache__)(/|$)|\.(html|md|py|DS_Store)$')
 
 ID_RX = re.compile(r'^[A-Za-z0-9.\-]+$')
 
@@ -170,6 +170,12 @@ def main() -> None:
     errs = {loc: {k: v for k, v in msgs.items() if k.startswith('error/')} for loc, msgs in (('he', he), ('en', en))}
     (MESSAGES / 'error.json').write_text(json.dumps(errs, ensure_ascii=False, indent=1) + '\n', encoding='utf-8')
     (MESSAGES / 'js-ids.json').write_text(json.dumps(sorted(conv.js_ids | set(PATCH_IDS)), indent=1) + '\n', encoding='utf-8')
+
+    # a plain lookup of a message with tags fails at render time (next-intl wants the tag functions): stop here instead
+    plain = {m for f in GEN.glob('*.tsx') for m in re.findall(r'\bc\("([^"]+)"', f.read_text(encoding='utf-8'))}
+    broken = sorted(k for k in plain if re.search(r'<t\d+>', he.get(k.replace('.', '/'), '')))
+    if broken:
+        raise SystemExit(f'plain lookups of messages with tags: {broken}')
 
     # 4. report
     lines = [f'# Port report\n', f'Prototype: `{DESIGN.name}` at `{sha}`. Deck ids: {len(deck)}, draft ids (COPY-GAP, pending approval): {len(pending)}.\n',
