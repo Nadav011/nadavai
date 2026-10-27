@@ -27,7 +27,7 @@ uniform vec4 uHalf0, uHalf1;     // origin xy, translate x, scale
 uniform vec2 uLeft;              // 1 when that half sits on the left of the seam
 uniform vec2 uEdge;              // portal edges L, R (stage px)
 uniform vec3 uPtr;               // pointer xy (stage px), strength 0..1
-uniform float uIntro, uTime, uA, uB, uDpr, uGx, uMorph, uScan;
+uniform float uIntro, uTime, uA, uB, uDpr, uGx, uMorph;
 vec2 halfX(vec2 p, float h){ vec4 H = h < 0.5 ? uHalf0 : uHalf1; return H.xy + (p - H.xy) * H.w + vec2(H.z, 0.0); }
 float leftOf(float h){ return h < 0.5 ? uLeft.x : uLeft.y; }
 vec4 clipOf(vec2 p){ return vec4(p.x / uRes.x * 2.0 - 1.0, 1.0 - p.y / uRes.y * 2.0, 0.0, 1.0); }
@@ -63,12 +63,18 @@ export function wordMask(geo, k = 1, face = null) {
   const c = document.createElement('canvas'); c.width = W; c.height = H;
   const g = c.getContext('2d', { willReadFrequently: true });
   const letters = [];
+  let toneData = null;
   // face: draw this stencil instead of the words, centred and split down the middle (the head target of the scroll)
   if (face) {
     const t = Math.min(...geo.words.map((w) => w.t)), b = Math.max(...geo.words.map((w) => w.b));
     const fh = (b - t) * 1.55, fw = fh * (face.width / face.height);
     const cx = geo.W / 2, fx = cx - fw / 2, fy = b - fh; // centred on the screen, split down its middle
     g.drawImage(face, fx * k, fy * k, fw * k, fh * k);
+    if (face.tone) { // the tone map at the same place, read by tone(x, y)
+      const tc = document.createElement('canvas'); tc.width = W; tc.height = H;
+      tc.getContext('2d').drawImage(face.tone, fx * k, fy * k, fw * k, fh * k);
+      toneData = tc.getContext('2d').getImageData(0, 0, W, H).data;
+    }
     // colour the stencil by half: left of the gap is word 0, right of it word 1
     g.globalCompositeOperation = 'source-atop'; // paint on the stencil only, keep the other half
     g.fillStyle = '#f00'; g.fillRect(0, 0, cx * k, H);
@@ -108,7 +114,12 @@ export function wordMask(geo, k = 1, face = null) {
   let x0 = Infinity, x1 = -Infinity, y0 = Infinity, y1 = -Infinity;
   geo.words.forEach((w) => { x0 = Math.min(x0, w.l); x1 = Math.max(x1, w.r); y0 = Math.min(y0, w.t); y1 = Math.max(y1, w.b); });
   if (face) letters.flat().forEach((r) => { x0 = Math.min(x0, r.x0); x1 = Math.max(x1, r.x1); y0 = Math.min(y0, r.t); y1 = Math.max(y1, r.b); });
-  return { word, edge, letters, canvas: c, box: { x0: x0 - 4, x1: x1 + 4, y0: y0 - 4, y1: y1 + 4 } };
+  const tone = (x, y) => {
+    if (!toneData) return 1;
+    const X = Math.floor(x * k), Y = Math.floor(y * k);
+    return X < 0 || Y < 0 || X >= W || Y >= H ? 0 : toneData[(Y * W + X) * 4] / 255;
+  };
+  return { word, edge, tone, letters, canvas: c, box: { x0: x0 - 4, x1: x1 + 4, y0: y0 - 4, y1: y1 + 4 } };
 }
 
 export function rng(seed) {
@@ -116,33 +127,38 @@ export function rng(seed) {
   return () => { s = (s + 0x6d2b79f5) | 0; let t = Math.imul(s ^ (s >>> 15), 1 | s); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; };
 }
 
-// the head target of the scroll (Nadav, 2026-10-27): the code that wrote NADAV AI redraws the avatar's head (the
-// aviators, the hair, the beard) as a stencil: its dark parts and its outline, cut from the idle frame of the atlas
+// the head target of the scroll (Nadav, 2026-10-27: "the man from the letters, improved"): the code that wrote
+// NADAV AI redraws the avatar's head and shoulders as a portrait in glyphs. The stencil is the whole figure;
+// alongside it a tone map, so each glyph takes the brightness of its spot: a light face and shirt, dark aviators,
+// hair and beard, and a bright outline that holds the shape.
 async function faceStencil() {
-  const img = new Image(); img.src = new URL('../assets/avatar/spritesheet.webp', import.meta.url).href;
+  const img = new Image(); img.src = new URL('../assets/avatar/spritesheet@2x.webp', import.meta.url).href;
   await img.decode();
-  const CW = 192, CH = 208, cell = document.createElement('canvas'); cell.width = CW; cell.height = CH;
+  const CW = 384, CH = 416, cell = document.createElement('canvas'); cell.width = CW; cell.height = CH;
   const cg = cell.getContext('2d', { willReadFrequently: true }); cg.drawImage(img, 0, 0, CW, CH, 0, 0, CW, CH);
   const d = cg.getImageData(0, 0, CW, CH).data;
   let x0 = CW, x1 = 0, y0 = CH, y1 = 0;
   for (let y = 0; y < CH; y++) for (let x = 0; x < CW; x++) if (d[(y * CW + x) * 4 + 3] > 40) { x0 = Math.min(x0, x); x1 = Math.max(x1, x); y0 = Math.min(y0, y); y1 = Math.max(y1, y); }
   const hh = Math.round((y1 - y0) * 0.44); // the head, the shoulders and the top of the shirt
-  // the full width of the figure: the avatar's head is as wide as its shoulders, so a narrower crop cuts its sides flat
-  const hx0 = Math.max(0, x0 - 2), hw = Math.min(CW - hx0, x1 - x0 + 5);
+  // the full width of the figure: the avatar's head is as wide as its shoulders
+  const hx0 = Math.max(0, x0 - 4), hw = Math.min(CW - hx0, x1 - x0 + 9);
   const out = document.createElement('canvas'); out.width = hw; out.height = hh;
-  const og = out.getContext('2d'); const id = og.createImageData(hw, hh);
+  const tone = document.createElement('canvas'); tone.width = hw; tone.height = hh;
+  const id = out.getContext('2d').createImageData(hw, hh), td = tone.getContext('2d').createImageData(hw, hh);
+  const A = (x, y) => (x < 0 || y < 0 || x >= CW || y >= CH ? 0 : d[(y * CW + x) * 4 + 3]);
   for (let y = 0; y < hh; y++) for (let x = 0; x < hw; x++) {
-    const o = ((y0 + y) * CW + hx0 + x) * 4, a = d[o + 3];
+    const sx = hx0 + x, sy = y0 + y, o = (sy * CW + sx) * 4, a = d[o + 3];
     if (a < 40) continue;
     const l = (0.299 * d[o] + 0.587 * d[o + 1] + 0.114 * d[o + 2]) / 255;
-    // dark features always; the rest only near the outline, so the face reads as a drawing, not a blob
-    const edge = [[-3, 0], [3, 0], [0, -3], [0, 3]].some(([dx, dy]) => (d[((y0 + y + dy) * CW + hx0 + x + dx) * 4 + 3] ?? 0) < 40);
-    if (l < 0.42 || edge) { const p = (y * hw + x) * 4; id.data[p] = id.data[p + 1] = id.data[p + 2] = 255; id.data[p + 3] = 255; }
+    const edge = [[-4, 0], [4, 0], [0, -4], [0, 4]].some(([dx, dy]) => A(sx + dx, sy + dy) < 40);
+    // contrast: the aviators sink, the hair and the beard keep a texture, the face and the shirt come up; the outline is bright
+    const v = edge ? 0.95 : Math.min(1, Math.max(0, (l - 0.07) / 0.66)) ** 0.75; // hair keeps a texture, the aviators stay darkest
+    const p = (y * hw + x) * 4;
+    id.data[p] = id.data[p + 1] = id.data[p + 2] = 255; id.data[p + 3] = 255;
+    td.data[p] = td.data[p + 1] = td.data[p + 2] = Math.round(v * 255); td.data[p + 3] = 255;
   }
-  og.putImageData(id, 0, 0);
-  // the same crop of the real, full-colour avatar replaces the code once it has landed (hero.js prints it)
-  window.__heroFace = { sx: hx0, sy: y0, sw: hw, sh: hh };
-  document.dispatchEvent(new CustomEvent('hero:face'));
+  out.getContext('2d').putImageData(id, 0, 0); tone.getContext('2d').putImageData(td, 0, 0);
+  out.tone = tone;
   return out;
 }
 
@@ -157,9 +173,22 @@ async function boot() {
 
   let renderer;
   try {
+    if (q.get('gl') === '2d') throw new Error('2d requested'); // review link: the fallback below, on a WebGL machine
+    // ask quietly first: three.js logs console errors when it fails to make a context
+    if (!document.createElement('canvas').getContext('webgl2')) throw new Error('no WebGL2');
     const solid = v === 'c' || v === 'd' || v === 'cloud'; // 3D blocks need depth and edge AA
     renderer = new THREE.WebGLRenderer({ canvas, alpha: true, premultipliedAlpha: true, antialias: solid, depth: solid, stencil: false, powerPreference: 'high-performance' });
-  } catch { fail(canvas); return; }
+  } catch {
+    // no WebGL here: the same code hero on a 2D canvas (hero-2d.js) instead of the plain text name
+    const c2 = document.createElement('canvas'); c2.className = 'pfx-canvas'; c2.setAttribute('aria-hidden', 'true');
+    canvas.replaceWith(c2);
+    try {
+      const fine = matchMedia('(hover: hover) and (pointer: fine)').matches;
+      const { boot2d } = await import('./hero-2d.js');
+      await boot2d({ geo0, head, wordMask, rng, stage, canvas: c2, INTRO_S, fine, mobile: !fine && Math.min(innerWidth, innerHeight) < 820 });
+    } catch (e) { console.info('[hero-gl] 2d fallback unavailable, text hero kept', e); fail(c2); }
+    return;
+  }
   renderer.setClearColor(0x000000, 0);
   renderer.debug.checkShaderErrors = /^(localhost|127\.0\.0\.1)$/.test(location.hostname);
   const scene = new THREE.Scene(), cam = new THREE.Camera();
@@ -171,7 +200,7 @@ async function boot() {
   const U = {
     uRes: { value: new THREE.Vector2(1, 1) }, uHalf0: { value: new THREE.Vector4() }, uHalf1: { value: new THREE.Vector4() },
     uLeft: { value: new THREE.Vector2() }, uEdge: { value: new THREE.Vector2() }, uPtr: { value: new THREE.Vector3() },
-    uIntro: { value: 0 }, uTime: { value: 0 }, uA: { value: 0 }, uB: { value: 0 }, uMorph: { value: 0 }, uScan: { value: -1e5 }, uDpr: { value: 1 }, uGx: { value: 0 },
+    uIntro: { value: 0 }, uTime: { value: 0 }, uA: { value: 0 }, uB: { value: 0 }, uMorph: { value: 0 }, uDpr: { value: 1 }, uGx: { value: 0 },
     uInk: { value: new THREE.Color('#EDE7DC') }, uAcc: { value: new THREE.Color('#E8913C') },
   };
   // authored as sRGB triplets, output untouched (no colorspace chunk), like the DOM colours
@@ -245,7 +274,7 @@ async function boot() {
     U.uHalf1.value.set(w[1].ox, w[1].oy, G.tx[1], G.grow);
     U.uLeft.value.set(w[0].left ? 1 : 0, w[1].left ? 1 : 0);
     U.uEdge.value.set(G.L, G.R); U.uGx.value = G.gx;
-    U.uA.value = G.a; U.uB.value = G.b; U.uMorph.value = G.m || 0; U.uScan.value = G.scan ?? -1e5;
+    U.uA.value = G.a; U.uB.value = G.b; U.uMorph.value = G.m || 0;
     // pointer: damped follow + eased strength (no field once the portal opens)
     const k = 1 - Math.exp(-dt * 14);
     ptr.sx += (ptr.x - ptr.sx) * k; ptr.sy += (ptr.y - ptr.sy) * k;

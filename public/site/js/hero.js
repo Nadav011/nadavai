@@ -27,17 +27,7 @@ export function initHero({ gsap, ScrollTrigger, lenis, reduce }) {
   const ins = [...wm.querySelectorAll('.wm__in')];
 
   const st = { a: 0, b: 0, m: 0 }; // m: the code leaves the letters and draws Nadav's head (before the portal)
-  // the avatar (Nadav, 2026-10-27: "where did the avatar go before my photo? not one made of code"): once the code
-  // has landed in the head, a line of light prints the real avatar over it, and the portal then opens through the
-  // avatar. Two halves of one crop of the sprite atlas, so the opening splits it down the middle like the code.
-  const av = document.createElement('div');
-  av.className = 'hav'; av.setAttribute('aria-hidden', 'true');
-  av.innerHTML = '<i class="hav__h hav__h--l"></i><i class="hav__h hav__h--r"></i><i class="hav__h"></i><i class="hav__scan"></i>';
-  stage.appendChild(av);
-  // whole while the portal is closed (two halves overlapping would draw the soft edge twice), halves once it opens
-  const avL = av.children[0], avR = av.children[1], avF = av.children[2], avScan = av.children[3];
   const smooth = (a, b, x) => { const u = clamp((x - a) / (b - a), 0, 1); return u * u * (3 - 2 * u); };
-  document.addEventListener('hero:face', () => { if (G) measure(); });
   let G = null;
   const lerp = (p, q, t) => p + (q - p) * t;
   const mix = (P, Q, t) => ({ s: lerp(P.s, Q.s, t), x: lerp(P.x, Q.x, t), y: lerp(P.y, Q.y, t) });
@@ -116,16 +106,7 @@ export function initHero({ gsap, ScrollTrigger, lenis, reduce }) {
     const overflow = wide ? stBottomA > H - 24 : stTopA < capB + 12;
     // narrow screens stop at 0.7 (the CSS hides the caption line on short ones instead); wide ones may go further
     if (overflow && k > (wide ? 0.3 : 0.7)) return measure(k * 0.88);
-    // the avatar's box is the code head's box (hero-gl wordMask): centred, 1.55 times the name's height, on its baseline
-    let face = null;
-    const F = window.__heroFace;
-    if (F) {
-      const t = Math.min(rects[0].t, rects[1].t), fh = (wmBottom - t) * 1.55, fw = fh * (F.sw / F.sh), s = fw / F.sw;
-      face = { x: W / 2 - fw / 2, y: wmBottom - fh, w: fw, h: fh };
-      Object.assign(av.style, { left: `${face.x.toFixed(1)}px`, top: `${face.y.toFixed(1)}px`, width: `${fw.toFixed(1)}px`, height: `${fh.toFixed(1)}px` });
-      [avL, avR, avF].forEach((h) => Object.assign(h.style, { backgroundSize: `${(1536 * s).toFixed(1)}px auto`, backgroundPosition: `${(-F.sx * s).toFixed(1)}px ${(-F.sy * s).toFixed(1)}px` }));
-    }
-    G = { W, H, wide, gx, S, A, E, apA, sMax, halves: H2, copyA, face };
+    G = { W, H, wide, gx, S, A, E, apA, sMax, halves: H2, copyA };
     const WG = window.__wmGeo = window.__wmGeo || { v: 0 };
     WG.v++; WG.W = W; WG.H = H; WG.wide = wide; WG.gx = gx; WG.size = size;
     WG.words = ins.map((el, i) => {
@@ -165,21 +146,9 @@ export function initHero({ gsap, ScrollTrigger, lenis, reduce }) {
       h.el.style.transform = `translate3d(${x.toFixed(2)}px,0,0) scale(${grow.toFixed(4)})`;
       if (WG) WG.tx[i] = x;
     });
-    // the print: from the top of the head down, over the last part of the head phase
-    const pr = G.face ? smooth(0.55, 1, st.m || 0) : 0;
-    if (G.face) {
-      av.classList.toggle('is-on', pr > 0);
-      root.classList.toggle('hero-av', pr > 0.05 && b < 0.5); // the corner guide steps aside while the big avatar is on stage
-      const cut = ((1 - pr) * 100).toFixed(2);
-      const split = a > 0.0005;
-      avF.style.display = split ? 'none' : ''; avL.style.display = avR.style.display = split ? '' : 'none';
-      avF.style.clipPath = `inset(0 0 ${cut}% 0)`;
-      avL.style.clipPath = `inset(0 50% ${cut}% 0)`; avR.style.clipPath = `inset(0 0 ${cut}% 50%)`;
-      avL.style.transform = `translate3d(${(L - c0).toFixed(2)}px,0,0)`; avR.style.transform = `translate3d(${(R - c0).toFixed(2)}px,0,0)`;
-      avScan.style.top = `${(pr * 100).toFixed(2)}%`;
-      avScan.style.opacity = (Math.sin(Math.PI * pr) * 1.2).toFixed(3);
-    }
-    if (WG) { WG.grow = grow; WG.a = a; WG.b = b; WG.m = st.m; WG.L = L; WG.R = R; WG.t = performance.now(); WG.scan = pr > 0 ? G.face.y + pr * G.face.h + (pr >= 1 ? 40 : 0) : -1e5; }
+    // the corner guide steps aside while the code portrait is on stage
+    root.classList.toggle('hero-av', (st.m || 0) > 0.5 && b < 0.5);
+    if (WG) { WG.grow = grow; WG.a = a; WG.b = b; WG.m = st.m; WG.L = L; WG.R = R; WG.t = performance.now(); }
     const k = 1 - (b < 0.5 ? 4 * b * b * b : 1 - Math.pow(-2 * b + 2, 3) / 2);
     statement.style.translate = `${(G.copyA.x * k).toFixed(1)}px ${(G.copyA.y * k).toFixed(1)}px`;
     // the flying card passes through the copy's place while the portal opens: the copy steps aside

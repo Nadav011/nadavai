@@ -2,7 +2,7 @@ import { PAGE_ROUTES } from "./routes"
 
 // The prototype's two head scripts, run before first paint, in the same order:
 // 1. motion flags: html.js, html.reduce (calm mode, stored or asked for by the device), html.calm-auto, and on the home
-//    page html.pfx (WebGL2 + motion: the cloud of screens runs) with its hero modules preloaded;
+//    page html.pfx (motion on: the code hero runs, on WebGL2 or a 2D canvas) with the WebGL hero modules preloaded;
 // 2. the review looks (A night, B day): B sets html[data-look], the lk-* scopes and a render-blocking looks.css.
 // Plus three helpers the ported modules use instead of static .html pages: __href, __page / __pageOf, and __t (the deck).
 const motion = `(function () {
@@ -17,8 +17,10 @@ const motion = `(function () {
     setTimeout(function () { if (!d.classList.contains('gl-up')) d.classList.add('gl-late'); }, 9000);
     d.dataset.photo = '0'; d.dataset.wm = 'en'; d.dataset.v = 'cloud';
     if (!d.classList.contains('reduce') && q.get('gl') !== '0') {
+      // the code hero runs with motion on: WebGL2 where there is one, a 2D canvas where there is none (hero-2d.js)
+      d.classList.add('pfx');
       try { var c = document.createElement('canvas'), g = c.getContext('webgl2');
-        if (g) { d.classList.add('pfx'); var x = g.getExtension('WEBGL_lose_context'); if (x) x.loseContext();
+        if (g) { var x = g.getExtension('WEBGL_lose_context'); if (x) x.loseContext();
           ['https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js', '/site/hero/hero-gl.js', '/site/hero/hero-cloud.js', '/site/hero/hero-a.js', '/site/hero/cloud.js', '/site/hero/zoom.js']
             .forEach(function (u) { var l = document.createElement('link'); l.rel = 'modulepreload'; l.href = u; document.head.appendChild(l); }); } } catch (e) {}
     }

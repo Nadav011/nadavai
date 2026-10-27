@@ -401,15 +401,6 @@ html.past-hero .hud.hud--top.is-live{opacity:1;transform:none;transition-delay:0
 .zc__go-s{display:none}
 @container (max-width:150px){.zc__go{font-size:11px;gap:4px;padding:6px 8px;inset-block-end:8px}.zc__go svg{width:11px;height:11px}.zc__go-l{display:none}.zc__go-s{display:inline}}
 
-/* ── the avatar in the scroll (2026-10-27): the real, full-colour avatar printed over the code head, split by the portal ── */
-.hav{position:absolute;z-index:5;pointer-events:none;visibility:hidden}
-.hav.is-on{visibility:visible}
-.hav__h{position:absolute;inset:0;background-image:url("../assets/avatar/spritesheet@2x.webp");background-repeat:no-repeat;
-  filter:drop-shadow(0 18px 30px rgba(0,0,0,.55)) drop-shadow(0 0 18px rgba(232,145,60,.22));will-change:transform,clip-path;
-  -webkit-mask-image:linear-gradient(to bottom,#000 70%,transparent 99%);mask-image:linear-gradient(to bottom,#000 70%,transparent 99%)} /* the shirt fades out instead of ending in a cut */
-.hav__scan{position:absolute;inset-inline:-10%;height:2px;margin-block-start:-1px;opacity:0;border-radius:2px;
-  background:#FFD3A1;box-shadow:0 0 18px 5px rgba(232,145,60,.75)}
-html.static .hav{display:none}
 .nav-avatar{transition:opacity .35s ease}
 html.hero-av .nav-avatar{opacity:0;pointer-events:none}
 .panel::after{opacity:var(--edge,1)}
