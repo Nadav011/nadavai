@@ -1,39 +1,33 @@
 {
-  "name": "NADAV.AI - Full-Stack AI Developer",
-  "short_name": "NADAV.AI",
-  "description": "Nadav Cohen (נדב כהן) — Full-Stack AI Developer. 10+ production apps, 86 AI skills, 52 automation agents. Building everything with AI.",
-  "start_url": "/",
+  "name": "NadavAI",
+  "short_name": "NadavAI",
+  "description": "Nadav Cohen's software house. Systems, automations, AI agents, WhatsApp bots, apps and websites for small and mid-size businesses. Free business check.",
+  "start_url": "/he",
   "display": "standalone",
-  "display_override": ["window-controls-overlay", "standalone"],
-  "background_color": "#080b14",
-  "theme_color": "#06d6e0",
+  "display_override": [
+    "window-controls-overlay",
+    "standalone"
+  ],
+  "background_color": "#0A0C0E",
+  "theme_color": "#0A0C0E",
   "dir": "auto",
   "lang": "he",
-  "categories": ["developer", "productivity", "technology"],
+  "categories": [
+    "business",
+    "productivity"
+  ],
   "shortcuts": [
     {
-      "name": "פרויקטים",
-      "url": "/he#projects",
-      "description": "צפה בפרויקטים"
+      "name": "שירותים",
+      "url": "/he/services"
     },
     {
-      "name": "צור קשר",
-      "url": "/he#contact",
-      "description": "צור קשר"
+      "name": "בדיקה לעסק",
+      "url": "/he/check"
     },
     {
-      "name": "Projects",
-      "url": "/en#projects",
-      "description": "View projects"
-    }
-  ],
-  "screenshots": [
-    {
-      "src": "/opengraph-image",
-      "sizes": "1200x630",
-      "type": "image/png",
-      "form_factor": "wide",
-      "label": "NADAV.AI — Full-Stack AI Developer Portfolio"
+      "name": "Services",
+      "url": "/en/services"
     }
   ],
   "icons": [

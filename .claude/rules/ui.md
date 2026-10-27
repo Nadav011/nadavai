@@ -3,16 +3,16 @@ paths:
   - "components/**"
   - "app/**/*.tsx"
   - "app/**/*.css"
+  - "public/site/**"
+  - "scripts/port/**"
 ---
 
 # UI rules for nadavc.ai
 
-- The theme lives only in `@theme inline` in `app/globals.css`. Do not add a `tailwind.config.ts`. Why: Tailwind 4 CSS-first is a deliberate choice, and a config file would split the token source.
-- New colors are OKLCH tokens (`var(--color-cyan)`, `var(--color-pink)`, `var(--color-bg-deep)`, ...), never hex or HSL. Why: the palette is P3 wide-gamut, and other formats fall outside the token system.
-- Simple reveals use CSS scroll-driven animation (`animation-timeline: scroll()` / `view()`). Complex sequences use GSAP ScrollTrigger. Why: it keeps GSAP work off the main thread for the easy cases.
-- Do not "simplify" the three Lenis-to-GSAP-ticker sync lines in `components/gsap-setup.tsx`. Why: without them smooth scroll and ScrollTrigger drift apart.
-- Every animation honors `prefers-reduced-motion`. Why: the site animates continuously and has no global off switch.
-- A `linear-gradient(to right)` or other direction-bound value gets an RTL variant, or a `/* rtl-ok */` comment when the LTR direction is deliberate. Why: review can then tell a deliberate choice from an RTL bug.
-- Reuse the utilities defined in `globals.css` before writing new ones: `glass`, `glass-strong`, `dot-grid`, `dot-grid-subtle`, `mesh-gradient`, `text-gradient*`, `glow-cyan`, `glow-pink`, `glow-text`, `gradient-border`, `grid-bg`, `section-divider`, `shader-fallback`, `holographic`, `noise-bg`, `scrollbar-hide`. Why: they carry the site's look and its fallbacks.
-- `components/` is all client components (`"use client"`), while server work and metadata stay in `app/`. Why: the sections depend on GSAP and browser APIs.
-- Locale switching goes through `next-view-transitions`. Why: it is already wired in the layout.
+- The look lives in the prototype's CSS (`public/site/css`, `public/site/sections/*/*.css`), ported as is. Change it in `~/design-redesign/nadavc-ai/demos/site-v1` and re-run `scripts/port/sync.py`. Why: Nadav approved porting the CSS unchanged (ANSWERS #63), and a hand edit here is overwritten by the next sync.
+- What the port itself adds (language switch, LTR arrows) goes in `app/[locale]/site-port.css`, with logical properties only. Why: it is the one stylesheet the sync does not own.
+- Never edit `components/site/generated/*` or `public/site/**` by hand: change the converter (`scripts/port/convert.py`) or add an exact replacement to `scripts/port/js_patches.py`. Why: both are rewritten on every sync.
+- Every visible string is a deck lookup. A new string gets a row in a deck file first (`scripts/port/COPY-PORT.md` until Nadav approves it). Why: the deck is the single source of the Hebrew and the English, and the copy gate checks against it.
+- `html.reduce` (calm mode, or the device's reduced-motion setting) means no motion and no WebGL, and every page stays readable. Why: it is the site's only motion switch.
+- Hebrew is RTL-first: logical properties (inline-start/end), never left/right. A direction-bound value gets a `[dir="ltr"]` variant. Why: the English pages render the same CSS left to right.
+- Targets are at least 44px and text at least 12px, with no sideways scroll at 390px. Why: the WCAG 2.2 AA and phone checks the prototype was approved with.

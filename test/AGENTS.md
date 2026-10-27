@@ -4,14 +4,13 @@
 **Generated:** 2026-10-27 · **Updated:** 2026-10-27
 
 ## Purpose
-Global Vitest setup and tests that are not tied to a single module. Most unit tests sit next to their source file (`lib/*.test.ts`, `i18n/*.test.ts`).
+Global Vitest setup and tests that are not tied to a single module. Unit tests sit next to their source file (`i18n/*.test.ts`).
 
 ## Key Files
 | File | Description |
 |------|-------------|
 | `setup.ts` | Loads jest-dom matchers; sets a fixed fast-check seed (`42`; run count from `FC_NUM_RUNS`, default 100); mocks `matchMedia`, `ResizeObserver`, `IntersectionObserver`, `scrollIntoView`, `crypto.randomUUID` |
 | `smoke.test.ts` | Checks that Vitest and jsdom run |
-| `utils.prop.test.ts` | fast-check property tests for `cn()` |
 
 ## For AI Agents
 

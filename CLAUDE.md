@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## What this is
 
-nadavc.ai: Nadav Cohen's personal portfolio and blog site. It is a single-page landing in Hebrew (primary, RTL) and English, plus an MDX blog. Built with Next.js 16 (App Router), React 19, Tailwind 4 and next-intl, and deployed to Cloudflare through OpenNext.
+nadavc.ai: the site of NadavAI, Nadav Cohen's software house (systems, automations, AI agents and WhatsApp bots, apps, websites). 16 pages in Hebrew (primary, RTL) and English. Built with Next.js 16 (App Router), React 19 and next-intl, and deployed to Cloudflare through OpenNext. The pages are a port of the approved prototype in `~/design-redesign/nadavc-ai/demos/site-v1`.
 
 ## Commands
 
@@ -21,19 +21,21 @@ Tests use Vitest with jsdom. `test/setup.ts` mocks `matchMedia`, `ResizeObserver
 
 ## Architecture
 
-**Routing and i18n.** Every page lives under `app/[locale]/`. `i18n/routing.ts` defines locales `he` (default) and `en`, and exports the locale-aware `Link`, `redirect` and `useRouter`. Use those instead of `next/link` so locale prefixes are kept. `proxy.ts` is the next-intl middleware (Next 16 renamed `middleware.ts` to `proxy.ts`). `i18n/request.ts` loads `messages/<locale>.json`. `app/[locale]/layout.tsx` sets `dir="rtl"` for `he` and holds the site-wide metadata, hreflang alternates and the JSON-LD Person/ProfilePage schema.
+**The port.** `scripts/port/sync.py` (Python 3 + bs4) ports the prototype at the design repo's HEAD. Re-run it after every prototype commit and commit what it writes; never edit its outputs by hand:
+- `public/site/**`: the prototype's CSS, JS modules and assets as they are. Document-relative paths become `/site/...`, `.html` links become `__href('<page>')`, and Hebrew literals become `__t('<deck id>')`. Hand fixes to a module go in `scripts/port/js_patches.py` as exact replacements (a patch that stops applying stops the sync).
+- `components/site/generated/*.tsx`: one server component per page, plus the shared header, footer and dock. Every text run whose text equals a deck string becomes `c(id)` / `r(id, tags)`.
+- `messages/{he,en}.json`: every deck string, keyed by deck id with `/` in place of `.` (next-intl reads dots as nesting). `messages/js-ids.json` lists the ids the modules read through `window.__t`.
+- `scripts/port/REPORT.md`: what is still literal (no deck id yet).
 
-**UI strings.** Section components read their text from `messages/he.json` and `messages/en.json`, one namespace per section (`hero`, `projects`, `services`, ...). Any new string goes into both files under the same key.
+**Copy.** Strings come from the deck, never typed into code: `COPY-FULL.md` (approved), then `COPY-GAP.md` (draft) in the design repo, then `scripts/port/COPY-PORT.md` (the port's own draft rows). A new string goes into a deck file first, then the sync. `scripts/copy-gate.sh [base-url]` runs the prototype's copy rules on the 16 rendered pages and the modules.
 
-**Home page composition.** `app/[locale]/page.tsx` renders the hero eagerly and loads every below-the-fold section with `next/dynamic`. Client-only extras (custom cursor, WhatsApp button, easter egg, ambient orbs) load with `ssr: false` inside `components/non-critical.tsx`, and GSAP loads the same way through `components/gsap-setup-lazy.tsx`. `dynamic(..., { ssr: false })` is only valid inside a `"use client"` file, which is why these wrapper files exist. Keep new heavy or decorative pieces behind the same pattern.
+**Routing and i18n.** One catch-all route, `app/[locale]/[[...slug]]/page.tsx`, renders the 16 pages; `lib/site/routes.ts` maps prototype page names to routes. `i18n/routing.ts` defines `he` (default) and `en`; `proxy.ts` is the next-intl middleware. Links are plain `<a>`: every page is a full load, as in the prototype, so a page module never outlives its page.
 
-**Blog.** Posts are `.mdx` files in `content/blog/`. `lib/blog.ts` reads them from disk with gray-matter. Frontmatter: `title`, `titleEn`, `description`, `descriptionEn`, `date`, `tags`, optional `readingTime`. The Hebrew fields are primary, and the `*En` fields are fallbacks for the `en` locale. Slugs are validated against `^[a-zA-Z0-9_-]+$` to block path traversal. `app/[locale]/blog/[slug]/page.tsx` renders posts with `next-mdx-remote/rsc` and `components/mdx-components.tsx`. `app/sitemap.ts` lists the posts through `getAllSlugs()`. `app/feed.xml` is not built from the blog: it serves a hardcoded `PROJECTS` array.
+**Runtime.** `app/[locale]/layout.tsx` puts the import map (three.js 0.170.0 from jsDelivr) and the prototype's two before-paint scripts (`lib/site/head-script.ts`: calm mode and `html.pfx`, the night/day look, plus `__href`, `__page`, `__t`) in `<head>`. `components/site/page-shell.tsx` adds the page's stylesheets, its `<body>` class and its module; `components/site/engine.tsx` loads GSAP, ScrollTrigger and Lenis from the prototype's CDNs and then the module, after hydration. `app/[locale]/site-port.css` holds the few styles the port adds (language switch, LTR arrows).
 
-**Styling.** Tailwind 4 with no `tailwind.config`. The design tokens are OKLCH values inside `@theme inline` in `app/globals.css`, which also holds the section glow and divider utilities used on the home page. The site is dark-only (`className="dark"` on `<html>`). shadcn primitives live in `components/ui/` (`components.json`). Fonts are loaded in the layout via `next/font`: Heebo (Hebrew), Space Grotesk and JetBrains Mono.
+**Security headers.** `next.config.ts` sets a strict CSP and COEP `credentialless`. The CDNs above and the framed MediZen demo are allowed there; any new external origin must be added to the matching directive, or the browser blocks it silently.
 
-**Security headers.** `next.config.ts` sets a strict CSP and COEP `credentialless` on every route. Any new external origin (script, font, image, iframe, fetch) must be added to the matching CSP directive, or the browser blocks it silently.
-
-**Newsletter.** `app/api/newsletter/route.ts` validates the email and rate-limits by IP, but it stores subscribers in an in-memory `Set`. There is no real email provider yet.
+**Newsletter.** `app/api/newsletter/route.ts` validates the email and rate-limits by IP, but it stores subscribers in an in-memory `Set`. The redesign does not link to it.
 
 **Deploy.** Deployment goes to Cloudflare via `@opennextjs/cloudflare` (`open-next.config.ts`, `wrangler.jsonc` with output `.open-next/assets`). `package.json` has no deploy script.
 
@@ -44,8 +46,8 @@ Tests use Vitest with jsdom. `test/setup.ts` mocks `matchMedia`, `ResizeObserver
 ### Product and brand
 - Marketing-only site: no auth, no accounts, no database, and no test accounts. Why: it decides how much safety and data tooling a change needs (none beyond the newsletter route).
 - Keep the JSON-LD disambiguation in `app/[locale]/layout.tsx` ("Not to be confused with Prof. Nadav Cohen, the deep learning researcher at Tel Aviv University") through every rewrite. Why: search engines and AI answers otherwise merge the two people.
-- The headline numbers (10+ production apps, 86 AI skills, 52 automation agents) appear in 7 places: `components/hero.tsx`, `app/opengraph-image.tsx`, `app/feed.xml/route.ts`, the layout JSON-LD, `messages/he.json`, `messages/en.json`, `public/llms.txt`. Change all of them together. Why: otherwise the structured data contradicts the page.
-- "APEX" in site content (projects, news, feed, llms.txt, a blog post, `WIKIDATA-ENTRY.md`) is Nadav's product, not the retired agent harness. Keep it. Why: it was removed from tooling only. `WIKIDATA-ENTRY.md` is a brand document, not tooling.
+- No usage numbers anywhere: no user, download, client or revenue counts. Only what the approved bio says. Why: the copy deck forbids them, and the old "10+ apps, 86 skills, 52 agents" lines were removed from the JSON-LD, `public/llms.txt` and `public/manifest.json` in the redesign.
+- `WIKIDATA-ENTRY.md` is a brand document, not tooling; "APEX" there is Nadav's product. Why: it was removed from tooling only.
 
 ### Deploy and CI
 - Production is nadavc.ai on Cloudflare Pages via OpenNext. Never Vercel or Netlify, despite the old docs and `README.md`. Why: only the Cloudflare config exists in the repo.
@@ -55,7 +57,7 @@ Tests use Vitest with jsdom. `test/setup.ts` mocks `matchMedia`, `ResizeObserver
 
 ### Tests and gates
 - `pool: "forks"` must stay at the top level of `test` in `vitest.config.ts`. Why: a nested `forks` object is ignored, which already caused a real failure.
-- `bundle-check.yml` fails when the build output exceeds 6500 KB. Why: the site ships GSAP, Spline and Lenis, and the budget is the only bundle guard.
+- `bundle-check.yml` fails when the build output exceeds 6500 KB. Why: it is the only bundle guard (the prototype's engines load from CDNs and do not count).
 - Lighthouse CI (`.lighthouserc.cjs`) and Stryker (`lib/**`, `i18n/**`, `break: null`) only warn and never fail the build. `coverage-gate.yml` ratchets a threshold stored in `.coverage-threshold`. Why: read their output as advisory, and do not cite them as passing gates.
 - There is no `type-coverage` check. Why: an old doc claimed one, but it is not installed.
 
@@ -74,5 +76,6 @@ Tests use Vitest with jsdom. `test/setup.ts` mocks `matchMedia`, `ResizeObserver
 5. `REVERSE-ENGINEERING-2026-07-26.md` and `mockups/` are Nadav's untracked files. Leave them alone.
 
 ### Redesign
-- The 2026 redesign of nadavc.ai is designed outside this repo, in `~/design-redesign/nadavc-ai`: the prototype is `demos/site-v1`, the owner decisions are `ANSWERS.md` #1–54, and all site copy is in `COPY-FULL.md`. Treat those files as the source of truth for the redesign, not the current components. Why: the decisions and copy were settled there with the owner, and the current site predates them.
-- The redesign is ported into this repo only after the re-init is finished, and in its own session. Do not start the port as a side task of other work. Why: the port is a large change that needs a clean CLAUDE.md and a dedicated session.
+- The design source of truth is `~/design-redesign/nadavc-ai`: the prototype `demos/site-v1`, the owner decisions `ANSWERS.md`, the copy `COPY-FULL.md`. Change the prototype there, then port it with `scripts/port/sync.py`. Why: the decisions and copy are settled there with the owner, and the sync keeps the two in step.
+- The night (A) and day (B) looks are the prototype's `css/looks.css` scopes; the visitor's switch sits in the header. Why: Nadav kept both looks as a light/dark choice (ANSWERS #51).
+- Launch gates stay as placeholders until Nadav closes them: the legal entity name, the AI-check monthly cap, client consents (RetroBarber, חתום בנשיקה, the social clients), Google Play links, hello@nadavc.ai. Why: they are his decisions, and inventing them would publish false facts.
