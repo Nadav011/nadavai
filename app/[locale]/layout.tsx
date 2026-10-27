@@ -5,6 +5,7 @@ import { routing } from "@/i18n/routing"
 import { getSiteCopy } from "@/lib/site/copy"
 import { HEAD_LOOKS, HEAD_MOTION } from "@/lib/site/head-script"
 import { jsCopy } from "@/lib/site/js-copy"
+import { SiteAnalytics } from "@/components/site/analytics"
 import "./site-port.css"
 
 // The prototype's favicon: a dark tile with the orange cursor bar.
@@ -110,6 +111,7 @@ export default async function LocaleLayout({
       </head>
       <body suppressHydrationWarning>
         {children}
+        <SiteAnalytics />
         <script id="__copy" type="application/json" dangerouslySetInnerHTML={{ __html: JSON.stringify(await jsCopy(locale)).replace(/</g, "\\u003c") }} />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd(locale, c("home.meta.description"))).replace(/</g, "\\u003c") }} />
       </body>
