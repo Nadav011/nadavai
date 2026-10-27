@@ -13,7 +13,7 @@ const LOOK_SCOPES = { 'site.css': 'site', 'chrome.css': 'chrome', 'home.css': 'h
   'work.css': 'work', 'offer.css': 'offer', 'bio.css': 'bio', 'avatar.css': 'avatar' };
 // Nadav kept A (night) and B (day) on 2026-10-27; C (graphite) is retired, a stored 'c' falls back to A
 const LOOK_META = { b: { scheme: 'light', theme: '#F3EFE7' } };
-const LOOK_NAMES = { a: 'לילה', b: 'יום' };
+const LOOK_NAMES = { a: __t('global.theme.night'), b: __t('global.theme.day') };
 function initLooks() {
   const root = document.documentElement;
   const q = new URLSearchParams(location.search);
@@ -69,12 +69,12 @@ function initLooks() {
         + '.looks button[aria-pressed="true"] i{scale:1.25;box-shadow:0 0 0 2px #fff,0 0 0 3.5px #111}.looks button:focus-visible{outline:2px solid #fff;outline-offset:1px;box-shadow:0 0 0 5px #111}';
       document.head.appendChild(st);
       const bar = document.createElement('div');
-      bar.className = 'looks'; bar.setAttribute('role', 'group'); bar.setAttribute('aria-label', 'מראה האתר (לבדיקה)');
+      bar.className = 'looks'; bar.setAttribute('role', 'group'); bar.setAttribute('aria-label', __t('global.theme.label'));
       const dots = { a: 'linear-gradient(135deg,#0A0C0E 50%,#E8913C 50%)', b: 'linear-gradient(135deg,#F3EFE7 50%,#B23C0A 50%)' };
       Object.keys(LOOK_NAMES).forEach((k) => {
         const b = document.createElement('button');
-        b.type = 'button'; b.dataset.look = k; b.title = `${k.toUpperCase()} · ${LOOK_NAMES[k]}`;
-        b.setAttribute('aria-label', `מראה ${k.toUpperCase()}: ${LOOK_NAMES[k]}`);
+        b.type = 'button'; b.dataset.look = k; b.title = LOOK_NAMES[k];
+        b.setAttribute('aria-label', LOOK_NAMES[k]);
         b.setAttribute('aria-pressed', String(k === state.id));
         b.innerHTML = `<i style="background:${dots[k]}"></i>`;
         b.addEventListener('click', () => {
@@ -102,13 +102,13 @@ export function initSiteChrome({ lenis = null, dockAfter = 0.6 } = {}) {
   const scrollY0 = () => (lenis ? lenis.scroll : window.scrollY);
 
   // the current page: aria-current + a hidden "(העמוד הנוכחי)" for screen readers
-  const here = (location.pathname.split('/').pop() || __href('index')).replace(/\.html?$/, '') || 'index';
+  const here = window.__page;
   const alias = { 'work-sporchat': 'work', 'work-medizen': 'work', 'work-green-room': 'work', 'mexicani-network': 'work' };
   document.querySelectorAll('#nav .nav__links a, #navSheet a, .site-foot .foot__col a').forEach((a) => {
-    const t = (a.getAttribute('href') || '').replace(/\.html?$/, '');
+    const t = window.__pageOf(a.getAttribute('href') || '') || '';
     if (t && (t === here || t === alias[here])) {
       a.setAttribute('aria-current', 'page');
-      if (!a.querySelector('.sr')) a.insertAdjacentHTML('beforeend', '<span class="sr"> (העמוד הנוכחי)</span>');
+      if (!a.querySelector('.sr')) a.insertAdjacentHTML('beforeend', '<span class="sr"> ' + __t('global.nav.current') + '</span>');
     }
   });
   document.querySelectorAll('[data-year]').forEach((y) => { y.textContent = String(new Date().getFullYear()); });

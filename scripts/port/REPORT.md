@@ -1,9 +1,9 @@
 # Port report
 
-Prototype: `nadavc-ai` at `e2a8ce6`. Deck ids: 977, draft ids (COPY-GAP, pending approval): 530.
+Prototype: `nadavc-ai` at `e2a8ce6`. Deck ids: 977, draft ids (COPY-GAP, pending approval): 533.
 
-Markup strings mapped to an id: 1867; still literal (no id in either file): 260.
-Ids used that are still draft-only: 495. JS literals replaced: 249; JS literals left: 86.
+Markup strings mapped to an id: 1917; still literal (no id in either file): 260.
+Ids used that are still draft-only: 495. JS literals replaced: 274; JS literals left: 55.
 
 ## Literal strings without a deck id
 
@@ -294,10 +294,6 @@ Ids used that are still draft-only: 495. JS literals replaced: 249; JS literals 
 - `js/check-samples.js`: הלקוח מקבל אישור כשהעבודה נקבעת, ותזכורת יום לפני.
 - `js/check-samples.js`: סיכום יומי בוואטסאפ.
 - `js/check-samples.js`: בסוף כל יום מגיעה הודעה עם מה שבוצע ומה מחכה למחר.
-- `js/chrome-site.js`: לילה
-- `js/chrome-site.js`: יום
-- `js/chrome-site.js`: מראה האתר (לבדיקה)
-- `js/chrome-site.js`: <span class="sr"> (העמוד הנוכחי)</span>
 - `js/games/greenroom-play.js`: עוד סיבוב
 - `js/games/greenroom-play.js`: נעצר על <b></b> · המחשה, בלי פרסים
 - `js/main.js`: אני
@@ -322,37 +318,10 @@ Ids used that are still draft-only: 495. JS literals replaced: 249; JS literals 
 - `js/work-pages.js`: לפתוח
 - `hero/cloud.js`: אבגדהוזחטיכלמנסעפצקרשת
 - `hero/hero-a.js`: אבגדהוזחטיכלמנסעפצקרשת
-- `hero/hero-cloud.js`: קבע תור ל-16:30, ואת השאלה הרפואית העביר למטפלת. · MediZen · בוט בוואטסאפ
-- `hero/hero-cloud.js`: כל היום של הקליניקה, במסך אחד. · MediZen · יומן
-- `hero/hero-cloud.js`: קבע תור ל-16:30, ואת השאלה הרפואית העביר למטפלת. · MediZen · בוט בוואטסאפ
-- `hero/hero-cloud.js`: כמה כסף עוד אצל השליחים, עכשיו. · מזומן · הסניף שלי
-- `hero/hero-cloud.js`: ספירה, דוח והפקדה בסוף כל יום. · Z · סגירת קופה
-- `hero/hero-cloud.js`: כמה כסף עוד אצל השליחים, עכשיו. · מזומן · הסניף שלי
-- `hero/hero-cloud.js`: כמה כסף עוד אצל השליחים, עכשיו. · מזומן · הסניף שלי
-- `hero/hero-cloud.js`: כמה כסף עוד אצל השליחים, עכשיו. · מזומן · הסניף שלי
-- `hero/hero-cloud.js`: כמה כסף עוד אצל השליחים, עכשיו. · מזומן · הסניף שלי
-- `hero/hero-cloud.js`: חדר צ'אט שנפתח עם שריקת הפתיחה. · SporChat · חדר משחק
-- `hero/hero-cloud.js`: שולחן, תשלום וקוד לדלת, בלי אף אחד בדלפק. · Green Room · הזמנה
-- `hero/hero-cloud.js`: שולחן, תשלום וקוד לדלת, בלי אף אחד בדלפק. · Green Room · הזמנה
-- `hero/hero-cloud.js`: שולחן, תשלום וקוד לדלת, בלי אף אחד בדלפק. · Green Room · הזמנה
-- `hero/hero-cloud.js`: שולחן, תשלום וקוד לדלת, בלי אף אחד בדלפק. · Green Room · הזמנה
-- `hero/hero-cloud.js`: שולחן, תשלום וקוד לדלת, בלי אף אחד בדלפק. · Green Room · הזמנה
-- `hero/hero-cloud.js`: פוסט מוכן, מתוזמן ל-20:00. · Green Room · תוכן ותזמון
-- `hero/hero-cloud.js`: פוסט מוכן, מתוזמן ל-20:00. · Green Room · תוכן ותזמון
-- `hero/hero-cloud.js`: פוסט מוכן, מתוזמן ל-20:00. · Green Room · תוכן ותזמון
-- `hero/hero-cloud.js`: פוסט מוכן, מתוזמן ל-20:00. · Green Room · תוכן ותזמון
-- `hero/hero-cloud.js`: פוסט מוכן, מתוזמן ל-20:00. · Green Room · תוכן ותזמון
-- `hero/hero-cloud.js`: מודעה שמביאה פניות ישר לוואטסאפ. · חשמלכה · קמפיין
-- `hero/hero-cloud.js`: מודעה שמביאה פניות ישר לוואטסאפ. · חשמלכה · קמפיין
-- `hero/hero-cloud.js`: פלאייר בשפה של הלקוחות של החנות. · Asian Bar · פלאייר
-- `hero/hero-cloud.js`: שפה חזותית אחת, מהלוגו ועד הפוסט. · ברסלב · מיתוג
-- `hero/hero-cloud.js`: שפה חזותית אחת, מהלוגו ועד הפוסט. · ברסלב · מיתוג
-- `hero/zoom.js`: <div class="zd__scrim"></div><figure class="zc zd__card"><div class="zc__glass"><img alt="" decoding="async"></div><figcaption class="zc__ca
 - `hero/zoom.js`: א
 - `hero/zoom.js`: ב
 - `hero/zoom.js`: ש
 - `hero/zoom.js`: ת
 - `hero/zoom.js`: נ
 - `hero/zoom.js`: ד
-- `hero/zoom.js`: <b class="zc__go"><span class="zc__go-l">לעמוד הפרויקט</span><span class="zc__go-s">לפרויקט</span><svg viewBox="0 0 16 16" aria-hidden="true
 - `sections/bio/bio.js`: אבגדהוזחטיכלמנסעפצקרשת

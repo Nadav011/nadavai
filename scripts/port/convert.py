@@ -419,6 +419,23 @@ class Converter:
                 out[comp] = self.module(self.COMPONENT[comp], fj, f'fragments/{frag} at {self.sha}', ', home' if comp == 'chrome-dock' else '')
         return out
 
+    def composite(self, text: str) -> list[str] | None:
+        """A string joined from deck strings with ' · ' (a caption = line · label): the ids of its parts, or None."""
+        parts = text.split(' · ')
+        n = len(parts)
+        def solve(i: int) -> list[str] | None:
+            if i == n:
+                return []
+            for j in range(n, i, -1):
+                piece = ' · '.join(parts[i:j])
+                hit = self.index.get(self.norm(piece)) if HEB.search(piece) else None
+                if hit:
+                    rest = solve(j)
+                    if rest is not None:
+                        return [self.lookup(piece) or hit[0]] + rest
+            return None
+        return solve(0) if n > 1 else None
+
     # ── JS modules ───────────────────────────────────────────────────────────
     JS_STR = re.compile(r"'((?:[^'\\\n]|\\.)*)'|\"((?:[^\"\\\n]|\\.)*)\"|`((?:[^`\\$]|\\.|\$(?!\{))*)`")
 
@@ -455,11 +472,17 @@ class Converter:
                 if ASSET_PREFIX.match(s) and not s.startswith(('js/', 'css/')):
                     return f'{q}/site/{s}{q}'
                 if HEB.search(s):
-                    i = self.lookup(s.replace("\\'", "'").replace('\\"', '"'))
+                    text = s.replace("\\'", "'").replace('\\"', '"')
+                    i = self.lookup(text)
                     if i:
                         self.js_ids.add(i)
                         self.stats['js'] += 1
                         return f"__t('{i}')"
+                    ids = self.composite(text)
+                    if ids:
+                        self.js_ids.update(ids)
+                        self.stats['js'] += 1
+                        return " + ' · ' + ".join(f"__t('{x}')" for x in ids)
                     self.js_misses.append((rel, self.norm(s)[:140]))
                 return m.group(0)
             out.append(self.JS_STR.sub(sub, line))

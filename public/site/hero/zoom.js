@@ -32,7 +32,7 @@ export function createZoom({ stage, eng, cards, U, fine, mobile }) {
   const dlg = document.createElement('div');
   dlg.className = 'zd'; dlg.hidden = true;
   dlg.setAttribute('role', 'dialog'); dlg.setAttribute('aria-modal', 'true'); dlg.setAttribute('aria-labelledby', 'zdCap');
-  dlg.innerHTML = '<div class="zd__scrim"></div><figure class="zc zd__card"><div class="zc__glass"><img alt="" decoding="async"></div><figcaption class="zc__cap" id="zdCap"><i aria-hidden="true"></i><span></span></figcaption></figure><button type="button" class="zd__close" aria-label="לסגור את המסך המוגדל"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 3l10 10M13 3L3 13" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button><a class="zd__go" href="work.html">לעמוד הפרויקט<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M13 8H3m4-4L3 8l4 4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></a>';
+  dlg.innerHTML = '<div class="zd__scrim"></div><figure class="zc zd__card"><div class="zc__glass"><img alt="" decoding="async"></div><figcaption class="zc__cap" id="zdCap"><i aria-hidden="true"></i><span></span></figcaption></figure><button type="button" class="zd__close" aria-label="' + __t('home.hero.dialog.close') + '"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 3l10 10M13 3L3 13" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button><a class="zd__go" href="' + __href('work') + '">' + __t('home.hero.peek.go') + '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M13 8H3m4-4L3 8l4 4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></a>';
   document.body.appendChild(dlg);
   const dCard = dlg.querySelector('.zd__card'), dClose = dlg.querySelector('.zd__close'), dScrim = dlg.querySelector('.zd__scrim'), dGo = dlg.querySelector('.zd__go');
 
@@ -179,7 +179,7 @@ export function createZoom({ stage, eng, cards, U, fine, mobile }) {
     blinds.append(...Array.from({ length: SLATS }, () => document.createElement('i')));
     glass.appendChild(blinds);
     // the hover label: where a click goes
-    glass.insertAdjacentHTML('beforeend', '<b class="zc__go"><span class="zc__go-l">לעמוד הפרויקט</span><span class="zc__go-s">לפרויקט</span><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M13 8H3m4-4L3 8l4 4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></b>');
+    glass.insertAdjacentHTML('beforeend', '<b class="zc__go"><span class="zc__go-l">' + __t('home.hero.peek.go') + '</span><span class="zc__go-s">' + __t('home.hero.peek.goShort') + '</span><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M13 8H3m4-4L3 8l4 4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></b>');
     // the tiles sit on the figure, not inside the glass, so they can fly in from the letter outside the frame
     const tiles = Object.assign(document.createElement('div'), { className: 'zc__tiles' });
     tiles.append(...Array.from({ length: TC * TR }, (_, k) => { const e = document.createElement('i'); e.style.cssText = `left:${(k % TC) * 100 / TC}%;top:${Math.floor(k / TC) * 100 / TR}%;width:${100 / TC}%;height:${100 / TR}%`; return e; }));

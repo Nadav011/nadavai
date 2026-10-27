@@ -28,7 +28,7 @@ from pathlib import Path
 import sys
 sys.path.insert(0, str(Path(__file__).resolve().parent))  # run with -I: the sibling modules are not on the path
 from convert import Converter, PAGE_ROUTES  # noqa: E402  (same folder)
-from js_patches import JS_PATCHES  # noqa: E402
+from js_patches import JS_PATCHES, PATCH_IDS  # noqa: E402
 
 REPO = Path(__file__).resolve().parents[2]
 DESIGN = Path.home() / 'design-redesign/nadavc-ai'
@@ -86,8 +86,9 @@ def main() -> None:
 
     deck = read_deck((tmp / 'COPY-FULL.md').read_text(encoding='utf-8'))
     gap = read_deck((tmp / 'COPY-GAP.md').read_text(encoding='utf-8'))
-    copy = {**gap, **deck}  # the approved deck wins over the draft
-    pending = set(gap) - set(deck)
+    extra = read_deck((Path(__file__).parent / 'COPY-PORT.md').read_text(encoding='utf-8'))
+    copy = {**extra, **gap, **deck}  # the approved deck wins over the drafts
+    pending = (set(gap) | set(extra)) - set(deck)
     # a deck row that lists the items of a mock screen ("a · b · c") also gives each item its own id: <id>.1, <id>.2 ...
     for key, (h, e) in list(copy.items()):
         hs, es = norm(h).split(' · '), norm(e).split(' · ')
@@ -146,7 +147,7 @@ def main() -> None:
     # the root error boundary renders outside the intl provider, so it gets its few strings as a file of its own
     errs = {loc: {k: v for k, v in msgs.items() if k.startswith('error/')} for loc, msgs in (('he', he), ('en', en))}
     (MESSAGES / 'error.json').write_text(json.dumps(errs, ensure_ascii=False, indent=1) + '\n', encoding='utf-8')
-    (MESSAGES / 'js-ids.json').write_text(json.dumps(sorted(conv.js_ids), indent=1) + '\n', encoding='utf-8')
+    (MESSAGES / 'js-ids.json').write_text(json.dumps(sorted(conv.js_ids | set(PATCH_IDS)), indent=1) + '\n', encoding='utf-8')
 
     # 4. report
     lines = [f'# Port report\n', f'Prototype: `{DESIGN.name}` at `{sha}`. Deck ids: {len(deck)}, draft ids (COPY-GAP, pending approval): {len(pending)}.\n',
