@@ -98,6 +98,7 @@ class Converter:
                     pass
         self.rich_he: dict[str, str] = {}      # deck id (or id~n variant) -> Hebrew message with tags
         self.variants: dict[str, str] = {}     # variant key -> base deck id (for the English)
+        self.rich_en: dict[str, str] = {}      # message key -> English message with the same tags
         self.misses: list[tuple[str, str]] = []
         self.js_misses: list[tuple[str, str]] = []
         self.used_pending: set[str] = set()
@@ -283,6 +284,7 @@ class Converter:
     def rich(self, nodes: list, svg: bool) -> tuple[str, list[str]]:
         """The ICU message for a run of inline nodes, and its tag factories."""
         facs: list[str] = []
+        self.last_tags = []
         def walk(kids) -> str:
             msg = ''
             for ch in kids:
@@ -295,6 +297,13 @@ class Converter:
                 facs.append('')
                 idx = len(facs) - 1
                 in_svg = svg or ch.name == 'svg'
+                attrs = set(ch.attrs) - {'lang', 'dir', 'aria-hidden'}
+                # "structural": the page needs this element in every language (a link, a control, an element a script finds)
+                info = {'name': name, 'structural': bool({'id', 'href'} & attrs) or any(a.startswith('data-') for a in attrs)
+                        or ch.name in ('a', 'button', 'time', 'input'), 'styled': 'class' in attrs,
+                        'empty': ch.name in VOID or not ch.get_text().strip() or ch.name == 'svg',
+                        'leaf': not any(isinstance(x, Tag) for x in ch.children), 'inner': self.norm(ch.get_text())}
+                self.last_tags.append(info)
                 if ch.name in VOID or not ch.get_text().strip() or ch.name == 'svg':
                     facs[idx] = f'{name}: () => {self.element(ch, in_svg)}'
                     msg += f'<{name}></{name}>'
@@ -306,6 +315,57 @@ class Converter:
             return msg
         m = walk(nodes).strip()
         return re.sub(r' {2,}', ' ', m), facs
+
+    def place_en(self, he_msg: str, tags: list[dict], deck_id: str) -> str | None:
+        """The English message with the Hebrew message's tags put where their text is, or None when an element the
+        page needs (an id, a class, a link) cannot be placed. Plain inline tags (bdi, b) may simply drop."""
+        en = self.icu(self.norm(self.copy[deck_id][1]))
+        if not en:
+            return he_msg
+        for t in tags:
+            n, open_, close = t['name'], f"<{t['name']}>", f"</{t['name']}>"
+            if t['empty']:
+                if he_msg.startswith(open_ + close):
+                    en = open_ + close + en
+                elif he_msg.endswith(open_ + close):
+                    en = en + open_ + close
+                elif t['structural']:
+                    en = en + open_ + close
+                continue
+            if not t['structural'] and not (t['styled'] and t['leaf']):
+                continue  # inline emphasis, a <bdi>, a wrapper: the English reads the same without it
+            if not t['leaf']:
+                return None
+            inner = t['inner']
+            target = inner if not HEB.search(inner) else None
+            if target is None:
+                sub = self.lookup(inner)
+                if sub:
+                    self.stats['hit'] -= 1
+                    target = self.norm(self.copy[sub][1])
+            if target:
+                target = self.icu(target)
+                m = (re.search(rf'(?<!\w){re.escape(target)}(?!\w)', en) or re.search(rf'(?<!\w){re.escape(target)}(?!\w)', en, re.I)) if target else None
+                if m and '<t' not in en[m.start():m.end()]:
+                    en = en[:m.start()] + open_ + en[m.start():m.end()] + close + en[m.end():]
+                    continue
+            if not t['structural']:
+                continue  # a styled run whose text the English does not repeat (a script may still look for its class)
+            if t['structural']:
+                # a link that closes (or opens) the sentence wraps as many English words at the same end
+                words = len(inner.split())
+                if re.search(rf'{close}[.!?…]?$', he_msg):
+                    m = re.search(rf"((?:\S+\s+){{{max(words - 1, 0)}}}\S+?)([.!?…]?)$", en)
+                    if m and '<t' not in m.group(1):
+                        en = en[:m.start(1)] + open_ + m.group(1) + close + en[m.end(1):]
+                        continue
+                if he_msg.startswith(open_):
+                    m = re.match(rf"((?:\S+\s+){{{max(words - 1, 0)}}}\S+)", en)
+                    if m and '<t' not in m.group(1):
+                        en = open_ + m.group(1) + close + en[m.end(1):]
+                        continue
+                return None
+        return en
 
     @staticmethod
     def text_of(nodes: list) -> str:
@@ -330,7 +390,13 @@ class Converter:
                 return f'{lead}{{{call}}}{trail}'
             return None
         msg, facs = self.rich(nodes, svg)
+        en = self.place_en(msg, self.last_tags, i)
+        if en is None:
+            self.stats['hit'] -= 1
+            return None  # the English cannot carry an element the page needs: smaller runs instead
         key = self.key_for(i, msg)
+        if facs:
+            self.rich_en[key] = en
         lead = '{" "}' if re.match(r'\s', text) else ''
         trail = '{" "}' if re.search(r'\s$', text) else ''
         if facs:
@@ -583,7 +649,7 @@ class Converter:
                     return f'__href({q}{pm.group(1)}{pm.group(2) or ""}{q})'
                 if ASSET_PREFIX.match(s) and not s.startswith(('js/', 'css/')):
                     return f'{q}/site/{s}{q}'
-                if HEB.search(s):
+                if HEB.search(s) and len(s) > 1:  # a single letter is an effect glyph or an initial, not copy
                     text = s.replace("\\'", "'").replace('\\"', '"')
                     i = self.lookup(text)
                     if i:

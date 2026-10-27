@@ -149,6 +149,8 @@ function initGames() {
   const els = [...document.querySelectorAll('[data-game]')];
   if (!els.length) return;
   const env = { gsap: engine ? gsap : null, reduce, avatar, lenis };
+  // the page's world behind it (js/worlds): a background of its own, driven by the scroll
+  import('./worlds/world.js').then((m) => m.initWorld({ lenis, reduce })).catch((e) => console.info('[world] off', e));
   const load = (el) => {
     if (el.dataset.loaded) return; el.dataset.loaded = '1';
     import(`./games/${el.dataset.game}.js`).then((m) => m.init(el, env)).catch((e) => { console.warn(`[work] game ${el.dataset.game} kept static`, e?.message); el.classList.add('is-static'); });
@@ -175,7 +177,7 @@ function initIndex() {
       let shown = 0;
       cards.forEach((c) => { const on = f === 'all' || c.dataset.cat.split(' ').includes(f); c.classList.toggle('is-out', !on); if (on) shown++; });
       secs.forEach((s) => { s.hidden = !s.querySelector('.wc:not(.is-out), .wl__i:not(.is-out)'); });
-      n.textContent = `${shown} עבודות`;
+      n.textContent = __t('work.filter.count', { n: shown });
       if (empty) empty.hidden = shown > 0;
       ScrollTrigger?.refresh?.();
       // a filter shows its result at once: cards still waiting for their scroll reveal come in now
@@ -235,7 +237,7 @@ function initIndex() {
     pEl.textContent = c.dataset.long || c.querySelector('.wc__line').textContent;
     noteEl.textContent = c.dataset.note || ''; noteEl.hidden = !c.dataset.note;
     acts.innerHTML = '';
-    if (c.dataset.href) { const a = document.createElement('a'); a.className = 'btn btn--sm'; a.href = c.dataset.href; a.target = '_blank'; a.rel = 'noopener'; a.textContent = c.dataset.hrefLabel || 'לפתוח'; acts.appendChild(a); }
+    if (c.dataset.href) { const a = document.createElement('a'); a.className = 'btn btn--sm'; a.href = c.dataset.href; a.target = '_blank'; a.rel = 'noopener'; a.textContent = c.dataset.hrefLabel || __t('work.zoom.open'); acts.appendChild(a); }
     const wa = document.createElement('a'); wa.className = 'btn btn--sm btn--ghost'; wa.target = '_blank'; wa.rel = 'noopener';
     wa.href = 'https://wa.me/972504401760?text=' + encodeURIComponent(__t('wa.proto.generic', { project: hEl.textContent }));
     wa.textContent = __t('services.block.cta'); acts.appendChild(wa);

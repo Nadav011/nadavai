@@ -22,7 +22,7 @@ const $ = (s, el = document) => el.querySelector(s);
 const $$ = (s, el = document) => [...el.querySelectorAll(s)];
 const X_ICON = '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 3l10 10M13 3L3 13" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>';
 const ARROW = '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M13 8H3m4-4L3 8l4 4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
-const NEW = '<span class="sr"> (נפתח בחלון חדש)</span>';
+const NEW = '<span class="sr"> ' + __t('global.newWindow') + '</span>';
 export const wa = (text) => `https://wa.me/972504401760?text=${encodeURIComponent(text)}`;
 
 let lenis = null;
@@ -36,6 +36,9 @@ if (engine) {
     gsap.ticker.lagSmoothing(0);
   }
 }
+// the page's world behind it (js/worlds): a background of its own, driven by the scroll
+import('./worlds/world.js').then((m) => m.initWorld({ lenis, reduce })).catch((e) => console.info('[world] off', e));
+
 const scrollToEl = (el, offset = -90) => {
   if (lenis) lenis.scrollTo(el, { offset, duration: 1.1 });
   else el.scrollIntoView({ block: 'start', behavior: reduce ? 'auto' : 'smooth' });
@@ -227,7 +230,7 @@ function initCheck() {
   let pvKey = null;
   function preview() {
     const k = keyNow(), S = SAMPLES[k];
-    pv.how.textContent = picked() !== 'auto' ? __t('check.preview.how.field') : input.value.trim().length >= 6 ? __t('check.preview.how.text') : 'דוגמה';
+    pv.how.textContent = picked() !== 'auto' ? __t('check.preview.how.field') : input.value.trim().length >= 6 ? __t('check.preview.how.text') : __t('check.hero.demoTag');
     if (k === pvKey) return;
     pvKey = k;
     pv.field.textContent = FIELDS[k];
@@ -445,7 +448,7 @@ function initCheck() {
   dlgR.addEventListener('close', () => {
     lenis?.start();
     if (dlgR.returnValue === 'send') {
-      if (!$('#ckrReportDone')) saved.insertAdjacentHTML('beforeend', '<p class="saved__ok" id="ckrReportDone">תודה. הדיווח הגיע אליי.</p>');
+      if (!$('#ckrReportDone')) saved.insertAdjacentHTML('beforeend', '<p class="saved__ok" id="ckrReportDone">' + __t('check.report.done') + '</p>');
       announce(__t('check.report.done'));
     }
     $('#ckrReport').focus({ preventScroll: true });

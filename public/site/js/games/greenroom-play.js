@@ -12,7 +12,7 @@ import { createFrameLoop } from '../../hero/kit/frame-loop.js';
 const TAU = Math.PI * 2;
 const SEGS = [
   { t: '147', c: '#0E3B24' }, { t: __t('greenroom.try.wheel.seg2'), c: '#101311' }, { t: __t('greenroom.try.wheel.seg3'), c: '#13472C' }, { t: __t('greenroom.try.wheel.seg4'), c: '#101311' },
-  { t: 'עוד סיבוב', c: '#0E3B24' }, { t: __t('greenroom.try.wheel.seg6'), c: '#101311' }, { t: __t('greenroom.try.wheel.seg7'), c: '#13472C' }, { t: __t('greenroom.try.wheel.seg8'), c: '#101311' },
+  { t: __t('greenroom.try.wheel.seg5'), c: '#0E3B24' }, { t: __t('greenroom.try.wheel.seg6'), c: '#101311' }, { t: __t('greenroom.try.wheel.seg7'), c: '#13472C' }, { t: __t('greenroom.try.wheel.seg8'), c: '#101311' },
 ];
 
 export function init(stage, { reduce }) {
@@ -61,7 +61,7 @@ function wheel(box, res, { reduce }) {
   const angleOf = (e) => { const r = cv.getBoundingClientRect(); return Math.atan2(e.clientY - r.top - r.height / 2, e.clientX - r.left - r.width / 2); };
   function say(final) {
     const s = SEGS[idxAt()];
-    res.innerHTML = final ? `נעצר על <b></b> · המחשה, בלי פרסים` : __t('greenroom.try.wheel.spinning');
+    res.innerHTML = final ? __t('greenroom.try.wheel.result', { prize: '<b></b>' }) : __t('greenroom.try.wheel.spinning');
     if (final) res.querySelector('b').textContent = s.t;
   }
 

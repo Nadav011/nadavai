@@ -39,8 +39,21 @@ JS_PATCHES: dict[str, list[tuple[str, str]]] = {
     ],
     'js/sales-pages.js': [
         ("g.direction = 'rtl'; g.textAlign = 'right';", "const ltr = getComputedStyle(input).direction === 'ltr'; g.direction = ltr ? 'ltr' : 'rtl'; g.textAlign = ltr ? 'left' : 'right';"),
+        ("const NEW = '<span class=\"sr\"> (נפתח בחלון חדש)</span>';", "const NEW = '<span class=\"sr\"> ' + __t('global.newWindow') + '</span>';"),
+        ("'<p class=\"saved__ok\" id=\"ckrReportDone\">תודה. הדיווח הגיע אליי.</p>'",
+         "'<p class=\"saved__ok\" id=\"ckrReportDone\">' + __t('check.report.done') + '</p>'"),
         ("g.fillText(l, ir.right - fr.left - parseFloat(cs.paddingInlineStart || 0), top + i * lh)",
          "g.fillText(l, ltr ? ir.left - fr.left + parseFloat(cs.paddingInlineStart || 0) : ir.right - fr.left - parseFloat(cs.paddingInlineStart || 0), top + i * lh)"),
+    ],
+    # Hebrew inside a longer piece of markup: the text becomes a deck lookup, the markup stays
+    'js/story/social.js': [
+        ('aria-label="פוסט של ${w.name}"', "aria-label=\"${__t('social.feed.post.aria', { name: w.name })}\""),
+    ],
+    'js/story-pages.js': [
+        ("'<span class=\"st-ill\">המחשה</span>'", "'<span class=\"st-ill\">' + __t('global.illustration') + '</span>'"),
+    ],
+    'js/games/greenroom-play.js': [
+        ("`נעצר על <b></b> · המחשה, בלי פרסים`", "__t('greenroom.try.wheel.result', { prize: '<b></b>' })"),
     ],
     'hero/zoom.js': [
         ('aria-label="לסגור את המסך המוגדל">', "aria-label=\"' + __t('home.hero.dialog.close') + '\">"),
@@ -51,5 +64,6 @@ JS_PATCHES: dict[str, list[tuple[str, str]]] = {
 }
 
 # ids the patches above read; the sync adds them to messages/js-ids.json
-PATCH_IDS = ['global.nav.current', 'global.theme.night', 'global.theme.day', 'global.theme.label',
+PATCH_IDS = ['social.feed.post.aria', 'global.illustration', 'greenroom.try.wheel.result', 'global.newWindow', 'check.report.done',
+             'global.nav.current', 'global.theme.night', 'global.theme.day', 'global.theme.label',
              'home.hero.dialog.close', 'home.hero.peek.go', 'home.hero.peek.goShort']

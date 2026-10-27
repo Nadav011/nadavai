@@ -146,10 +146,23 @@ def main() -> None:
     for key, (h, e) in sorted(copy.items()):
         k = key.replace('.', '/')
         he[k] = conv.rich_he.get(key, conv.icu(norm(h)))
-        en[k] = conv.icu(norm(e)) if norm(e) else he[k]
+        en[k] = conv.rich_en.get(key) or (conv.icu(norm(e)) if norm(e) else he[k])
+    # an English row with a placeholder whose Hebrew row is literal ("הפרויקט הבא · 02 / 03" / "Next project · {n} / 03"):
+    # the number the Hebrew shows fills the English placeholder, since the page passes no value for it
+    for k, v in en.items():
+        names = re.findall(r'\{(\w+)\}', v)
+        if names and not re.search(r'\{\w+\}', he[k]):
+            nums = re.findall(r'\d+', re.sub(r'<[^>]+>', '', he[k]))
+            for lit in re.findall(r'\d+', re.sub(r'\{\w+\}', '', v)):
+                if lit in nums:
+                    nums.remove(lit)
+            if len(nums) == len(names):
+                for name, num in zip(names, nums):
+                    v = v.replace('{' + name + '}', num, 1)
+                en[k] = v
     for key, base in conv.variants.items():
         he[key.replace('.', '/')] = conv.rich_he[key]
-        en[key.replace('.', '/')] = en[base.replace('.', '/')]
+        en[key.replace('.', '/')] = conv.rich_en.get(key) or en[base.replace('.', '/')]
     MESSAGES.mkdir(exist_ok=True)
     (MESSAGES / 'he.json').write_text(json.dumps(he, ensure_ascii=False, indent=1) + '\n', encoding='utf-8')
     (MESSAGES / 'en.json').write_text(json.dumps(en, ensure_ascii=False, indent=1) + '\n', encoding='utf-8')

@@ -676,3 +676,17 @@ section[tabindex="-1"]:focus{outline:none}
   .nav-avatar .nav-avatar__head{inset-block-start:calc((var(--nav) - 40px) / 2 + env(safe-area-inset-top,0px));inset-block-end:auto;
     inset-inline-start:50%;translate:50% 0;inline-size:40px;block-size:40px}
 }
+
+/* ── worlds (2026-10-27): each page's own background, behind everything (js/worlds/world.js) ── */
+.world-cv{position:fixed;inset:0;width:100vw;height:100vh;z-index:-1;pointer-events:none;display:block}
+html.has-world{background:var(--world-base,var(--ground))}
+html.has-world body{background:transparent}
+html.world-static body{background:radial-gradient(70% 55% at 80% 0%,color-mix(in srgb,var(--world-accent) 14%,transparent),transparent 70%),var(--world-base,var(--ground))}
+
+/* ── the passage between worlds (2026-10-27): the new page spreads like ink from the click ── */
+@view-transition{navigation:auto}
+::view-transition-old(root){animation:vt-out .7s cubic-bezier(.7,0,.2,1) both}
+::view-transition-new(root){animation:vt-in .75s cubic-bezier(.7,0,.2,1) both}
+@keyframes vt-in{from{clip-path:circle(0 at var(--vt-x,50%) var(--vt-y,50%))}to{clip-path:circle(150% at var(--vt-x,50%) var(--vt-y,50%))}}
+@keyframes vt-out{to{filter:brightness(.55) saturate(.8);scale:.97}}
+@media (prefers-reduced-motion:reduce){::view-transition-old(root),::view-transition-new(root){animation:none}}

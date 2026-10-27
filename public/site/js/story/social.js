@@ -11,9 +11,9 @@ const P = (k) => `/site/assets/story/${k}.webp`;
 const FLY = ['so-gr-offers-urgent-single', 'so-hm-ad', 'so-br-home', 'so-ab-neon', 'so-gr-game-coach-carousel', 'so-hm-offer', 'so-br-craft', 'so-gr-food-dish-spotlight'];
 const WHO = {
   gr: { name: 'Green Room', av: P('so-gr-room-hero-single'), stories: ['so-gr-offers-urgent-single', 'so-gr-people-birthday-single'] },
-  hm: { name: 'חשמלכה', av: P('so-hm-ad'), stories: ['so-hm-story'] },
+  hm: { name: __t('social.feed.story.hashmalka'), av: P('so-hm-ad'), stories: ['so-hm-story'] },
   ab: { name: 'Asian Bar', av: P('so-ab-neon'), stories: ['so-ab-neon', 'so-ab-final'] },
-  br: { name: 'ברסלב', av: P('so-br-logo'), stories: ['so-br-home', 'so-br-craft'] },
+  br: { name: __t('social.feed.story.breslev'), av: P('so-br-logo'), stories: ['so-br-home', 'so-br-craft'] },
 };
 const POSTS = [
   { who: 'gr', img: 'so-gr-game-coach-carousel', w: 560, h: 560, cap: __t('social.feed.post1.cap'), alt: __t('social.gallery.item17.alt') },
@@ -116,7 +116,7 @@ function buildFeed({ gsap, reduce }) {
   const list = document.getElementById('feedList');
   list.innerHTML = POSTS.map((p, i) => {
     const w = WHO[p.who];
-    return `<article class="fp" aria-label="פוסט של ${w.name}">
+    return `<article class="fp" aria-label="${__t('social.feed.post.aria', { name: w.name })}">
       <header class="fp__h"><img src="${w.av}" alt="" width="30" height="30" loading="lazy"><div><b>${w.name}</b><small>${i % 2 ? __t('social.feed.status.auto') : __t('social.feed.status.morning')}</small></div><span class="fp__sch">מתוזמן</span></header>
       <div class="fp__img"><img src="${P(p.img)}" width="${p.w}" height="${p.h}" alt="${p.alt}" loading="lazy" decoding="async"><span class="fp__heart">${HEART}</span></div>
       <div class="fp__act"><button type="button" aria-pressed="false" aria-label=__t('play.avatar.like')>${HEART}</button><button type="button" aria-label=__t('social.feed.comment.aria') tabindex="-1">${CHAT}</button><button type="button" aria-label=__t('social.feed.share.aria') tabindex="-1">${SEND}</button></div>

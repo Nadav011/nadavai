@@ -25,6 +25,9 @@ if (engine) {
   }
 }
 
+// the page's world behind it (js/worlds): a background of its own, driven by the scroll
+import('./worlds/world.js').then((m) => m.initWorld({ lenis, reduce })).catch((e) => console.info('[world] off', e));
+
 /* ── small helpers shared with the page modules ── */
 export function lazy(el, fn, margin = '600px') {
   if (!el) return;
@@ -58,7 +61,7 @@ export function openShots({ title, time = '', shots = [], from = null }) {
     if (s.kind === 'laptop') frame = `<div class="st-laptop"><div class="st-laptop__in"><img src="${s.src}" alt="" decoding="async"></div></div>`;
     else if (s.html) frame = `<div class="st-phone"><div class="st-phone__in">${s.html}</div></div>`;
     else frame = `<div class="st-phone"><div class="st-phone__in"><img src="${s.src}" alt="" decoding="async"></div></div>`;
-    f.innerHTML = `${frame}<figcaption><span></span>${s.ill ? '<span class="st-ill">המחשה</span>' : ''}</figcaption>`;
+    f.innerHTML = `${frame}<figcaption><span></span>${s.ill ? '<span class="st-ill">' + __t('global.illustration') + '</span>' : ''}</figcaption>`;
     const im = f.querySelector('img'); if (im) im.alt = s.alt || '';
     f.querySelector('figcaption span').textContent = s.cap || '';
     body.appendChild(f);
