@@ -1,0 +1,174 @@
+/* ══ AVATAR: Nadav as the site guide ═══════════════════════════════════════
+   Everything is scoped under .nav-avatar, every token lives on .nav-avatar.
+   The layer is fixed and ignores the pointer; only the figure, the bubbles and the
+   head button take clicks. avatar.js positions the actor with a transform measured
+   from the viewport's physical top-left (getBoundingClientRect space), so the actor
+   and the sprite inside it use physical offsets on purpose; all page-facing layout
+   (bubbles, menu, head button) uses logical properties.
+   Fonts (Rubik) are loaded by the host page.                                    */
+
+.nav-avatar{
+  --av-h:144px;                      /* rendered cell height; the figure is ~89% of it */
+  --av-ink:#EDE7DC;
+  --av-soft:#B3B5B3;
+  --av-mute:#80878B;
+  --av-acc:#E8913C;
+  --av-acc-2:#F2B36F;
+  --av-ground:rgba(18,21,25,.94);
+  --av-line:rgba(237,231,220,.16);
+  --av-he:'Rubik','Arial Hebrew','Noto Sans Hebrew',Arial,sans-serif;
+  --av-ease:cubic-bezier(.16,1,.3,1);
+
+  position:fixed;inset:0;z-index:58;pointer-events:none;overflow:clip;
+  contain:layout paint;              /* nothing inside can widen the page, in RTL or LTR */
+  font-family:var(--av-he);color:var(--av-ink);
+  -webkit-font-smoothing:antialiased;
+  opacity:0;transition:opacity .4s var(--av-ease);
+}
+.nav-avatar.is-ready{opacity:1}
+.nav-avatar *,.nav-avatar *::before,.nav-avatar *::after{box-sizing:border-box}
+.nav-avatar :where(p){margin:0}
+.nav-avatar :focus-visible{outline:2px solid var(--av-acc);outline-offset:3px}
+.nav-avatar .nav-avatar__sr{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+@media (max-width:760px){ .nav-avatar{--av-h:101px} }
+
+/* ── actor ──────────────────────────────────────────────── */
+.nav-avatar__actor{position:absolute;top:0;left:0;will-change:transform;
+  inline-size:calc(var(--av-h) * 170 / 416)}   /* the figure's width: page CSS (button{width:100%}) can't stretch it */
+.nav-avatar .nav-avatar__btn{inline-size:calc(var(--av-h) * 170 / 416);max-inline-size:none}
+.nav-avatar__actor[hidden]{display:none}
+.nav-avatar[data-ducked] .nav-avatar__actor{opacity:0;visibility:hidden;transition:opacity .2s,visibility 0s .2s}
+
+.nav-avatar__btn{
+  pointer-events:auto;position:relative;display:block;
+  inline-size:calc(var(--av-h) * 170 / 416);block-size:calc(var(--av-h) * 374 / 416);
+  padding:0;margin:0;border:0;background:none;cursor:pointer;
+  border-radius:44% 44% 14px 14px;
+  -webkit-tap-highlight-color:transparent;touch-action:manipulation;
+}
+.nav-avatar__btn:focus-visible{outline-offset:6px}
+/* contact shadow: grounds him on the floor or on a card */
+.nav-avatar__btn::before{
+  content:"";position:absolute;inset-block-end:calc(var(--av-h) * -6 / 416);inset-inline-start:50%;
+  inline-size:78%;block-size:calc(var(--av-h) * 22 / 416);translate:-50% 0;
+  background:radial-gradient(closest-side,rgba(0,0,0,.5),rgba(0,0,0,0));
+  transition:opacity .2s;
+}
+[dir="rtl"] .nav-avatar__btn::before{translate:50% 0}
+.nav-avatar:is([data-row="jumping"],[data-row="celebrate"],[data-row="sit"]) .nav-avatar__btn::before{opacity:0}
+
+.nav-avatar__sprite{
+  position:absolute;                 /* left/top set in px by avatar.js from the cell's hit box */
+  inline-size:calc(var(--av-h) * 384 / 416);block-size:var(--av-h);
+  background-repeat:no-repeat;pointer-events:none;
+  filter:drop-shadow(0 4px 10px rgba(0,0,0,.28));
+  transition:filter .25s var(--av-ease);
+}
+.nav-avatar__btn:hover .nav-avatar__sprite,
+.nav-avatar__btn[aria-expanded="true"] .nav-avatar__sprite{filter:drop-shadow(0 4px 10px rgba(0,0,0,.28)) drop-shadow(0 0 14px rgba(232,145,60,.35))}
+
+/* "blink": he never takes the aviators off, so the lenses catch the light instead */
+.nav-avatar__glint{position:absolute;inset-block-start:21.6%;block-size:8%;overflow:hidden;border-radius:40% 40% 48% 48%;opacity:0}
+.nav-avatar__glint--a{left:34.8%;inline-size:13.4%}
+.nav-avatar__glint--b{left:51.4%;inline-size:13.6%}
+.nav-avatar__glint::after{
+  content:"";position:absolute;inset-block:-40%;inline-size:38%;left:-60%;
+  background:linear-gradient(100deg,rgba(255,255,255,0),rgba(255,255,255,.85) 50%,rgba(255,255,255,0));
+  transform:skewX(-18deg);
+}
+.nav-avatar.is-glint[data-row="idle"] .nav-avatar__glint{opacity:1}
+.nav-avatar.is-glint[data-row="idle"] .nav-avatar__glint::after{animation:nav-avatar-glint .6s var(--av-ease) both}
+.nav-avatar.is-glint[data-row="idle"] .nav-avatar__glint--b::after{animation-delay:.07s}
+@keyframes nav-avatar-glint{from{left:-60%}to{left:130%}}
+
+/* minimise chip, on hover or keyboard focus */
+.nav-avatar__x{
+  pointer-events:auto;position:absolute;inset-block-start:calc(var(--av-h) * 10 / 416);inset-inline-end:calc(var(--av-h) * -18 / 416);
+  inline-size:44px;block-size:44px;border-radius:50%;padding:0;display:grid;place-items:center;cursor:pointer;
+  background:var(--av-ground);color:var(--av-soft);border:1px solid var(--av-line);
+  opacity:0;scale:.8;transition:opacity .18s,scale .18s var(--av-ease),color .15s;
+}
+.nav-avatar__x svg{inline-size:12px;block-size:12px}
+.nav-avatar__actor:hover .nav-avatar__x,.nav-avatar__x:focus-visible{opacity:1;scale:1}
+.nav-avatar__x:hover{color:var(--av-ink);border-color:var(--av-acc)}
+@media (hover:none){ .nav-avatar__x{display:none} }
+
+/* ── bubbles ────────────────────────────────────────────── */
+.nav-avatar__bubble,.nav-avatar__say{
+  pointer-events:auto;position:absolute;inset-block-end:calc(100% + 12px);
+  inset-inline-start:calc(var(--av-h) * -24 / 416);
+  inline-size:max-content;max-inline-size:min(272px,calc(100vw - 32px));
+  background:var(--av-ground);border:1px solid var(--av-line);border-radius:16px;
+  box-shadow:0 18px 40px -12px rgba(0,0,0,.6),0 0 0 1px rgba(0,0,0,.25);
+  -webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);
+  transform-origin:bottom right;
+}
+[dir="ltr"].nav-avatar .nav-avatar__bubble,[dir="ltr"].nav-avatar .nav-avatar__say{transform-origin:bottom left}
+.nav-avatar__bubble::after,.nav-avatar__say::after{   /* tail toward his head */
+  content:"";position:absolute;inset-block-end:-7px;inset-inline-start:calc(var(--av-h) * 70 / 416);
+  inline-size:12px;block-size:12px;background:inherit;border:inherit;border-block-start:0;border-inline-start:0;
+  rotate:45deg;
+}
+.nav-avatar__bubble.is-side,.nav-avatar__say.is-side{inset-block-end:auto;inset-block-start:0;inset-inline-start:calc(100% + 12px)}
+.nav-avatar__bubble.is-side::after,.nav-avatar__say.is-side::after{display:none}
+
+.nav-avatar__bubble{padding:14px 10px 8px;opacity:0;scale:.92;transition:opacity .2s var(--av-ease),scale .3s var(--av-ease)}
+.nav-avatar__bubble.is-on{opacity:1;scale:1}
+.nav-avatar__bubble[hidden]{display:none}
+.nav-avatar .is-measuring{scale:1!important;transition:none!important}
+.nav-avatar__hi{font-size:15px;font-weight:600;line-height:1.35;padding-inline:8px;margin-block-end:8px}
+.nav-avatar__menu{display:flex;flex-direction:column;gap:2px}
+.nav-avatar__item{
+  display:flex;align-items:center;justify-content:space-between;gap:16px;
+  min-block-size:44px;padding-block:10px;padding-inline:10px 12px;border-radius:10px;
+  font:inherit;font-size:15px;font-weight:500;line-height:1.3;color:var(--av-ink);text-align:start;text-decoration:none;
+  background:none;border:0;cursor:pointer;transition:background .15s,color .15s;
+}
+.nav-avatar__item i{
+  flex:none;inline-size:16px;block-size:16px;opacity:.5;transition:opacity .15s,translate .2s var(--av-ease);
+  background:currentColor;
+  -webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M13 8H3m4-4L3 8l4 4' fill='none' stroke='black' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/contain no-repeat;
+          mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M13 8H3m4-4L3 8l4 4' fill='none' stroke='black' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/contain no-repeat;
+}
+[dir="ltr"].nav-avatar .nav-avatar__item i{scale:-1 1}
+.nav-avatar__item:hover,.nav-avatar__item:focus-visible{background:rgba(232,145,60,.13);color:var(--av-acc-2)}
+.nav-avatar__item:focus-visible{outline-offset:-2px}
+.nav-avatar__item:hover i,.nav-avatar__item:focus-visible i{opacity:1;translate:-3px 0}
+[dir="ltr"].nav-avatar .nav-avatar__item:hover i,[dir="ltr"].nav-avatar .nav-avatar__item:focus-visible i{translate:3px 0}
+.nav-avatar__item--wa{color:var(--av-acc-2)}
+.nav-avatar__item--quiet{
+  min-block-size:40px;margin-block-start:4px;border-block-start:1px solid var(--av-line);border-radius:0 0 10px 10px;
+  font-size:13px;color:var(--av-mute);
+}
+
+.nav-avatar__say{padding:10px 14px;opacity:0;scale:.9;visibility:hidden;
+  transition:opacity .2s var(--av-ease),scale .3s var(--av-ease),visibility 0s .2s}
+.nav-avatar__say.is-on{opacity:1;scale:1;visibility:visible;transition-delay:0s}
+.nav-avatar__say-t{font-size:14px;font-weight:500;line-height:1.4;max-inline-size:220px;inline-size:max-content}
+
+/* ── minimised head ─────────────────────────────────────── */
+.nav-avatar__head{
+  pointer-events:auto;position:absolute;
+  inset-block-end:calc(16px + env(safe-area-inset-bottom,0px));inset-inline-start:20px;
+  inline-size:56px;block-size:56px;border-radius:50%;padding:0;overflow:hidden;cursor:pointer;
+  background:radial-gradient(circle at 50% 35%,#2A3038,#14171B);
+  border:2px solid var(--av-acc);
+  box-shadow:0 10px 24px -8px rgba(0,0,0,.7);
+  transition:scale .25s var(--av-ease),border-color .2s;
+}
+.nav-avatar__head:hover{scale:1.06;border-color:var(--av-acc-2)}
+.nav-avatar__head[hidden]{display:none}
+.nav-avatar__face{position:absolute;inset:-2px;background-repeat:no-repeat}
+@media (max-width:760px){
+  .nav-avatar__head{inset-inline-start:12px;inset-block-end:calc(12px + env(safe-area-inset-bottom,0px))}
+}
+
+@media (prefers-reduced-motion:reduce){
+  .nav-avatar,.nav-avatar *{transition:none!important;animation:none!important}
+}
+
+/* site-v1: while he runs along his lane, he fades when his box crosses text or a control */
+.nav-avatar[data-over] .nav-avatar__actor{opacity:.18;transition:opacity .2s}
+.nav-avatar__actor{transition:opacity .25s}
+/* every item in the guide's menu is a full 44px target */
+.nav-avatar__item--quiet{min-height:44px}

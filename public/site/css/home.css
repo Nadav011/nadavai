@@ -1,0 +1,434 @@
+/* ══ home.css: the home page only (fix round 1) ═══════════════════════════
+   Loaded after site.css and the modules. site.css stays the shared base that the
+   inner pages link; everything specific to the home page lives here.            */
+
+/* skip links: the first link, and "skip the animation" before every heavy chapter */
+.skip--fx{position:absolute;z-index:200}
+.skip--fx:focus{position:fixed;inset-block-start:12px}
+
+/* ── hero: the promise and both CTAs from first paint; the wordmark itself is built by the code and the
+   screens (Nadav, 2026-10-27), so its text shows only when WebGL fails, or while the cloud is late (gl-late, set by the head script at 9 s; a class, so the fade runs both ways) ── */
+html.gl-fail .wm,html.pfx.gl-late:not(.gl-up) .wm{color:var(--ink);-webkit-text-fill-color:var(--ink)}
+
+html.pfx .wm{transition:color .9s ease,-webkit-text-fill-color .9s ease}
+.statement{will-change:translate}
+.st__head{text-shadow:0 2px 28px rgba(10,12,14,.75)}
+.js:not(.ready) .st__head,.js:not(.ready) .st__cta{visibility:hidden}
+.st__cta{margin-block-start:clamp(16px,2.6vh,26px)}
+.st__sub{margin-block-start:clamp(16px,2.4vh,24px);max-width:34em;font-size:clamp(15.5px,1.15vw,18px);line-height:1.6;color:#E2DED6}
+.st__roles{margin-block-start:10px}
+@media (max-aspect-ratio: 6/5){
+  .st__head{font-size:clamp(26px,7.2vw,40px)}
+  .st__sub{font-size:15px}
+  .st__live{display:none}
+}
+
+/* ── one tag system: the NN eyebrow + the corner HUD; no stray English tags ── */
+.eyebrow,.of__tag,.bio__tag{font-size:14px}
+.eyebrow b,.of__tag b,.bio__tag b{font-size:12.5px}
+.sec__more-row{display:flex;padding-inline:var(--gut);margin-block-start:clamp(18px,3vh,30px)}
+.offer .sec__more-row,.bio .sec__more-row{padding-block-end:clamp(20px,4vh,40px)}
+.sec__more{display:inline-flex;align-items:center;gap:8px;min-height:44px;font-size:15px;color:var(--accent-2);text-decoration:none;
+  border-block-end:1px solid rgba(242,179,111,.35)}
+.sec__more::after{content:"";width:14px;height:14px;
+  -webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M13 8H3m4-4L3 8l4 4' fill='none' stroke='black' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/contain no-repeat;
+          mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M13 8H3m4-4L3 8l4 4' fill='none' stroke='black' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/contain no-repeat;
+  background:currentColor}
+.sec__more:hover{color:var(--ink);border-color:var(--ink)}
+
+/* ── 02 before/after: outcome line, no amounts in the mess ── */
+.ba__out{display:flex;align-items:baseline;gap:10px;font-size:16px;line-height:1.55;color:var(--ink);font-weight:500}
+.ba__tag{flex:none;display:inline-flex;align-items:center;min-height:24px;padding:0 9px;border-radius:999px;font-size:12.5px;font-weight:500;
+  color:var(--live);border:1px solid rgba(111,227,161,.45)}
+.ba__proof{font-size:14px}
+.wa__bar em:empty{display:none}
+.pp__head span{min-height:24px}
+.pp__scrawl{position:relative}
+.pp__scrawl::before{content:"";position:absolute;inset-inline:8px;inset-block-start:50%;height:2px;border-radius:2px;background:#5D5A52;
+  -webkit-mask:repeating-linear-gradient(90deg,#000 0 6px,transparent 6px 9px);mask:repeating-linear-gradient(90deg,#000 0 6px,transparent 6px 9px);rotate:-2deg}
+.pp__q{color:#C0392B;font-weight:700;text-align:center}
+.pp__line{display:block;height:10px;margin-block:5px;border-radius:3px;background:repeating-linear-gradient(90deg,#9C978A 0 5px,transparent 5px 8px);opacity:.7}
+.pp__line.pp__x{background:#C0392B;height:2px;opacity:.8}
+.mess--calls{padding-block-start:26px}
+
+/* ── 04 process: the guarantee line, Hebrew step labels ── */
+.night__lbl{display:block;margin-block-end:4px;font-size:13px;font-weight:500;color:var(--accent-2)}
+.path__ctr{font-family:var(--he);font-size:13px;letter-spacing:0;color:var(--ink-soft)}
+.path__ctr b{font-size:13px}
+.path__hud{justify-content:flex-start}
+.path__guarantee{margin:clamp(30px,5vh,48px) auto 0;width:fit-content;max-width:100%;padding:12px 20px;border-radius:999px;text-align:center;
+  font-size:15.5px;font-weight:500;color:var(--ink);border:1px solid rgba(232,145,60,.45);background:rgba(232,145,60,.07)}
+
+/* ── 05 phones: the label never collides with the caption ── */
+.phone.is-focus .phone__name{opacity:0}
+.phone__name{transition:opacity .3s ease}
+.wc__row .sec__more{margin-inline-start:6px}
+.work__cap{min-height:150px}
+
+/* ── 06 branch: the made-up-data note, readable times ── */
+.dial-wrap{display:grid;justify-items:center;gap:12px;min-width:0}
+.dial__note{font-size:13px;color:var(--mute);text-align:center}
+.dn__time{font-size:12.5px}
+.dn__name{font-size:14.5px}
+@media (max-width:900px){ .dn__name{font-size:13px} .dn__time{font-size:12px} }
+
+/* ── 07 check: visible label, helper, progress, the sample report ── */
+.ck__label{display:block;margin-block-end:12px;text-align:center;font-size:15px;color:var(--ink-soft)}
+.ck__go{flex:none;width:auto;height:auto;min-height:clamp(52px,5.6vw,64px);padding-inline:clamp(18px,2vw,28px);border-radius:999px;font-size:16px}
+.ck__go svg{display:none}
+.ck__field.is-done .ck__ph{opacity:0}
+.ck__help{margin-block-start:12px;text-align:center;font-size:14px;color:var(--mute)}
+.ck__err{margin-block-start:6px}
+.ck__progress{min-height:24px;margin-block-start:6px;text-align:center;font-size:14.5px;color:var(--accent-2)}
+.ck__progress:empty{min-height:0}
+.ck__chip{color:var(--ground)}
+.ck__h{font-size:clamp(22px,2vw,30px);font-weight:600;margin-block:6px 4px}
+.ck__disc{font-size:14px;color:var(--mute);margin-block-end:16px}
+.ck__sec{display:grid;gap:8px;padding-block:14px;border-block-start:1px solid var(--line)}
+.ck__sec h4{margin:0;font-size:14px;font-weight:600;color:var(--accent-2)}
+.ck__sec p{margin:0}
+.ck__cta-h{margin-block:6px 12px;font-size:18px;font-weight:600}
+.ck__again{min-height:44px;margin-inline-start:10px;padding:0 14px;border:0;background:none;color:var(--ink-soft);font:400 15px var(--he);
+  text-decoration:underline;text-underline-offset:4px;cursor:pointer}
+@media (max-width:720px){
+  .ck__field{flex-wrap:wrap;border-radius:26px;padding:8px}
+  .ck__in{flex:1 1 100%;height:56px;padding-inline:10px}
+  .ck__ph{inset-inline:18px 18px;inset-block:8px auto;height:56px}
+  .ck__go{flex:1 1 100%}
+}
+
+/* ── 08 plans: the soft price line, 44px select targets, no stamps in English ── */
+.offer .pl__price--soft{color:var(--ink-soft);font-weight:400}
+.offer .pl__go{display:inline-flex;align-items:center;min-height:44px}
+.offer .pl__cursor b{display:none}
+
+/* ── 09 bio: 44px controls ── */
+.bio .bio__btn{min-width:44px;min-height:44px}
+.bio .bio__lvl-k,.bio .bio__no-k{font-family:var(--he);font-weight:500;letter-spacing:0;font-stretch:100%}
+
+/* ── 10 playground: calm note, goals after the first goal ── */
+.arena__calm{display:none;position:absolute;inset-block-start:14px;inset-inline-start:16px;font-size:14px;color:var(--ink-soft)}
+.reduce .arena__calm{display:block}
+.reduce .arena__hint,.reduce .arena__ctl{display:none}
+.arena__score{font-size:14px;letter-spacing:0;color:var(--ink-soft)}
+.arena__score b{font-size:20px;margin-inline:4px 0}
+
+/* ── length budget: the process runs as one row on desktop, plan art is smaller ── */
+@media (min-width:901px){
+  .sec--path{padding-block-end:clamp(60px,8vh,96px)}
+  .path{max-width:1320px;margin-block-start:clamp(20px,4vh,44px)}
+  .nights{grid-template-columns:repeat(5,minmax(0,1fr));gap:clamp(10px,1.2vw,18px);align-items:start;padding-block-start:clamp(36px,6vh,56px)}
+  .night,.night:nth-child(even){width:auto;margin:0;grid-template-columns:minmax(0,1fr);gap:12px}
+  .night + .night{margin-block-start:0}
+  .night:nth-child(even){margin-block-start:clamp(28px,5vh,52px)}
+  .night__n{font-size:clamp(54px,5.2vw,92px);text-align:center}
+  .night__body{padding:16px}
+  .night__p{font-size:14.5px}
+  .path__hud{display:none}
+}
+.offer .pl__art{width:clamp(110px,9vw,150px)}
+.offer .pl--top .pl__art{width:clamp(140px,12vw,190px)}
+.cmp{aspect-ratio:3/3.1}
+.offer--tree .tr__stage{padding-block-start:calc(var(--nav) + clamp(30px,5vh,56px))}
+.bio__intro{padding-block:clamp(64px,10vh,110px) clamp(20px,3vh,36px)}
+@media (max-width:720px){
+  .offer .pl__art,.offer .pl--top .pl__art{width:110px;margin-block:0 8px}
+  .offer .pl__inc{margin-block:14px 16px;padding-block-start:12px}
+  .offer--plans{padding-block:calc(var(--nav) + 28px) 56px}
+  .cmp{aspect-ratio:3/2.7}
+  .ba{gap:36px}
+  .night__n{font-size:46px}
+  .nights{gap:8px}
+}
+.nav-avatar .nav-avatar__x{min-width:44px!important;min-height:44px!important}
+
+/* ══ fix round 2 ══════════════════════════════════════════ */
+/* hero: on tall screens the statement sits on the portrait from first paint, so its scrim is there too */
+@media (max-aspect-ratio: 6/5){
+  .scrim--text{opacity:1!important;visibility:visible!important}
+  .st__head{color:#FFFFFF;text-shadow:0 2px 18px rgba(10,12,14,.9)}
+}
+.zc-keys button{min-height:44px;min-width:44px}
+/* the chapter HUD lives at the top corner, under the header, so the bottom corner stays the avatar's lane */
+.hud--top{inset-block-start:calc(var(--nav) + 10px);inset-block-end:auto;font-size:13px}
+.hud__of{font-size:12px}
+/* no text under 12px */
+.offer .sk__n,.offer .tc__k,.offer .tc__k b,.offer .of__corner [lang="en"]{font-size:12px}
+.phone__name{font-size:12.5px}
+@media (max-width:720px){ .phone__name{font-size:12px} }
+/* 05: the role gets its own row */
+.wc__name{display:block}
+.wc__role{font-size:14px;color:var(--ink-soft);margin-block-start:-2px}
+/* 07: the field the sample answers */
+.ck__field-tag:not(:empty){display:inline-flex;align-items:center;min-height:28px;padding:0 12px;border-radius:999px;font-size:13px;color:var(--ink);border:1px solid var(--line-2)}
+/* 09: the bio as one screen: three level cards and the way to the full story */
+.sec--bio{padding-block:var(--sec-pad) clamp(40px,6vh,72px)}
+.lv3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(14px,1.8vw,28px);margin-block-start:clamp(26px,4vh,44px)}
+.lv3__card{display:grid;grid-template-rows:auto auto auto 1fr;gap:8px;padding:clamp(12px,1.2vw,18px);border-radius:var(--r-card);
+  background:linear-gradient(180deg,#14181D,#0F1215);border:1px solid var(--line)}
+.lv3__img{position:relative;aspect-ratio:16/10;margin:0 0 6px;border-radius:calc(var(--r-card) - 6px);overflow:hidden;background:var(--ground-2)}
+.lv3__img img{width:100%;height:100%;object-fit:cover}
+.lv3__img--dev{display:grid;place-items:center;background:radial-gradient(60% 80% at 50% 100%,rgba(232,145,60,.18),transparent 70%),var(--ground-2)}
+.lv3__img--dev img{width:auto;height:118%;object-fit:contain;translate:0 12%;border-radius:14px;box-shadow:0 18px 40px -16px rgba(0,0,0,.8)}
+.lv3__img figcaption{position:absolute;inset-block-end:8px;inset-inline-start:8px;min-height:24px;display:inline-flex;align-items:center;padding:0 9px;border-radius:999px;
+  font-size:12px;color:var(--ink-soft);background:rgba(var(--scrim),.7)}
+.lv3__no{display:flex;align-items:baseline;gap:8px;font-size:13px;color:var(--accent-2)}
+.lv3__no b{font-size:clamp(26px,2.4vw,36px);line-height:1;color:var(--ink)}
+.lv3__t{font-size:clamp(20px,1.6vw,24px);font-weight:600;line-height:1.2}
+.lv3__p{font-size:15px;line-height:1.6;color:var(--ink-soft);display:-webkit-box;-webkit-line-clamp:5;-webkit-box-orient:vertical;overflow:hidden}
+.lv3__more{align-items:center;gap:16px;padding-inline:0}
+.lv3__xp{flex:0 1 220px;height:6px;border-radius:999px;background:rgba(255,255,255,.07);overflow:hidden}
+.lv3__xp i{display:block;height:100%;width:87.5%;border-radius:inherit;background:linear-gradient(to left,var(--accent),var(--accent-2))}
+@media (max-width:900px){ .lv3{grid-template-columns:minmax(0,1fr)} .lv3__p{-webkit-line-clamp:4} .lv3__img{aspect-ratio:16/8} }
+/* 10: the playground as one teaser strip */
+.sec--play{padding-block:clamp(40px,6vh,72px)}
+.strip{position:relative;isolation:isolate;display:grid;align-items:end;min-height:clamp(320px,46svh,460px);border-radius:var(--r-card);overflow:hidden;border:1px solid var(--line)}
+.strip__img{position:absolute;inset:0;z-index:-2;width:100%;height:100%;object-fit:cover}
+.strip::before{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(to left,rgba(var(--scrim),.92) 0%,rgba(var(--scrim),.72) 42%,rgba(var(--scrim),.15) 80%)}
+.strip__body{max-width:620px;padding:clamp(20px,3vw,44px)}
+.strip__row{display:flex;flex-wrap:wrap;align-items:center;gap:14px;margin-block-start:18px}
+@media (max-width:720px){ .strip::before{background:linear-gradient(to top,rgba(var(--scrim),.95) 20%,rgba(var(--scrim),.5) 70%,rgba(var(--scrim),.15))} .strip{min-height:440px} }
+/* 08: on phones the plans are a swipe row of three cards */
+@media (max-width:720px){
+  .offer .pl__grid{display:flex;gap:12px;overflow-x:auto;overscroll-behavior-x:contain;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;
+    margin-inline:calc(var(--gut) * -1);padding:4px var(--gut) 14px;scrollbar-width:none}
+  .offer .pl__grid::-webkit-scrollbar{display:none}
+  .offer .pl{flex:0 0 84%;scroll-snap-align:center}
+  .offer .pl__cursor{display:none}
+  .offer .pl__terms{margin-block-start:18px}
+}
+
+/* ══ fix round 3 ══ */
+/* 05: while a phone is focused the caption names it; the small labels step back so nothing overprints */
+.phones:has(.is-focus) .phone__name{opacity:0}
+.phone__body{height:min(42svh,470px)}
+/* the chapter HUD is a small chip beside the dock (bottom, reading-end corner), never over the content */
+.hud.hud--top{inset-block-start:auto;inset-block-end:calc(16px + env(safe-area-inset-bottom));inset-inline-start:auto;inset-inline-end:calc(var(--gut) + 196px);
+  align-items:center;min-height:36px;padding:0 14px;border-radius:999px;background:rgba(16,19,23,.78);border:1px solid var(--line);
+  -webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
+/* calm mode: the wordmark stays, above the promise */
+.st__wm{display:none;margin-block-end:14px;font-family:var(--wide);font-weight:800;font-stretch:125%;font-size:clamp(44px,6.4vw,104px);line-height:.86;letter-spacing:-.025em;color:var(--ink)}
+.st__wm span{color:var(--accent)}
+.static .st__wm{display:block}
+/* the chapter chip appears only while the page moves and fades out at rest, so it never sits on content */
+html.past-hero .hud.hud--top{opacity:0;transform:translateY(6px);transition:opacity .4s ease .1s,transform .5s var(--ease-out)}
+html.past-hero .hud.hud--top.is-live{opacity:1;transform:none;transition-delay:0s}
+/* phones: the peek's caption sits above the card, clear of the NADAV row */
+@media (max-width:720px){
+  .zc--peek .zc__cap{inset-block-start:auto;inset-block-end:calc(100% + 10px);max-width:80vw;font-size:12.5px}
+}
+
+/* ── hero peek (2026-10-27, "compile"): code rises from the letter in a soft column of light, the screen tilts up
+   showing glowing code, a scan line turns it into the real screen, a sheen crosses the glass, and the message writes
+   itself in a glass panel beside it (cap-start / cap-end are logical, set from the layout). ── */
+.zc--peek .zc__glass{background:#07090b;border-radius:clamp(12px,9%,22px);
+  box-shadow:0 34px 60px -22px rgba(0,0,0,.75),0 0 0 1px rgba(255,255,255,.1),0 0 26px -6px rgba(232,145,60,.35)}
+.zc__scr{position:absolute;inset:0;overflow:hidden;border-radius:inherit}
+.zc--peek .zc__scr img{height:auto}
+.zc__code{position:absolute;inset:0;padding:6px 7px;overflow:hidden;direction:ltr;text-align:start;white-space:pre;
+  font:500 8.5px/1.24 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;letter-spacing:.4px;
+  color:rgba(232,145,60,.82);text-shadow:0 0 6px rgba(232,145,60,.45)}
+.zc__scan{position:absolute;inset-inline:0;top:0;height:2px;margin-block-start:-1px;opacity:0;visibility:hidden;
+  background:#FFD3A1;box-shadow:0 0 14px 3px rgba(232,145,60,.85)}
+.zc__shine{position:absolute;inset:0;pointer-events:none;border-radius:inherit;
+  background:linear-gradient(105deg,transparent 35%,rgba(255,255,255,.17) 50%,transparent 65%)}
+.zc__floor{position:absolute;inset-inline:-12%;inset-block-end:-26px;height:34px;pointer-events:none;
+  background:radial-gradient(ellipse at center,rgba(232,145,60,.38),transparent 70%);filter:blur(7px)}
+.zc--peek .zc__cap{inset-block-start:auto;inset-block-end:10px;translate:none;width:max-content;white-space:normal;
+  flex-wrap:wrap;column-gap:9px;row-gap:4px;align-items:flex-start;border-radius:14px;padding:10px 13px;
+  font-size:13px;line-height:1.5;background:rgba(12,14,17,.94);border:1px solid rgba(255,255,255,.1);
+  -webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);box-shadow:0 18px 40px -18px rgba(0,0,0,.8)}
+/* offsetting from the opposite edge puts the panel outside the frame on that side */
+.zc--peek.cap-start .zc__cap{inset-inline:auto calc(100% + 16px)}
+.zc--peek.cap-end .zc__cap{inset-inline:calc(100% + 16px) auto}
+.zc--peek .zc__cap i:first-child{margin-block-start:.55em}
+.zc--peek .zc__cap span{flex:1 1 0;min-width:0}
+.zc--peek .zc__cap .w{display:inline-block;white-space:pre}
+.zc__tag{flex-basis:100%;padding-inline-start:15px;font:600 12px/1.3 ui-monospace,SFMono-Regular,Menlo,monospace;
+  letter-spacing:.3px;color:var(--accent)}
+.zc:not(.zc--peek) .zc__tag{display:none}
+.zc-beam{position:absolute;width:30px;translate:-50% 0;opacity:0;visibility:hidden;transform-origin:50% 100%;pointer-events:none;
+  background:linear-gradient(to top,rgba(232,145,60,.42),rgba(232,145,60,.08) 70%,transparent);filter:blur(7px)}
+.zc-beam::after{content:"";position:absolute;inset-block-end:-3px;inset-inline-start:calc(50% - 3px);width:6px;height:6px;border-radius:50%;
+  background:#FFD3A1;box-shadow:0 0 12px 3px rgba(232,145,60,.9)}
+.zc-rise{position:absolute;inset:0;pointer-events:none;direction:ltr}
+.zc-rise i{position:absolute;opacity:0;visibility:hidden;font:600 11px/1 ui-monospace,SFMono-Regular,Menlo,monospace;font-style:normal;
+  color:#F2B36F;text-shadow:0 0 8px rgba(232,145,60,.85);translate:-50% -50%;will-change:transform}
+
+/* ── hero project chips (2026-10-27): the keyboard list made visible under the name; the live one glows ── */
+.hero .zc-keys{inset-block:var(--keys-top,auto) auto;inset-inline:0;justify-content:center;align-items:center;max-width:none;
+  padding-inline:var(--gut);gap:8px;transition:opacity .5s ease,translate .5s ease}
+.hero .zc-keys.is-away{opacity:0;translate:0 8px;pointer-events:none}
+.hero .zc-keys.is-tight button{position:absolute;width:1px;height:1px;min-height:0;padding:0;overflow:hidden;clip-path:inset(50%);border:0}
+.hero .zc-keys.is-tight button:focus-visible{position:static;width:auto;height:auto;min-height:44px;padding-inline:13px;clip-path:none;border:1px solid rgba(255,255,255,.12)}
+.hero .zc-keys.is-tight .zc-keys__mark{display:none}
+.hero .zc-keys__mark{font:600 12px/1 ui-monospace,SFMono-Regular,Menlo,monospace;font-style:normal;color:var(--accent);opacity:.8;direction:ltr}
+.hero .zc-keys button{position:static;width:auto;height:auto;min-height:44px;min-width:44px;clip-path:none;overflow:visible;
+  display:inline-flex;align-items:center;gap:7px;padding-inline:13px;border-radius:999px;cursor:pointer;
+  font:500 13px/1 var(--he,inherit);color:var(--ink);background:rgba(14,16,19,.55);border:1px solid rgba(255,255,255,.12);
+  -webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);transition:border-color .3s ease,background .3s ease,box-shadow .3s ease}
+.hero .zc-keys button i{width:6px;height:6px;border-radius:50%;background:rgba(232,145,60,.45);transition:background .3s ease,box-shadow .3s ease}
+.hero .zc-keys button.is-live{border-color:rgba(232,145,60,.6);background:rgba(232,145,60,.12)}
+.hero .zc-keys button.is-live i{background:var(--accent);box-shadow:0 0 10px 2px rgba(232,145,60,.75)}
+@media (max-width:899px){
+  .hero .zc-keys{flex-wrap:nowrap;justify-content:flex-start;overflow-x:auto;scrollbar-width:none;padding-block:6px}
+  .hero .zc-keys::-webkit-scrollbar{display:none}
+  .hero .zc-keys button{flex:none;font-size:12.5px;padding-inline:11px}
+  /* the row scrolls sideways: a soft fade at its far (inline-end) edge says there is more */
+  [dir="rtl"] .hero .zc-keys.has-more{-webkit-mask-image:linear-gradient(to left,transparent,#000 14%);mask-image:linear-gradient(to left,transparent,#000 14%)}
+  [dir="ltr"] .hero .zc-keys.has-more{-webkit-mask-image:linear-gradient(to right,transparent,#000 14%);mask-image:linear-gradient(to right,transparent,#000 14%)}
+}
+
+/* ── hero peek extras (2026-10-27): rings of anticipation at the source, and a phone island on the frame ── */
+.zc-pulse{position:absolute;width:26px;height:26px;translate:-50% -50%;border-radius:50%;pointer-events:none;opacity:0;visibility:hidden;
+  border:1.5px solid rgba(255,211,161,.9);box-shadow:0 0 14px rgba(232,145,60,.7),inset 0 0 8px rgba(232,145,60,.45)}
+.zc__island{position:absolute;inset-block-start:5px;inset-inline-start:50%;translate:-50% 0;width:28%;height:9px;border-radius:999px;
+  background:#000;box-shadow:0 0 0 1px rgba(255,255,255,.06);pointer-events:none;z-index:2}
+[dir="rtl"] .zc__island{translate:50% 0}
+.zc--peek .zc__glass{outline:3px solid rgba(20,22,26,.95);outline-offset:0}
+
+/* ── hero polish (2026-10-27): a cursor ring that reads "click", a timer on the live chip ── */
+.zc-cursor{position:absolute;z-index:9;width:30px;height:30px;translate:-50% -50%;border-radius:50%;pointer-events:none;opacity:0;
+  display:grid;place-items:center;border:1.5px solid rgba(232,145,60,.7);transition:opacity .25s ease,width .3s ease,height .3s ease,background .3s ease}
+.zc-cursor.is-on{opacity:1}
+.zc-cursor b{font:700 11px/1 ui-monospace,SFMono-Regular,Menlo,monospace;color:#FFD3A1;opacity:0;direction:ltr;transition:opacity .2s ease}
+.zc-cursor.is-hot{width:58px;height:58px;background:rgba(232,145,60,.14);border-color:rgba(255,211,161,.9);box-shadow:0 0 18px rgba(232,145,60,.45)}
+.zc-cursor.is-hot b{opacity:1}
+@media (hover:none),(pointer:coarse){.zc-cursor{display:none}}
+.hero .zc-keys button{position:relative;overflow:hidden}
+.hero .zc-keys button.is-live::after{content:"";position:absolute;inset-inline:10px;inset-block-end:4px;height:2px;border-radius:2px;
+  background:var(--accent);scale:0 1;animation:chip-run var(--run,5.6s) linear forwards}
+[dir="rtl"] .hero .zc-keys button.is-live::after{transform-origin:100% 50%}
+[dir="ltr"] .hero .zc-keys button.is-live::after{transform-origin:0 50%}
+@keyframes chip-run{to{scale:1 1}}
+@media (prefers-reduced-motion:reduce){.hero .zc-keys button.is-live::after{animation:none;scale:1 1}}
+
+/* ── hero peek on a phone (2026-10-27): a compact message, the product line on one line ── */
+@media (max-width:599px){
+  .zc--peek .zc__cap{font-size:12px;line-height:1.45;padding:8px 10px;column-gap:7px}
+  .zc--peek .zc__cap i:first-child{margin-block-start:.5em}
+  .zc__tag{padding-inline-start:13px;font-size:12px;white-space:normal}
+}
+
+
+/* ── very short screens (landscape phones, 200% zoom, the smallest phones): the promise and CTAs stay in the first screen ── */
+@media (max-height:520px), (max-aspect-ratio:6/5) and (max-height:700px){
+  .wm__cap{display:none}
+  .wm-wrap{align-items:start;padding-block-start:calc(var(--nav,68px) + 6px)} /* the name moves up under the nav instead of shrinking away */
+  .st__head{font-size:clamp(20px,5.4vh,26px)}
+  .st__cta{margin-block-start:12px}
+  .corner{display:none}
+}
+
+/* ── scan round 1 (2026-10-27) ── */
+/* the walk goes left to right (Nadav); the chips read the same way, so the first chip lights first, on the left */
+[dir="rtl"] .hero .zc-keys{flex-direction:row-reverse}
+@media (hover:hover){.hero .zc-keys button:hover{border-color:rgba(232,145,60,.6);background:rgba(232,145,60,.12)}}
+/* the open screen opens big and readable on click */
+.zc--peek.is-on{pointer-events:auto;cursor:zoom-in}
+/* Day look: the chips need a visible edge on paper, and the cursor label the paper accent */
+:root[data-look="b"] .hero .zc-keys button{border-color:var(--line-2,rgba(23,20,15,.32))}
+:root[data-look="b"] .zc-cursor b{color:var(--lk-acc,#B23C0A)}
+:root[data-look="b"] .zc-cursor{border-color:var(--lk-acc,#B23C0A)}
+/* portrait screens: the promise sits a little higher, clear of the avatar's corner */
+@media (max-aspect-ratio:6/5){
+  .statement{inset-block-end:calc(var(--tick,0px) + 40px + env(safe-area-inset-bottom))}
+}
+@media (max-aspect-ratio:6/5) and (min-width:761px){.corner--bs{display:none}} /* only where the avatar meets it (tablets) */
+/* reduced motion (static hero): the dock is up from the first paint, so the promise makes room for it */
+@media (max-width:720px){
+  html.static .statement{inset-block-end:calc(96px + env(safe-area-inset-bottom))}
+  html.static .ticker{display:none}
+}
+/* the product line: product and category; on phones each on its own line instead of breaking mid-phrase */
+.zc__tag .sep{opacity:.6}
+@media (max-width:599px){.zc__tag span{display:block}.zc__tag .sep{display:none}}
+
+/* ── hero screens, round 3 (2026-10-27): they open up or down, each with its own reveal; hover holds and grows one,
+   a click opens its project page ── */
+/* under the name the frame hangs from its top edge: the glow, the beam and the message follow it */
+.zc--peek.is-down .zc__floor{inset-block-end:auto;inset-block-start:-26px}
+.zc--peek.is-down .zc__cap{inset-block-end:auto;inset-block-start:10px}
+.zc-beam.is-down{transform-origin:50% 0;background:linear-gradient(to bottom,rgba(232,145,60,.42),rgba(232,145,60,.08) 70%,transparent)}
+.zc-beam.is-down::after{inset-block-end:auto;inset-block-start:-3px}
+/* blinds: seven slats that flip open */
+.zc__blinds{position:absolute;inset:0;perspective:520px;pointer-events:none;z-index:1}
+.zc__blinds i{position:absolute;inset-inline:0;height:calc(100% / 7 + 1px);opacity:0;visibility:hidden;backface-visibility:hidden;
+  background:linear-gradient(to bottom,#151a20,#0a0d10);box-shadow:inset 0 1px 0 rgba(255,211,161,.35)}
+.zc__blinds i:nth-child(1){top:0}.zc__blinds i:nth-child(2){top:calc(100% / 7)}.zc__blinds i:nth-child(3){top:calc(200% / 7)}
+.zc__blinds i:nth-child(4){top:calc(300% / 7)}.zc__blinds i:nth-child(5){top:calc(400% / 7)}.zc__blinds i:nth-child(6){top:calc(500% / 7)}
+.zc__blinds i:nth-child(7){top:calc(600% / 7)}
+/* tiles: the screen in pieces, flying out of the letter */
+.zc__tiles{position:absolute;inset:0;pointer-events:none;z-index:2}
+.zc__tiles i{position:absolute;opacity:0;visibility:hidden;background-repeat:no-repeat;border-radius:2px;
+  box-shadow:0 0 0 .5px rgba(255,211,161,.3),0 0 10px rgba(232,145,60,.25)}
+/* iris: a ring of light opens the screen from where the beam lands */
+.zc__iris{position:absolute;inset:0;pointer-events:none;opacity:0;visibility:hidden;z-index:1;
+  background:radial-gradient(circle at var(--o,50% 100%),transparent calc(var(--rp,0px) - 3px),rgba(255,211,161,.95) var(--rp,0px),rgba(232,145,60,.35) calc(var(--rp,0px) + 3px),transparent calc(var(--rp,0px) + 14px))}
+/* hover: the screen grows toward the visitor and glows; the label says where a click goes */
+/* (on the glass, not the figure: GSAP owns the figure's transforms and pins its CSS scale to none) */
+.zc--peek.is-on{cursor:pointer}
+.zc--peek .zc__glass{transform-origin:50% 100%;transition:transform .5s cubic-bezier(.2,.8,.2,1),box-shadow .4s ease}
+.zc--peek.is-down .zc__glass{transform-origin:50% 0}
+.zc--peek.is-hover .zc__glass{transform:scale(var(--grow,1.08))}
+.zc--peek.is-hover .zc__glass{box-shadow:0 40px 70px -24px rgba(0,0,0,.8),0 0 0 1px rgba(255,211,161,.55),0 0 46px -4px rgba(232,145,60,.6)}
+.zc__go{position:absolute;z-index:3;inset-block-end:10px;inset-inline:0;margin-inline:auto;width:max-content;max-width:calc(100% - 16px);
+  display:flex;align-items:center;gap:6px;padding:7px 11px;border-radius:999px;opacity:0;visibility:hidden;pointer-events:none;
+  font:600 12px/1 var(--he,inherit);color:#16110b;background:rgba(255,211,161,.94);box-shadow:0 8px 20px -8px rgba(0,0,0,.7);
+  transition:background .3s ease,transform .3s ease}
+.zc__go svg{width:13px;height:13px;flex:none}
+.zc--peek.is-hover .zc__go{background:#FFD3A1;transform:translateY(-2px)}
+@media (hover:hover) and (pointer:fine){.zc--peek:not(.is-hover) .zc__go{background:rgba(255,211,161,.8)}}
+/* the live chip's bar waits while a screen is held, and restarts at the screen's own point after it */
+.hero .zc-keys button.is-live::after{animation-delay:var(--run-at,0s)}
+.hero .zc-keys.is-held button.is-live::after{animation-play-state:paused}
+/* the jump into a project page: the frame fills the window and fades to the page's ground */
+.zc-go{position:fixed;z-index:120;pointer-events:none;overflow:hidden;border-radius:18px;background:var(--ground,#0b0d10)}
+.zc-go img{display:block;width:100%;height:auto;transform-origin:50% 0}
+/* the dialog's way into the project page */
+.zd__go{position:fixed;inset-block-end:calc(22px + env(safe-area-inset-bottom));inset-inline:0;margin-inline:auto;width:max-content;
+  display:flex;align-items:center;gap:8px;min-height:44px;padding-inline:18px;border-radius:999px;text-decoration:none;
+  font:600 14px/1 var(--he,inherit);color:#16110b;background:#FFD3A1;box-shadow:0 12px 30px -12px rgba(0,0,0,.8)}
+.zd__go svg{width:15px;height:15px}
+.zd__go:focus-visible{outline:2px solid #FFD3A1;outline-offset:3px}
+@media (prefers-reduced-motion:reduce){.zc--peek .zc__glass{transition:none}}
+/* the narrow phone frame: the page label on one line */
+.zc__go{white-space:nowrap}
+@media (max-width:599px){.zc__go{font-size:11px;gap:4px;padding:6px 8px;inset-block-end:8px}.zc__go svg{width:11px;height:11px}}
+/* the page label reads on any frame: solid, one line, and the short form on narrow frames (a 100px frame at 1280x720) */
+.zc--peek .zc__glass{container-type:size}
+.zc__go,.zc--peek:not(.is-hover) .zc__go{background:#FFD3A1}
+.zc__go-s{display:none}
+@container (max-width:150px){.zc__go{font-size:11px;gap:4px;padding:6px 8px;inset-block-end:8px}.zc__go svg{width:11px;height:11px}.zc__go-l{display:none}.zc__go-s{display:inline}}
+
+/* ── the avatar in the scroll (2026-10-27): the real, full-colour avatar printed over the code head, split by the portal ── */
+.hav{position:absolute;z-index:5;pointer-events:none;visibility:hidden}
+.hav.is-on{visibility:visible}
+.hav__h{position:absolute;inset:0;background-image:url("../assets/avatar/spritesheet@2x.webp");background-repeat:no-repeat;
+  filter:drop-shadow(0 18px 30px rgba(0,0,0,.55)) drop-shadow(0 0 18px rgba(232,145,60,.22));will-change:transform,clip-path;
+  -webkit-mask-image:linear-gradient(to bottom,#000 70%,transparent 99%);mask-image:linear-gradient(to bottom,#000 70%,transparent 99%)} /* the shirt fades out instead of ending in a cut */
+.hav__scan{position:absolute;inset-inline:-10%;height:2px;margin-block-start:-1px;opacity:0;border-radius:2px;
+  background:#FFD3A1;box-shadow:0 0 18px 5px rgba(232,145,60,.75)}
+html.static .hav{display:none}
+.nav-avatar{transition:opacity .35s ease}
+html.hero-av .nav-avatar{opacity:0;pointer-events:none}
+.panel::after{opacity:var(--edge,1)}
+
+/* ── home review round (2026-10-27) ── */
+/* 05: the phones fit the row between the lead and the caption, so they never cover the instruction (a size container) */
+.phones{container-type:size}
+.phone__body{height:min(42svh,470px,calc(100cqh - 36px))}
+@media (max-width:720px){
+  .phone__body{height:auto;width:min(calc((100vw - 2 * var(--gut) - 20px) / 3),calc((100cqh - 30px) * 540 / 1170))}
+  /* 04: the step counter would sit on the cards on a phone */
+  .path__hud{display:none}
+  /* 07: the example in the check field wraps to two lines instead of being cut mid-word */
+  .ck__ph{white-space:normal;font-size:15px;line-height:1.3}
+}
+
+/* short desktop screens: the caption and the stage padding give the phones more room (a 1280x720 screen) */
+@media (min-width:721px) and (max-height:820px){
+  .work__stage{padding-block-start:calc(var(--nav) + 14px);padding-block-end:14px}
+  .work__cap{min-height:0;gap:4px}
+  .work__head .sec__lead{margin-block-start:6px}
+}

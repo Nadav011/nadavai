@@ -1,0 +1,18 @@
+{
+ "he": {
+  "error/body": "השגיאה נרשמה אצלי. נסו לרענן בעוד רגע, ואם זה חוזר, וואטסאפ עובד גם כשהאתר לא.",
+  "error/cta/home": "לדף הבית",
+  "error/cta/retry": "לרענן את הדף",
+  "error/cta/whatsapp": "לדבר איתי בוואטסאפ",
+  "error/h1": "משהו נשבר בצד שלי.",
+  "error/meta/title": "משהו נשבר"
+ },
+ "en": {
+  "error/body": "The error has been logged. Try refreshing in a moment. If it keeps happening, WhatsApp works even when the site doesn't.",
+  "error/cta/home": "Go home",
+  "error/cta/retry": "Refresh the page",
+  "error/cta/whatsapp": "Message me on WhatsApp",
+  "error/h1": "Something broke on my end.",
+  "error/meta/title": "Something broke"
+ }
+}

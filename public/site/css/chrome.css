@@ -1,0 +1,69 @@
+/* ══ chrome.css: the shared page frame (header, phone menu, calm switch, footer, dock) ═══════
+   Load after css/site.css on every page. Markup: fragments/header.html, footer.html, dock.html.  */
+
+/* ── header: 6 page links + WhatsApp, the "חינם" tag, the calm switch, 44px targets ── */
+.nav__links{gap:clamp(10px,1.4vw,24px)}
+.nav__links a,.nav__links a:nth-child(1),.nav__links a:nth-child(3){display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:44px;min-width:44px;padding-block:0}
+.nav__links a::after{inset-block-end:8px}
+.nav__links a[aria-current="page"]{color:var(--ink)}
+.nav__links a[aria-current="page"]::after{transform:scaleX(1)}
+.nav__logo{display:inline-flex;align-items:center;min-height:44px}
+.nav__badge{display:inline-flex;align-items:center;min-height:20px;padding:0 7px;border-radius:999px;font-size:12px;font-weight:600;
+  color:var(--ground);background:var(--accent-2);line-height:1}
+.calm{display:inline-flex;align-items:center;gap:9px;min-height:44px;min-width:44px;padding:0 4px;border:0;background:none;color:var(--ink-soft);
+  font:400 14px/1 var(--he);cursor:pointer;white-space:nowrap}
+.calm:hover{color:var(--ink)}
+.calm__track{position:relative;width:34px;height:20px;border-radius:999px;border:1px solid var(--line-2);background:rgba(255,255,255,.04);transition:background-color .25s ease,border-color .25s ease}
+.calm__track i{position:absolute;inset-block-start:2px;inset-inline-start:2px;width:14px;height:14px;border-radius:50%;background:var(--ink-soft);transition:translate .3s var(--ease-out),background-color .25s ease}
+.calm[aria-checked="true"] .calm__track{background:rgba(111,227,161,.18);border-color:var(--live)}
+.calm[aria-checked="true"] .calm__track i{translate:-14px 0;background:var(--live)}
+[dir="ltr"] .calm[aria-checked="true"] .calm__track i{translate:14px 0}
+@media (max-width:1280px){ .calm__l{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)} .nav__links a{font-size:14px} }
+@media (max-width:900px){ .nav > .calm{display:none} }
+.sheet__h{margin-block:22px 6px;font-size:13px;color:var(--mute)}
+.sheet__more a{font-size:18px;min-height:48px}
+.sheet__calm{margin-block-start:18px}
+.sheet a[aria-current="page"]{color:var(--accent-2)}
+
+/* ── footer: brand + three columns (האתר · יצירת קשר · מידע) ── */
+.site-foot{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,2fr);gap:28px clamp(24px,4vw,64px);align-items:start;
+  margin-block-start:clamp(64px,10vh,110px);padding:28px var(--gut) calc(40px + env(safe-area-inset-bottom));border-block-start:1px solid var(--line)}
+.sec .site-foot{padding-inline:0}
+.foot__brand{display:grid;gap:6px;align-content:start;min-width:0}
+.site-foot .foot__logo{display:inline-flex;align-items:center;min-height:44px;justify-self:start;font-family:var(--wide);font-weight:800;font-stretch:125%;font-size:18px;text-decoration:none}
+.site-foot .foot__logo span{color:var(--accent)}
+.foot__cols{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px}
+.foot__h{margin-block-end:6px;font-size:13px;color:var(--mute)}
+.foot__col ul{display:grid;list-style:none;margin:0;padding:0}
+.foot__col a{display:inline-flex;align-items:center;gap:6px;min-height:44px;min-width:44px;font-size:15px;color:var(--ink-soft);text-decoration:none}
+.foot__col a:hover,.foot__col a[aria-current="page"]{color:var(--accent-2)}
+.site-foot .foot__line{font-size:14px;color:var(--mute)}
+.site-foot .foot__c{grid-column:1/-1;font-size:13px;color:var(--mute)}
+@media (max-width:720px){
+  .site-foot{grid-template-columns:minmax(0,1fr);padding-block-end:calc(110px + env(safe-area-inset-bottom))}
+  .foot__cols{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+
+/* ── dock: one tap to WhatsApp, the check and the work, after the opening screen ── */
+.dock__slot{display:none}
+@media (max-width:720px){
+  html.has-avatar .dock__slot{display:block;flex:0 0 52px}
+  /* the avatar folds into the dock: its head takes the dock's last slot */
+  html.has-avatar .nav-avatar .nav-avatar__head{inset-inline-start:auto!important;inset-inline-end:18px!important;inset-block-start:auto!important;
+    inset-block-end:calc(22px + env(safe-area-inset-bottom,0px))!important;translate:none!important;inline-size:52px!important;block-size:52px!important}
+  html.has-avatar .nav-avatar{--av-safe:84px}
+}
+/* the footer always paints above page backdrops (a fixed sky, a world image) */
+.site-foot{position:relative;z-index:1}
+/* the dock and the chapter chip never cover the last footer links on desktop either */
+@media (min-width:721px){.site-foot{padding-block-end:calc(96px + env(safe-area-inset-bottom))}}
+@media (max-width:720px){
+  /* a focused link or field never hides under the dock (WCAG 2.4.11) */
+  html{scroll-padding-block-end:calc(96px + env(safe-area-inset-bottom))}
+  /* the guide steps aside while someone types */
+  html:has(input:focus,textarea:focus,select:focus) .nav-avatar{opacity:0;pointer-events:none}
+}
+/* the phone number never breaks across lines */
+.foot__col bdi{white-space:nowrap}
+/* nothing draws over the open phone menu */
+html.menu-open .nav-avatar{display:none}

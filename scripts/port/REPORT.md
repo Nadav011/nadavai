@@ -1,0 +1,358 @@
+# Port report
+
+Prototype: `nadavc-ai` at `e2a8ce6`. Deck ids: 977, draft ids (COPY-GAP, pending approval): 530.
+
+Markup strings mapped to an id: 1867; still literal (no id in either file): 260.
+Ids used that are still draft-only: 495. JS literals replaced: 249; JS literals left: 86.
+
+## Literal strings without a deck id
+
+- `index`: ניהול קליניקות
+- `index`: צ'אט חי לכל משחק
+- `index`: מועדון סנוקר בלי דלפק
+- `index`: משלוחים וכסף בשטח
+- `index`: סגירת קופה
+- `index`: סניפים, ביקורות ומשימות
+- `index`: משחק תלת-ממד בדפדפן
+- `index`: מראה מה הסוכנים שלי עושים
+- `index`: מה זה נותן
+- `index`: הודעות
+- `index`: שיחות שלא נקראו
+- `index`: כמה מהמסך מציג את המצב לפני: כאוס בוואטסאפ
+- `index`: כמה מהמסך מציג את המצב לפני: נייר ואקסל
+- `index`: לקוח חדש · 23:41
+- `index`: כמה מהמסך מציג את המצב לפני: פניות שהולכות לאיבוד
+- `index`: שירות
+- `index`: קביעת תורים
+- `index`: עיצוב
+- `index`: פניות ישר לוואטסאפ
+- `index`: תזמון
+- `index`: הקשחה
+- `index`: ניטור
+- `index`: בדיקות
+- `index`: עם שקיפות מלאה
+- `index`: מתוך 5
+- `index`: שלב 1
+- `index`: שלב 2
+- `index`: שלב 3
+- `index`: שלב 4
+- `index`: שלב 5
+- `index`: רחפו או הקישו על טלפון.
+- `index`: הקישו על טלפון.
+- `index`: צ'אט חי לכל משחק כדורגל. CTO. ב-App Store וב-Google Play.
+- `index`: ניהול קליניקות, עם בוט בוואטסאפ שקובע תורים. Co-Founder & CTO. עובד בקליניקות.
+- `index`: מועדון סנוקר שעובד בלי אף אחד בדלפק. בניתי את כל המערכת. ב-App Store וב-Google Play.
+- `index`: 08:00, משמרות
+- `index`: היי נדב, הגעתי מהאתר ורוצה לשמוע על החבילה שותף טכנולוגי.
+- `index`: שעות פיתוח קבועות כל חודש
+- `index`: מערכות וסוכני
+- `index`: לפי הצורך
+- `index`: עדיפות בזמינות
+- `index`: פגישת אסטרטגיה חודשית
+- `index`: היי נדב, הגעתי מהאתר ורוצה לשמוע על החבילה צוות AI.
+- `index`: סוכן
+- `index`: או אוטומציות
+- `index`: מערכת תוכן
+- `index`: שיפורים חודשיים
+- `index`: שירות ופיתוח
+- `index`: היי נדב, הגעתי מהאתר ורוצה לשמוע על החבילה תחזוקה וצמיחה.
+- `index`: תחזוקה
+- `index`: שעות פיתוח קטנות
+- `index`: ניטור
+- `index`: · בקרוב לשחק
+- `index`: שאלות
+- `index`: נ
+- `services`: לחצו על צומת כדי לפתוח אותו.
+- `services`: שירות
+- `services`: קביעת תורים
+- `services`: עיצוב
+- `services`: פניות ישר לוואטסאפ
+- `services`: תזמון
+- `services`: הקשחה
+- `services`: ניטור
+- `services`: בדיקות
+- `services`: עם שקיפות מלאה
+- `services`: היי נדב, הגעתי מדף השירותים, בנושא מערכות ואוטומציות לעסק.
+- `services`: היי נדב, הגעתי מדף השירותים, בנושא סוכני AI ובוטים לוואטסאפ.
+- `services`: היי נדב, הגעתי מדף השירותים, בנושא אפליקציות לחנויות.
+- `services`: היי נדב, הגעתי מדף השירותים, בנושא אתרים ועיצוב UI/UX.
+- `services`: היי נדב, הגעתי מדף השירותים, בנושא מערכת תוכן ותזמון.
+- `services`: היי נדב, הגעתי מדף השירותים, בנושא אבטחת מידע לעסקים.
+- `services`: היי נדב, הגעתי מדף השירותים, בנושא הטמעת AI לצוותים.
+- `services`: שלב 1
+- `services`: שלב 2
+- `services`: שלב 3
+- `services`: שלב 4
+- `services`: שלב 5
+- `services`: דמו לפני בנייה
+- `services`: שקיפות מלאה לאורך הדרך
+- `work`: מערכות
+- `work`: קריאייטיב
+- `work`: כלים
+- `work`: חשבוניות
+- `work`: סליקה
+- `work`: המערכות של הסניף שלי
+- `work`: אפליקציה
+- `work`: משחק
+- `work`: קמפיין · לקוח
+- `work`: קמפיין פייסבוק לחשמלאי שמתקין עמדות טעינה לרכב חשמלי. מחקר, בריף, זהות לדף, מודעות בשני פורמטים, ותבנית שיחה שמסננת פניות. כל פנייה נוחתת יש
+- `work`: מודעות
+- `work`: קריאייטיב · עסקים
+- `work`: פלאיירים, לוגואים, ערכות פוסטרים ותוכן לרשתות לעסקים מקומיים: Asian Bar, ברסלב פרויקטים, חשמלכה ועוד. חלק מהם נוצרו במערכת התוכן שבניתי, כדי
+- `work`: מיתוג
+- `work`: הדמיות תלת-ממד
+- `work`: ההדמיות נוצרו ב-AI. המצגות עצמן נבנו בקוד.
+- `work`: מצגות נדל״ן שגוללים בהן: נקודות חמות על הדמיה אווירית של מתחם, ובניין שמתפרק ונבנה מחדש בזמן הגלילה. נבנו כדמו לאדריכלים ויזמים.
+- `work`: תלת-ממד
+- `work`: גלילה
+- `work`: כלי · אדריכלות
+- `work`: כלי שממלא תוכנית DXF לפי מפרט: חדרים, מידות ותוויות, ישר לתוך AutoCAD.
+- `work`: כלי · קוד פתוח
+- `work`: מבוסס על פרויקט קוד פתוח (MIT), עם הדמות שלי ושינויים משלי.
+- `work`: חיית מחמד לשולחן העבודה שמראה מה סוכן הקוד עושה עכשיו: עובד, מחכה לאישור, תקוע או סיים. יש לה צ'אט מהיר והכתבה בעברית. אחד הדברים שהכי כיף ל
+- `work`: אפליקציה
+- `work`: חתום בנשיקה דיגיטל
+- `work`: סגירה
+- `work-sporchat`: אפליקציה לאוהדי ספורט
+- `work-sporchat`: גללו
+- `work-sporchat`: חדר משחק חי, עם צ'אט ומדדי לחץ
+- `work-sporchat`: חדר משחק
+- `work-sporchat`: דף המשחק: לפני שריקת הפתיחה, עם ניחוש
+- `work-sporchat`: המגרש: ניחושים פתוחים, רצף ונקודות
+- `work-sporchat`: צ'אטים: המשחק הגדול, חי עכשיו
+- `work-sporchat`: פיד: תוצאות חיות ופרשן ה-AI
+- `work-sporchat`: פיד
+- `work-sporchat`: ליגות: הטבלה והמשחק שרץ עכשיו
+- `work-sporchat`: ליגות
+- `work-sporchat`: כ
+- `work-sporchat`: א
+- `work-sporchat`: שערים
+- `work-sporchat`: התפקיד
+- `work-sporchat`: כל העבודות
+- `work-medizen`: שרתים בישראל
+- `work-medizen`: גללו
+- `work-medizen`: היום שלך בהודעה אחת: תורים, הכנסות ותזכורות
+- `work-medizen`: סיכום יומי
+- `work-medizen`: היומן: תורים, חדרים ואישור בלחיצה
+- `work-medizen`: יומן
+- `work-medizen`: דף הבית: כל הקליניקה במערכת אחת
+- `work-medizen`: דף הבית
+- `work-medizen`: הבוט עונה למטופלים מתוך המידע של הקליניקה
+- `work-medizen`: בוט לוואטסאפ
+- `work-medizen`: הדמו במחשב
+- `work-medizen`: במחשב
+- `work-medizen`: התפקיד
+- `work-medizen`: הפרויקט הבא · 03 / 03
+- `work-medizen`: כל העבודות
+- `work-green-room`: עם תשלומים אמיתיים
+- `work-green-room`: גללו
+- `work-green-room`: דף הבית: חדר פרטי, הזמנה בלחיצה
+- `work-green-room`: בוחרים יום, שעה וכמה שחקנים
+- `work-green-room`: הזמנה
+- `work-green-room`: אוכל ושתייה עד השולחן
+- `work-green-room`: אוכל
+- `work-green-room`: עזרה: קוד כניסה, הזמנות, תשלום
+- `work-green-room`: פוסט שמערכת התוכן הכינה ותזמנה
+- `work-green-room`: עוד פוסט מאותה מערכת
+- `work-green-room`: פוסט
+- `work-green-room`: סובבו
+- `work-green-room`: סרטון הפתיחה
+- `work-green-room`: שולחן סנוקר
+- `work-green-room`: חצים: כיוון וכוח · Enter: מכה
+- `work-green-room`: כל העבודות
+- `my-branch`: מערכות הסניף
+- `my-branch`: הסניף
+- `my-branch`: בוקר
+- `my-branch`: משמרות: לפתוח את המסכים
+- `my-branch`: לפני הספקים
+- `my-branch`: מלאי: לפתוח את המסכים
+- `my-branch`: שיא הצהריים
+- `my-branch`: שיא הערב
+- `my-branch`: סגירה
+- `my-branch`: Z: לפתוח את המסכים
+- `my-branch`: היי נדב, ראיתי באתר את מערכות הסניף. אשמח לשמוע מה אפשר לבנות לעסק שלי.
+- `mexicani-network`: סניפים
+- `mexicani-network`: ביקורות
+- `mexicani-network`: משימות
+- `mexicani-network`: יומן
+- `mexicani-network`: מסמכים
+- `mexicani-network`: עוזר
+- `mexicani-network`: כל הסניפים
+- `mexicani-network`: אף אחד לא רואה את התמונה המלאה.
+- `mexicani-network`: מסך אחד
+- `mexicani-network`: ביקורת
+- `mexicani-network`: התוצאה
+- `mexicani-network`: התוצאה
+- `mexicani-network`: היי נדב, ראיתי באתר את אפליקציית רשת המקסיקני. אשמח לשמוע מה אפשר לבנות לעסק שלי.
+- `mexicani-network`: לסניף שלי
+- `social`: תוכן, מיתוג ותזמון
+- `social`: השירות
+- `social`: תוכן
+- `social`: פוסטים, סטוריז וסרטונים קצרים, בשפה של העסק
+- `social`: מיתוג
+- `social`: לוגו, צבעים ותבניות שכל פוסט נבנה עליהן
+- `social`: תזמון
+- `social`: לוח תוכן חודשי שמתפרסם לבד
+- `social`: קמפיינים
+- `social`: מודעות שמביאות פניות ישר לוואטסאפ
+- `social`: מכינה, מתזמנת ומפרסמת
+- `social`: מכינה
+- `social`: מתזמנת
+- `social`: החודש
+- `social`: מפרסמת
+- `social`: להגדיל: פוסט של Green Room: המנה המומלצת, על רקע שולחן הסנוקר
+- `social`: להגדיל: מודעה של חשמלכה: עמדת טעינה חכמה לרכב חשמלי, כולל התקנה
+- `social`: להגדיל: מודעה של ברסלב פרויקטים: מחדשים את הבית, מדייקים בכל פרט
+- `social`: להגדיל: פלאייר של Asian Bar בסגנון ניאון
+- `social`: להגדיל: הלוגו של ברסלב פרויקטים: להבה זהובה ושם החברה
+- `social`: להגדיל: פוסט של Green Room: שולחן פנוי הערב
+- `social`: להגדיל: סטורי של חשמלכה: עמדת טעינה, התקנה מקצועית
+- `social`: להגדיל: פוסט של Green Room: טיפ למשחק
+- `social`: להגדיל: פלאייר של Asian Bar: מוצרים ומטעמים מאסיה, שעות פתיחה
+- `social`: להגדיל: פוסט של Green Room: המועדון בבאר שבע
+- `social`: להגדיל: מודעה של ברסלב פרויקטים: ריצוף ועבודות גמר
+- `social`: להגדיל: קרוסלה של חשמלכה: שלושה צעדים, משיחה ועד הטעינה הראשונה
+- `social`: להגדיל: מודעה של חשמלכה: טוענים בבית, יוצאים מוכנים
+- `social`: להגדיל: פוסט של Green Room: חוגגים כאן יום הולדת
+- `social`: להגדיל: מודעה של ברסלב פרויקטים: עבודות גמר, תוצאה שלמה
+- `social`: להגדיל: פוסט של Green Room: ערב חברה
+- `social`: להגדיל: פוסט של Green Room: שיעור עם מאמן
+- `social`: להגדיל: מודעה של ברסלב פרויקטים: מתמחים בעבודות גמר
+- `social`: להגדיל: מודעה של חשמלכה: עמדת טעינה חכמה בבית הלקוח
+- `social`: להגדיל: פלאייר של Asian Bar: מוצרים ומטעמים מאסיה, שעות פתיחה
+- `social`: סטוריז
+- `social`: חשמלכה
+- `social`: ברסלב
+- `social`: סטורי
+- `about`: הסיפור
+- `about`: באר שבע
+- `about`: מהנדס
+- `about`: 250 שעות אקדמיות
+- `about`: נתיבות
+- `about`: תורכם
+- `plans`: היי נדב, הגעתי מהאתר ורוצה לשמוע על החבילה שותף טכנולוגי.
+- `plans`: שעות פיתוח קבועות כל חודש
+- `plans`: מערכות וסוכני
+- `plans`: לפי הצורך
+- `plans`: עדיפות בזמינות
+- `plans`: פגישת אסטרטגיה חודשית
+- `plans`: היי נדב, הגעתי מהאתר ורוצה לשמוע על החבילה צוות AI.
+- `plans`: סוכן
+- `plans`: או אוטומציות
+- `plans`: מערכת תוכן
+- `plans`: שיפורים חודשיים
+- `plans`: שירות ופיתוח
+- `plans`: היי נדב, הגעתי מהאתר ורוצה לשמוע על החבילה תחזוקה וצמיחה.
+- `plans`: תחזוקה
+- `plans`: שעות פיתוח קטנות
+- `plans`: ניטור
+- `check`: דוגמה
+- `check`: בלי הרשמה
+- `check`: בלי טלפון ומייל
+- `play`: על המשחק
+- `play`: רץ בדפדפן
+- `play`: לבעוט
+- `play`: לעבוד
+- `accessibility`: בעמוד הזה
+- `accessibility`: האתר נבדק בכרום, ספארי, פיירפוקס ואדג', במחשב ובטלפון, עם קוראי המסך
+- `accessibility`: ו-
+- `accessibility`: . תאריך הבדיקה האחרונה:
+- `accessibility`: [ימולא לפני ההשקה]
+- `accessibility`: טלפון ווואטסאפ
+- `accessibility`: ההצהרה עודכנה לאחרונה:
+- `accessibility`: [ימולא לפני ההשקה]
+- `privacy`: בעמוד הזה
+- `privacy`: NadavAI, בית התוכנה של נדב כהן. ישות משפטית:
+- `privacy`: [ימולא לפני ההשקה]
+- `privacy`: . פנייה:
+- `privacy`: אם משהו כאן ישתנה, אעדכן את העמוד ואת התאריך. עדכון אחרון:
+- `privacy`: [ימולא לפני ההשקה]
+
+## JS literals without a deck id
+
+- `js/check-samples.js`: רישום משלוחים וכסף בשטח.
+- `js/check-samples.js`: כל משלוח נרשם כשהוא יוצא, ורואים בכל רגע כמה כסף אצל כל שליח.
+- `js/check-samples.js`: סיכום יומי בוואטסאפ.
+- `js/check-samples.js`: בסוף כל יום מגיעה הודעה עם המשלוחים, הכסף והפערים.
+- `js/check-samples.js`: סגירת קופה בטלפון.
+- `js/check-samples.js`: ספירה לפי שטרות ומטבעות, ודוח מוכן.
+- `js/check-samples.js`: קביעת תורים מתוך הוואטסאפ.
+- `js/check-samples.js`: הלקוח בוחר שעה פנויה בעצמו, והתור נכנס ליומן של הכסא הנכון.
+- `js/check-samples.js`: תזכורת יום לפני.
+- `js/check-samples.js`: הודעה עם אישור הגעה, ותור שמתבטל חוזר מיד ליומן.
+- `js/check-samples.js`: רשימת המתנה לשעות העומס.
+- `js/check-samples.js`: כשמתפנה תור ביום חמישי, ההודעה יוצאת לבא בתור ברשימה.
+- `js/check-samples.js`: סוכן שעונה בוואטסאפ.
+- `js/check-samples.js`: עונה על שעות, כתובת והכנה לטיפול, רק מתוך המידע של הקליניקה, ושאלה רפואית עוברת למטפל.
+- `js/check-samples.js`: קביעת תורים ביומן המשותף.
+- `js/check-samples.js`: המטופל בוחר שעה, והתור נכנס ליומן של המטפל הנכון.
+- `js/check-samples.js`: תזכורות ואישור הגעה.
+- `js/check-samples.js`: הודעה יום לפני, ותור שמתבטל מתפנה למטופל הבא.
+- `js/check-samples.js`: לוח עבודות אחד לכל הצוות.
+- `js/check-samples.js`: כל עבודה נרשמת פעם אחת, וכל עובד רואה בטלפון לאן הוא נוסע היום.
+- `js/check-samples.js`: אישור ותזכורת ללקוח בוואטסאפ.
+- `js/check-samples.js`: הלקוח מקבל אישור כשהעבודה נקבעת, ותזכורת יום לפני.
+- `js/check-samples.js`: סיכום יומי בוואטסאפ.
+- `js/check-samples.js`: בסוף כל יום מגיעה הודעה עם מה שבוצע ומה מחכה למחר.
+- `js/chrome-site.js`: לילה
+- `js/chrome-site.js`: יום
+- `js/chrome-site.js`: מראה האתר (לבדיקה)
+- `js/chrome-site.js`: <span class="sr"> (העמוד הנוכחי)</span>
+- `js/games/greenroom-play.js`: עוד סיבוב
+- `js/games/greenroom-play.js`: נעצר על <b></b> · המחשה, בלי פרסים
+- `js/main.js`: אני
+- `js/motion.js`: אבגדהוזחטיכלמנסעפצקרשת
+- `js/play.js`: א
+- `js/sales-pages.js`: <span class="sr"> (נפתח בחלון חדש)</span>
+- `js/sales-pages.js`: דוגמה
+- `js/sales-pages.js`: <p class="saved__ok" id="ckrReportDone">תודה. הדיווח הגיע אליי.</p>
+- `js/sales-pages.js`: מספרה בנתיבות
+- `js/sales-pages.js`: המסעדה-שלי
+- `js/sales-pages.js`: מספרה בנתיבות, 3 עובדות. תורים בוואטסאפ, 050-1234567
+- `js/sales-pages.js`: מצבים
+- `js/sales-pages.js`: מספרה בנתיבות, התורים בוואטסאפ.
+- `js/sales-pages.js`: אני
+- `js/story/playground.js`: א
+- `js/story/playground.js`: ב
+- `js/story/social.js`: חשמלכה
+- `js/story/social.js`: ברסלב
+- `js/story/social.js`: פוסט של ${w.name}
+- `js/story-pages.js`: <span class="st-ill">המחשה</span>
+- `js/story-pages.js`: אני
+- `js/work-pages.js`: לפתוח
+- `hero/cloud.js`: אבגדהוזחטיכלמנסעפצקרשת
+- `hero/hero-a.js`: אבגדהוזחטיכלמנסעפצקרשת
+- `hero/hero-cloud.js`: קבע תור ל-16:30, ואת השאלה הרפואית העביר למטפלת. · MediZen · בוט בוואטסאפ
+- `hero/hero-cloud.js`: כל היום של הקליניקה, במסך אחד. · MediZen · יומן
+- `hero/hero-cloud.js`: קבע תור ל-16:30, ואת השאלה הרפואית העביר למטפלת. · MediZen · בוט בוואטסאפ
+- `hero/hero-cloud.js`: כמה כסף עוד אצל השליחים, עכשיו. · מזומן · הסניף שלי
+- `hero/hero-cloud.js`: ספירה, דוח והפקדה בסוף כל יום. · Z · סגירת קופה
+- `hero/hero-cloud.js`: כמה כסף עוד אצל השליחים, עכשיו. · מזומן · הסניף שלי
+- `hero/hero-cloud.js`: כמה כסף עוד אצל השליחים, עכשיו. · מזומן · הסניף שלי
+- `hero/hero-cloud.js`: כמה כסף עוד אצל השליחים, עכשיו. · מזומן · הסניף שלי
+- `hero/hero-cloud.js`: כמה כסף עוד אצל השליחים, עכשיו. · מזומן · הסניף שלי
+- `hero/hero-cloud.js`: חדר צ'אט שנפתח עם שריקת הפתיחה. · SporChat · חדר משחק
+- `hero/hero-cloud.js`: שולחן, תשלום וקוד לדלת, בלי אף אחד בדלפק. · Green Room · הזמנה
+- `hero/hero-cloud.js`: שולחן, תשלום וקוד לדלת, בלי אף אחד בדלפק. · Green Room · הזמנה
+- `hero/hero-cloud.js`: שולחן, תשלום וקוד לדלת, בלי אף אחד בדלפק. · Green Room · הזמנה
+- `hero/hero-cloud.js`: שולחן, תשלום וקוד לדלת, בלי אף אחד בדלפק. · Green Room · הזמנה
+- `hero/hero-cloud.js`: שולחן, תשלום וקוד לדלת, בלי אף אחד בדלפק. · Green Room · הזמנה
+- `hero/hero-cloud.js`: פוסט מוכן, מתוזמן ל-20:00. · Green Room · תוכן ותזמון
+- `hero/hero-cloud.js`: פוסט מוכן, מתוזמן ל-20:00. · Green Room · תוכן ותזמון
+- `hero/hero-cloud.js`: פוסט מוכן, מתוזמן ל-20:00. · Green Room · תוכן ותזמון
+- `hero/hero-cloud.js`: פוסט מוכן, מתוזמן ל-20:00. · Green Room · תוכן ותזמון
+- `hero/hero-cloud.js`: פוסט מוכן, מתוזמן ל-20:00. · Green Room · תוכן ותזמון
+- `hero/hero-cloud.js`: מודעה שמביאה פניות ישר לוואטסאפ. · חשמלכה · קמפיין
+- `hero/hero-cloud.js`: מודעה שמביאה פניות ישר לוואטסאפ. · חשמלכה · קמפיין
+- `hero/hero-cloud.js`: פלאייר בשפה של הלקוחות של החנות. · Asian Bar · פלאייר
+- `hero/hero-cloud.js`: שפה חזותית אחת, מהלוגו ועד הפוסט. · ברסלב · מיתוג
+- `hero/hero-cloud.js`: שפה חזותית אחת, מהלוגו ועד הפוסט. · ברסלב · מיתוג
+- `hero/zoom.js`: <div class="zd__scrim"></div><figure class="zc zd__card"><div class="zc__glass"><img alt="" decoding="async"></div><figcaption class="zc__ca
+- `hero/zoom.js`: א
+- `hero/zoom.js`: ב
+- `hero/zoom.js`: ש
+- `hero/zoom.js`: ת
+- `hero/zoom.js`: נ
+- `hero/zoom.js`: ד
+- `hero/zoom.js`: <b class="zc__go"><span class="zc__go-l">לעמוד הפרויקט</span><span class="zc__go-s">לפרויקט</span><svg viewBox="0 0 16 16" aria-hidden="true
+- `sections/bio/bio.js`: אבגדהוזחטיכלמנסעפצקרשת
