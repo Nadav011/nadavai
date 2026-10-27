@@ -252,7 +252,9 @@
       "text": "המערכות שנדב כהן בנה לסניף המקסיקני שהוא מנהל: מזומן, Z, מלאי, תיקונים ומשמרות, מהבוקר ועד סגירת הקופה."
     },
     "ogImage": "/site/assets/og/my-branch.jpg",
-    "htmlData": {},
+    "htmlData": {
+      "world": "branch"
+    },
     "bodyClass": "page story",
     "bodyData": {
       "page": "branch"
@@ -286,7 +288,9 @@
       "text": "מערכת ניהול לרשת המקסיקני: סניפים, ביקורות, פניות של זכיינים, משימות, כספים ומסמכים, עם עוזר AI."
     },
     "ogImage": "/site/assets/og/mexicani-network.jpg",
-    "htmlData": {},
+    "htmlData": {
+      "world": "network"
+    },
     "bodyClass": "page story",
     "bodyData": {
       "page": "network"
@@ -320,7 +324,9 @@
       "text": "תוכן, מיתוג ותזמון לרשתות, עם מערכת AI שמכינה ומפרסמת. דוגמאות מ-Green Room ומעסקים נוספים."
     },
     "ogImage": "/site/assets/og/social.jpg",
-    "htmlData": {},
+    "htmlData": {
+      "world": "social"
+    },
     "bodyClass": "page story",
     "bodyData": {
       "page": "social"
@@ -355,7 +361,9 @@
       "text": "נדב כהן: זכיין המקסיקני ומנהל סניף נוסף, CTO ב-SporChat, Co-Founder & CTO ב-MediZen, ומאחורי NadavAI."
     },
     "ogImage": "/site/assets/og/about.jpg",
-    "htmlData": {},
+    "htmlData": {
+      "world": "about"
+    },
     "bodyClass": "page story",
     "bodyData": {
       "page": "about"
@@ -462,7 +470,9 @@
       "text": "Neon Alley, משחק תלת-ממד בדפדפן, חיית המחמד לשולחן העבודה, וכדורים שאפשר לבעוט בהם."
     },
     "ogImage": "/site/assets/og/play.jpg",
-    "htmlData": {},
+    "htmlData": {
+      "world": "play"
+    },
     "bodyClass": "page story",
     "bodyData": {
       "page": "playground"

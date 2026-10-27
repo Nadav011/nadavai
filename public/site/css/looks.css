@@ -1184,6 +1184,7 @@ html:where([data-look="b"].lk-site).has-world .vow{background:transparent}
 :where(:root[data-look="b"].lk-story).pet__code i:nth-child(4n){background:rgba(111,227,161,.3)}
 :where(:root[data-look="b"].lk-story) .pet__bub i,
 :where(:root[data-look="b"].lk-story).pet__bub i{background:var(--c,var(--live))}
+html:where([data-look="b"].lk-story).world-on .bio{background:transparent}
 /* css/work.css */
 :where(:root[data-look="b"].lk-work) .mono b,
 :where(:root[data-look="b"].lk-work).mono b{color:var(--app)}
@@ -2352,6 +2353,7 @@ html:where([data-look="c"].lk-site).has-world .vow{background:transparent}
 :where(:root[data-look="c"].lk-story).pet__code i:nth-child(4n){background:rgba(111,227,161,.3)}
 :where(:root[data-look="c"].lk-story) .pet__bub i,
 :where(:root[data-look="c"].lk-story).pet__bub i{background:var(--c,var(--live))}
+html:where([data-look="c"].lk-story).world-on .bio{background:transparent}
 /* css/work.css */
 :where(:root[data-look="c"].lk-work) .mono b,
 :where(:root[data-look="c"].lk-work).mono b{color:var(--app)}

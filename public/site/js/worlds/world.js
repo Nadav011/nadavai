@@ -19,8 +19,8 @@ precision highp float;
 #else
 precision mediump float;
 #endif
-uniform vec2 u_res;uniform float u_time,u_scroll,u_vel,u_chap,u_nchap,u_rtl;uniform vec3 u_ptr;
-float hash(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453);}
+uniform vec2 u_res;uniform float u_time,u_scroll,u_vel,u_chap,u_nchap,u_rtl,u_cut;uniform vec3 u_ptr,u_acc;
+float hash(vec2 p){vec3 q=fract(vec3(p.xyx)*.1031);q+=dot(q,q.yzx+33.33);return fract((q.x+q.y)*q.z);} // no sin(): it loses precision on some GPUs and shows blocks
 float noise(vec2 p){vec2 i=floor(p),f=fract(p);f=f*f*(3.-2.*f);
   return mix(mix(hash(i),hash(i+vec2(1,0)),f.x),mix(hash(i+vec2(0,1)),hash(i+vec2(1,1)),f.x),f.y);}
 float fbm(vec2 p){float v=0.,a=.5;for(int i=0;i<4;i++){v+=a*noise(p);p*=2.03;a*=.5;}return v;}
@@ -48,7 +48,10 @@ export async function initWorld({ lenis, reduce } = {}) {
   const prog = gl.createProgram();
   try {
     gl.attachShader(prog, sh(gl.VERTEX_SHADER, VERT));
-    gl.attachShader(prog, sh(gl.FRAGMENT_SHADER, HEAD + (W.head || '') + 'void main(){' + W.frag + '}'));
+    // every world gets the crossing: when a new chapter arrives, a band of its light sweeps the screen (u_cut 0..1 while it runs)
+    const CUT = 'if(u_cut>=0.&&u_cut<=1.){vec2 q_=gl_FragCoord.xy/u_res;float y_=u_cut*1.3-.15;float b_=exp(-pow((q_.y-y_)*7.,2.))*(1.-u_cut);'
+      + 'float g_=.6+.4*hash(floor(gl_FragCoord.xy*.5)+u_cut*90.);gl_FragColor.rgb+=u_acc*b_*.32*g_+vec3(b_*.04);gl_FragColor.rgb*=1.+.18*(1.-u_cut)*exp(-u_cut*6.);}';
+    gl.attachShader(prog, sh(gl.FRAGMENT_SHADER, HEAD + (W.head || '') + 'void main(){' + W.frag + CUT + '}'));
     gl.linkProgram(prog);
     if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) throw new Error(gl.getProgramInfoLog(prog));
   } catch (e) { console.info('[world] shader', name, e); root.classList.add('world-static'); return null; }
@@ -57,7 +60,8 @@ export async function initWorld({ lenis, reduce } = {}) {
   gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), gl.STATIC_DRAW);
   const loc = gl.getAttribLocation(prog, 'p'); gl.enableVertexAttribArray(loc); gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
   const U = {};
-  for (const n of ['u_res', 'u_time', 'u_scroll', 'u_vel', 'u_chap', 'u_nchap', 'u_ptr', 'u_rtl', ...(W.extra || [])]) U[n] = gl.getUniformLocation(prog, n);
+  for (const n of ['u_res', 'u_time', 'u_scroll', 'u_vel', 'u_chap', 'u_nchap', 'u_ptr', 'u_rtl', 'u_cut', 'u_acc', ...(W.extra || [])]) U[n] = gl.getUniformLocation(prog, n);
+  const acc = (W.accent.match(/[0-9a-f]{2}/gi) || ['ff', 'ff', 'ff']).map((h) => parseInt(h, 16) / 255);
   document.body.prepend(canvas);
 
   // size: a smaller buffer on phones, DPR capped everywhere (the world is soft by nature)
@@ -70,7 +74,7 @@ export async function initWorld({ lenis, reduce } = {}) {
 
   // chapters: the page's sections; u_chap is the one crossing the middle of the screen, with its fraction
   const chapters = [...document.querySelectorAll('main section, main > header, [data-chapter]')].filter((el, i, a) => !a.some((o) => o !== el && o.contains(el)));
-  const st = { scroll: 0, vel: 0, chap: 0, px: 0.5, py: 0.5, pz: 0, last: 0, y: scrollY };
+  const st = { scroll: 0, vel: 0, chap: 0, px: 0.5, py: 0.5, pz: 0, last: 0, y: scrollY, ci: -1, cutT: -1e9, cutDir: 1 };
   function measure(now) {
     const max = Math.max(1, document.documentElement.scrollHeight - innerHeight);
     const y = lenis ? lenis.scroll : scrollY;
@@ -83,6 +87,10 @@ export async function initWorld({ lenis, reduce } = {}) {
       if (r.top <= mid) c = i + Math.min(0.999, Math.max(0, (mid - r.top) / Math.max(1, r.height)));
     }
     st.chap = c;
+    // a new chapter: the crossing starts, a band sweeping up the screen
+    const ci = Math.floor(c);
+    if (st.ci >= 0 && ci !== st.ci) { st.cutT = now; st.cutDir = ci > st.ci ? 1 : -1; }
+    st.ci = ci;
     if (Math.abs(dy) > 0.5) st.last = now;
   }
   const fine = matchMedia('(hover: hover) and (pointer: fine)').matches;
@@ -98,6 +106,8 @@ export async function initWorld({ lenis, reduce } = {}) {
     gl.uniform1f(U.u_scroll, st.scroll); gl.uniform1f(U.u_vel, st.vel);
     gl.uniform1f(U.u_chap, st.chap); gl.uniform1f(U.u_nchap, Math.max(1, chapters.length));
     gl.uniform3f(U.u_ptr, st.px, st.py, st.pz); gl.uniform1f(U.u_rtl, rtl);
+    const k = (now - st.cutT) / 900;
+    gl.uniform1f(U.u_cut, reduce || k > 1 ? -1 : k); gl.uniform3f(U.u_acc, acc[0], acc[1], acc[2]);
     W.uniforms?.(gl, U, st);
     gl.drawArrays(gl.TRIANGLES, 0, 3);
   }
@@ -107,7 +117,7 @@ export async function initWorld({ lenis, reduce } = {}) {
     if (!alive) return;
     raf = requestAnimationFrame(loop);
     if (document.hidden) return;
-    const idle = now - st.last > 2500;
+    const idle = now - st.last > 2500 && now - st.cutT > 1000;
     if (idle && now - lastFrame < 33) return; // 30 fps while nothing moves
     lastFrame = now; draw(now);
   }

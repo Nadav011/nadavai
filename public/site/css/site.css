@@ -692,3 +692,6 @@ html.world-static body{background:radial-gradient(70% 55% at 80% 0%,color-mix(in
 @media (prefers-reduced-motion:reduce){::view-transition-old(root),::view-transition-new(root){animation:none}}
 /* the sections that paint their own ground let the page's world through */
 html.has-world .offer,html.has-world .vow{background:transparent}
+/* the interface takes the world's light: the active link, the progress line and focus rings re-tint per page */
+html.has-world .nav a[aria-current="page"]{color:var(--world-accent);border-color:var(--world-accent)}
+html.has-world .progress,html.has-world .nav__progress{background:var(--world-accent)}

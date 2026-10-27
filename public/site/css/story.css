@@ -614,3 +614,11 @@
 @media (max-width:760px){.so-desk{overflow:clip}.so-fly{overflow:hidden}}
 /* the guide's bubble on the social desk stays above the flying posts */
 .so-desk .spr{z-index:4}
+
+/* ── worlds on the story pages (2026-10-27) ── */
+/* my-branch: the world paints the sky from the colours branch.js sets on #sky; the page gradient steps aside */
+html.world-on .sky{background:none}
+/* about: the opaque plates let the world show through */
+html.world-on .bio{background:transparent}
+html.world-on .ab-hero__plate{-webkit-mask-image:linear-gradient(to left,transparent 16%,#000 62%);mask-image:linear-gradient(to left,transparent 16%,#000 62%)}
+@media (max-width:900px){html.world-on .ab-hero__plate{-webkit-mask-image:linear-gradient(to bottom,#000 52%,transparent 98%);mask-image:linear-gradient(to bottom,#000 52%,transparent 98%)}}
