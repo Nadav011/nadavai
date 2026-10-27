@@ -59,44 +59,52 @@ export function samplePoints({ geo, mobile, mask, faceMask, rng }) {
       T.push(px, py); Hh.push(w); R.push(r(), r(), r(), r()); Gi.push(Math.floor(r() * GLYPHS.length)); E.push(mask.edge(px, py) ? 1 : 0);
     }
   }
-  const n = Hh.length;
-  // the head (scroll phase m): the same sampling over the head stencil; each glyph of the name is given one of
-  // those points (spread evenly, so the head is as dense as the name) and its half, so the portal splits the head
-  const F = new Float32Array(n * 2), HF = new Float32Array(n), FT = new Float32Array(n), FG = new Float32Array(n);
+  const n0 = Hh.length; // the name's own glyphs
+  // the head (scroll phase m): its own grid over the head stencil, fine enough for the features at any size. Every
+  // point gets one glyph: the name's glyphs first, and where the head has more points than the name has glyphs,
+  // extra glyphs that exist for the portrait only (born inside the name, invisible there, they fly out with the rest)
   const rank = inkRank(), NG = rank.length;
   const fp = [];
   let fc = cell;
   if (faceMask) {
-    // a finer grid than the name's, so the portrait holds its features (the aviators, the beard line, the collar)
-    // as fine as the glyphs of the name can cover: a small name (a phone) gets a coarser grid with larger glyphs,
-    // so the portrait is never sparse
-    const fb = faceMask.box;
-    fc = cell * 0.6;
+    const fb = faceMask.box, orig = faceMask.man === 'orig';
+    fc = orig ? cell : cell * 0.62;
+    const cap = n0 * (orig ? 1.1 : 2.5); // past this many points the grid coarsens instead
     for (let pass = 0; pass < 4; pass++) {
       fp.length = 0;
       for (let y = fb.y0; y < fb.y1; y += fc) for (let x = fb.x0; x < fb.x1; x += fc) {
-        const px = x + (r() - 0.5) * fc * 0.3, py = y + (r() - 0.5) * fc * 0.3, w = faceMask.word(px, py);
+        const px = x + (r() - 0.5) * fc * 0.7, py = y + (r() - 0.5) * fc * 0.7, w = faceMask.word(px, py); // loose enough that no rows show
         if (w >= 0) fp.push(px, py, w, faceMask.tone(px, py));
       }
       const m0 = fp.length / 4;
-      if (m0 <= n * 1.1) break;
-      fc *= Math.sqrt(m0 / (n * 1.1));
+      if (m0 <= cap) break;
+      fc *= Math.sqrt(m0 / cap);
     }
   }
   const m = fp.length / 4;
+  for (let k = 0, extra = Math.max(0, m - n0); k < extra; k++) {
+    const j = Math.floor(r() * n0);
+    T.push(T[j * 2], T[j * 2 + 1]); Hh.push(Hh[j]); R.push(r(), r(), r(), r()); Gi.push(Math.floor(r() * GLYPHS.length)); E.push(0);
+  }
+  const n = Hh.length;
+  const X = new Float32Array(n); for (let k = n0; k < n; k++) X[k] = 1;
+  const F = new Float32Array(n * 2), HF = new Float32Array(n), FT = new Float32Array(n), FG = new Float32Array(n);
+  // a shuffled order, so the name's glyphs and the extras mix evenly over the head
+  const order = Array.from({ length: m }, (_, k) => k);
+  for (let k = m - 1; k > 0; k--) { const s = Math.floor(r() * (k + 1)); [order[k], order[s]] = [order[s], order[k]]; }
   for (let i = 0; i < n; i++) {
     if (!m) { F[i * 2] = T[i * 2]; F[i * 2 + 1] = T[i * 2 + 1]; HF[i] = Hh[i]; FT[i] = 1; FG[i] = Gi[i]; continue; }
-    const j = Math.floor(((i * 0.6180339887) % 1) * m); // golden-ratio spread: every head point is used
-    F[i * 2] = fp[j * 4] + (r() - 0.5) * cell * 0.15; F[i * 2 + 1] = fp[j * 4 + 1] + (r() - 0.5) * cell * 0.15; HF[i] = fp[j * 4 + 2]; FT[i] = fp[j * 4 + 3];
-    FG[i] = FT[i] < 0.35 ? Gi[i] : rank[Math.max(0, Math.min(NG - 1, Math.round(FT[i] * (NG - 1) + (r() - 0.5) * 4)))];
+    const j = m >= n ? order[i] : Math.floor(((i * 0.6180339887) % 1) * m); // one glyph per point, or a golden-ratio spread
+    F[i * 2] = fp[j * 4] + (r() - 0.5) * fc * 0.25; F[i * 2 + 1] = fp[j * 4 + 1] + (r() - 0.5) * fc * 0.25; HF[i] = fp[j * 4 + 2]; FT[i] = fp[j * 4 + 3];
+    FG[i] = FT[i] < 0.35 || faceMask?.man === 'orig' ? Gi[i] : rank[Math.max(0, Math.min(NG - 1, Math.round(FT[i] * (NG - 1) + (r() - 0.5) * 4)))];
   }
   // the portrait's glyph size, relative to the name's: it follows the head grid
-  const headK = Math.min(1, Math.max(0.8, fc / cell * 1.25)); // bold like the first head, dense enough to read
-  return { cell, T, Hh, R, Gi, E, F, HF, FT, FG, n, headK };
+  const headK = faceMask?.man === 'orig' ? 1 : Math.min(1, Math.max(0.62, fc / cell * 1.3));
+  return { cell, T, Hh, R, Gi, E, F, HF, FT, FG, X, n, n0, headK };
 }
 
 export async function create({ THREE, U, geo, mobile, mask, faceMask, HALF_GLSL, rng }) {
-  const { cell, T, Hh, R, Gi, E, F, HF, FT, FG, n, headK } = samplePoints({ geo, mobile, mask, faceMask, rng });
+  const { cell, T, Hh, R, Gi, E, F, HF, FT, FG, X, n, headK } = samplePoints({ geo, mobile, mask, faceMask, rng });
   const geom = new THREE.BufferGeometry();
   geom.setAttribute('position', new THREE.BufferAttribute(new Float32Array(n * 3), 3));
   geom.setAttribute('aT', new THREE.BufferAttribute(new Float32Array(T), 2));
@@ -108,6 +116,7 @@ export async function create({ THREE, U, geo, mobile, mask, faceMask, HALF_GLSL,
   geom.setAttribute('aHF', new THREE.BufferAttribute(HF, 1));
   geom.setAttribute('aFT', new THREE.BufferAttribute(FT, 1));
   geom.setAttribute('aFG', new THREE.BufferAttribute(FG, 1));
+  geom.setAttribute('aX', new THREE.BufferAttribute(X, 1));
 
   const tex = atlas(THREE);
   const mat = new THREE.ShaderMaterial({
@@ -117,7 +126,7 @@ export async function create({ THREE, U, geo, mobile, mask, faceMask, HALF_GLSL,
       uniform float uSize, uN;
       uniform vec3 uInk, uAcc;
       attribute vec2 aT; attribute float aH; attribute vec4 aR; attribute float aG; attribute float aE;
-      attribute vec2 aF; attribute float aHF; attribute float aFT; attribute float aFG;
+      attribute vec2 aF; attribute float aHF; attribute float aFT; attribute float aFG; attribute float aX;
       varying vec2 vCell; varying vec3 vCol; varying float vA;
       void main(){
         float W = uRes.x;
@@ -181,6 +190,7 @@ export async function create({ THREE, U, geo, mobile, mask, faceMask, HALF_GLSL,
         float sweep = exp(-pow((p.x * 0.8 + p.y * 0.45 - mod(uTime * 150.0, uRes.x + uRes.y + 600.0) + 300.0) / 55.0, 2.0));
         vCol += (uInk * 0.32 + uAcc * 0.12) * sweep * land * (0.35 + 0.65 * aFT);
         vA *= mix(1.0, 0.72 + 0.28 * smoothstep(0.0, 0.5, aFT), land); // everything filled, as in the first head
+        vA *= mix(1.0, smoothstep(0.35, 0.9, mk), aX); // the portrait's own glyphs show only on the way to the head
         gl_PointSize = uSize * uDpr * (1.0 + f * 0.35) * mix(1.0, ${headK.toFixed(3)}, smoothstep(0.82, 1.0, mk)); // in the portrait the glyphs follow its grid, so its features hold
       }`,
     fragmentShader: /* glsl */ `

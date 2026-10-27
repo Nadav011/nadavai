@@ -40,10 +40,14 @@ function fail(canvas) {
   document.dispatchEvent(new CustomEvent('cloud:fail'));
 }
 
+// a geometry with a real size: right after a viewport change the stage can measure 0 wide for a moment, and a mask
+// of 0 width cannot be read (getImageData), so wait for the next measurement instead
 function waitGeo() {
+  const ok = (G) => G?.words && G.W > 0 && G.H > 0 && G.words.every((w) => w.r - w.l > 0);
   return new Promise((res) => {
-    if (window.__wmGeo?.words) return res(window.__wmGeo);
-    document.addEventListener('wm:geo', () => res(window.__wmGeo), { once: true });
+    if (ok(window.__wmGeo)) return res(window.__wmGeo);
+    const on = () => { if (ok(window.__wmGeo)) { document.removeEventListener('wm:geo', on); res(window.__wmGeo); } };
+    document.addEventListener('wm:geo', on);
   });
 }
 
@@ -67,7 +71,12 @@ export function wordMask(geo, k = 1, face = null) {
   // face: draw this stencil instead of the words, centred and split down the middle (the head target of the scroll)
   if (face) {
     const t = Math.min(...geo.words.map((w) => w.t)), b = Math.max(...geo.words.map((w) => w.b));
-    const fh = (b - t) * 1.55, fw = fh * (face.width / face.height);
+    // as large as the space above the name allows (Nadav, 2026-10-27: "it needs to be bigger to be beautiful"): from just
+    // under the nav's meta line down to the name's baseline, never wider than most of the screen
+    const nav = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--nav')) || 68;
+    const room = b - (nav + 34), asp = face.width / face.height;
+    let fh = Math.max((b - t) * 1.55, Math.min(room, (b - t) * 3.2)), fw = fh * asp;
+    if (fw > geo.W * 0.86) { fw = geo.W * 0.86; fh = fw / asp; }
     const cx = geo.W / 2, fx = cx - fw / 2, fy = b - fh; // centred on the screen, split down its middle
     g.drawImage(face, fx * k, fy * k, fw * k, fh * k);
     if (face.tone) { // the tone map at the same place, read by tone(x, y)
@@ -119,7 +128,7 @@ export function wordMask(geo, k = 1, face = null) {
     const X = Math.floor(x * k), Y = Math.floor(y * k);
     return X < 0 || Y < 0 || X >= W || Y >= H ? 0 : toneData[(Y * W + X) * 4] / 255;
   };
-  return { word, edge, tone, letters, canvas: c, box: { x0: x0 - 4, x1: x1 + 4, y0: y0 - 4, y1: y1 + 4 } };
+  return { word, edge, tone, man: face?.man, letters, canvas: c, box: { x0: x0 - 4, x1: x1 + 4, y0: y0 - 4, y1: y1 + 4 } };
 }
 
 export function rng(seed) {
@@ -131,7 +140,66 @@ export function rng(seed) {
 // NADAV AI redraws the avatar's head and shoulders as a portrait in glyphs. The stencil is the whole figure;
 // alongside it a tone map, so each glyph takes the brightness of its spot: a light face and shirt, dark aviators,
 // hair and beard, and a bright outline that holds the shape.
+// which man (Nadav, 2026-10-27: "make me an example with all three, I'll choose"): ?man= or #man- with
+// orig (the first code head), duo (the two-tone portrait), photo (a code portrait of the real photo)
+const MAN = (q.get('man') || (location.hash.match(/man-(orig|duo|photo)/) || [])[1] || 'duo');
 async function faceStencil() {
+  if (MAN === 'orig') return origStencil();
+  if (MAN === 'photo') return photoStencil();
+  return duoStencil();
+}
+
+// the first head (the video Nadav liked): the avatar's dark features and its outline, filled with plain code
+async function origStencil() {
+  const img = new Image(); img.src = new URL('../assets/avatar/spritesheet.webp', import.meta.url).href;
+  await img.decode();
+  const CW = 192, CH = 208, cell = document.createElement('canvas'); cell.width = CW; cell.height = CH;
+  const cg = cell.getContext('2d', { willReadFrequently: true }); cg.drawImage(img, 0, 0, CW, CH, 0, 0, CW, CH);
+  const d = cg.getImageData(0, 0, CW, CH).data;
+  let x0 = CW, x1 = 0, y0 = CH, y1 = 0;
+  for (let y = 0; y < CH; y++) for (let x = 0; x < CW; x++) if (d[(y * CW + x) * 4 + 3] > 40) { x0 = Math.min(x0, x); x1 = Math.max(x1, x); y0 = Math.min(y0, y); y1 = Math.max(y1, y); }
+  const hh = Math.round((y1 - y0) * 0.36), hx0 = x0 + Math.round((x1 - x0) * 0.12), hw = Math.round((x1 - x0) * 0.76);
+  const out = document.createElement('canvas'); out.width = hw; out.height = hh;
+  const og = out.getContext('2d'), id = og.createImageData(hw, hh);
+  for (let y = 0; y < hh; y++) for (let x = 0; x < hw; x++) {
+    const o = ((y0 + y) * CW + hx0 + x) * 4;
+    if (d[o + 3] < 40) continue;
+    const l = (0.299 * d[o] + 0.587 * d[o + 1] + 0.114 * d[o + 2]) / 255;
+    const edge = [[-3, 0], [3, 0], [0, -3], [0, 3]].some(([dx, dy]) => (d[((y0 + y + dy) * CW + hx0 + x + dx) * 4 + 3] ?? 0) < 40);
+    if (l < 0.42 || edge) { const p = (y * hw + x) * 4; id.data[p] = id.data[p + 1] = id.data[p + 2] = 255; id.data[p + 3] = 255; }
+  }
+  og.putImageData(id, 0, 0);
+  out.man = 'orig'; // no tone map: the glyphs keep their plain code colours
+  return out;
+}
+
+// a mask and a tone map from any source: alpha or a person test decides the figure, luminance the tone
+function toned(src, sx, sy, sw, sh, keep, curve) {
+  const c = document.createElement('canvas'); c.width = sw; c.height = sh;
+  const g = c.getContext('2d', { willReadFrequently: true }); g.drawImage(src, sx, sy, sw, sh, 0, 0, sw, sh);
+  const d = g.getImageData(0, 0, sw, sh).data;
+  const out = document.createElement('canvas'); out.width = sw; out.height = sh;
+  const tone = document.createElement('canvas'); tone.width = sw; tone.height = sh;
+  const id = out.getContext('2d').createImageData(sw, sh), td = tone.getContext('2d').createImageData(sw, sh);
+  const IN = (x, y) => x >= 0 && y >= 0 && x < sw && y < sh && keep(d, (y * sw + x) * 4);
+  for (let y = 0; y < sh; y++) for (let x = 0; x < sw; x++) {
+    const o = (y * sw + x) * 4;
+    if (!keep(d, o)) continue;
+    const l = (0.299 * d[o] + 0.587 * d[o + 1] + 0.114 * d[o + 2]) / 255;
+    const e = Math.max(2, Math.round(sw / 96));
+    const edge = !IN(x - e, y) || !IN(x + e, y) || !IN(x, y - e) || !IN(x, y + e);
+    const v = edge ? 1 : curve(l);
+    id.data[o] = id.data[o + 1] = id.data[o + 2] = 255; id.data[o + 3] = 255;
+    td.data[o] = td.data[o + 1] = td.data[o + 2] = Math.round(v * 255); td.data[o + 3] = 255;
+  }
+  out.getContext('2d').putImageData(id, 0, 0); tone.getContext('2d').putImageData(td, 0, 0);
+  out.tone = tone;
+  return out;
+}
+const sCurve = (lo, span) => (l) => { const s = Math.min(1, Math.max(0, (l - lo) / span)); return s * s * (3 - 2 * s); };
+
+// the two-tone portrait: the avatar's head and shoulders from the 2x sprite
+async function duoStencil() {
   const img = new Image(); img.src = new URL('../assets/avatar/spritesheet@2x.webp', import.meta.url).href;
   await img.decode();
   const CW = 384, CH = 416, cell = document.createElement('canvas'); cell.width = CW; cell.height = CH;
@@ -139,28 +207,27 @@ async function faceStencil() {
   const d = cg.getImageData(0, 0, CW, CH).data;
   let x0 = CW, x1 = 0, y0 = CH, y1 = 0;
   for (let y = 0; y < CH; y++) for (let x = 0; x < CW; x++) if (d[(y * CW + x) * 4 + 3] > 40) { x0 = Math.min(x0, x); x1 = Math.max(x1, x); y0 = Math.min(y0, y); y1 = Math.max(y1, y); }
-  const hh = Math.round((y1 - y0) * 0.44); // the head, the shoulders and the top of the shirt
-  // the full width of the figure: the avatar's head is as wide as its shoulders
-  const hx0 = Math.max(0, x0 - 4), hw = Math.min(CW - hx0, x1 - x0 + 9);
-  const out = document.createElement('canvas'); out.width = hw; out.height = hh;
-  const tone = document.createElement('canvas'); tone.width = hw; tone.height = hh;
-  const id = out.getContext('2d').createImageData(hw, hh), td = tone.getContext('2d').createImageData(hw, hh);
-  const A = (x, y) => (x < 0 || y < 0 || x >= CW || y >= CH ? 0 : d[(y * CW + x) * 4 + 3]);
-  for (let y = 0; y < hh; y++) for (let x = 0; x < hw; x++) {
-    const sx = hx0 + x, sy = y0 + y, o = (sy * CW + sx) * 4, a = d[o + 3];
-    if (a < 40) continue;
-    const l = (0.299 * d[o] + 0.587 * d[o + 1] + 0.114 * d[o + 2]) / 255;
-    const edge = [[-4, 0], [4, 0], [0, -4], [0, 4]].some(([dx, dy]) => A(sx + dx, sy + dy) < 40);
-    // contrast: the aviators sink, the hair and the beard keep a texture, the face and the shirt come up; the outline is bright
-    // an S-curve (Nadav liked the bold first head): light parts fill solid, features cut out clearly, hair keeps a little texture
-    const s = Math.min(1, Math.max(0, (l - 0.1) / 0.45)), pos = s * s * (3 - 2 * s);
-    const v = edge ? 1 : pos;
-    const p = (y * hw + x) * 4;
-    id.data[p] = id.data[p + 1] = id.data[p + 2] = 255; id.data[p + 3] = 255;
-    td.data[p] = td.data[p + 1] = td.data[p + 2] = Math.round(v * 255); td.data[p + 3] = 255;
-  }
-  out.getContext('2d').putImageData(id, 0, 0); tone.getContext('2d').putImageData(td, 0, 0);
-  out.tone = tone;
+  const hx0 = Math.max(0, x0 - 4), hw = Math.min(CW - hx0, x1 - x0 + 9), hh = Math.round((y1 - y0) * 0.44);
+  const out = toned(cell, hx0, y0, hw, hh, (D, o) => D[o + 3] > 40, sCurve(0.1, 0.45));
+  out.man = 'duo';
+  return out;
+}
+
+// a code portrait of the real photo (the plate the portal opens onto): the person is told from the grey wall by
+// colour (skin), darkness (hair, beard) or brightness (the shirt)
+async function photoStencil() {
+  const img = new Image(); img.src = new URL('./assets/p2-plate.webp', import.meta.url).href;
+  await img.decode();
+  // the face, the hair and the shoulders in the 2800x1536 plate, at half size for the sampler
+  const c = document.createElement('canvas'); c.width = 300; c.height = 390;
+  c.getContext('2d').drawImage(img, 230, 120, 600, 780, 0, 0, 300, 390);
+  const keep = (D, o) => {
+    const r = D[o] / 255, g = D[o + 1] / 255, b = D[o + 2] / 255, mx = Math.max(r, g, b), mn = Math.min(r, g, b);
+    const s = mx ? (mx - mn) / mx : 0;
+    return s > 0.12 || mx < 0.42 || mx > 0.86;
+  };
+  const out = toned(c, 0, 0, 300, 390, keep, sCurve(0.12, 0.62));
+  out.man = 'photo';
   return out;
 }
 
@@ -333,6 +400,7 @@ async function boot() {
   const geoKey = (G) => [G.W, G.H, ...G.words.flatMap((w) => [w.l, w.t, w.r, w.b, w.font.size])].map((v) => Math.round(v)).join(',');
   let lastGeo = geoKey(geo0);
   document.addEventListener('wm:geo', () => {
+    if (!(window.__wmGeo?.W > 0 && window.__wmGeo.H > 0)) return; // a 0-wide moment (a viewport change): keep the last build
     const k = geoKey(window.__wmGeo); if (k === lastGeo) return; // a refresh with nothing moved: keep the build (and its loading cards)
     lastGeo = k;
     clearTimeout(rb);

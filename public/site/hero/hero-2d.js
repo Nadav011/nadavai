@@ -117,7 +117,7 @@ export async function boot2d({ geo0, head, wordMask, rng, stage, canvas, INTRO_S
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     ctx.clearRect(0, 0, W, H);
     if (G.b >= 0.999) return;
-    const { T, Hh, R, Gi, E, F, HF, FT, FG, n, cell, headK } = P;
+    const { T, Hh, R, Gi, E, F, HF, FT, FG, X, n, cell, headK } = P;
     const w = G.words, intro = U.uIntro.value, m = G.m || 0;
     const half = [w[0], w[1]].map((x, i) => ({ ox: x.ox, oy: x.oy, tx: G.tx[i], g: G.grow, left: x.left }));
     const S = sh.S, C = sh.C, base = cell * 1.95;
@@ -128,6 +128,7 @@ export async function boot2d({ geo0, head, wordMask, rng, stage, canvas, INTRO_S
       const delay = (1 - clamp(tx / W, 0, 1)) * 0.75 + rx * 0.45;
       const t = clamp((intro - delay) / 1.05, 0, 1), e = 1 - (1 - t) ** 4;
       let mk = clamp(m * 1.35 - ry * 0.35, 0, 1); mk = mk * mk * (3 - 2 * mk);
+      if (X[i] && mk < 0.35) continue; // the portrait's own glyphs exist only on the way to the head
       const fly = Math.sin(Math.PI * mk);
       const gx = tx + (F[i * 2] - tx) * mk, gy = ty + (F[i * 2 + 1] - ty) * mk;
       const fx = W + 24 + ry * W * 0.3, fy = ty + (rz - 0.5) * 18;
@@ -169,6 +170,7 @@ export async function boot2d({ geo0, head, wordMask, rng, stage, canvas, INTRO_S
         bright += sweep * land * 0.4 * (0.35 + 0.65 * ft);
         a *= 1 - land + land * (0.72 + 0.28 * smooth(0, 0.5, ft));
       }
+      if (X[i]) a *= smooth(0.35, 0.9, mk);
       if (a < 0.02) continue;
       const sz = base * (1 + f * 0.35) * (1 - land + land * Math.min(1, headK * 1.2)); // 2D sprites are softer than the shader's, so a little larger
       const sx = (g % C) * S, sy = Math.floor(g / C) * S;
@@ -181,7 +183,15 @@ export async function boot2d({ geo0, head, wordMask, rng, stage, canvas, INTRO_S
 
   // geometry changes: new points, no second intro
   let rb = 0;
-  const onGeo = () => { clearTimeout(rb); rb = setTimeout(() => { introDone = introDone || U.uIntro.value > 0.5; build(window.__wmGeo); size(); dirty = true; }, 120); };
+  const onGeo = () => {
+    clearTimeout(rb);
+    rb = setTimeout(() => {
+      const G = window.__wmGeo; if (!(G?.W > 0 && G.H > 0)) return; // a 0-wide moment: keep the last build
+      introDone = introDone || U.uIntro.value > 0.5;
+      try { build(G); } catch (e) { console.info('[hero-2d] rebuild skipped', e); return; }
+      size(); dirty = true;
+    }, 120);
+  };
   document.addEventListener('wm:geo', onGeo);
   addEventListener('resize', () => { size(); dirty = true; });
 
