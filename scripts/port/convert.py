@@ -512,9 +512,17 @@ class Converter:
             t = head.find(*sel)
             val = (t.get_text() if key == 'title' else t.get('content', '')) if t else ''
             look = re.sub(r'\s*·\s*NadavAI$', '', val) if key == 'title' else val
-            meta[key] = {'id': self.lookup(look) if HEB.search(look) else None, 'text': val}
+            i = self.lookup(look) if HEB.search(look) else None
+            if not i and HEB.search(look) and len(look) > 40:
+                # an unescaped quote in the prototype's attribute cuts the value short: the deck string it starts
+                pre = [k for k, (h, _e) in self.copy.items() if self.norm(h).startswith(self.norm(look)) and k.endswith(('description', 'title'))]
+                i = min(pre, key=lambda k: (0 if any(k.startswith(n) for n in self.ns) else 1, k in self.pending)) if pre else None
+            if HEB.search(look) and not i:
+                self.misses.append((page, f'<meta {key}> {self.norm(look)}'))
+            meta[key] = {'id': i, 'text': val}
         og = head.find('meta', attrs={'property': 'og:image'})
         meta['ogImage'] = og.get('content', '').replace('https://nadavc.ai/assets/', '/site/assets/') if og else None
+        meta['htmlData'] = {k[5:]: v for k, v in (soup.html.attrs.items() if soup.html else []) if k.startswith('data-')}
         body = soup.body
         meta['bodyClass'] = ' '.join(body.get('class', []))
         meta['bodyData'] = {k[5:]: v for k, v in body.attrs.items() if k.startswith('data-')}
@@ -622,6 +630,57 @@ class Converter:
         self.js_misses.append((self.where, self.norm(text.replace('\x00', '{…}'))))
         return m.group(0)
 
+    def js_literal(self, q: str, s: str) -> str:
+        """A '...' or "..." literal in code: page link, asset path, or a Hebrew string that is a deck string."""
+        pm = PAGE_LINK.match(s)
+        if pm:
+            return f'__href({q}{pm.group(1)}{pm.group(2) or ""}{q})'
+        if ASSET_PREFIX.match(s) and not s.startswith(('js/', 'css/')):
+            return f'{q}/site/{s}{q}'
+        if HEB.search(s) and len(s) > 1:  # a single letter is an effect glyph or an initial, not copy
+            text = s.replace("\\'", "'").replace('\\"', '"')
+            i = self.lookup(text)
+            if i:
+                self.js_ids.add(i)
+                self.stats['js'] += 1
+                return f"__t('{i}')"
+            ids = self.composite(text)
+            if ids:
+                self.js_ids.update(ids)
+                self.stats['js'] += 1
+                return " + ' · ' + ".join(f"__t('{x}')" for x in ids)
+            self.js_misses.append((self.where, self.norm(s)))
+        return f'{q}{s}{q}'
+
+    TPL_PAGE = re.compile(r'(?<=["\'])(' + '|'.join(map(re.escape, PAGE_ROUTES)) + r')\.html(#[\w-]*)?(?=["\'])')
+    TPL_HEB = re.compile(r'[^<>"\']*[\u0590-\u05FF][^<>"\']*')
+
+    def js_template_text(self, t: str) -> str:
+        """The text of a template literal (often HTML): page links and Hebrew runs become ${...} lookups."""
+        t = self.TPL_PAGE.sub(lambda m: f"${{__href('{m.group(1)}{m.group(2) or ''}')}}", t)
+        def sub(m: re.Match) -> str:
+            run = m.group(0)
+            core = run.strip()
+            if len(core) <= 1:
+                return run
+            lead, trail = run[:len(run) - len(run.lstrip())], run[len(run.rstrip()):]
+            i = self.lookup(core)
+            if i:
+                self.js_ids.add(i); self.stats['js'] += 1
+                return f"{lead}${{__t('{i}')}}{trail}"
+            ids = self.composite(core)
+            if ids:
+                self.js_ids.update(ids); self.stats['js'] += 1
+                return lead + ' · '.join(f"${{__t('{x}')}}" for x in ids) + trail
+            hit = self.template(core)
+            if hit:
+                k, vals = hit
+                self.js_ids.add(k); self.stats['js'] += 1
+                return lead + f"${{__t('{k}', {{ {', '.join(f'{n}: {js(v)}' for n, v in vals.items())} }})}}" + trail
+            self.js_misses.append((self.where, self.norm(core)))
+            return run
+        return self.TPL_HEB.sub(sub, t)
+
     def js(self, rel: str, src: str) -> str:
         self.where = rel
         self.ns = ['global.']
@@ -637,37 +696,112 @@ class Converter:
             if old not in src:
                 raise SystemExit(f'patch for {rel} no longer applies: {old[:60]!r}')
             src = src.replace(old, new)
-        lines = src.split('\n')
-        out = []
-        in_block = False
-        for line in lines:
-            stripped = line.lstrip()
-            if in_block or stripped.startswith('//') or stripped.startswith('/*') or stripped.startswith('*'):
-                in_block = (in_block or stripped.startswith('/*')) and '*/' not in line
-                out.append(line)
+        return JsRewriter(self, rel).run(src)
+
+
+class JsRewriter:
+    """A small JavaScript lexer that rewrites string literals and template-literal text, and leaves code, comments and
+    regular expressions alone. In code a Hebrew string becomes __t('<id>'); inside a template literal (which often
+    builds HTML) the Hebrew text becomes ${__t('<id>')}, so an attribute keeps its quotes."""
+    REGEX_AFTER = set('(,=:[!&|?{};+-*%<>~^')
+
+    def __init__(self, conv: 'Converter', rel: str):
+        self.c, self.rel = conv, rel
+
+    def run(self, src: str) -> str:
+        self.s, self.i = src, 0
+        out = self.code(stop_brace=False)
+        if self.i < len(self.s):
+            raise SystemExit(f'{self.rel}: could not lex past offset {self.i}')
+        return out
+
+    # code: copy it, and hand strings, templates, comments and regexes to their readers
+    def code(self, stop_brace: bool) -> str:
+        s, out, depth, last = self.s, [], 0, ''
+        while self.i < len(s):
+            ch = s[self.i]
+            if s.startswith('//', self.i):
+                j = s.find('\n', self.i)
+                j = len(s) if j < 0 else j
+                out.append(s[self.i:j]); self.i = j
                 continue
-            def sub(m: re.Match) -> str:
-                q = m.group(0)[0]
-                s = next(g for g in m.groups() if g is not None)
-                pm = PAGE_LINK.match(s)
-                if pm:
-                    return f'__href({q}{pm.group(1)}{pm.group(2) or ""}{q})'
-                if ASSET_PREFIX.match(s) and not s.startswith(('js/', 'css/')):
-                    return f'{q}/site/{s}{q}'
-                if HEB.search(s) and len(s) > 1:  # a single letter is an effect glyph or an initial, not copy
-                    text = s.replace("\\'", "'").replace('\\"', '"')
-                    i = self.lookup(text)
-                    if i:
-                        self.js_ids.add(i)
-                        self.stats['js'] += 1
-                        return f"__t('{i}')"
-                    ids = self.composite(text)
-                    if ids:
-                        self.js_ids.update(ids)
-                        self.stats['js'] += 1
-                        return " + ' · ' + ".join(f"__t('{x}')" for x in ids)
-                    self.js_misses.append((rel, self.norm(s)))
-                return m.group(0)
-            line = self.JS_STR.sub(sub, line)
-            out.append(self.JS_TPL.sub(self.js_template, line))
-        return '\n'.join(out)
+            if s.startswith('/*', self.i):
+                j = s.find('*/', self.i + 2) + 2
+                out.append(s[self.i:j]); self.i = j
+                continue
+            if ch in '\'"':
+                out.append(self.string(ch)); last = 'x'
+                continue
+            if ch == '`':
+                out.append(self.template()); last = 'x'
+                continue
+            if ch == '/' and (last in self.REGEX_AFTER or last == '' or re.search(r'\b(return|typeof|case|in|of)\s*$', ''.join(out[-3:]))):
+                out.append(self.regex()); last = 'x'
+                continue
+            if stop_brace:
+                if ch == '{':
+                    depth += 1
+                elif ch == '}':
+                    if depth == 0:
+                        return ''.join(out)
+                    depth -= 1
+            out.append(ch)
+            if not ch.isspace():
+                last = ch if not (ch.isalnum() or ch in '_$') else 'x'
+            self.i += 1
+        return ''.join(out)
+
+    def string(self, q: str) -> str:
+        s, j = self.s, self.i + 1
+        while s[j] != q:
+            j += 2 if s[j] == '\\' else 1
+        body = s[self.i + 1:j]
+        self.i = j + 1
+        return self.c.js_literal(q, body)
+
+    def regex(self) -> str:
+        s, j, cls = self.s, self.i + 1, False
+        while True:
+            ch = s[j]
+            if ch == '\\':
+                j += 2; continue
+            if ch == '[': cls = True
+            elif ch == ']': cls = False
+            elif ch == '/' and not cls: break
+            elif ch == '\n': raise SystemExit(f'{self.rel}: unterminated regex at {self.i}')
+            j += 1
+        j += 1
+        while j < len(s) and s[j].isalpha():
+            j += 1
+        out = s[self.i:j]; self.i = j
+        return out
+
+    def template(self) -> str:
+        s, start = self.s, self.i
+        self.i += 1
+        parts: list[tuple[str, str]] = []   # ('text', raw) | ('expr', rewritten code)
+        buf = []
+        while True:
+            ch = s[self.i]
+            if ch == '\\':
+                buf.append(s[self.i:self.i + 2]); self.i += 2; continue
+            if ch == '`':
+                self.i += 1; break
+            if s.startswith('${', self.i):
+                parts.append(('text', ''.join(buf))); buf = []
+                self.i += 2
+                expr = self.code(stop_brace=True)
+                self.i += 1  # the closing brace
+                parts.append(('expr', expr))
+                continue
+            buf.append(ch); self.i += 1
+        parts.append(('text', ''.join(buf)))
+        raw = s[start:self.i]
+        # a template that is a deck string with placeholders as a whole ("שלב ${n} מתוך 5"), with no markup in it
+        if '<' not in raw and HEB.search(raw):
+            m = self.c.JS_TPL.fullmatch(raw)
+            if m and '${' in raw:
+                done = self.c.js_template(m)
+                if done != raw:
+                    return done
+        return '`' + ''.join(self.c.js_template_text(t) if k == 'text' else '${' + t + '}' for k, t in parts) + '`'

@@ -128,7 +128,7 @@ function openZoom(btn) {
   const d = document.createElement('dialog');
   d.className = 'sl-dlg zoom';
   d.setAttribute('aria-label', img.alt);
-  d.innerHTML = `<figure><img alt="" decoding="async"><figcaption></figcaption></figure><button type="button" class="zoom__x" aria-label=__t('social.gallery.close')>${X_ICON}</button>`;
+  d.innerHTML = `<figure><img alt="" decoding="async"><figcaption></figcaption></figure><button type="button" class="zoom__x" aria-label="${__t('social.gallery.close')}">${X_ICON}</button>`;
   const big = d.querySelector('img'); big.src = img.currentSrc || img.src; big.alt = img.alt;
   d.querySelector('figcaption').textContent = img.alt;
   document.body.appendChild(d);
@@ -354,30 +354,30 @@ function initCheck() {
       <li class="auto__i" data-gate>
         <span class="auto__n" lang="en" dir="ltr">0${i + 1}</span>
         <p class="auto__t" data-s="${esc(a.t)}"></p>
-        <p class="auto__why"><b>למה זה</b><span data-s="${esc(a.why)}"></span></p>
-        <details class="asm"><summary>ההנחות שלי</summary>
+        <p class="auto__why"><b>${__t('check.result.automate.why')}</b><span data-s="${esc(a.why)}"></span></p>
+        <details class="asm"><summary>${__t('check.result.automate.assumptions')}</summary>
           <div class="asm__f">
-            <label>כמה פעמים בשבוע<input type="number" inputmode="numeric" min="0" max="500" value="${a.times}" data-t></label>
-            <label>כמה דקות בכל פעם<input type="number" inputmode="numeric" min="0" max="600" value="${a.min}" data-m></label>
-            <p class="asm__out" aria-live="polite">זה בערך ${hoursOf(a.times, a.min)} שעות בחודש.</p>
+            <label>${__t('check.result.automate.timesPerWeek')}<input type="number" inputmode="numeric" min="0" max="500" value="${a.times}" data-t></label>
+            <label>${__t('check.result.automate.minutes')}<input type="number" inputmode="numeric" min="0" max="600" value="${a.min}" data-m></label>
+            <p class="asm__out" aria-live="polite">${__t('check.result.automate.saved', { hours: hoursOf(a.times, a.min) })}</p>
           </div>
         </details>
       </li>`).join('');
     const site = withSite ? `
-      <section class="ckr__sec" data-gate><h3>מה בדקתי באתר</h3>
+      <section class="ckr__sec" data-gate><h3>${__t('check.site.title')}</h3>
         <ul class="sitec">${SITE.checks.map(([k, ok]) => `<li><span>${bidi(k)}</span><span class="st ${ok ? 'st--ok' : 'st--no'}">${ok ? __t('check.site.found') : __t('check.site.missing')}</span></li>`).join('')}</ul>
       </section>
-      <section class="ckr__sec" data-gate><h3>תיקונים מהירים באתר</h3>
+      <section class="ckr__sec" data-gate><h3>${__t('check.result.fixes.h')}</h3>
         <div class="fix"><p data-s="${esc(SITE.fix)}"></p>
-          <a class="sl-link" href="https://www.w3.org/WAI/standards-guidelines/wcag/" target="_blank" rel="noopener">למה זה חשוב${NEW}${ARROW}</a></div>
+          <a class="sl-link" href="https://www.w3.org/WAI/standards-guidelines/wcag/" target="_blank" rel="noopener">${__t('check.result.fixes.source')}${NEW}${ARROW}</a></div>
       </section>` : '';
     body.innerHTML = `
-      <section class="ckr__sec" data-gate><h3>מה הבנתי מהעסק</h3><p><span data-s="${esc(S.saw)}"></span><span class="src">מתוך מה שכתבתם</span></p></section>
-      <section class="ckr__sec" data-gate><h3>מה הייתי הופך לאוטומטי קודם</h3><ol class="auto">${auto}</ol></section>
+      <section class="ckr__sec" data-gate><h3>${__t('check.result.saw.h')}</h3><p><span data-s="${esc(S.saw)}"></span><span class="src">${__t('check.result.saw.sourceText')}</span></p></section>
+      <section class="ckr__sec" data-gate><h3>${__t('check.result.automate.h')}</h3><ol class="auto">${auto}</ol></section>
       ${site}
-      <section class="ckr__sec" data-gate><h3>הכי דומה למה שבניתי</h3><p data-s="${esc(S.similar)}"></p>
-        <a class="sl-link" href="${S.similarHref}">לפרויקט${ARROW}</a></section>
-      <section class="ckr__sec" data-gate><h3>מה הייתי בונה ראשון</h3><p data-s="${esc(S.first)}"></p></section>`;
+      <section class="ckr__sec" data-gate><h3>${__t('check.result.similar.h')}</h3><p data-s="${esc(S.similar)}"></p>
+        <a class="sl-link" href="${S.similarHref}">${__t('home.hero.peek.goShort')}${ARROW}</a></section>
+      <section class="ckr__sec" data-gate><h3>${__t('check.result.first.h')}</h3><p data-s="${esc(S.first)}"></p></section>`;
     $$('.asm', body).forEach((d) => {
       const t = $('[data-t]', d), m = $('[data-m]', d), o = $('.asm__out', d);
       const upd = () => { o.textContent = __t('check.result.automate.saved', { hours: hoursOf(+t.value || 0, +m.value || 0) }); };

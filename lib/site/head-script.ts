@@ -1,6 +1,8 @@
 import { PAGE_ROUTES } from "./routes"
 
-// The prototype's two head scripts, run before first paint, in the same order:
+// The prototype's head scripts, run before first paint, in the same order:
+// 0. the world-to-world passage: the next page opens like ink from the spot the visitor clicked (cross-document View
+//    Transitions; a plain load where they are not supported);
 // 1. motion flags: html.js, html.reduce (calm mode, stored or asked for by the device), html.calm-auto, and on the home
 //    page html.pfx (motion on: the code hero runs, on WebGL2 or a 2D canvas) with the WebGL hero modules preloaded;
 // 2. the review looks (A night, B day): B sets html[data-look], the lk-* scopes and a render-blocking looks.css.
@@ -53,5 +55,20 @@ const looks = `(function () {
   document.write('<link rel="stylesheet" href="/site/css/looks.css" data-looks>');
 })();`
 
+const passage = `(function () {
+  var d = document.documentElement;
+  document.addEventListener('click', function (e) {
+    var a = e.target.closest && e.target.closest('a[href]');
+    if (!a || a.target === '_blank' || a.origin !== location.origin || a.pathname === location.pathname) return;
+    try { sessionStorage.setItem('nadavai.vt', Math.round(e.clientX) + ',' + Math.round(e.clientY)); } catch (x) {}
+  }, true);
+  addEventListener('pagereveal', function (e) {
+    if (!e.viewTransition) return;
+    var s = null; try { s = sessionStorage.getItem('nadavai.vt'); sessionStorage.removeItem('nadavai.vt'); } catch (x) {}
+    if (s) { var xy = s.split(','); d.style.setProperty('--vt-x', xy[0] + 'px'); d.style.setProperty('--vt-y', xy[1] + 'px'); }
+  });
+})();`
+
+export const HEAD_PASSAGE = passage
 export const HEAD_MOTION = motion
 export const HEAD_LOOKS = looks

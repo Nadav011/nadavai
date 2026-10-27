@@ -690,3 +690,5 @@ html.world-static body{background:radial-gradient(70% 55% at 80% 0%,color-mix(in
 @keyframes vt-in{from{clip-path:circle(0 at var(--vt-x,50%) var(--vt-y,50%))}to{clip-path:circle(150% at var(--vt-x,50%) var(--vt-y,50%))}}
 @keyframes vt-out{to{filter:brightness(.55) saturate(.8);scale:.97}}
 @media (prefers-reduced-motion:reduce){::view-transition-old(root),::view-transition-new(root){animation:none}}
+/* the sections that paint their own ground let the page's world through */
+html.has-world .offer,html.has-world .vow{background:transparent}

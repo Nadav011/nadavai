@@ -29,25 +29,25 @@ const rgba = (c) => `rgba(${c.slice(0, 3).map(Math.round).join(',')},${c[3].toFi
 const clamp01 = (v) => Math.max(0, Math.min(1, v));
 
 const WA_SVG = '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8.6 8.4c.2-.5.5-.5.8-.5h.5c.2 0 .4 0 .6.5l.7 1.6c.1.2.1.4 0 .6l-.5.6c-.1.2-.1.3 0 .5.6 1 1.4 1.8 2.4 2.4.2.1.4.1.5 0l.6-.6c.2-.2.4-.2.6-.1l1.6.7c.4.2.4.4.4.6v.5c0 .3 0 .6-.5.8-.5.3-1.4.6-2.6.2a9.3 9.3 0 0 1-4.9-4.9c-.4-1.2-.1-2.1.2-2.6z"/></svg>';
-const MOCK_REPAIRS = `<div class="mk mk--light"><span class="st-ill">המחשה</span>
-  <div class="mk__bar"><span>תיקונים</span><span style="font-size:13px;font-weight:400;color:#6b7078">היום · <bdi dir="ltr">16:02</bdi></span></div>
+const MOCK_REPAIRS = `<div class="mk mk--light"><span class="st-ill">${__t('global.illustration')}</span>
+  <div class="mk__bar"><span>${__t('branch.story.1600.title')}</span><span style="font-size:13px;font-weight:400;color:#6b7078">${__t('branch.mock.repairs.time', { time: '<bdi dir="ltr">16:02</bdi>' })}</span></div>
   <div class="mk__card">
     <div class="mk__photo"><span class="mk__temp" dir="ltr">9°C</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><rect x="6" y="2.5" width="12" height="19" rx="2"/><path d="M6 9h12M9 5.5v1.5M9 12v3"/></svg></div>
-    <b style="font-size:13px">מקרר שתייה מצפצף</b>
-    <div class="mk__chips"><span class="mk__chip mk__chip--ok">באחריות</span><span class="mk__chip">עד <bdi dir="ltr">03/2027</bdi></span><span class="mk__chip mk__chip--acc">דחוף</span></div>
+    <b style="font-size:13px">${__t('branch.mock.repairs.item')}</b>
+    <div class="mk__chips"><span class="mk__chip mk__chip--ok">${__t('branch.mock.repairs.chip1')}</span><span class="mk__chip">${__t('branch.mock.repairs.chip2', { date: '<bdi dir="ltr">03/2027</bdi>' })}</span><span class="mk__chip mk__chip--acc">${__t('branch.mock.repairs.chip3')}</span></div>
   </div>
-  <div class="mk__wa"><i>${WA_SVG}</i><div><b>נשלח לטכנאי בוואטסאפ</b><div style="color:#3b4a40">קריאה חדשה: מקרר שתייה. תמונה מצורפת.</div></div></div>
-  <ol class="mk__steps"><li>נפתחה קריאה עם תמונה</li><li>נבדקה אחריות</li><li class="is-wait">הטכנאי בדרך</li></ol>
+  <div class="mk__wa"><i>${WA_SVG}</i><div><b>${__t('branch.mock.repairs.wa.title')}</b><div style="color:#3b4a40">${__t('branch.mock.repairs.wa.body')}</div></div></div>
+  <ol class="mk__steps"><li>${__t('branch.mock.repairs.step1')}</li><li>${__t('branch.mock.repairs.step2')}</li><li class="is-wait">${__t('branch.mock.repairs.step3')}</li></ol>
 </div>`;
-const MOCK_DRAWER = `<div class="mk mk--dark"><span class="st-ill">המחשה</span>
-  <div class="mk__bar"><span>ספירת מגירה</span><span style="font-size:13px;font-weight:400;color:var(--mute)" lang="en" dir="ltr">23:04</span></div>
+const MOCK_DRAWER = `<div class="mk mk--dark"><span class="st-ill">${__t('global.illustration')}</span>
+  <div class="mk__bar"><span>${__t('branch.mock.drawer.title')}</span><span style="font-size:13px;font-weight:400;color:var(--mute)" lang="en" dir="ltr">23:04</span></div>
   <div class="mk__grid">
-    <div class="mk__den"><b dir="ltr">₪200</b><span>שטרות × 3</span></div><div class="mk__den"><b dir="ltr">₪100</b><span>שטרות × 5</span></div>
-    <div class="mk__den"><b dir="ltr">₪50</b><span>שטרות × 4</span></div><div class="mk__den"><b dir="ltr">₪20</b><span>שטרות × 7</span></div>
-    <div class="mk__den"><b dir="ltr">₪10</b><span>מטבעות × 6</span></div><div class="mk__den"><b dir="ltr">₪5</b><span>מטבעות × 4</span></div>
+    <div class="mk__den"><b dir="ltr">₪200</b><span>${__t('branch.mock.drawer.notes', { n: "3" })}</span></div><div class="mk__den"><b dir="ltr">₪100</b><span>${__t('branch.mock.drawer.notes', { n: "5" })}</span></div>
+    <div class="mk__den"><b dir="ltr">₪50</b><span>${__t('branch.mock.drawer.notes', { n: "4" })}</span></div><div class="mk__den"><b dir="ltr">₪20</b><span>${__t('branch.mock.drawer.notes', { n: "7" })}</span></div>
+    <div class="mk__den"><b dir="ltr">₪10</b><span>${__t('branch.mock.drawer.coins', { n: "6" })}</span></div><div class="mk__den"><b dir="ltr">₪5</b><span>${__t('branch.mock.drawer.coins', { n: "4" })}</span></div>
   </div>
-  <div class="mk__ok"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 8.5l3 3 7-7"/></svg>אין פער. דוח Z מוכן.</div>
-  <div class="mk__chips"><span class="mk__chip mk__chip--ok">ההפקדה תועדה עם תמונה</span><span class="mk__chip">סיכום נשלח בוואטסאפ</span></div>
+  <div class="mk__ok"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 8.5l3 3 7-7"/></svg>${__t('branch.mock.drawer.ok')}</div>
+  <div class="mk__chips"><span class="mk__chip mk__chip--ok">${__t('branch.mock.drawer.chip1')}</span><span class="mk__chip">${__t('branch.mock.drawer.chip2')}</span></div>
 </div>`;
 
 const SHOTS = {

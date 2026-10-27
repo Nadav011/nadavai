@@ -117,9 +117,9 @@ function buildFeed({ gsap, reduce }) {
   list.innerHTML = POSTS.map((p, i) => {
     const w = WHO[p.who];
     return `<article class="fp" aria-label="${__t('social.feed.post.aria', { name: w.name })}">
-      <header class="fp__h"><img src="${w.av}" alt="" width="30" height="30" loading="lazy"><div><b>${w.name}</b><small>${i % 2 ? __t('social.feed.status.auto') : __t('social.feed.status.morning')}</small></div><span class="fp__sch">מתוזמן</span></header>
+      <header class="fp__h"><img src="${w.av}" alt="" width="30" height="30" loading="lazy"><div><b>${w.name}</b><small>${i % 2 ? __t('social.feed.status.auto') : __t('social.feed.status.morning')}</small></div><span class="fp__sch">${__t('social.feed.status.scheduled')}</span></header>
       <div class="fp__img"><img src="${P(p.img)}" width="${p.w}" height="${p.h}" alt="${p.alt}" loading="lazy" decoding="async"><span class="fp__heart">${HEART}</span></div>
-      <div class="fp__act"><button type="button" aria-pressed="false" aria-label=__t('play.avatar.like')>${HEART}</button><button type="button" aria-label=__t('social.feed.comment.aria') tabindex="-1">${CHAT}</button><button type="button" aria-label=__t('social.feed.share.aria') tabindex="-1">${SEND}</button></div>
+      <div class="fp__act"><button type="button" aria-pressed="false" aria-label="${__t('play.avatar.like')}">${HEART}</button><button type="button" aria-label="${__t('social.feed.comment.aria')}" tabindex="-1">${CHAT}</button><button type="button" aria-label="${__t('social.feed.share.aria')}" tabindex="-1">${SEND}</button></div>
       <p class="fp__cap"><b>${w.name}</b> ${p.cap}</p>
     </article>`;
   }).join('');

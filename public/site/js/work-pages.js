@@ -71,8 +71,8 @@ function initGallery() {
   dlg.className = 'zd zd--paged'; dlg.hidden = true;
   dlg.setAttribute('role', 'dialog'); dlg.setAttribute('aria-modal', 'true'); dlg.setAttribute('aria-labelledby', 'wkgCap');
   dlg.innerHTML = `<div class="zd__scrim"></div><figure class="zc zd__card"><div class="zc__glass"><img alt="" decoding="async"></div><figcaption class="zc__cap" id="wkgCap"><i aria-hidden="true"></i><span></span></figcaption></figure>
-    <button type="button" class="zd__close" aria-label=__t('home.hero.dialog.close')>${ICON_X}</button>
-    <div class="zd__nav"><button type="button" data-d="-1" aria-label=__t('sporchat.screens.prev')>${ICON_PREV}</button><span class="zd__count" dir="ltr" aria-live="polite"></span><button type="button" data-d="1" aria-label=__t('sporchat.screens.next')>${ICON_NEXT}</button></div>`;
+    <button type="button" class="zd__close" aria-label="${__t('home.hero.dialog.close')}">${ICON_X}</button>
+    <div class="zd__nav"><button type="button" data-d="-1" aria-label="${__t('sporchat.screens.prev')}">${ICON_PREV}</button><span class="zd__count" dir="ltr" aria-live="polite"></span><button type="button" data-d="1" aria-label="${__t('sporchat.screens.next')}">${ICON_NEXT}</button></div>`;
   document.body.appendChild(dlg);
   const card = dlg.querySelector('.zd__card'), img = card.querySelector('img'), cap = card.querySelector('.zc__cap span');
   const scrim = dlg.querySelector('.zd__scrim'), close = dlg.querySelector('.zd__close'), count = dlg.querySelector('.zd__count');
@@ -145,12 +145,13 @@ function initGallery() {
 }
 
 /* ── games: load each one when it comes near ───────────────── */
+// the page's world behind it (js/worlds): a background of its own, driven by the scroll; every work page, the index too
+import('./worlds/world.js').then((m) => m.initWorld({ lenis, reduce })).catch((e) => console.info('[world] off', e));
+
 function initGames() {
   const els = [...document.querySelectorAll('[data-game]')];
   if (!els.length) return;
   const env = { gsap: engine ? gsap : null, reduce, avatar, lenis };
-  // the page's world behind it (js/worlds): a background of its own, driven by the scroll
-  import('./worlds/world.js').then((m) => m.initWorld({ lenis, reduce })).catch((e) => console.info('[world] off', e));
   const load = (el) => {
     if (el.dataset.loaded) return; el.dataset.loaded = '1';
     import(`./games/${el.dataset.game}.js`).then((m) => m.init(el, env)).catch((e) => { console.warn(`[work] game ${el.dataset.game} kept static`, e?.message); el.classList.add('is-static'); });

@@ -3,7 +3,7 @@ import type { Metadata, Viewport } from "next"
 import { notFound } from "next/navigation"
 import { routing } from "@/i18n/routing"
 import { getSiteCopy } from "@/lib/site/copy"
-import { HEAD_LOOKS, HEAD_MOTION } from "@/lib/site/head-script"
+import { HEAD_LOOKS, HEAD_MOTION, HEAD_PASSAGE } from "@/lib/site/head-script"
 import { jsCopy } from "@/lib/site/js-copy"
 import { SiteAnalytics } from "@/components/site/analytics"
 import "./site-port.css"
@@ -102,6 +102,7 @@ export default async function LocaleLayout({
     <html lang={locale} dir={locale === "he" ? "rtl" : "ltr"} suppressHydrationWarning>
       <head>
         <script type="importmap" dangerouslySetInnerHTML={{ __html: IMPORT_MAP }} />
+        <script dangerouslySetInnerHTML={{ __html: HEAD_PASSAGE }} />
         <script dangerouslySetInnerHTML={{ __html: HEAD_MOTION }} />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />

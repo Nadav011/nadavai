@@ -51,7 +51,7 @@ export function openShots({ title, time = '', shots = [], from = null }) {
   d.className = 'st-dlg';
   d.setAttribute('aria-labelledby', 'stDlgT');
   d.innerHTML = `<div class="st-dlg__head">${time ? `<span class="st-dlg__time" lang="en" dir="ltr">${time}</span>` : ''}<h2 class="st-dlg__t" id="stDlgT"></h2>
-    <button type="button" class="st-dlg__x" aria-label=__t('social.gallery.close')>${X_ICON}</button></div><div class="st-dlg__body"></div>`;
+    <button type="button" class="st-dlg__x" aria-label="${__t('social.gallery.close')}">${X_ICON}</button></div><div class="st-dlg__body"></div>`;
   d.querySelector('.st-dlg__t').textContent = title;
   const body = d.querySelector('.st-dlg__body');
   shots.forEach((s) => {
@@ -92,7 +92,7 @@ export function openImage({ src, alt, cap, from }) {
   const d = document.createElement('dialog');
   d.className = 'st-dlg st-lb';
   d.setAttribute('aria-label', cap || alt || '');
-  d.innerHTML = `<figure><img alt="" decoding="async"><figcaption></figcaption></figure><button type="button" class="st-dlg__x" aria-label=__t('social.gallery.close')>${X_ICON}</button>`;
+  d.innerHTML = `<figure><img alt="" decoding="async"><figcaption></figcaption></figure><button type="button" class="st-dlg__x" aria-label="${__t('social.gallery.close')}">${X_ICON}</button>`;
   const im = d.querySelector('img'); im.src = src; im.alt = alt || '';
   d.querySelector('figcaption').textContent = cap || '';
   document.body.appendChild(d);

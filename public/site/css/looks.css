@@ -303,6 +303,8 @@
 }
 :where(:root[data-look="b"].lk-site) .ck__next,
 :where(:root[data-look="b"].lk-site).ck__next{color:var(--accent-2)}
+html:where([data-look="b"].lk-site).has-world .offer,
+html:where([data-look="b"].lk-site).has-world .vow{background:transparent}
 /* css/chrome.css */
 :where(:root[data-look="b"].lk-chrome) .calm,
 :where(:root[data-look="b"].lk-chrome).calm{background:none}
@@ -1535,6 +1537,8 @@
 }
 :where(:root[data-look="c"].lk-site) .ck__next,
 :where(:root[data-look="c"].lk-site).ck__next{color:var(--accent-2)}
+html:where([data-look="c"].lk-site).has-world .offer,
+html:where([data-look="c"].lk-site).has-world .vow{background:transparent}
 /* css/chrome.css */
 :where(:root[data-look="c"].lk-chrome) .calm__track i,
 :where(:root[data-look="c"].lk-chrome).calm__track i{background:var(--ink-soft)}

@@ -98,21 +98,21 @@ export function initAvatar({
     <div class="nav-avatar__actor">
       <div class="nav-avatar__say" role="status" aria-live="polite"><p class="nav-avatar__say-t"></p></div>
       <div class="nav-avatar__bubble" hidden>
-        <p class="nav-avatar__hi" id="nav-avatar-hi">לאן?</p>
+        <p class="nav-avatar__hi" id="nav-avatar-hi">${__t('avatar.menu.title')}</p>
         <div class="nav-avatar__menu" id="nav-avatar-menu" role="menu" aria-labelledby="nav-avatar-hi">
-          <button type="button" role="menuitem" class="nav-avatar__item" data-go="services"><span>מה אתה בונה?</span><i aria-hidden="true"></i></button>
-          <button type="button" role="menuitem" class="nav-avatar__item" data-go="work"><span>תראה לי מה בנית</span><i aria-hidden="true"></i></button>
-          <button type="button" role="menuitem" class="nav-avatar__item" data-go="check"><span>תבדוק לי את העסק</span><i aria-hidden="true"></i></button>
-          <a role="menuitem" class="nav-avatar__item nav-avatar__item--wa" href="${T.whatsapp.href}" target="_blank" rel="noopener"><span>בוא נדבר בוואטסאפ</span><i aria-hidden="true"></i><span class="nav-avatar__sr">(נפתח בחלון חדש)</span></a>
-          <button type="button" role="menuitem" class="nav-avatar__item nav-avatar__item--quiet" data-act="min"><span>תסתתר לרגע</span></button>
+          <button type="button" role="menuitem" class="nav-avatar__item" data-go="services"><span>${__t('avatar.menu.services')}</span><i aria-hidden="true"></i></button>
+          <button type="button" role="menuitem" class="nav-avatar__item" data-go="work"><span>${__t('avatar.menu.work')}</span><i aria-hidden="true"></i></button>
+          <button type="button" role="menuitem" class="nav-avatar__item" data-go="check"><span>${__t('avatar.menu.check')}</span><i aria-hidden="true"></i></button>
+          <a role="menuitem" class="nav-avatar__item nav-avatar__item--wa" href="${T.whatsapp.href}" target="_blank" rel="noopener"><span>${__t('avatar.menu.whatsapp')}</span><i aria-hidden="true"></i><span class="nav-avatar__sr">${__t('global.newWindow')}</span></a>
+          <button type="button" role="menuitem" class="nav-avatar__item nav-avatar__item--quiet" data-act="min"><span>${__t('avatar.menu.hide')}</span></button>
         </div>
       </div>
-      <button type="button" class="nav-avatar__btn" aria-label=__t('avatar.aria') aria-haspopup="menu" aria-expanded="false" aria-controls="nav-avatar-menu">
+      <button type="button" class="nav-avatar__btn" aria-label="${__t('avatar.aria')}" aria-haspopup="menu" aria-expanded="false" aria-controls="nav-avatar-menu">
         <span class="nav-avatar__sprite" aria-hidden="true"><span class="nav-avatar__glint nav-avatar__glint--a"></span><span class="nav-avatar__glint nav-avatar__glint--b"></span></span>
       </button>
-      <button type="button" class="nav-avatar__x" aria-label=__t('avatar.minimize.aria')><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M2.5 6h7" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button>
+      <button type="button" class="nav-avatar__x" aria-label="${__t('avatar.minimize.aria')}"><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M2.5 6h7" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button>
     </div>
-    <button type="button" class="nav-avatar__head" aria-label=__t('avatar.show') hidden><span class="nav-avatar__face" aria-hidden="true"></span></button>`;
+    <button type="button" class="nav-avatar__head" aria-label="${__t('avatar.show')}" hidden><span class="nav-avatar__face" aria-hidden="true"></span></button>`;
   root.appendChild(el);
 
   const $ = (s) => el.querySelector(s);

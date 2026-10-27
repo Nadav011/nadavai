@@ -1,12 +1,13 @@
 "use client"
 
 import { useEffect } from "react"
+import { useParams } from "next/navigation"
 import copy from "@/messages/error.json"
 
 const WHATSAPP = "https://wa.me/972504401760"
 
 export default function Error({ error, reset }: { error: Error & { digest?: string }; reset: () => void }) {
-  const locale = typeof document !== "undefined" && document.documentElement.lang === "en" ? "en" : "he"
+  const locale = useParams<{ locale?: string }>().locale === "en" ? "en" : "he" // the same value on the server and the client
   const t = copy[locale]
 
   useEffect(() => {

@@ -29,10 +29,11 @@
       "text": "NadavAI · מערכות, אוטומציות וסוכני AI לעסקים"
     },
     "ogDescription": {
-      "id": null,
+      "id": "home.meta.description",
       "text": "בית התוכנה של נדב כהן. מערכות, אוטומציות, סוכני AI ובוטים לוואטסאפ, אפליקציות ואתרים לעסקים קטנים ובינוניים."
     },
     "ogImage": "/site/assets/og/index.jpg",
+    "htmlData": {},
     "bodyClass": "",
     "bodyData": {},
     "module": "/site/js/main.js"
@@ -65,6 +66,9 @@
       "text": "כל מה שאני בונה לעסקים: מערכות ואוטומציות, סוכני AI ובוטים לוואטסאפ, אפליקציות, אתרים, מערכת תוכן, אבטחת מידע והטמעת AI."
     },
     "ogImage": "/site/assets/og/services.jpg",
+    "htmlData": {
+      "world": "services"
+    },
     "bodyClass": "page sales",
     "bodyData": {
       "page": "services"
@@ -98,6 +102,9 @@
       "text": "כל העבודות של NadavAI בשמן האמיתי: SporChat, MediZen, Green Room, מערכות הסניף, אפליקציית רשת המקסיקני, Neon Alley ועוד."
     },
     "ogImage": "/site/assets/og/work.jpg",
+    "htmlData": {
+      "world": "work"
+    },
     "bodyClass": "page wk",
     "bodyData": {
       "work": "index"
@@ -137,6 +144,9 @@
       "text": "SporChat: חדר צ'אט חי לכל משחק כדורגל, עם ניחושים, ליגות ופרשן AI. ב-App Store וב-Google Play. נדב כהן, CTO."
     },
     "ogImage": "/site/assets/og/work-sporchat.jpg",
+    "htmlData": {
+      "world": "sporchat"
+    },
     "bodyClass": "page wk wk--sporchat",
     "bodyData": {
       "work": "sporchat"
@@ -170,6 +180,9 @@
       "text": "MediZen: מערכת אחת לקליניקה. יומן, תיקים, חשבוניות ובוט לוואטסאפ שקובע תורים. נדב כהן, Co-Founder & CTO."
     },
     "ogImage": "/site/assets/og/work-medizen.jpg",
+    "htmlData": {
+      "world": "medizen"
+    },
     "bodyClass": "page wk wk--medizen",
     "bodyData": {
       "work": "medizen"
@@ -203,6 +216,9 @@
       "text": "Green Room: מועדון סנוקר VIP בבאר שבע שפתוח 24/7 בלי עובד בדלפק. מזמינים, משלמים ונכנסים מהאפליקציה. ב-App Store וב-Google Play."
     },
     "ogImage": "/site/assets/og/work-green-room.jpg",
+    "htmlData": {
+      "world": "greenroom"
+    },
     "bodyClass": "page wk wk--greenroom",
     "bodyData": {
       "work": "greenroom"
@@ -236,6 +252,7 @@
       "text": "המערכות שנדב כהן בנה לסניף המקסיקני שהוא מנהל: מזומן, Z, מלאי, תיקונים ומשמרות, מהבוקר ועד סגירת הקופה."
     },
     "ogImage": "/site/assets/og/my-branch.jpg",
+    "htmlData": {},
     "bodyClass": "page story",
     "bodyData": {
       "page": "branch"
@@ -269,6 +286,7 @@
       "text": "מערכת ניהול לרשת המקסיקני: סניפים, ביקורות, פניות של זכיינים, משימות, כספים ומסמכים, עם עוזר AI."
     },
     "ogImage": "/site/assets/og/mexicani-network.jpg",
+    "htmlData": {},
     "bodyClass": "page story",
     "bodyData": {
       "page": "network"
@@ -302,6 +320,7 @@
       "text": "תוכן, מיתוג ותזמון לרשתות, עם מערכת AI שמכינה ומפרסמת. דוגמאות מ-Green Room ומעסקים נוספים."
     },
     "ogImage": "/site/assets/og/social.jpg",
+    "htmlData": {},
     "bodyClass": "page story",
     "bodyData": {
       "page": "social"
@@ -336,6 +355,7 @@
       "text": "נדב כהן: זכיין המקסיקני ומנהל סניף נוסף, CTO ב-SporChat, Co-Founder & CTO ב-MediZen, ומאחורי NadavAI."
     },
     "ogImage": "/site/assets/og/about.jpg",
+    "htmlData": {},
     "bodyClass": "page story",
     "bodyData": {
       "page": "about"
@@ -370,6 +390,9 @@
       "text": "שלוש חבילות חודשיות עם שירות ופיתוח, ופרויקטים חד-פעמיים שמתחילים באפיון. אחריות על הכל."
     },
     "ogImage": "/site/assets/og/plans.jpg",
+    "htmlData": {
+      "world": "plans"
+    },
     "bodyClass": "page sales",
     "bodyData": {
       "page": "plans"
@@ -403,6 +426,9 @@
       "text": "כתבו משפט על העסק, וה-AI יראה לכם מה אפשר להפוך לאוטומטי קודם. חינם, בלי הרשמה."
     },
     "ogImage": "/site/assets/og/check.jpg",
+    "htmlData": {
+      "world": "check"
+    },
     "bodyClass": "page sales",
     "bodyData": {
       "page": "check"
@@ -436,6 +462,7 @@
       "text": "Neon Alley, משחק תלת-ממד בדפדפן, חיית המחמד לשולחן העבודה, וכדורים שאפשר לבעוט בהם."
     },
     "ogImage": "/site/assets/og/play.jpg",
+    "htmlData": {},
     "bodyClass": "page story",
     "bodyData": {
       "page": "playground"
@@ -457,7 +484,7 @@
       "text": "יצירת קשר · וואטסאפ ומייל · NadavAI"
     },
     "description": {
-      "id": null,
+      "id": "contact.meta.description",
       "text": "הכי מהר בוואטסאפ: 050-440-1760. או במייל, hello@nadavc.ai. נתיבות, ועבודה עם עסקים בכל הארץ ובחו"
     },
     "ogTitle": {
@@ -465,10 +492,13 @@
       "text": "יצירת קשר · וואטסאפ ומייל"
     },
     "ogDescription": {
-      "id": null,
+      "id": "contact.meta.description",
       "text": "הכי מהר בוואטסאפ: 050-440-1760. או במייל, hello@nadavc.ai. נתיבות, ועבודה עם עסקים בכל הארץ ובחו"
     },
     "ogImage": "/site/assets/og/contact.jpg",
+    "htmlData": {
+      "world": "contact"
+    },
     "bodyClass": "page sales",
     "bodyData": {
       "page": "contact"
@@ -502,6 +532,7 @@
       "text": "הצהרת הנגישות של NadavAI: מה עשיתי באתר, איך נבדק, מה עוד לא נגיש ואיך פונים לרכז הנגישות."
     },
     "ogImage": "/site/assets/og/accessibility.jpg",
+    "htmlData": {},
     "bodyClass": "page sales",
     "bodyData": {
       "page": "accessibility"
@@ -535,6 +566,7 @@
       "text": "מה האתר של NadavAI אוסף, למה, כמה זמן זה נשמר ומה אפשר לבקש."
     },
     "ogImage": "/site/assets/og/privacy.jpg",
+    "htmlData": {},
     "bodyClass": "page sales",
     "bodyData": {
       "page": "privacy"

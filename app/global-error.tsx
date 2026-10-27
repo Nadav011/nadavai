@@ -1,11 +1,12 @@
 "use client"
 
 import { useEffect } from "react"
+import { usePathname } from "next/navigation"
 import copy from "@/messages/error.json"
 
-// The root error boundary renders outside the locale layout, so it reads the locale from the URL.
+// The root error boundary renders outside the locale layout, so it reads the locale from the path.
 export default function GlobalError({ error, reset }: { error: Error & { digest?: string }; reset: () => void }) {
-  const locale = typeof window !== "undefined" && window.location.pathname.startsWith("/en") ? "en" : "he"
+  const locale = /^\/en(\/|$)/.test(usePathname() ?? "") ? "en" : "he" // the same value on the server and the client
   const t = copy[locale]
 
   useEffect(() => {

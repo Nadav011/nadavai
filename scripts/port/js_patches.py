@@ -38,6 +38,8 @@ JS_PATCHES: dict[str, list[tuple[str, str]]] = {
          "g.fillText(text, ltr ? ir.left - fr.left + parseFloat(cs.paddingInlineStart || 0) : ir.right - fr.left - parseFloat(cs.paddingInlineStart || 0),"),
     ],
     'js/sales-pages.js': [
+        ('aria-live="polite">זה בערך ${hoursOf(a.times, a.min)} שעות בחודש.</p>',
+         "aria-live=\"polite\">${__t('check.result.automate.saved', { hours: hoursOf(a.times, a.min) })}</p>"),
         ("g.direction = 'rtl'; g.textAlign = 'right';", "const ltr = getComputedStyle(input).direction === 'ltr'; g.direction = ltr ? 'ltr' : 'rtl'; g.textAlign = ltr ? 'left' : 'right';"),
         ("const NEW = '<span class=\"sr\"> (נפתח בחלון חדש)</span>';", "const NEW = '<span class=\"sr\"> ' + __t('global.newWindow') + '</span>';"),
         ("'<p class=\"saved__ok\" id=\"ckrReportDone\">תודה. הדיווח הגיע אליי.</p>'",
@@ -52,6 +54,10 @@ JS_PATCHES: dict[str, list[tuple[str, str]]] = {
     'js/story-pages.js': [
         ("'<span class=\"st-ill\">המחשה</span>'", "'<span class=\"st-ill\">' + __t('global.illustration') + '</span>'"),
     ],
+    'js/story/branch.js': [
+        ('>היום · <bdi dir="ltr">16:02</bdi></span>', ">${__t('branch.mock.repairs.time', { time: '<bdi dir=\"ltr\">16:02</bdi>' })}</span>"),
+        ('<span class="mk__chip">עד <bdi dir="ltr">03/2027</bdi></span>', "<span class=\"mk__chip\">${__t('branch.mock.repairs.chip2', { date: '<bdi dir=\"ltr\">03/2027</bdi>' })}</span>"),
+    ],
     'js/games/greenroom-play.js': [
         ("`נעצר על <b></b> · המחשה, בלי פרסים`", "__t('greenroom.try.wheel.result', { prize: '<b></b>' })"),
     ],
@@ -64,6 +70,6 @@ JS_PATCHES: dict[str, list[tuple[str, str]]] = {
 }
 
 # ids the patches above read; the sync adds them to messages/js-ids.json
-PATCH_IDS = ['social.feed.post.aria', 'global.illustration', 'greenroom.try.wheel.result', 'global.newWindow', 'check.report.done',
+PATCH_IDS = ['branch.mock.repairs.time', 'branch.mock.repairs.chip2', 'check.result.automate.saved', 'social.feed.post.aria', 'global.illustration', 'greenroom.try.wheel.result', 'global.newWindow', 'check.report.done',
              'global.nav.current', 'global.theme.night', 'global.theme.day', 'global.theme.label',
              'home.hero.dialog.close', 'home.hero.peek.go', 'home.hero.peek.goShort']
