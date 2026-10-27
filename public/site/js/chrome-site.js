@@ -63,8 +63,8 @@ function initLooks() {
   if (q.get('looks') !== '0') {
     const mount = () => {
       const st = document.createElement('style');
-      st.textContent = '.looks{position:fixed;z-index:70;inset-block-start:calc(var(--nav,68px) + 10px);inset-inline-start:50%;translate:50% 0;display:flex;gap:2px;padding:3px;border-radius:999px;background:rgba(128,128,128,.22);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}'
-        + '[dir="ltr"] .looks{translate:-50% 0}.looks button{display:grid;place-items:center;width:32px;height:32px;padding:0;border:0;border-radius:50%;background:none;cursor:pointer}'
+      st.textContent = '.looks{display:flex;align-items:center}@media (max-width:900px){.nav > .looks{display:none}}.sheet .looks{margin-block-start:12px}'
+        + '.looks button{display:grid;place-items:center;width:44px;height:44px;padding:0;border:0;border-radius:50%;background:none;cursor:pointer}'
         + '.looks i{width:14px;height:14px;border-radius:50%;box-shadow:0 0 0 1px rgba(128,128,128,.6);transition:scale .2s ease}'
         + '.looks button[aria-pressed="true"] i{scale:1.25;box-shadow:0 0 0 2px #fff,0 0 0 3.5px #111}.looks button:focus-visible{outline:2px solid #fff;outline-offset:1px;box-shadow:0 0 0 5px #111}';
       document.head.appendChild(st);
@@ -80,12 +80,18 @@ function initLooks() {
         b.addEventListener('click', () => {
           apply(k);
           try { localStorage.setItem('nadav-look', k); } catch { /* this page only */ }
-          bar.querySelectorAll('button').forEach((x) => x.setAttribute('aria-pressed', String(x.dataset.look === k)));
+          document.querySelectorAll('.looks button').forEach((x) => x.setAttribute('aria-pressed', String(x.dataset.look === k)));
           try { const u = new URL(location.href); u.searchParams.set('look', k); history.replaceState(history.state, '', u); } catch { /* opaque-origin frame */ }
         });
         bar.appendChild(b);
       });
-      document.body.appendChild(bar);
+      const nav = document.getElementById('nav'), sheet = document.querySelector('#navSheet nav');
+      if (nav) nav.insertBefore(bar, document.getElementById('calm')); else document.body.appendChild(bar);
+      if (sheet) {
+        const copy = bar.cloneNode(true);
+        copy.addEventListener('click', (e) => { const t = e.target.closest('button[data-look]'); if (t) bar.querySelector(`[data-look="${t.dataset.look}"]`).click(); });
+        sheet.appendChild(copy);
+      }
     };
     if (document.body) mount(); else addEventListener('DOMContentLoaded', mount, { once: true });
   }

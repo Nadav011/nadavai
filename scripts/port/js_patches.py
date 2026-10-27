@@ -16,6 +16,20 @@ JS_PATCHES: dict[str, list[tuple[str, str]]] = {
         ("bar.setAttribute('aria-label', 'מראה האתר (לבדיקה)');", "bar.setAttribute('aria-label', __t('global.theme.label'));"),
         ("b.title = `${k.toUpperCase()} · ${LOOK_NAMES[k]}`;", "b.title = LOOK_NAMES[k];"),
         ("b.setAttribute('aria-label', `מראה ${k.toUpperCase()}: ${LOOK_NAMES[k]}`);", "b.setAttribute('aria-label', LOOK_NAMES[k]);"),
+        # it lives in the header next to the calm switch (and in the phone menu below 900px), with 44px targets
+        ("'.looks{position:fixed;z-index:70;inset-block-start:calc(var(--nav,68px) + 10px);inset-inline-start:50%;translate:50% 0;display:flex;gap:2px;padding:3px;border-radius:999px;background:rgba(128,128,128,.22);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}'\n"
+         "        + '[dir=\"ltr\"] .looks{translate:-50% 0}.looks button{display:grid;place-items:center;width:32px;height:32px;",
+         "'.looks{display:flex;align-items:center}@media (max-width:900px){.nav > .looks{display:none}}.sheet .looks{margin-block-start:12px}'\n"
+         "        + '.looks button{display:grid;place-items:center;width:44px;height:44px;"),
+        ("bar.querySelectorAll('button').forEach((x) =>", "document.querySelectorAll('.looks button').forEach((x) =>"),
+        ("      document.body.appendChild(bar);\n",
+         "      const nav = document.getElementById('nav'), sheet = document.querySelector('#navSheet nav');\n"
+         "      if (nav) nav.insertBefore(bar, document.getElementById('calm')); else document.body.appendChild(bar);\n"
+         "      if (sheet) {\n"
+         "        const copy = bar.cloneNode(true);\n"
+         "        copy.addEventListener('click', (e) => { const t = e.target.closest('button[data-look]'); if (t) bar.querySelector(`[data-look=\"${t.dataset.look}\"]`).click(); });\n"
+         "        sheet.appendChild(copy);\n"
+         "      }\n"),
     ],
     'hero/zoom.js': [
         ('aria-label="לסגור את המסך המוגדל">', "aria-label=\"' + __t('home.hero.dialog.close') + '\">"),
