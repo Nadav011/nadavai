@@ -1,0 +1,19 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(ci-wait *)",
+      "Bash(git merge-base *)",
+      "Bash(pnpm typecheck)",
+      "Bash(journalctl --user -u nadavai-slot *)",
+      "Bash(dpkg -l *)",
+      "Bash(cs ls)",
+      "Bash(cs ls *)",
+      "Bash(sensors)",
+      "Bash(nadavai-ci status *)",
+      "Bash(lsblk *)",
+      "mcp__claude-in-chrome__get_page_text",
+      "mcp__claude-in-chrome__read_network_requests",
+      "mcp__plugin_playwright_playwright__browser_console_messages"
+    ]
+  }
+}

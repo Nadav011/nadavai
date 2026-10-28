@@ -12,6 +12,9 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // the ported prototype: its modules are served as they are, and the page components are generated
+    "public/site/**",
+    "components/site/generated/**",
   ]),
 ]);
 

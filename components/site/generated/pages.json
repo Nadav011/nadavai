@@ -1,0 +1,600 @@
+{
+  "index": {
+    "route": "",
+    "css": [
+      "/site/css/site.css",
+      "/site/css/chrome.css",
+      "/site/sections/offer/offer.css",
+      "/site/sections/avatar/avatar.css",
+      "/site/css/home.css",
+      "/site/css/dims-home.css"
+    ],
+    "preload": [
+      {
+        "as": "image",
+        "href": "/site/hero/assets/p2-plate.webp",
+        "fetchpriority": "high"
+      }
+    ],
+    "importmap": true,
+    "title": {
+      "id": null,
+      "text": "NadavAI"
+    },
+    "description": {
+      "id": "home.meta.description",
+      "text": "בית התוכנה של נדב כהן. מערכות, אוטומציות, סוכני AI ובוטים לוואטסאפ, אפליקציות ואתרים לעסקים קטנים ובינוניים. בדיקה לעסק בחינם."
+    },
+    "ogTitle": {
+      "id": "home.meta.title",
+      "text": "NadavAI · מערכות, אוטומציות וסוכני AI לעסקים"
+    },
+    "ogDescription": {
+      "id": "home.meta.description",
+      "text": "בית התוכנה של נדב כהן. מערכות, אוטומציות, סוכני AI ובוטים לוואטסאפ, אפליקציות ואתרים לעסקים קטנים ובינוניים."
+    },
+    "ogImage": "/site/assets/og/index.jpg",
+    "htmlData": {},
+    "bodyClass": "",
+    "bodyData": {},
+    "module": "/site/js/main.js"
+  },
+  "services": {
+    "route": "services",
+    "css": [
+      "/site/css/site.css",
+      "/site/css/chrome.css",
+      "/site/sections/offer/offer.css",
+      "/site/css/sales.css",
+      "/site/css/dims-sales.css",
+      "/site/sections/avatar/avatar.css"
+    ],
+    "preload": [],
+    "importmap": true,
+    "title": {
+      "id": "services.meta.title",
+      "text": "שירותים · מערכות, סוכני AI, אפליקציות ואתרים · NadavAI"
+    },
+    "description": {
+      "id": "services.meta.description",
+      "text": "כל מה שאני בונה לעסקים: מערכות ואוטומציות, סוכני AI ובוטים לוואטסאפ, אפליקציות, אתרים, מערכת תוכן, אבטחת מידע והטמעת AI."
+    },
+    "ogTitle": {
+      "id": "services.meta.title",
+      "text": "שירותים · מערכות, סוכני AI, אפליקציות ואתרים"
+    },
+    "ogDescription": {
+      "id": "services.meta.description",
+      "text": "כל מה שאני בונה לעסקים: מערכות ואוטומציות, סוכני AI ובוטים לוואטסאפ, אפליקציות, אתרים, מערכת תוכן, אבטחת מידע והטמעת AI."
+    },
+    "ogImage": "/site/assets/og/services.jpg",
+    "htmlData": {
+      "world": "services"
+    },
+    "bodyClass": "page sales",
+    "bodyData": {
+      "page": "services"
+    },
+    "module": "/site/js/sales-pages.js"
+  },
+  "work": {
+    "route": "work",
+    "css": [
+      "/site/css/site.css",
+      "/site/css/chrome.css",
+      "/site/css/work.css",
+      "/site/css/dims-work.css",
+      "/site/sections/avatar/avatar.css"
+    ],
+    "preload": [],
+    "importmap": true,
+    "title": {
+      "id": "work.meta.title",
+      "text": "עבודות · מה בניתי · NadavAI"
+    },
+    "description": {
+      "id": "work.meta.description",
+      "text": "SporChat, MediZen, Green Room, המערכות של הסניף שלי, אפליקציית רשת המקסיקני ועוד עבודות, בשמן האמיתי."
+    },
+    "ogTitle": {
+      "id": "work.meta.title",
+      "text": "עבודות · מה בניתי · NadavAI"
+    },
+    "ogDescription": {
+      "id": "work.meta.description",
+      "text": "SporChat, MediZen, Green Room, המערכות של הסניף שלי, אפליקציית רשת המקסיקני ועוד עבודות, בשמן האמיתי."
+    },
+    "ogImage": "/site/assets/og/work.jpg",
+    "htmlData": {
+      "world": "work"
+    },
+    "bodyClass": "page wk",
+    "bodyData": {
+      "work": "index"
+    },
+    "module": "/site/js/work-pages.js"
+  },
+  "work-sporchat": {
+    "route": "work/sporchat",
+    "css": [
+      "/site/css/site.css",
+      "/site/css/chrome.css",
+      "/site/sections/avatar/avatar.css",
+      "/site/css/work.css",
+      "/site/css/games.css"
+    ],
+    "preload": [
+      {
+        "as": "image",
+        "href": "/site/assets/work/world-sporchat-wide.webp",
+        "media": "(min-width:901px)"
+      }
+    ],
+    "importmap": true,
+    "title": {
+      "id": "sporchat.meta.title",
+      "text": "SporChat · צ'אט חי לכל משחק כדורגל · NadavAI"
+    },
+    "description": {
+      "id": "sporchat.meta.description",
+      "text": "אפליקציה לאוהדי ספורט בישראל: חדר צ'אט לכל משחק, מודרציית AI ופרשן AI. נדב כהן הוא ה-CTO."
+    },
+    "ogTitle": {
+      "id": "sporchat.meta.title",
+      "text": "SporChat · צ'אט חי לכל משחק כדורגל · NadavAI"
+    },
+    "ogDescription": {
+      "id": "sporchat.meta.description",
+      "text": "אפליקציה לאוהדי ספורט בישראל: חדר צ'אט לכל משחק, מודרציית AI ופרשן AI. נדב כהן הוא ה-CTO."
+    },
+    "ogImage": "/site/assets/og/work-sporchat.jpg",
+    "htmlData": {
+      "world": "sporchat"
+    },
+    "bodyClass": "page wk wk--sporchat",
+    "bodyData": {
+      "work": "sporchat"
+    },
+    "module": "/site/js/work-pages.js"
+  },
+  "work-medizen": {
+    "route": "work/medizen",
+    "css": [
+      "/site/css/site.css",
+      "/site/css/chrome.css",
+      "/site/sections/avatar/avatar.css",
+      "/site/css/work.css",
+      "/site/css/games.css"
+    ],
+    "preload": [],
+    "importmap": true,
+    "title": {
+      "id": "medizen.meta.title",
+      "text": "MediZen · ניהול קליניקות עם בוט לוואטסאפ · NadavAI"
+    },
+    "description": {
+      "id": "medizen.meta.description",
+      "text": "מערכת אחת למטפלים: יומן, תיקי מטופלים, בוט לוואטסאפ שקובע תורים, וחשבוניות. נדב כהן הוא Co-Founder & CTO."
+    },
+    "ogTitle": {
+      "id": "medizen.meta.title",
+      "text": "MediZen · ניהול קליניקות עם בוט לוואטסאפ · NadavAI"
+    },
+    "ogDescription": {
+      "id": "medizen.meta.description",
+      "text": "מערכת אחת למטפלים: יומן, תיקי מטופלים, בוט לוואטסאפ שקובע תורים, וחשבוניות. נדב כהן הוא Co-Founder & CTO."
+    },
+    "ogImage": "/site/assets/og/work-medizen.jpg",
+    "htmlData": {
+      "world": "medizen"
+    },
+    "bodyClass": "page wk wk--medizen",
+    "bodyData": {
+      "work": "medizen"
+    },
+    "module": "/site/js/work-pages.js"
+  },
+  "work-green-room": {
+    "route": "work/green-room",
+    "css": [
+      "/site/css/site.css",
+      "/site/css/chrome.css",
+      "/site/sections/avatar/avatar.css",
+      "/site/css/work.css",
+      "/site/css/games.css"
+    ],
+    "preload": [],
+    "importmap": true,
+    "title": {
+      "id": "greenroom.meta.title",
+      "text": "Green Room · מועדון סנוקר בלי דלפק · NadavAI"
+    },
+    "description": {
+      "id": "greenroom.meta.description",
+      "text": "מועדון סנוקר VIP בבאר שבע שעובד מסביב לשעון בלי עובד בדלפק: הזמנה, תשלום, קוד לדלת ובוט לוואטסאפ, באפליקציה אחת."
+    },
+    "ogTitle": {
+      "id": "greenroom.meta.title",
+      "text": "Green Room · מועדון סנוקר בלי דלפק · NadavAI"
+    },
+    "ogDescription": {
+      "id": "greenroom.meta.description",
+      "text": "מועדון סנוקר VIP בבאר שבע שעובד מסביב לשעון בלי עובד בדלפק: הזמנה, תשלום, קוד לדלת ובוט לוואטסאפ, באפליקציה אחת."
+    },
+    "ogImage": "/site/assets/og/work-green-room.jpg",
+    "htmlData": {
+      "world": "greenroom"
+    },
+    "bodyClass": "page wk wk--greenroom",
+    "bodyData": {
+      "work": "greenroom"
+    },
+    "module": "/site/js/work-pages.js"
+  },
+  "my-branch": {
+    "route": "work/my-branch",
+    "css": [
+      "/site/css/site.css",
+      "/site/css/chrome.css",
+      "/site/sections/avatar/avatar.css",
+      "/site/css/story.css",
+      "/site/css/dims-story.css"
+    ],
+    "preload": [],
+    "importmap": true,
+    "title": {
+      "id": "branch.meta.title",
+      "text": "הסניף שלי · יום אחד, חמש מערכות · NadavAI"
+    },
+    "description": {
+      "id": "branch.meta.description",
+      "text": "המערכות שנדב כהן בנה לסניף המקסיקני שהוא מנהל: מזומן, Z, מלאי, תיקונים ומשמרות, מהבוקר ועד סגירת הקופה."
+    },
+    "ogTitle": {
+      "id": "branch.meta.title",
+      "text": "הסניף שלי · יום אחד, חמש מערכות"
+    },
+    "ogDescription": {
+      "id": "branch.meta.description",
+      "text": "המערכות שנדב כהן בנה לסניף המקסיקני שהוא מנהל: מזומן, Z, מלאי, תיקונים ומשמרות, מהבוקר ועד סגירת הקופה."
+    },
+    "ogImage": "/site/assets/og/my-branch.jpg",
+    "htmlData": {
+      "world": "branch"
+    },
+    "bodyClass": "page story",
+    "bodyData": {
+      "page": "branch"
+    },
+    "module": "/site/js/story-pages.js"
+  },
+  "mexicani-network": {
+    "route": "work/mexicani-network",
+    "css": [
+      "/site/css/site.css",
+      "/site/css/chrome.css",
+      "/site/sections/avatar/avatar.css",
+      "/site/css/story.css",
+      "/site/css/dims-story.css"
+    ],
+    "preload": [],
+    "importmap": true,
+    "title": {
+      "id": "network.meta.title",
+      "text": "אפליקציית רשת המקסיקני · NadavAI"
+    },
+    "description": {
+      "id": "network.meta.description",
+      "text": "מערכת ניהול לרשת המקסיקני: סניפים, ביקורות, פניות של זכיינים, משימות, כספים ומסמכים, עם עוזר AI."
+    },
+    "ogTitle": {
+      "id": "network.meta.title",
+      "text": "אפליקציית רשת המקסיקני"
+    },
+    "ogDescription": {
+      "id": "network.meta.description",
+      "text": "מערכת ניהול לרשת המקסיקני: סניפים, ביקורות, פניות של זכיינים, משימות, כספים ומסמכים, עם עוזר AI."
+    },
+    "ogImage": "/site/assets/og/mexicani-network.jpg",
+    "htmlData": {
+      "world": "network"
+    },
+    "bodyClass": "page story",
+    "bodyData": {
+      "page": "network"
+    },
+    "module": "/site/js/story-pages.js"
+  },
+  "social": {
+    "route": "social",
+    "css": [
+      "/site/css/site.css",
+      "/site/css/chrome.css",
+      "/site/sections/avatar/avatar.css",
+      "/site/css/story.css",
+      "/site/css/dims-story.css"
+    ],
+    "preload": [],
+    "importmap": true,
+    "title": {
+      "id": "social.meta.title",
+      "text": "סושיאל · אני מנהל לכם את הסושיאל · NadavAI"
+    },
+    "description": {
+      "id": "social.meta.description",
+      "text": "תוכן, מיתוג ותזמון לרשתות, עם מערכת AI שמכינה ומפרסמת. דוגמאות מ-Green Room ומעסקים נוספים."
+    },
+    "ogTitle": {
+      "id": "social.meta.title",
+      "text": "סושיאל · אני מנהל לכם את הסושיאל"
+    },
+    "ogDescription": {
+      "id": "social.meta.description",
+      "text": "תוכן, מיתוג ותזמון לרשתות, עם מערכת AI שמכינה ומפרסמת. דוגמאות מ-Green Room ומעסקים נוספים."
+    },
+    "ogImage": "/site/assets/og/social.jpg",
+    "htmlData": {
+      "world": "social"
+    },
+    "bodyClass": "page story",
+    "bodyData": {
+      "page": "social"
+    },
+    "module": "/site/js/story-pages.js"
+  },
+  "about": {
+    "route": "about",
+    "css": [
+      "/site/css/site.css",
+      "/site/css/chrome.css",
+      "/site/sections/bio/bio.css",
+      "/site/sections/avatar/avatar.css",
+      "/site/css/story.css",
+      "/site/css/dims-story.css"
+    ],
+    "preload": [],
+    "importmap": true,
+    "title": {
+      "id": "about.meta.title",
+      "text": "מי אני · נדב כהן · NadavAI"
+    },
+    "description": {
+      "id": "about.meta.description",
+      "text": "נדב כהן: זכיין המקסיקני ומנהל סניף נוסף, CTO ב-SporChat, Co-Founder & CTO ב-MediZen, ומאחורי NadavAI."
+    },
+    "ogTitle": {
+      "id": "about.meta.title",
+      "text": "מי אני · נדב כהן"
+    },
+    "ogDescription": {
+      "id": "about.meta.description",
+      "text": "נדב כהן: זכיין המקסיקני ומנהל סניף נוסף, CTO ב-SporChat, Co-Founder & CTO ב-MediZen, ומאחורי NadavAI."
+    },
+    "ogImage": "/site/assets/og/about.jpg",
+    "htmlData": {
+      "world": "about"
+    },
+    "bodyClass": "page story",
+    "bodyData": {
+      "page": "about"
+    },
+    "module": "/site/js/story-pages.js"
+  },
+  "plans": {
+    "route": "plans",
+    "css": [
+      "/site/css/site.css",
+      "/site/css/chrome.css",
+      "/site/sections/offer/offer.css",
+      "/site/css/sales.css",
+      "/site/css/dims-sales.css",
+      "/site/sections/avatar/avatar.css"
+    ],
+    "preload": [],
+    "importmap": true,
+    "title": {
+      "id": "plans.meta.title",
+      "text": "חבילות · שותף טכנולוגי, צוות AI, תחזוקה וצמיחה · NadavAI"
+    },
+    "description": {
+      "id": "plans.meta.description",
+      "text": "שלוש חבילות חודשיות עם שירות ופיתוח, ופרויקטים חד-פעמיים שמתחילים באפיון. אחריות על הכל."
+    },
+    "ogTitle": {
+      "id": "plans.meta.title",
+      "text": "חבילות · שותף טכנולוגי, צוות AI, תחזוקה וצמיחה"
+    },
+    "ogDescription": {
+      "id": "plans.meta.description",
+      "text": "שלוש חבילות חודשיות עם שירות ופיתוח, ופרויקטים חד-פעמיים שמתחילים באפיון. אחריות על הכל."
+    },
+    "ogImage": "/site/assets/og/plans.jpg",
+    "htmlData": {
+      "world": "plans"
+    },
+    "bodyClass": "page sales",
+    "bodyData": {
+      "page": "plans"
+    },
+    "module": "/site/js/sales-pages.js"
+  },
+  "check": {
+    "route": "check",
+    "css": [
+      "/site/css/site.css",
+      "/site/css/chrome.css",
+      "/site/css/sales.css",
+      "/site/css/dims-sales.css",
+      "/site/sections/avatar/avatar.css"
+    ],
+    "preload": [],
+    "importmap": true,
+    "title": {
+      "id": "check.meta.title",
+      "text": "בדיקה לעסק, בחינם · NadavAI"
+    },
+    "description": {
+      "id": "check.meta.description",
+      "text": "כתבו משפט על העסק, וה-AI יראה לכם מה אפשר להפוך לאוטומטי קודם. חינם, בלי הרשמה."
+    },
+    "ogTitle": {
+      "id": "check.meta.title",
+      "text": "בדיקה לעסק, בחינם"
+    },
+    "ogDescription": {
+      "id": "check.meta.description",
+      "text": "כתבו משפט על העסק, וה-AI יראה לכם מה אפשר להפוך לאוטומטי קודם. חינם, בלי הרשמה."
+    },
+    "ogImage": "/site/assets/og/check.jpg",
+    "htmlData": {
+      "world": "check"
+    },
+    "bodyClass": "page sales",
+    "bodyData": {
+      "page": "check"
+    },
+    "module": "/site/js/sales-pages.js"
+  },
+  "play": {
+    "route": "play",
+    "css": [
+      "/site/css/site.css",
+      "/site/css/chrome.css",
+      "/site/sections/avatar/avatar.css",
+      "/site/css/story.css",
+      "/site/css/dims-story.css"
+    ],
+    "preload": [],
+    "importmap": true,
+    "title": {
+      "id": "play.meta.title",
+      "text": "מגרש משחקים · דברים שאפשר לגעת בהם · NadavAI"
+    },
+    "description": {
+      "id": "play.meta.description",
+      "text": "Neon Alley, משחק תלת-ממד בדפדפן, נדב 2.0 שעובד בשבילי על המחשב, וכדורים שאפשר לבעוט בהם."
+    },
+    "ogTitle": {
+      "id": "play.meta.title",
+      "text": "מגרש משחקים · דברים שאפשר לגעת בהם"
+    },
+    "ogDescription": {
+      "id": "play.meta.description",
+      "text": "Neon Alley, משחק תלת-ממד בדפדפן, נדב 2.0 שעובד בשבילי על המחשב, וכדורים שאפשר לבעוט בהם."
+    },
+    "ogImage": "/site/assets/og/play.jpg",
+    "htmlData": {
+      "world": "play"
+    },
+    "bodyClass": "page story",
+    "bodyData": {
+      "page": "playground"
+    },
+    "module": "/site/js/story-pages.js"
+  },
+  "contact": {
+    "route": "contact",
+    "css": [
+      "/site/css/site.css",
+      "/site/css/chrome.css",
+      "/site/css/sales.css",
+      "/site/css/dims-sales.css",
+      "/site/sections/avatar/avatar.css"
+    ],
+    "preload": [],
+    "importmap": true,
+    "title": {
+      "id": "contact.meta.title",
+      "text": "יצירת קשר · וואטסאפ ומייל · NadavAI"
+    },
+    "description": {
+      "id": "contact.meta.description",
+      "text": "הכי מהר בוואטסאפ: 050-440-1760. או במייל, hello@nadavc.ai. נתיבות, ועבודה עם עסקים בכל הארץ ובחו"
+    },
+    "ogTitle": {
+      "id": "contact.meta.title",
+      "text": "יצירת קשר · וואטסאפ ומייל"
+    },
+    "ogDescription": {
+      "id": "contact.meta.description",
+      "text": "הכי מהר בוואטסאפ: 050-440-1760. או במייל, hello@nadavc.ai. נתיבות, ועבודה עם עסקים בכל הארץ ובחו"
+    },
+    "ogImage": "/site/assets/og/contact.jpg",
+    "htmlData": {
+      "world": "contact"
+    },
+    "bodyClass": "page sales",
+    "bodyData": {
+      "page": "contact"
+    },
+    "module": "/site/js/sales-pages.js"
+  },
+  "accessibility": {
+    "route": "accessibility",
+    "css": [
+      "/site/css/site.css",
+      "/site/css/chrome.css",
+      "/site/css/sales.css",
+      "/site/sections/avatar/avatar.css"
+    ],
+    "preload": [],
+    "importmap": false,
+    "title": {
+      "id": "a11y.meta.title",
+      "text": "הצהרת נגישות · NadavAI"
+    },
+    "description": {
+      "id": "a11y.meta.description",
+      "text": "הצהרת הנגישות של NadavAI: מה עשיתי באתר, איך נבדק, מה עוד לא נגיש ואיך פונים לרכז הנגישות."
+    },
+    "ogTitle": {
+      "id": "a11y.meta.title",
+      "text": "הצהרת נגישות"
+    },
+    "ogDescription": {
+      "id": "a11y.meta.description",
+      "text": "הצהרת הנגישות של NadavAI: מה עשיתי באתר, איך נבדק, מה עוד לא נגיש ואיך פונים לרכז הנגישות."
+    },
+    "ogImage": "/site/assets/og/accessibility.jpg",
+    "htmlData": {},
+    "bodyClass": "page sales",
+    "bodyData": {
+      "page": "accessibility"
+    },
+    "module": "/site/js/sales-pages.js"
+  },
+  "privacy": {
+    "route": "privacy",
+    "css": [
+      "/site/css/site.css",
+      "/site/css/chrome.css",
+      "/site/css/sales.css",
+      "/site/sections/avatar/avatar.css"
+    ],
+    "preload": [],
+    "importmap": false,
+    "title": {
+      "id": "privacy.meta.title",
+      "text": "מדיניות פרטיות · NadavAI"
+    },
+    "description": {
+      "id": "privacy.meta.description",
+      "text": "מה האתר של NadavAI אוסף, למה, כמה זמן זה נשמר ומה אפשר לבקש."
+    },
+    "ogTitle": {
+      "id": "privacy.meta.title",
+      "text": "מדיניות פרטיות"
+    },
+    "ogDescription": {
+      "id": "privacy.meta.description",
+      "text": "מה האתר של NadavAI אוסף, למה, כמה זמן זה נשמר ומה אפשר לבקש."
+    },
+    "ogImage": "/site/assets/og/privacy.jpg",
+    "htmlData": {},
+    "bodyClass": "page sales",
+    "bodyData": {
+      "page": "privacy"
+    },
+    "module": "/site/js/sales-pages.js"
+  }
+}

@@ -47,3 +47,6 @@ reports/
 .netlify/
 .vercel/
 .open-next/
+
+# scripts/port/sync.py working copy of the prototype
+/.port-snapshot/

@@ -1,0 +1,39 @@
+/* ══ The hub of dimensions (js/dims/home.js, 2026-10-28): one 3D space behind the home page after the hero ══
+   html.dim-home is set only once the space has rendered (never under reduced motion, in the light look or
+   without WebGL2), so without it the page is exactly as before. The hero keeps its own ground and canvas on top. */
+html.dim-home{background:#05070B}
+html.dim-home body{background:transparent}
+.dimh{position:fixed;inset:0;z-index:-1;pointer-events:none}
+.dimh__cv{position:absolute;inset:0;width:100%;height:100%;display:block}
+/* the reading side (RTL: the start, on the right) sits over a soft scrim */
+.dimh__scrim{position:absolute;inset:0;
+  background:linear-gradient(to left,rgba(5,7,11,.7) 0%,rgba(5,7,11,.5) 26%,rgba(5,7,11,.14) 52%,rgba(5,7,11,0) 68%),
+             linear-gradient(to bottom,rgba(5,7,11,.35),rgba(5,7,11,0) 22%,rgba(5,7,11,0) 80%,rgba(5,7,11,.4))}
+html[dir="ltr"] .dimh__scrim{background:linear-gradient(to right,rgba(5,7,11,.7) 0%,rgba(5,7,11,.5) 26%,rgba(5,7,11,.14) 52%,rgba(5,7,11,0) 68%),
+             linear-gradient(to bottom,rgba(5,7,11,.35),rgba(5,7,11,0) 22%,rgba(5,7,11,0) 80%,rgba(5,7,11,.4))}
+@media (max-width:900px){ .dimh__scrim{background:linear-gradient(to bottom,rgba(5,7,11,.42),rgba(5,7,11,.5) 50%,rgba(5,7,11,.6))} }
+
+/* the sections that paint their own ground let the space through */
+html.dim-home .offer,html.dim-home .sec--path,html.dim-home .sec--check{background:transparent}
+/* the work and branch backdrops are 3D now: the rooms and the storefront */
+html.dim-home .work__worlds,html.dim-home .branch__bg{display:none}
+html.dim-home .work__scrim{background:linear-gradient(to bottom,rgba(5,7,11,.72) 0%,rgba(5,7,11,.18) 26%,rgba(5,7,11,0) 50%,rgba(5,7,11,.2) 72%,rgba(5,7,11,.86) 100%)}
+/* titles and leads keep their contrast wherever the space is bright */
+html.dim-home main .sec__h,html.dim-home main .tr__h,html.dim-home main .pl__h{text-shadow:0 2px 30px rgba(5,7,11,.8),0 0 2px rgba(5,7,11,.6)}
+html.dim-home main .sec__lead,html.dim-home main .eyebrow,html.dim-home main .of__tag,html.dim-home .wc__line,html.dim-home .wc__role{text-shadow:0 1px 18px rgba(5,7,11,.9),0 0 2px rgba(5,7,11,.7)}
+/* a soft pool of shade behind every chapter's head, and behind the small lines that sit on the space itself */
+html.dim-home main .sec__head::before,html.dim-home main .tr__intro::before,html.dim-home main .pl__intro::before,html.dim-home main .ck__help::before,html.dim-home main .eyebrow::before,html.dim-home .work__cap::before{
+  content:"";position:absolute;inset:-80px -40px;z-index:-1;pointer-events:none;
+  background:radial-gradient(farthest-side,rgba(5,7,11,.86),rgba(5,7,11,.74) 55%,rgba(5,7,11,0))}
+html.dim-home main .tr__intro,html.dim-home main .pl__intro,html.dim-home main .ck__help,html.dim-home main .eyebrow,html.dim-home .work__cap{position:relative}
+html.dim-home main .eyebrow::before{inset:-26px -30px}
+html.dim-home .work__cap::before{inset:-30px -40px}
+html.dim-home main .ck__help::before{inset:-22px -40px}
+html.dim-home .night__body{background:rgba(10,12,16,.9)}
+html.dim-home.js .night:not(.is-lit) .night__body{opacity:.8}
+html.dim-home .dn__txt{background:rgba(5,7,11,.82);box-shadow:0 0 0 4px rgba(5,7,11,.82),0 0 18px 8px rgba(5,7,11,.5);border-radius:4px}
+/* on a phone the pools stay inside the 16px gutter (anything wider would widen the page) */
+@media (max-width:900px){
+  html.dim-home main .sec__head::before,html.dim-home main .tr__intro::before,html.dim-home main .pl__intro::before,html.dim-home .work__cap::before{inset:-50px 0}
+  html.dim-home main .eyebrow::before,html.dim-home main .ck__help::before{inset:-18px 0}
+}

@@ -1,0 +1,24 @@
+/* What the port adds to the prototype's own CSS (public/site/css), which stays as it is. */
+
+/* The language switch: Hebrew-only in the prototype. In the header next to the calm switch, in the phone menu below 900px. */
+.nav__lang {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  min-width: 44px;
+  padding-inline: 8px;
+  color: var(--ink-soft);
+  font-size: 14px;
+  text-decoration: none;
+}
+.nav__lang:hover { color: var(--ink); }
+.nav__lang:focus-visible { outline: 2px solid currentColor; outline-offset: 2px; border-radius: 6px; }
+.sheet__lang { display: flex; justify-content: flex-start; margin-block-start: 18px; font-size: 16px; }
+@media (max-width: 900px) { .nav > .nav__lang { display: none; } }
+
+/* The prototype's arrows point to the reading direction of Hebrew (left); in English they point right. */
+[dir="ltr"] svg:has(> path[d^="M13 8H3"]) { scale: -1 1; }
+
+/* English nav labels are longer than the Hebrew ones; keep each on one line. */
+.nav__links a { white-space: nowrap; }
