@@ -63,6 +63,60 @@ export function probeGL() {
   } catch { return false; }
 }
 
+/* ── device tier: may this device run a dimension? (2026-10-28) ───────────────────────────────────────────────
+   One small check shared by every dimension: startDim (all the pages built on this file) and dims/home.js call it.
+   It only ever answers no on a phone (coarse pointer or under 760 px wide), so a desktop always gets its place.
+     dimTier()       sync: 'low' when the phone reports navigator.hardwareConcurrency <= 4, or navigator.deviceMemory
+                     <= 4 GB (Chromium only; a browser that does not report it gives no verdict), else 'ok'
+     dimWarmup()     async: about 40 frames of the page as it runs now (after its load); true when the median frame is
+                     over WARM_MS, i.e. the page alone already runs under ~36 fps and a dimension would take it under 30
+     dimAllowed()    both together: false means skip the dimension (the page keeps its shader world, or home its own look)
+     dimWatch()      after the start: feed it every frame's interval; true once two windows of 60 frames in a row have a
+                     median over SLOW_MS (under ~30 fps), so the caller hands the page back. Phones only, like the rest.
+   ?dim forces the dimension on any device (review), ?nodim off (as before). window.__dimTier keeps the last verdict. */
+const WARM_MS = 28, SLOW_MS = 34;
+export const isPhone = () => matchMedia('(pointer: coarse)').matches || innerWidth < 760;
+const forced = () => new URLSearchParams(location.search).has('dim');
+export function dimTier() {
+  if (forced() || !isPhone()) return 'ok';
+  const cores = navigator.hardwareConcurrency || 0, mem = navigator.deviceMemory || 0;
+  return (cores && cores <= 4) || (mem && mem <= 4) ? 'low' : 'ok';
+}
+export async function dimWarmup({ frames = 40, maxMs = 3000 } = {}) {
+  if (forced() || !isPhone()) return false;
+  if (document.readyState !== 'complete') await new Promise((r) => addEventListener('load', r, { once: true }));
+  const iv = [];
+  await new Promise((done) => {
+    const cap = setTimeout(done, maxMs);   // a hidden tab runs no frames: no verdict
+    let last = 0;
+    const f = (now) => { if (last && now - last < 250) iv.push(now - last); last = now; if (iv.length < frames) requestAnimationFrame(f); else { clearTimeout(cap); done(); } };
+    requestAnimationFrame(f);
+  });
+  if (iv.length < frames / 2) return false;
+  iv.sort((a, b) => a - b);
+  return iv[iv.length >> 1] > WARM_MS;
+}
+export async function dimAllowed() {
+  const tier = dimTier();
+  const slow = tier === 'low' ? false : await dimWarmup();
+  const ok = tier === 'ok' && !slow;
+  window.__dimTier = { tier, warmup: slow ? 'slow' : 'ok', ok };
+  return ok;
+}
+export function dimWatch() {
+  if (forced() || !isPhone()) return () => false;
+  const win = new Float32Array(60); let n = 0, slowRuns = 0;
+  return (interval) => {
+    if (!(interval > 0 && interval < 250)) return false;   // a stall (a hidden tab, a load) is not the dimension's
+    win[n++] = interval;
+    if (n < win.length) return false;
+    n = 0; const s = Float32Array.from(win).sort();
+    slowRuns = s[s.length >> 1] > SLOW_MS ? slowRuns + 1 : 0;
+    if (slowRuns >= 2) { window.__dimTier = { ...(window.__dimTier || {}), ok: false, watch: 'slow' }; return true; }
+    return false;
+  };
+}
+
 export function canvasTex(THREE, w, h, draw, { srgb = true, repeat = false, aniso = 8 } = {}) {
   const c = document.createElement('canvas'); c.width = w; c.height = h;
   draw(c.getContext('2d'), w, h);
@@ -74,7 +128,9 @@ export function canvasTex(THREE, w, h, draw, { srgb = true, repeat = false, anis
 }
 
 export const loadImages = (srcs) => Promise.all(srcs.map((src) => new Promise((res, rej) => {
-  const im = new Image(); im.decoding = 'async'; im.onload = () => res(im); im.onerror = () => rej(new Error('screen ' + src)); im.src = src;
+  // decode() off the main thread: an undecoded image would decode synchronously inside the atlas's drawImage
+  const im = new Image(); im.decoding = 'async'; im.onerror = () => rej(new Error('screen ' + src));
+  im.onload = () => (im.decode ? im.decode().catch(() => {}) : Promise.resolve()).then(() => res(im)); im.src = src;
 })));
 
 /* fog for additive materials: they fade to black, not to the fog colour */
@@ -290,6 +346,7 @@ export async function startDim(spec, { lenis = null, reduce = false, onLost = nu
   const late = new Promise((_, rej) => { timer = setTimeout(() => rej(new Error(`not loaded in ${LOAD_MS / 1000} s`)), LOAD_MS); });
   const loaded = (p) => Promise.race([p, late]);
   const life = { dispose: null };
+  const allowed = dimAllowed();   // the device tier (above), measured while three loads
   try {
     const [THREE, { EffectComposer }, { RenderPass }, { UnrealBloomPass }, { ShaderPass }, { OutputPass }] = await loaded(Promise.all([
       import('three'),
@@ -299,6 +356,7 @@ export async function startDim(spec, { lenis = null, reduce = false, onLost = nu
       import('three/addons/postprocessing/ShaderPass.js'),
       import('three/addons/postprocessing/OutputPass.js'),
     ]));
+    if (!(await allowed)) { console.info(`[dim] ${spec.name} skipped on this device, the page keeps its world`, window.__dimTier); return false; }
     await build(THREE, { EffectComposer, RenderPass, UnrealBloomPass, ShaderPass, OutputPass }, spec, { lenis, onLost, cls, dbgOn: q.has('dimdbg'), loaded, life });
     return true;
   } catch (e) {
@@ -554,6 +612,7 @@ async function build(THREE, P, spec, { lenis, onLost, cls, dbgOn, loaded, life }
   const OA = { p: new THREE.Vector3(), q: new THREE.Quaternion(), s: 1, f: 1, lift: 0 }, OB = { p: new THREE.Vector3(), q: new THREE.Quaternion(), s: 1, f: 1, lift: 0 };
   const stats = { frames: 0, fps: 0, dpr, bloom: true, samples: [] };
   let govN = 0, govSum = 0, slowRuns = 0, lastF = performance.now(), fpsN = 0, fpsT = performance.now();
+  const watch = dbgOn ? () => false : dimWatch();   // the device tier's last word: a phone that stays under 30 fps
   const introOff = V3(spec.intro || [0, 0, 0]);
 
   function frame(now) {
@@ -644,6 +703,7 @@ async function build(THREE, P, spec, { lenis, onLost, cls, dbgOn, loaded, life }
     stats.frames++; fpsN++;
     if (now - fpsT > 1000) { stats.fps = Math.round((fpsN * 1000) / (now - fpsT)); fpsN = 0; fpsT = now; }
     if (stats.frames > 150 && now - lastF < 100) { govN++; govSum += now - lastF; }
+    if (stats.frames > 90 && watch(now - lastF)) { console.info(`[dim] ${spec.name} handed back: under 30 fps on this device`); handBack(); return; }
     lastF = now;
     if (govN >= 120 && !dbgOn) {
       const avg = govSum / govN; govN = 0; govSum = 0;

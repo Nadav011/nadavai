@@ -108,7 +108,8 @@ html.scrolled .nav::before{opacity:1}
 @keyframes grain{0%{transform:translate3d(0,0,0)}20%{transform:translate3d(-3%,2%,0)}40%{transform:translate3d(2%,-4%,0)}
   60%{transform:translate3d(-4%,-1%,0)}80%{transform:translate3d(3%,3%,0)}100%{transform:translate3d(0,0,0)}}
 .progress{position:fixed;inset-block-start:0;inset-inline:0;height:2px;z-index:85;pointer-events:none;
-  background:linear-gradient(to left,var(--accent),var(--accent-2));transform-origin:100% 50%;transform:scaleX(0)}
+  background:linear-gradient(to left,var(--accent),var(--accent-2));transform-origin:100% 50%;transform:scaleX(0);
+  will-change:transform}/* its scale changes every frame of a scroll: on its own layer that is a compositor update, not a repaint */
 .cloud-layer{position:fixed;inset-block-start:0;inset-inline:0;height:100svh;z-index:50;pointer-events:none}
 .cloud-layer .pfx-canvas{position:absolute;inset:0;width:100%;height:100%}
 

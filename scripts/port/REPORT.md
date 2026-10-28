@@ -1,9 +1,9 @@
 # Port report
 
-Prototype: `nadavc-ai` at `cb4fbca`. Deck ids: 1658, draft ids (COPY-GAP, pending approval): 267.
+Prototype: `nadavc-ai` at `f7d4129`. Deck ids: 1694, draft ids (COPY-GAP, pending approval): 231.
 
 Markup strings mapped to an id: 2441; still literal (no id in either file): 0.
-Ids used that are still draft-only: 236. JS literals replaced: 516; JS literals left: 12.
+Ids used that are still draft-only: 202. JS literals replaced: 516; JS literals left: 12.
 
 ## Literal strings without a deck id
 

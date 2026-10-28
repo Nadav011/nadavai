@@ -17,6 +17,8 @@
 // as it was. Started from work-pages.js on this page only; it returns false (and the page keeps its shader world and
 // poster phone) under reduced motion, without WebGL2, on software GL, or when three cannot load.
 
+import { dimAllowed, dimWatch } from './core.js';   // the shared phone device tier (see core.js)
+
 const TAU = Math.PI * 2;
 const clamp = (x, a = 0, b = 1) => Math.min(b, Math.max(a, x));
 const lerp = (a, b, t) => a + (b - a) * t;
@@ -105,7 +107,7 @@ function probeGL() {
 
 export async function initDim({ lenis = null, reduce = false, onLost = null } = {}) {
   const root = document.documentElement;
-  if (reduce || root.classList.contains('reduce') || !probeGL()) return false;
+  if (reduce || new URLSearchParams(location.search).has('nodim') || root.classList.contains('reduce') || !probeGL()) return false; // ?nodim as in core.js
   // the cards are the app now: the hero's poster phone (and its own WebGL phone) step aside, but only once the stadium draws
   const stage = document.querySelector('.wkh__stage');
   const parent = stage?.parentNode, next = stage?.nextSibling;
@@ -118,6 +120,7 @@ export async function initDim({ lenis = null, reduce = false, onLost = null } = 
   let timer = 0;
   const late = new Promise((_, rej) => { timer = setTimeout(() => rej(new Error(`not loaded in ${LOAD_MS / 1000} s`)), LOAD_MS); });
   const loaded = (p) => Promise.race([p, late]);
+  const allowed = dimAllowed();   // the device tier (core.js), measured while three loads
   try {
     const [THREE, { EffectComposer }, { RenderPass }, { UnrealBloomPass }, { ShaderPass }, { OutputPass }] = await loaded(Promise.all([
       import('three'),
@@ -127,6 +130,7 @@ export async function initDim({ lenis = null, reduce = false, onLost = null } = 
       import('three/addons/postprocessing/ShaderPass.js'),
       import('three/addons/postprocessing/OutputPass.js'),
     ]));
+    if (!(await allowed)) { console.info('[dim] the stadium is skipped on this device, the page keeps its shader world', window.__dimTier); back(); return false; }
     await build(THREE, { EffectComposer, RenderPass, UnrealBloomPass, ShaderPass, OutputPass }, { lenis, loaded, onLost: () => { back(); onLost?.(); } });
     stage?.remove();
     return true;
@@ -997,6 +1001,8 @@ async function build(THREE, P, { lenis, loaded, onLost }) {
   const stats = { frames: 0, slow: 0, ms: 0, dpr, bloom: true, samples: [] };
   let govN = 0, govSum = 0, slowRuns = 0, last0 = performance.now();
 
+  const watch = new URLSearchParams(location.search).has('dimdbg') ? () => false : dimWatch();   // a phone that stays under 30 fps
+  let watchLast = performance.now();
   function frame(now) {
     raf = requestAnimationFrame(frame);
     const dt = Math.min(0.1, (now - last) / 1000); last = now;
@@ -1007,6 +1013,7 @@ async function build(THREE, P, { lenis, loaded, onLost }) {
     const kT = kOf(scrollY_());
     kPrev = k; k = damp(k, kT, 3.6, dt);
     if (Math.abs(k - kT) < 1e-4) k = kT;
+    if (!Number.isFinite(k)) k = Number.isFinite(kT) ? kT : 0; // a scroll value before layout (or a 0-height gap) must not reach CAMK[NaN]
     const dk = (k - kPrev) / Math.max(dt, 1e-3);
     vel = damp(vel, Math.abs(dk), 6, dt);
     const idx = Math.round(k);
@@ -1097,6 +1104,8 @@ async function build(THREE, P, { lenis, loaded, onLost }) {
     // a small governor: steps the pixel ratio down (then the bloom off) if frames run long
     // (stalls over 100 ms are the page or the tab, not the scene, and two slow windows in a row are needed)
     stats.frames++; stats.ms = dt * 1000;
+    if (stats.frames > 90 && watch(now - watchLast)) { console.info('[dim] the stadium handed back: under 30 fps on this device'); dispose(); onLost?.(); return; }
+    watchLast = now;
     if (stats.frames > 150 && now - last0 < 100) { govN++; govSum += now - last0; }
     last0 = now;
     if (govN >= 120 && !dbgOn) {

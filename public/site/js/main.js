@@ -70,6 +70,12 @@ fonts.then(async () => {
     });
   }
   for (const [name, fn] of chapters) { await frame(); safe(name, fn); }
+  // the endless CSS loops (typing dots, pings, the bobbing plan art, the ticker) hold still while their chapter is
+  // off screen: a running animation costs a style pass every frame of a scroll wherever it is (css/home.css .sec-off)
+  if ('IntersectionObserver' in window) {
+    const io = new IntersectionObserver((es) => es.forEach((x) => x.target.classList.toggle('sec-off', !x.isIntersecting)), { rootMargin: '20% 0px' });
+    document.querySelectorAll('#main > section, #main > .pin-spacer > section').forEach((sec) => io.observe(sec));
+  }
   if (engine) {
     safe('transit', () => initTransit({ ...env, heroST: hero.st }));
     ScrollTrigger.sort();

@@ -20,6 +20,8 @@
 // as it was. Started from work-pages.js on this page only; it returns false (and the page keeps its shader world and
 // poster phone) under reduced motion, without WebGL2, on software GL, or when three or the screens cannot load.
 
+import { dimAllowed, dimWatch } from './core.js';   // the shared phone device tier (see core.js)
+
 const TAU = Math.PI * 2;
 const clamp = (x, a = 0, b = 1) => Math.min(b, Math.max(a, x));
 const lerp = (a, b, t) => a + (b - a) * t;
@@ -93,7 +95,7 @@ function probeGL() {
 
 export async function initDim({ lenis = null, reduce = false, onLost = null } = {}) {
   const root = document.documentElement;
-  if (reduce || root.classList.contains('reduce') || !probeGL()) return false;
+  if (reduce || new URLSearchParams(location.search).has('nodim') || root.classList.contains('reduce') || !probeGL()) return false; // ?nodim as in core.js
   // the cards are the app now: the hero's poster phone (and its own WebGL phone) step aside, but only once the clinic draws
   const stage = document.querySelector('.wkh__stage');
   const parent = stage?.parentNode, next = stage?.nextSibling;
@@ -106,6 +108,7 @@ export async function initDim({ lenis = null, reduce = false, onLost = null } = 
   let timer = 0;
   const late = new Promise((_, rej) => { timer = setTimeout(() => rej(new Error(`not loaded in ${LOAD_MS / 1000} s`)), LOAD_MS); });
   const loaded = (p) => Promise.race([p, late]);
+  const allowed = dimAllowed();   // the device tier (core.js), measured while three loads
   try {
     const [THREE, { EffectComposer }, { RenderPass }, { UnrealBloomPass }, { ShaderPass }, { OutputPass }] = await loaded(Promise.all([
       import('three'),
@@ -115,6 +118,7 @@ export async function initDim({ lenis = null, reduce = false, onLost = null } = 
       import('three/addons/postprocessing/ShaderPass.js'),
       import('three/addons/postprocessing/OutputPass.js'),
     ]));
+    if (!(await allowed)) { console.info('[dim] the clinic is skipped on this device, the page keeps its shader world', window.__dimTier); back(); return false; }
     await build(THREE, { EffectComposer, RenderPass, UnrealBloomPass, ShaderPass, OutputPass }, { lenis, loaded, onLost: () => { back(); onLost?.(); } });
     stage?.remove();
     return true;
@@ -932,6 +936,8 @@ async function build(THREE, P, { lenis, loaded, onLost }) {
   let last = performance.now(), raf = 0, slow = 0;
   const intro0 = performance.now();
 
+  const watch = new URLSearchParams(location.search).has('dimdbg') ? () => false : dimWatch();   // a phone that stays under 30 fps
+  let watchLast = performance.now();
   function frame(now) {
     raf = requestAnimationFrame(frame);
     const dt = Math.min(0.05, (now - last) / 1000); last = now;
@@ -1016,6 +1022,8 @@ async function build(THREE, P, { lenis, loaded, onLost }) {
 
     // pace: a slow GPU loses resolution before it loses frames
     stats.frames++;
+    if (stats.frames > 90 && watch(now - watchLast)) { console.info('[dim] the clinic handed back: under 30 fps on this device'); dispose(); onLost?.(); return; }
+    watchLast = now;
     if (stats.frames === 2) root.classList.add('dim-medizen-ready');
     stats.dts.push(dt); if (stats.dts.length > 90) stats.dts.shift();
     if (now - stats.t0 > 1000) { stats.fps = Math.round((stats.frames - (stats.f0 || 0)) * 1000 / (now - stats.t0)); stats.f0 = stats.frames; stats.t0 = now; }

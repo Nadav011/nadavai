@@ -423,3 +423,6 @@ html.hero-av .nav-avatar{opacity:0;pointer-events:none}
   .work__cap{min-height:0;gap:4px}
   .work__head .sec__lead{margin-block-start:6px}
 }
+
+/* perf: a chapter off screen keeps its endless loops still (js/main.js toggles .sec-off with an IntersectionObserver) */
+.sec-off *,.sec-off *::before,.sec-off *::after{animation-play-state:paused!important}

@@ -21,6 +21,7 @@ export function initTransit({ gsap, ScrollTrigger, heroST, mobile }) {
   const live = () => root.classList.contains('transit');
   const kick = () => { S.dirty = 2; window.__heroGL?.wake?.(); };
 
+  const stale = new Set();
   function dockRect(d) {
     if (!d.el) return;
     const r = d.el.getBoundingClientRect();
@@ -39,11 +40,12 @@ export function initTransit({ gsap, ScrollTrigger, heroST, mobile }) {
     const built = () => { if (sec && !sec.dataset.built) { sec.dataset.built = '1'; sec.dispatchEvent(new CustomEvent('scene:built', { bubbles: true })); } };
     const apply = () => {
       if (state.p >= 0.9) built();
-      docks.forEach((d) => {
-        d.p = state.p;
-        dockRect(d);
-        if (d.el) d.el.style.setProperty('--dock', smooth(0.66, 0.9, state.p).toFixed(3));
-      });
+      // no layout read here: this runs inside GSAP's render, between other tweens' writes, and several scenes
+      // apply in one tick; the rects are read together once per tick (the ticker below). A dock that has never
+      // been measured is read now, so the cloud always has a rect. --dock is written only when it moves.
+      docks.forEach((d) => { d.p = state.p; if (d.rect) stale.add(d); else dockRect(d); });
+      const v = smooth(0.66, 0.9, state.p).toFixed(3);
+      docks.forEach((d) => { if (d.el && d.dv !== v) { d.dv = v; d.el.style.setProperty('--dock', v); } });
       kick();
     };
     let tw = null;
@@ -56,7 +58,11 @@ export function initTransit({ gsap, ScrollTrigger, heroST, mobile }) {
     });
     return sc;
   }
-  gsap.ticker.add(() => { const sc = S.on && S.scene(); if (sc) sc.docks.forEach(dockRect); });
+  gsap.ticker.add(() => {
+    const sc = S.on && S.scene();
+    if (sc) sc.docks.forEach((d) => stale.add(d));
+    if (stale.size) { stale.forEach(dockRect); stale.clear(); }   // reads only: one layout pass at most per tick
+  });
 
   // Every chapter's centrepiece is built by the same tiles, and every scene ends before its
   // centrepiece settles in the reading zone (top edge at 72 % of the viewport, or the start of

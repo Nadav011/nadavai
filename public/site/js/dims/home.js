@@ -21,6 +21,8 @@
 // scrim, every control as it was. Started from main.js; it resolves false (and the page stays exactly as it was)
 // under reduced motion, in the light look, without WebGL2, on software GL, or when three cannot load.
 
+import { dimAllowed, dimWatch } from './core.js';   // the shared device tier (see core.js)
+
 const TAU = Math.PI * 2;
 const clamp = (x, a = 0, b = 1) => Math.min(b, Math.max(a, x));
 const lerp = (a, b, t) => a + (b - a) * t;
@@ -78,7 +80,7 @@ function probeGL() {
 export async function initDim({ lenis = null, reduce = false } = {}) {
   const root = document.documentElement;
   const look = root.dataset.look;
-  if (reduce || root.classList.contains('reduce') || (look && look !== 'a')) return false;
+  if (reduce || new URLSearchParams(location.search).has('nodim') || root.classList.contains('reduce') || (look && look !== 'a')) return false; // ?nodim as in core.js
   if (!document.getElementById('value') || !document.querySelector('.hero') || !probeGL()) return false;
   // the hero's intro runs alone: the space is built only once #value comes within two viewports of the screen
   await new Promise((res) => {
@@ -89,16 +91,19 @@ export async function initDim({ lenis = null, reduce = false } = {}) {
   const late = new Promise((_, rej) => { timer = setTimeout(() => rej(new Error(`not loaded in ${LOAD_MS / 1000} s`)), LOAD_MS); });
   const loaded = (p) => Promise.race([p, late]);
   const life = { dispose: null };
+  const allowed = dimAllowed();   // the device tier (core.js): a weak or already slow phone keeps the page's own look
   try {
-    const [THREE, { EffectComposer }, { RenderPass }, { UnrealBloomPass }, { ShaderPass }, { OutputPass }] = await loaded(Promise.all([
+    const [THREE, { EffectComposer }, { RenderPass }, { UnrealBloomPass }, { ShaderPass }, { OutputPass }, { mergeGeometries }] = await loaded(Promise.all([
       import('three'),
       import('three/addons/postprocessing/EffectComposer.js'),
       import('three/addons/postprocessing/RenderPass.js'),
       import('three/addons/postprocessing/UnrealBloomPass.js'),
       import('three/addons/postprocessing/ShaderPass.js'),
       import('three/addons/postprocessing/OutputPass.js'),
+      import('three/addons/utils/BufferGeometryUtils.js'),
     ]));
-    return await build(THREE, { EffectComposer, RenderPass, UnrealBloomPass, ShaderPass, OutputPass }, { lenis, loaded, life });
+    if (!(await allowed)) { console.info('[dim] the hub is skipped on this device, the page keeps its own look', window.__dimTier); return false; }
+    return await build(THREE, { EffectComposer, RenderPass, UnrealBloomPass, ShaderPass, OutputPass, mergeGeometries }, { lenis, loaded, life });
   } catch (e) {
     console.warn('[dim] the hub is off, the page keeps its own look', e);
     life.dispose?.();   // listeners, the ResizeObserver, the context
@@ -511,7 +516,9 @@ async function build(THREE, P_, { lenis, loaded, life }) {
   const ac = new AbortController(); const sig_ = { signal: ac.signal };
   const NCH = POSES.length;
 
-  const imgs = await loaded(Promise.all(SHOTS.map((src) => new Promise((res, rej) => { const im = new Image(); im.decoding = 'async'; im.onload = () => res(im); im.onerror = rej; im.src = src; }))));
+  // decode() off the main thread: an undecoded screen would decode synchronously inside the atlas's drawImage
+  const imgs = await loaded(Promise.all(SHOTS.map((src) => new Promise((res, rej) => { const im = new Image(); im.decoding = 'async';
+    im.onload = () => (im.decode ? im.decode().catch(() => {}) : Promise.resolve()).then(() => res(im)); im.onerror = rej; im.src = src; }))));
 
   const wrap = document.createElement('div'); wrap.className = 'dimh'; wrap.setAttribute('aria-hidden', 'true');
   const canvas = document.createElement('canvas'); canvas.className = 'dimh__cv';
@@ -599,11 +606,16 @@ async function build(THREE, P_, { lenis, loaded, life }) {
   const hub = new THREE.Group();
   const hubMat = new THREE.MeshBasicMaterial({ color: new THREE.Color(0.9, 0.5, 0.2), fog: false, transparent: true, blending: THREE.AdditiveBlending, depthWrite: false });
   const hubMat2 = new THREE.MeshBasicMaterial({ color: new THREE.Color(0.35, 0.45, 0.7), fog: false, transparent: true, blending: THREE.AdditiveBlending, depthWrite: false });
-  hub.add(new THREE.Mesh(new THREE.TorusGeometry(300, 1.4, 6, 220), hubMat), new THREE.Mesh(new THREE.TorusGeometry(262, 0.6, 6, 200), hubMat2));
-  for (let i = 0; i < 24; i++) { // the spokes of light around the hub
-    const s = new THREE.Mesh(new THREE.BoxGeometry(0.5, 26, 0.5), hubMat2); const a = (i / 24) * TAU;
-    s.position.set(Math.cos(a) * 281, Math.sin(a) * 281, 0); s.rotation.z = a + Math.PI / 2; hub.add(s);
+  // the inner ring and its 24 spokes of light share one material (additive, no depth write), so they are one geometry
+  // and one draw call instead of 25: the same picture, a lighter frame
+  const spokes = [new THREE.TorusGeometry(262, 0.6, 6, 200)];
+  for (let i = 0; i < 24; i++) {
+    const a = (i / 24) * TAU, g = new THREE.BoxGeometry(0.5, 26, 0.5);
+    g.applyMatrix4(m4.compose(tmp.set(Math.cos(a) * 281, Math.sin(a) * 281, 0), q2.setFromEuler(e.set(0, 0, a + Math.PI / 2)), tmp2.set(1, 1, 1)));
+    spokes.push(g);
   }
+  const spokeGeo = P_.mergeGeometries(spokes, false); spokes.forEach((g) => g.dispose());
+  hub.add(new THREE.Mesh(new THREE.TorusGeometry(300, 1.4, 6, 220), hubMat), new THREE.Mesh(spokeGeo, hubMat2));
   hub.position.set(0, 70, -1500); hub.renderOrder = -5; scene.add(hub);
 
   /* the gateways the camera flies through between chapters */
@@ -1052,6 +1064,7 @@ async function build(THREE, P_, { lenis, loaded, life }) {
   const camP = new THREE.Vector3(), camT = new THREE.Vector3(), right = new THREE.Vector3(), camUp = new THREE.Vector3();
   const stats = { frames: 0, rendered: 0, cpu: 0, dpr, bloom: true, samples: [], drops: 0 };
   const gov = new Float32Array(90); let govN = 0, slowRuns = 0, fastRuns = 0, lastF = performance.now();
+  const watch = dbgOn ? () => false : dimWatch();   // the device tier's last word: a phone that stays under 30 fps
   const W = (i) => Math.max(0, 1 - Math.abs(k - i));
 
   function frame(now) {
@@ -1255,6 +1268,7 @@ async function build(THREE, P_, { lenis, loaded, life }) {
     // median of 90 frames, so a stall of the page itself (a pin, a font, the avatar loading) never costs resolution.
     stats.frames++;
     if (stats.rendered > 90 && now - lastF < 100) gov[govN++] = now - lastF;
+    if (stats.rendered > 90 && watch(now - lastF)) { console.info('[dim] the hub is off: under 30 fps on this device'); dispose(); return; }
     lastF = now;
     if (govN >= 90 && !dbgOn) {
       gov.sort(); const avg = gov[45]; govN = 0;

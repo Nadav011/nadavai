@@ -326,7 +326,15 @@ async function boot() {
   };
   const onLeave = () => { ptr.on = 0; };
   if (fine) { addEventListener('pointermove', onMove, { passive: true }); root.addEventListener('pointerleave', onLeave); }
-  const onScroll = () => { lastInput = performance.now(); wake(); };
+  // past the hero (transit.js has the canvas, SC.on) with no scene building, a frame would only redraw what the
+  // last one left (frame() returns "gone" right after drawing it), so the scroll does not wake the loop there.
+  // transit.js kicks it for every scene and when the hero takes the canvas back (setOn)
+  const onScroll = () => {
+    lastInput = performance.now();
+    const G = window.__wmGeo, SC = window.__siteCloud;
+    if (SC && SC.on && G && G.b > 0.999 && !SC.dirty && !SC.scene()) return;
+    wake();
+  };
   addEventListener('scroll', onScroll, { passive: true });
 
   // ---------- frame ----------

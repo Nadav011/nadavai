@@ -36,8 +36,11 @@ export function initChrome({ gsap, ScrollTrigger, lenis, reduce }) {
     numEl.textContent = sec.dataset.sec; nameEl.textContent = sec.dataset.name;
     if (gsap && !reduce) decode(gsap, nameEl, 0.45);
   };
-  let rest = 0;
-  const wake = () => { hud.classList.add('is-live'); clearTimeout(rest); rest = setTimeout(() => hud.classList.remove('is-live'), 900); };
+  // live while scrolling, and 900 ms after the last scroll: one timer that re-arms itself, and the class written
+  // only when it changes (a scroll event comes every frame; re-adding the class still mutated the element each time)
+  let last = 0, rest = 0;
+  const settle = () => { const left = 900 - (performance.now() - last); if (left > 1) rest = setTimeout(settle, left); else { rest = 0; hud.classList.remove('is-live'); } };
+  const wake = () => { last = performance.now(); if (!rest) { hud.classList.add('is-live'); rest = setTimeout(settle, 900); } };
   if (lenis) lenis.on('scroll', wake); else addEventListener('scroll', wake, { passive: true });
   secs.forEach((sec) => ScrollTrigger.create({ trigger: sec, start: 'top 55%', end: 'bottom 55%', onToggle: (self) => { if (self.isActive) setCur(sec); } }));
 }

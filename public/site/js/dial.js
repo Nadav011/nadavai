@@ -39,7 +39,9 @@ export function initDial({ gsap, ScrollTrigger, reduce }) {
     n.flow = mk('path', { d, class: 'beam__flow', stroke: '#F2B36F' }, beamsG);
   });
 
-  let t = T0, manualUntil = 0, onNode = null;
+  let t = T0, manualUntil = 0, onNode = null, lastVt = '';
+  // the scroll drives set() every frame: unchanged text is not written again (each write invalidates style)
+  const put = (el, v) => { if (el.textContent !== v) el.textContent = v; };
   function set(v) {
     t = Math.max(T0, Math.min(T1, v));
     const a = ang(t), p0 = pt(ang(T0), R), p1 = pt(a, R);
@@ -47,7 +49,7 @@ export function initDial({ gsap, ScrollTrigger, reduce }) {
     arc.setAttribute('d', t <= T0 + 0.5 ? '' : `M ${p0.x} ${p0.y} A ${R} ${R} 0 ${large} 1 ${p1.x} ${p1.y}`);
     hand.setAttribute('transform', `rotate(${(a * 180 / Math.PI).toFixed(2)})`);
     const q = Math.round(t / 15) * 15;
-    hh.textContent = pad(Math.floor(q / 60)); mm.textContent = pad(q % 60);
+    put(hh, pad(Math.floor(q / 60))); put(mm, pad(q % 60));
     let cur = null;
     nodes.forEach((n) => { if (n.t <= t + 0.5) cur = n; });
     nodes.forEach((n) => {
@@ -61,8 +63,10 @@ export function initDial({ gsap, ScrollTrigger, reduce }) {
       lineEl.textContent = cur.line;
       if (gsap && !reduce) gsap.fromTo([sysEl, lineEl], { autoAlpha: 0, y: 6 }, { autoAlpha: 1, y: 0, duration: 0.45, stagger: 0.05, ease: 'expo.out', overwrite: true });
     }
-    range.value = Math.round(t / 15) * 15;
-    range.setAttribute('aria-valuetext', `${hh.textContent}:${mm.textContent}, ${sysEl.textContent}`);
+    const rv = String(Math.round(t / 15) * 15);
+    if (range.value !== rv) range.value = rv;
+    const vt = `${hh.textContent}:${mm.textContent}, ${sysEl.textContent}`;
+    if (vt !== lastVt) { lastVt = vt; range.setAttribute('aria-valuetext', vt); }
     if (grab) placeGrab();
   }
 
@@ -70,11 +74,15 @@ export function initDial({ gsap, ScrollTrigger, reduce }) {
   const grab = document.createElement('span');
   grab.className = 'dial__grab'; grab.setAttribute('aria-hidden', 'true');
   dial.appendChild(grab);
+  // the dial's size is read when it changes (ResizeObserver, after layout), not in set(), which runs every frame
+  // of the scroll right after GSAP's writes and would force a layout each time
+  let dw = dial.clientWidth, dh = dial.clientHeight;
   function placeGrab() {
-    const p = pt(ang(t), R), k = dial.clientWidth / 400;
-    grab.style.left = (dial.clientWidth / 2 + p.x * k) + 'px';
-    grab.style.top = (dial.clientHeight / 2 + p.y * k) + 'px';
+    const p = pt(ang(t), R), k = dw / 400;
+    grab.style.left = (dw / 2 + p.x * k) + 'px';
+    grab.style.top = (dh / 2 + p.y * k) + 'px';
   }
+  const sizeDial = () => { dw = dial.clientWidth; dh = dial.clientHeight; placeGrab(); };
   const fromPointer = (e) => {
     const r = dial.getBoundingClientRect();
     let a = Math.atan2(e.clientX - (r.left + r.width / 2), -(e.clientY - (r.top + r.height / 2))) * 180 / Math.PI;
@@ -96,7 +104,7 @@ export function initDial({ gsap, ScrollTrigger, reduce }) {
     if (to == null) return;
     e.preventDefault(); manualUntil = performance.now() + 1500; set(to);
   });
-  addEventListener('resize', placeGrab);
+  if (window.ResizeObserver) new ResizeObserver(sizeDial).observe(dial); else addEventListener('resize', sizeDial);
 
   set(reduce ? 720 : T0);
   if (reduce || !gsap || !ScrollTrigger) return;

@@ -164,9 +164,15 @@ export function initSiteChrome({ lenis = null, dockAfter = 0.6 } = {}) {
     return dockAfter < 5 ? innerHeight * dockAfter : dockAfter;
   };
   let at = dockAt();
-  addEventListener('resize', () => { at = dockAt(); }, { passive: true });
+  // the page's height is read when it changes (a ResizeObserver runs after layout), never in the scroll handler,
+  // where it would force a style and layout pass on every frame of a scroll
+  let max = 0;
+  const measureMax = () => { max = document.documentElement.scrollHeight - innerHeight; };
+  measureMax();
+  if (window.ResizeObserver) new ResizeObserver(() => { measureMax(); onScroll(); }).observe(document.body);
+  addEventListener('resize', () => { at = dockAt(); measureMax(); }, { passive: true });
   const onScroll = () => {
-    const y = scrollY0(), max = document.documentElement.scrollHeight - innerHeight;
+    const y = scrollY0();
     if (bar) bar.style.transform = `scaleX(${max > 0 ? Math.min(1, Math.max(0, y / max)) : 0})`;
     root.classList.toggle('scrolled', y > 40);
     if (dockAfter !== false) root.classList.toggle('past-hero', y > at);
