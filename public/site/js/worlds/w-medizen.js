@@ -41,9 +41,9 @@ export default {
     float narrow = smoothstep(1.1, .6, asp);
     // a resting heartbeat, about 43 per minute: a strong beat, then a softer one
     float bt = fract(u_time / 1.4);
-    float pulse = exp(-pow((bt - .06) / .06, 2.)) + .55 * exp(-pow((bt - .27) / .07, 2.));
+    float pulse = exp(-(((bt - .06) / .06)*((bt - .06) / .06))) + .55 * exp(-(((bt - .27) / .07)*((bt - .27) / .07)));
     vec2 org = vec2(.46 * asp, .08);
-    float ring = exp(-pow((length(q - org) - bt * 1.7) / .17, 2.)) * smoothstep(1., .25, bt);
+    float ring = exp(-(((length(q - org) - bt * 1.7) / .17)*((length(q - org) - bt * 1.7) / .17))) * smoothstep(1., .25, bt);
     vec3 teal = vec3(.42, .84, .65);
     vec3 col = mix(vec3(.010, .030, .029), vec3(.016, .050, .046), uv.y);
     col += teal * .030 / (1. + 5. * length(q - org));

@@ -511,7 +511,7 @@ class Converter:
                          ('ogTitle', ('meta', {'property': 'og:title'})), ('ogDescription', ('meta', {'property': 'og:description'}))):
             t = head.find(*sel)
             val = (t.get_text() if key == 'title' else t.get('content', '')) if t else ''
-            look = re.sub(r'\s*·\s*NadavAI$', '', val) if key == 'title' else val
+            look = re.sub(r'\s*·\s*NadavAI$', '', val) if key in ('title', 'ogTitle') else val
             i = self.lookup(look) if HEB.search(look) else None
             if not i and HEB.search(look) and len(look) > 40:
                 # an unescaped quote in the prototype's attribute cuts the value short: the deck string it starts
@@ -643,7 +643,9 @@ class Converter:
             if i:
                 self.js_ids.add(i)
                 self.stats['js'] += 1
-                return f"__t('{i}')"
+                lead = "' ' + " if text[:1] == ' ' else ''
+                trail = " + ' '" if text[-1:] == ' ' else ''
+                return f"{lead}__t('{i}'){trail}"
             ids = self.composite(text)
             if ids:
                 self.js_ids.update(ids)
@@ -797,11 +799,27 @@ class JsRewriter:
             buf.append(ch); self.i += 1
         parts.append(('text', ''.join(buf)))
         raw = s[start:self.i]
-        # a template that is a deck string with placeholders as a whole ("שלב ${n} מתוך 5"), with no markup in it
-        if '<' not in raw and HEB.search(raw):
-            m = self.c.JS_TPL.fullmatch(raw)
-            if m and '${' in raw:
-                done = self.c.js_template(m)
-                if done != raw:
-                    return done
+        # a template that is a deck string with placeholders as a whole ("שלב ${n} מתוך 5"), with no markup in it;
+        # the values are the rewritten expressions, so a Hebrew literal inside one is a lookup too
+        if '<' not in raw and HEB.search(raw) and any(k == 'expr' for k, _ in parts):
+            exprs = [t for k, t in parts if k == 'expr']
+            text, n = '', 0
+            for k, t in parts:
+                if k == 'text':
+                    text += t
+                else:
+                    text += f'\x00{n}\x00'; n += 1
+            hit = self.c.template(text)
+            if hit:
+                key, vals = hit
+                pairs = []
+                for name, v in vals.items():
+                    m2 = re.fullmatch(r'\x00(\d+)\x00', v)
+                    if not m2:
+                        break
+                    pairs.append(f'{name}: {exprs[int(m2.group(1))]}')
+                else:
+                    self.c.js_ids.add(key); self.c.stats['js'] += 1
+                    return f"__t('{key}', {{ {', '.join(pairs)} }})"
+                self.c.stats['hit'] -= 1
         return '`' + ''.join(self.c.js_template_text(t) if k == 'text' else '${' + t + '}' for k, t in parts) + '`'

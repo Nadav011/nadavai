@@ -6,7 +6,8 @@
       "/site/css/chrome.css",
       "/site/sections/offer/offer.css",
       "/site/sections/avatar/avatar.css",
-      "/site/css/home.css"
+      "/site/css/home.css",
+      "/site/css/dims-home.css"
     ],
     "preload": [
       {
@@ -45,10 +46,11 @@
       "/site/css/chrome.css",
       "/site/sections/offer/offer.css",
       "/site/css/sales.css",
+      "/site/css/dims-sales.css",
       "/site/sections/avatar/avatar.css"
     ],
     "preload": [],
-    "importmap": false,
+    "importmap": true,
     "title": {
       "id": "services.meta.title",
       "text": "שירותים · מערכות, סוכני AI, אפליקציות ואתרים · NadavAI"
@@ -81,25 +83,26 @@
       "/site/css/site.css",
       "/site/css/chrome.css",
       "/site/css/work.css",
+      "/site/css/dims-work.css",
       "/site/sections/avatar/avatar.css"
     ],
     "preload": [],
-    "importmap": false,
+    "importmap": true,
     "title": {
-      "id": "global.nav.work",
-      "text": "עבודות · NadavAI"
+      "id": "work.meta.title",
+      "text": "עבודות · מה בניתי · NadavAI"
     },
     "description": {
-      "id": "work.meta.description.proto",
-      "text": "כל העבודות של NadavAI בשמן האמיתי: SporChat, MediZen, Green Room, מערכות הסניף, אפליקציית רשת המקסיקני, Neon Alley ועוד."
+      "id": "work.meta.description",
+      "text": "SporChat, MediZen, Green Room, המערכות של הסניף שלי, אפליקציית רשת המקסיקני ועוד עבודות, בשמן האמיתי."
     },
     "ogTitle": {
-      "id": "work.meta.title.proto",
-      "text": "עבודות · NadavAI"
+      "id": "work.meta.title",
+      "text": "עבודות · מה בניתי · NadavAI"
     },
     "ogDescription": {
-      "id": "work.meta.description.proto",
-      "text": "כל העבודות של NadavAI בשמן האמיתי: SporChat, MediZen, Green Room, מערכות הסניף, אפליקציית רשת המקסיקני, Neon Alley ועוד."
+      "id": "work.meta.description",
+      "text": "SporChat, MediZen, Green Room, המערכות של הסניף שלי, אפליקציית רשת המקסיקני ועוד עבודות, בשמן האמיתי."
     },
     "ogImage": "/site/assets/og/work.jpg",
     "htmlData": {
@@ -117,7 +120,8 @@
       "/site/css/site.css",
       "/site/css/chrome.css",
       "/site/sections/avatar/avatar.css",
-      "/site/css/work.css"
+      "/site/css/work.css",
+      "/site/css/games.css"
     ],
     "preload": [
       {
@@ -128,20 +132,20 @@
     ],
     "importmap": true,
     "title": {
-      "id": null,
-      "text": "SporChat · NadavAI"
+      "id": "sporchat.meta.title",
+      "text": "SporChat · צ'אט חי לכל משחק כדורגל · NadavAI"
     },
     "description": {
-      "id": "sporchat.meta.description.proto",
-      "text": "SporChat: חדר צ'אט חי לכל משחק כדורגל, עם ניחושים, ליגות ופרשן AI. ב-App Store וב-Google Play. נדב כהן, CTO."
+      "id": "sporchat.meta.description",
+      "text": "אפליקציה לאוהדי ספורט בישראל: חדר צ'אט לכל משחק, מודרציית AI ופרשן AI. נדב כהן הוא ה-CTO."
     },
     "ogTitle": {
-      "id": null,
-      "text": "SporChat · NadavAI"
+      "id": "sporchat.meta.title",
+      "text": "SporChat · צ'אט חי לכל משחק כדורגל · NadavAI"
     },
     "ogDescription": {
-      "id": "sporchat.meta.description.proto",
-      "text": "SporChat: חדר צ'אט חי לכל משחק כדורגל, עם ניחושים, ליגות ופרשן AI. ב-App Store וב-Google Play. נדב כהן, CTO."
+      "id": "sporchat.meta.description",
+      "text": "אפליקציה לאוהדי ספורט בישראל: חדר צ'אט לכל משחק, מודרציית AI ופרשן AI. נדב כהן הוא ה-CTO."
     },
     "ogImage": "/site/assets/og/work-sporchat.jpg",
     "htmlData": {
@@ -159,25 +163,26 @@
       "/site/css/site.css",
       "/site/css/chrome.css",
       "/site/sections/avatar/avatar.css",
-      "/site/css/work.css"
+      "/site/css/work.css",
+      "/site/css/games.css"
     ],
     "preload": [],
     "importmap": true,
     "title": {
-      "id": null,
-      "text": "MediZen · NadavAI"
+      "id": "medizen.meta.title",
+      "text": "MediZen · ניהול קליניקות עם בוט לוואטסאפ · NadavAI"
     },
     "description": {
-      "id": "medizen.meta.description.proto",
-      "text": "MediZen: מערכת אחת לקליניקה. יומן, תיקים, חשבוניות ובוט לוואטסאפ שקובע תורים. נדב כהן, Co-Founder & CTO."
+      "id": "medizen.meta.description",
+      "text": "מערכת אחת למטפלים: יומן, תיקי מטופלים, בוט לוואטסאפ שקובע תורים, וחשבוניות. נדב כהן הוא Co-Founder & CTO."
     },
     "ogTitle": {
-      "id": null,
-      "text": "MediZen · NadavAI"
+      "id": "medizen.meta.title",
+      "text": "MediZen · ניהול קליניקות עם בוט לוואטסאפ · NadavAI"
     },
     "ogDescription": {
-      "id": "medizen.meta.description.proto",
-      "text": "MediZen: מערכת אחת לקליניקה. יומן, תיקים, חשבוניות ובוט לוואטסאפ שקובע תורים. נדב כהן, Co-Founder & CTO."
+      "id": "medizen.meta.description",
+      "text": "מערכת אחת למטפלים: יומן, תיקי מטופלים, בוט לוואטסאפ שקובע תורים, וחשבוניות. נדב כהן הוא Co-Founder & CTO."
     },
     "ogImage": "/site/assets/og/work-medizen.jpg",
     "htmlData": {
@@ -195,25 +200,26 @@
       "/site/css/site.css",
       "/site/css/chrome.css",
       "/site/sections/avatar/avatar.css",
-      "/site/css/work.css"
+      "/site/css/work.css",
+      "/site/css/games.css"
     ],
     "preload": [],
     "importmap": true,
     "title": {
-      "id": null,
-      "text": "Green Room · NadavAI"
+      "id": "greenroom.meta.title",
+      "text": "Green Room · מועדון סנוקר בלי דלפק · NadavAI"
     },
     "description": {
-      "id": "greenroom.meta.description.proto",
-      "text": "Green Room: מועדון סנוקר VIP בבאר שבע שפתוח 24/7 בלי עובד בדלפק. מזמינים, משלמים ונכנסים מהאפליקציה. ב-App Store וב-Google Play."
+      "id": "greenroom.meta.description",
+      "text": "מועדון סנוקר VIP בבאר שבע שעובד מסביב לשעון בלי עובד בדלפק: הזמנה, תשלום, קוד לדלת ובוט לוואטסאפ, באפליקציה אחת."
     },
     "ogTitle": {
-      "id": null,
-      "text": "Green Room · NadavAI"
+      "id": "greenroom.meta.title",
+      "text": "Green Room · מועדון סנוקר בלי דלפק · NadavAI"
     },
     "ogDescription": {
-      "id": "greenroom.meta.description.proto",
-      "text": "Green Room: מועדון סנוקר VIP בבאר שבע שפתוח 24/7 בלי עובד בדלפק. מזמינים, משלמים ונכנסים מהאפליקציה. ב-App Store וב-Google Play."
+      "id": "greenroom.meta.description",
+      "text": "מועדון סנוקר VIP בבאר שבע שעובד מסביב לשעון בלי עובד בדלפק: הזמנה, תשלום, קוד לדלת ובוט לוואטסאפ, באפליקציה אחת."
     },
     "ogImage": "/site/assets/og/work-green-room.jpg",
     "htmlData": {
@@ -231,10 +237,11 @@
       "/site/css/site.css",
       "/site/css/chrome.css",
       "/site/sections/avatar/avatar.css",
-      "/site/css/story.css"
+      "/site/css/story.css",
+      "/site/css/dims-story.css"
     ],
     "preload": [],
-    "importmap": false,
+    "importmap": true,
     "title": {
       "id": "branch.meta.title",
       "text": "הסניף שלי · יום אחד, חמש מערכות · NadavAI"
@@ -267,10 +274,11 @@
       "/site/css/site.css",
       "/site/css/chrome.css",
       "/site/sections/avatar/avatar.css",
-      "/site/css/story.css"
+      "/site/css/story.css",
+      "/site/css/dims-story.css"
     ],
     "preload": [],
-    "importmap": false,
+    "importmap": true,
     "title": {
       "id": "network.meta.title",
       "text": "אפליקציית רשת המקסיקני · NadavAI"
@@ -303,10 +311,11 @@
       "/site/css/site.css",
       "/site/css/chrome.css",
       "/site/sections/avatar/avatar.css",
-      "/site/css/story.css"
+      "/site/css/story.css",
+      "/site/css/dims-story.css"
     ],
     "preload": [],
-    "importmap": false,
+    "importmap": true,
     "title": {
       "id": "social.meta.title",
       "text": "סושיאל · אני מנהל לכם את הסושיאל · NadavAI"
@@ -340,10 +349,11 @@
       "/site/css/chrome.css",
       "/site/sections/bio/bio.css",
       "/site/sections/avatar/avatar.css",
-      "/site/css/story.css"
+      "/site/css/story.css",
+      "/site/css/dims-story.css"
     ],
     "preload": [],
-    "importmap": false,
+    "importmap": true,
     "title": {
       "id": "about.meta.title",
       "text": "מי אני · נדב כהן · NadavAI"
@@ -377,10 +387,11 @@
       "/site/css/chrome.css",
       "/site/sections/offer/offer.css",
       "/site/css/sales.css",
+      "/site/css/dims-sales.css",
       "/site/sections/avatar/avatar.css"
     ],
     "preload": [],
-    "importmap": false,
+    "importmap": true,
     "title": {
       "id": "plans.meta.title",
       "text": "חבילות · שותף טכנולוגי, צוות AI, תחזוקה וצמיחה · NadavAI"
@@ -413,10 +424,11 @@
       "/site/css/site.css",
       "/site/css/chrome.css",
       "/site/css/sales.css",
+      "/site/css/dims-sales.css",
       "/site/sections/avatar/avatar.css"
     ],
     "preload": [],
-    "importmap": false,
+    "importmap": true,
     "title": {
       "id": "check.meta.title",
       "text": "בדיקה לעסק, בחינם · NadavAI"
@@ -449,17 +461,18 @@
       "/site/css/site.css",
       "/site/css/chrome.css",
       "/site/sections/avatar/avatar.css",
-      "/site/css/story.css"
+      "/site/css/story.css",
+      "/site/css/dims-story.css"
     ],
     "preload": [],
-    "importmap": false,
+    "importmap": true,
     "title": {
       "id": "play.meta.title",
       "text": "מגרש משחקים · דברים שאפשר לגעת בהם · NadavAI"
     },
     "description": {
       "id": "play.meta.description",
-      "text": "Neon Alley, משחק תלת-ממד בדפדפן, חיית המחמד לשולחן העבודה, וכדורים שאפשר לבעוט בהם."
+      "text": "Neon Alley, משחק תלת-ממד בדפדפן, נדב 2.0 שעובד בשבילי על המחשב, וכדורים שאפשר לבעוט בהם."
     },
     "ogTitle": {
       "id": "play.meta.title",
@@ -467,7 +480,7 @@
     },
     "ogDescription": {
       "id": "play.meta.description",
-      "text": "Neon Alley, משחק תלת-ממד בדפדפן, חיית המחמד לשולחן העבודה, וכדורים שאפשר לבעוט בהם."
+      "text": "Neon Alley, משחק תלת-ממד בדפדפן, נדב 2.0 שעובד בשבילי על המחשב, וכדורים שאפשר לבעוט בהם."
     },
     "ogImage": "/site/assets/og/play.jpg",
     "htmlData": {
@@ -485,10 +498,11 @@
       "/site/css/site.css",
       "/site/css/chrome.css",
       "/site/css/sales.css",
+      "/site/css/dims-sales.css",
       "/site/sections/avatar/avatar.css"
     ],
     "preload": [],
-    "importmap": false,
+    "importmap": true,
     "title": {
       "id": "contact.meta.title",
       "text": "יצירת קשר · וואטסאפ ומייל · NadavAI"

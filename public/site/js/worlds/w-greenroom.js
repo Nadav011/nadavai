@@ -42,7 +42,7 @@ export default {
       vec3 lit = vec3(.135, .32, .13) * pool;
       vec3 fcol = (felt + lit) * cloth;
       // the far cushion's lip catches the lamp
-      float lip = smoothstep(.02, .0, d) * (.06 + .5 * exp(-pow((q.x - pc.x) / .55, 2.)) * smoothstep(.0, .5, 1. - abs(pc.y - yt) * 4.));
+      float lip = smoothstep(.02, .0, d) * (.06 + .5 * exp(-(((q.x - pc.x) / .55)*((q.x - pc.x) / .55))) * smoothstep(.0, .5, 1. - abs(pc.y - yt) * 4.));
       fcol += vec3(.45, .34, .18) * lip * .5;
       fcol = mix(fcol, vec3(.014, .026, .018), exp(-d * 22.) * .55);
       col = mix(col, fcol, fe);

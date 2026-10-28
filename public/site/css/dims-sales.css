@@ -1,0 +1,47 @@
+/* ══ The sales pages' dimensions (js/dims/core.js + services.js, plans.js, check.js, contact.js; 2026-10-28) ══
+   One 3D place behind the whole page. html.dim3-on is set only while it starts or runs (never under reduced motion,
+   calm mode, the light look or without WebGL2); every rule here hangs off it, so without it the page is as before. */
+html.dim3-on{background:var(--world-base)}
+html.dim3-on body{background:transparent}
+.dim3{position:fixed;inset:0;z-index:-1;pointer-events:none}
+.dim3__cv{position:absolute;inset:0;width:100%;height:100%;display:block;opacity:0;transition:opacity 1.4s ease}
+html.dim3-ready .dim3__cv{opacity:1}
+/* the reading side (RTL: the right) sits on a soft dark scrim; phones get an even veil from top to bottom */
+.dim3::after{content:"";position:absolute;inset:0;background:color-mix(in srgb,var(--world-base) 22%,transparent)}
+.dim3__scrim{position:absolute;inset:0;background:linear-gradient(to left,
+  color-mix(in srgb,var(--world-base) 80%,transparent) 0%,color-mix(in srgb,var(--world-base) 62%,transparent) 32%,
+  color-mix(in srgb,var(--world-base) 22%,transparent) 54%,transparent 68%)}
+html[dir="ltr"] .dim3__scrim{background:linear-gradient(to right,
+  color-mix(in srgb,var(--world-base) 80%,transparent) 0%,color-mix(in srgb,var(--world-base) 62%,transparent) 32%,
+  color-mix(in srgb,var(--world-base) 22%,transparent) 54%,transparent 68%)}
+@media (max-width:900px){
+  .dim3__scrim,html[dir="ltr"] .dim3__scrim{background:linear-gradient(to bottom,color-mix(in srgb,var(--world-base) 40%,transparent),
+    color-mix(in srgb,var(--world-base) 62%,transparent) 40%,color-mix(in srgb,var(--world-base) 70%,transparent))}
+}
+/* the text keeps a breath of the place's dark around it, so it holds its contrast where the light passes behind */
+html.dim3-on main :is(h1,h2,h3,h4,p,li,legend,label,summary,small,dd,dt){text-shadow:0 0 2px var(--world-base),0 0 6px var(--world-base),0 1px 16px color-mix(in srgb,var(--world-base) 90%,transparent)}
+/* the guarantee's words are a gradient clipped to the text: a text-shadow would paint through them, a drop-shadow does not */
+html.dim3-on main .vow__big{text-shadow:none}
+html.dim3-on .vow__big span{filter:drop-shadow(0 2px 16px color-mix(in srgb,var(--world-base) 90%,transparent))}
+html.dim3-on .foot{background:color-mix(in srgb,var(--world-base) 82%,transparent)}
+
+/* services: the foundry. The page's own sections stay as they are; the blocks between them let the hall through */
+html.dim3-services .svc__txt{position:relative}
+html.dim3-services .road__st,html.dim3-services .vow__also li{text-shadow:0 1px 14px var(--world-base)}
+
+/* plans: the tower. The three cards keep their glass */
+html.dim3-plans .offer .pl{background:color-mix(in srgb,#0b0a18 72%,transparent);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
+html.dim3-plans .term,html.dim3-plans .oneoff,html.dim3-plans .terms__vow,html.dim3-plans .terms__price{-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
+
+/* check: the scanner room. A little more room above and below the stage, so the camera has somewhere to fly */
+html.dim3-check .ckp__hero{min-height:62svh;display:grid;align-content:end}
+html.dim3-check .ckp__stage{padding-block-end:max(36vh,180px)}
+html.dim3-check .ckp__stage::before{display:none}
+html.dim3-check .ckx,html.dim3-check .ckx__run,html.dim3-check .ckx__out,html.dim3-check .ckx__fail{position:relative}
+html.dim3-check .pv,html.dim3-check .ckr{-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
+
+/* contact: the landing. The hall to the door is long and calm */
+html.dim3-contact .ct__hero{min-height:58svh;display:grid;align-content:end}
+html.dim3-contact .ct__grid{margin-block-end:clamp(80px,22vh,240px)}
+html.dim3-contact .ctf{padding-block-end:max(34vh,160px)}
+html.dim3-contact .ct__wa,html.dim3-contact .ct__card{-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}

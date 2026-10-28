@@ -1,0 +1,51 @@
+/* ══ The story pages' dimensions (js/dims/core.js + about.js, social.js, play.js, branch.js, network.js; 2026-10-28) ══
+   One 3D place behind the whole page. html.dim3-on is set only while it starts or runs (never under reduced motion,
+   calm mode, the light look or without WebGL2); every rule here hangs off it, so without it the page is as before. */
+html.dim3-on{background:var(--world-base)}
+html.dim3-on body{background:transparent}
+.dim3{position:fixed;inset:0;z-index:-1;pointer-events:none}
+.dim3__cv{position:absolute;inset:0;width:100%;height:100%;display:block;opacity:0;transition:opacity 1.4s ease}
+html.dim3-ready .dim3__cv{opacity:1}
+/* the reading side (RTL: the right) sits on a soft dark scrim; phones get an even veil from top to bottom */
+.dim3::after{content:"";position:absolute;inset:0;background:color-mix(in srgb,var(--world-base) 22%,transparent)}
+.dim3__scrim{position:absolute;inset:0;background:linear-gradient(to left,
+  color-mix(in srgb,var(--world-base) 80%,transparent) 0%,color-mix(in srgb,var(--world-base) 62%,transparent) 32%,
+  color-mix(in srgb,var(--world-base) 22%,transparent) 54%,transparent 68%)}
+html[dir="ltr"] .dim3__scrim{background:linear-gradient(to right,
+  color-mix(in srgb,var(--world-base) 80%,transparent) 0%,color-mix(in srgb,var(--world-base) 62%,transparent) 32%,
+  color-mix(in srgb,var(--world-base) 22%,transparent) 54%,transparent 68%)}
+@media (max-width:900px){
+  .dim3__scrim,html[dir="ltr"] .dim3__scrim{background:linear-gradient(to bottom,color-mix(in srgb,var(--world-base) 40%,transparent),
+    color-mix(in srgb,var(--world-base) 62%,transparent) 40%,color-mix(in srgb,var(--world-base) 70%,transparent))}
+}
+/* the text keeps a breath of the place's dark around it, so it holds its contrast where the light passes behind */
+html.dim3-on main :is(h1,h2,h3,h4,p,li,legend,label,summary,small,dd,dt){text-shadow:0 0 2px var(--world-base),0 0 6px var(--world-base),0 1px 16px color-mix(in srgb,var(--world-base) 90%,transparent)}
+/* but not inside the light mock screens (the feed phone, the branch's phones and repair mock): dark text on white */
+html.dim3-on main :is(.feed,.st-phone,.st-laptop,.mk,.pub) :is(*,*::before){text-shadow:none}
+html.dim3-on .foot{background:color-mix(in srgb,var(--world-base) 90%,transparent)}
+
+/* about: the tower of levels. The bio's opaque ground and the portrait plate let the place through, like the world did */
+html.dim3-about .bio{background:transparent}
+html.dim3-about .ab-hero__plate{-webkit-mask-image:linear-gradient(to left,transparent 16%,#000 62%);mask-image:linear-gradient(to left,transparent 16%,#000 62%)}
+@media (max-width:900px){html.dim3-about .ab-hero__plate{-webkit-mask-image:linear-gradient(to bottom,#000 52%,transparent 98%);mask-image:linear-gradient(to bottom,#000 52%,transparent 98%)}}
+
+/* social: the feed shaft. The cards and the phone keep their own glass */
+html.dim3-social .so-what li,html.dim3-social .pipe__st,html.dim3-social .so-how li{background:color-mix(in srgb,var(--world-base) 74%,transparent);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
+html.dim3-social .so-legend{padding:10px 14px;border-radius:14px;background:color-mix(in srgb,var(--world-base) 70%,transparent)}
+
+/* play: the arcade. The cards keep a glass of their own over the grid */
+html.dim3-play .pl-card,html.dim3-play .pl-neon{-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
+
+/* my-branch: the town square. The 3D sky is the clock's sky, so the page's flat one (and its sun and moon) steps aside */
+html.dim3-branch .sky{display:none}
+html.dim3-branch .br-card{-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
+
+/* the network: the map. The page's flat grid steps aside for the ground's own */
+html.dim3-network .net-grid{display:none}
+html.dim3-network .bx,html.dim3-network .hq,html.dim3-network .net-mess__one{-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
+
+/* the centred closing sections (and the network's centred lines) sit over the open place: a soft pool of the page's
+   dark behind the words keeps them at 4.5:1 wherever the light passes, the place still shows around it */
+html.dim3-on :is(.ab-outro,.pl-end,.br-outro,.net-end,.net-result,.so-end,.net-mess__in){position:relative;isolation:isolate}
+html.dim3-on :is(.ab-outro,.pl-end,.br-outro,.net-end,.net-result,.so-end,.net-mess__in)::before{content:"";position:absolute;z-index:-1;pointer-events:none;
+  inset:-6% 4%;background:radial-gradient(closest-side,color-mix(in srgb,var(--world-base) 84%,transparent),color-mix(in srgb,var(--world-base) 55%,transparent) 62%,transparent)}

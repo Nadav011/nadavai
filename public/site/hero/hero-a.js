@@ -170,7 +170,7 @@ export async function create({ THREE, U, geo, mobile, mask, faceMask, HALF_GLSL,
         vCell = vec2(mod(g, ${COLS}.0), floor(g / ${COLS}.0));
         // colour: ember while flying, ink when locked; edges a touch brighter; a compile scan R→L
         float period = 6.5, sx = uRes.x * (1.15 - fract(max(uIntro - 3.0, 0.0) / period) * 1.3);
-        float scan = (uIntro > 3.0 ? 1.0 : 0.0) * exp(-pow((aT.x - sx) / 46.0, 2.0));
+        float scan = (uIntro > 3.0 ? 1.0 : 0.0) * exp(-(((aT.x - sx) / 46.0)*((aT.x - sx) / 46.0)));
         float accent = step(0.9, aR.y);
         vec3 rest = mix(uInk * (0.84 + 0.16 * aE), uAcc, accent * 0.9);
         vCol = mix(uAcc, rest, smoothstep(0.55, 1.0, t));
@@ -187,7 +187,7 @@ export async function create({ THREE, U, geo, mobile, mask, faceMask, HALF_GLSL,
         face = mix(face, uAcc * 1.25, step(0.9, aR.y) * 0.75 * (1.0 - dark));
         vCol = mix(vCol, face, land);
         // a band of light crosses the portrait every few seconds, like a scanner passing over it
-        float sweep = exp(-pow((p.x * 0.8 + p.y * 0.45 - mod(uTime * 150.0, uRes.x + uRes.y + 600.0) + 300.0) / 55.0, 2.0));
+        float sweep = exp(-(((p.x * 0.8 + p.y * 0.45 - mod(uTime * 150.0, uRes.x + uRes.y + 600.0) + 300.0) / 55.0)*((p.x * 0.8 + p.y * 0.45 - mod(uTime * 150.0, uRes.x + uRes.y + 600.0) + 300.0) / 55.0)));
         vCol += (uInk * 0.32 + uAcc * 0.12) * sweep * land * (0.35 + 0.65 * aFT);
         vA *= mix(1.0, 0.72 + 0.28 * smoothstep(0.0, 0.5, aFT), land); // everything filled, as in the first head
         vA *= mix(1.0, smoothstep(0.35, 0.9, mk), aX); // the portrait's own glyphs show only on the way to the head

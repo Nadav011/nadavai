@@ -171,9 +171,6 @@ a.wkc:hover{border-color:var(--app);color:var(--app)}
   color:var(--ground);background:var(--app);box-shadow:0 12px 30px -10px rgba(0,0,0,.6);pointer-events:none;opacity:0;translate:0 6px;transition:opacity .35s ease,translate .5s var(--ease-out)}
 .kick__coach svg{width:16px;height:16px}
 .kick.is-ready:not(.has-kicked) .kick__coach{opacity:1;translate:0 0}
-.kick__goal{position:absolute;z-index:6;inset:0;display:grid;place-items:center;pointer-events:none;font-family:var(--wide);font-weight:800;font-stretch:125%;
-  font-size:clamp(64px,11vw,170px);letter-spacing:-.02em;color:transparent;-webkit-text-stroke:2px var(--app);opacity:0}
-.kick.is-goal .kick__goal{animation:goal 1.3s var(--ease-out) forwards}
 .kick__hud{position:absolute;z-index:5;inset-block-start:16px;inset-inline-end:16px;display:flex;gap:8px}
 .kick__pill{display:inline-flex;align-items:center;gap:8px;min-height:36px;padding:0 14px;border-radius:999px;font-size:13.5px;background:rgba(7,10,16,.6);
   border:1px solid rgba(255,255,255,.14);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
@@ -200,6 +197,9 @@ a.wkc:hover{border-color:var(--app);color:var(--app)}
 .lr__team i{display:grid;place-items:center;width:2.8em;height:2.8em;border-radius:50%;font-style:normal;font-weight:800;font-size:1.05em;
   background:radial-gradient(circle at 35% 30%,#7fb3ff,#1f4fa8);box-shadow:0 0 0 2px rgba(255,255,255,.85),0 6px 14px rgba(0,0,0,.5)}
 .lr__team--a i{background:radial-gradient(circle at 35% 30%,#ff8a8a,#b3202c)}
+/* the real club crests from the SporChat app (ANSWERS #68): no disc behind them */
+.lr__team i.lr__crest{background:none!important;box-shadow:none!important;border-radius:0}
+.lr__crest img{display:block;width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 4px 8px rgba(0,0,0,.55))}
 .lr__mid{display:grid;justify-items:center}
 .lr__score{display:flex;align-items:center;gap:.2em;font-family:var(--wide);font-weight:800;font-stretch:125%;font-size:2.6em;line-height:1;direction:ltr}
 .lr__score b{display:inline-block;font-weight:800}
@@ -271,27 +271,12 @@ a.wkc:hover{border-color:var(--app);color:var(--app)}
   .wab__log{min-height:380px}
 }
 
-/* ═ Green Room: wheel, table, intro ═ */
+/* ═ Green Room: panels, intro ═ */
 .gr{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.5fr);align-items:center;gap:clamp(20px,3vw,44px);padding:clamp(22px,3.4vw,48px);
   background:radial-gradient(70% 60% at 30% 30%,rgba(var(--app-rgb),.1),rgba(var(--app-rgb),0) 70%),#07100b}
 .gr__panel{position:relative;display:grid;gap:14px;align-content:start;min-width:0}
 .gr__t{display:flex;align-items:baseline;justify-content:space-between;gap:12px;font-size:17px;font-weight:600}
 .gr__t small{font-size:13px;font-weight:400;color:var(--mute)}
-.wheel{position:relative;width:min(100%,460px);aspect-ratio:1;justify-self:center;touch-action:none;user-select:none;-webkit-user-select:none}
-.wheel__cv{position:absolute;inset:0;width:100%;height:100%;cursor:grab;border-radius:50%}
-.wheel__cv:active{cursor:grabbing}
-.wheel__ptr{position:absolute;z-index:2;inset-block-start:-6px;inset-inline-start:50%;translate:50% 0;width:34px;height:42px;pointer-events:none;filter:drop-shadow(0 6px 8px rgba(0,0,0,.6))}
-.wheel__hub{position:absolute;z-index:2;inset:39%;border-radius:50%;display:grid;place-items:center;padding:0;border:0;cursor:pointer;
-  font-family:var(--wide);font-weight:800;font-stretch:125%;font-size:clamp(14px,1.6vw,20px);color:#14200f;
-  background:radial-gradient(circle at 35% 30%,#fff2c7,#E4C57E 45%,#8c6a24);box-shadow:0 0 0 4px rgba(10,16,11,.9),0 10px 24px rgba(0,0,0,.6)}
-.wheel__hub:focus-visible{outline:2px solid #fff;outline-offset:4px}
-.wheel__res{min-height:52px;display:flex;align-items:center;justify-content:center;gap:10px;font-size:16px;text-align:center}
-.wheel__res b{color:var(--app);font-weight:600}
-.table{position:relative;border-radius:18px;padding:clamp(12px,1.4vw,18px);
-  background:linear-gradient(145deg,#4a2b17,#2a170c 50%,#3d2312);box-shadow:0 0 0 1px rgba(255,255,255,.08) inset,0 30px 70px -30px rgba(0,0,0,.9)}
-.table__cv{display:block;width:100%;aspect-ratio:2/1;border-radius:6px;touch-action:none;cursor:crosshair;background:#0d5a32}
-.table__hud{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px 14px;font-size:14px;color:var(--ink-soft)}
-.table__hud b{font-family:var(--wide);font-stretch:125%;font-weight:800;color:var(--app)}
 .gr__intro{grid-column:1/-1;grid-row:2;display:grid;grid-template-columns:auto minmax(0,30em);gap:22px;align-items:center;padding-block-start:22px;border-block-start:1px solid var(--line)}
 .gr__intro .wkp{height:clamp(240px,22vw,320px)}
 .gr__intro p{font-size:15px;line-height:1.6;color:var(--ink-soft)}
@@ -300,7 +285,6 @@ a.wkc:hover{border-color:var(--app);color:var(--app)}
   .gr{grid-template-columns:minmax(0,1fr);padding:16px 12px 22px;gap:34px}
   .gr__wide,.gr__intro{grid-column:1;grid-row:auto}
   .gr__intro{order:3}
-  .table__cv{aspect-ratio:1/1.55}
   .gr__intro{grid-template-columns:minmax(0,1fr);justify-items:center;text-align:center}
   .gr__intro .wkp{height:min(70svh,460px)}
 }
@@ -465,7 +449,6 @@ a.wkc:hover{border-color:var(--app);color:var(--app)}
 .reduce .wkg__card,.reduce .wc,.reduce .wkp{transition:none}
 .reduce .kick__ring,.reduce .mz__coach svg{animation:none}
 .tbtn[hidden],.btn[hidden],.kick__grab[hidden]{display:none}
-.table{max-width:1120px;margin-inline:auto;width:100%}
 
 /* in the grid a title card shows its mark, the name sits once in the card body; the open panel shows the name too */
 .wc .tc{align-content:end}
@@ -495,13 +478,8 @@ a.wkc:hover{border-color:var(--app);color:var(--app)}
 .wi-more .wc--more .wc__media > img[src*="pet-hero"]{object-position:18% 50%}
 
 /* ── work review round (2026-10-27) ── */
-/* phones: the wheel and the table let a vertical swipe scroll the page; sideways drags and the hub still play */
-@media (max-width:760px){.wheel,.table__cv{touch-action:pan-y pinch-zoom}}
 /* the live demo ignores touches and the wheel until it is tapped */
 .mz:not(.is-live):not(.is-fallback) .mz__frame iframe{pointer-events:none}
-/* the table's keyboard keys, shown while it has focus */
-.table__keys{margin:8px 0 0;font-size:13px;color:var(--ink-soft);text-align:center;opacity:0;transition:opacity .25s ease}
-.table:focus-within .table__keys{opacity:1}
 /* the filter row scrolls sideways on phones: a fade at its far edge says there is more */
 @media (max-width:760px){
   [dir="rtl"] .wf__in{-webkit-mask-image:linear-gradient(to left,transparent,#000 12%);mask-image:linear-gradient(to left,transparent,#000 12%)}
@@ -510,3 +488,140 @@ a.wkc:hover{border-color:var(--app);color:var(--app)}
 }
 /* the closing call to action leads straight into the footer, without an empty band under it */
 .wkn{padding-block-end:clamp(36px,6vh,64px)}
+
+/* ══ SporChat's dimension (js/dims/sporchat.js, 2026-10-28): one 3D stadium behind the whole page ══
+   html.dim-on is set only when the stadium runs (never under reduced motion or without WebGL2). */
+html.dim-on{background:#05080D}
+html.dim-on body{background:transparent}
+.dim{position:fixed;inset:0;z-index:-1;pointer-events:none}
+.dim__cv{position:absolute;inset:0;width:100%;height:100%;display:block;opacity:0;transition:opacity 1.4s ease}
+html.dim-ready .dim__cv{opacity:1}
+/* the reading column: a soft dark veil on the text side (RTL: the right), the world stays open on the other */
+.dim__scrim{position:absolute;inset:0;background:linear-gradient(to left,rgba(5,8,13,.8) 0%,rgba(5,8,13,.62) 28%,rgba(5,8,13,.22) 50%,rgba(5,8,13,0) 64%)}
+html[dir="ltr"] .dim__scrim{background:linear-gradient(to right,rgba(5,8,13,.8) 0%,rgba(5,8,13,.62) 28%,rgba(5,8,13,.22) 50%,rgba(5,8,13,0) 64%)}
+@media (max-width:900px){ .dim__scrim{background:linear-gradient(to bottom,rgba(5,8,13,.28),rgba(5,8,13,.5) 45%,rgba(5,8,13,.62))} }
+/* hero: the stadium takes over from the poster world and the phone */
+html.dim-on .wkh{min-height:100svh}
+html.dim-on .wkh__world,html.dim-on .wkh__scrim,html.dim-on .wkh__glow{transition:opacity 1.2s ease}
+html.dim-ready .wkh__world,html.dim-ready .wkh__scrim,html.dim-ready .wkh__glow{opacity:0}
+html.dim-ready .wkh__stage{display:none}
+html.dim-on .wkh__in{grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr)}
+html.dim-on .wkh__copy{text-shadow:0 2px 24px rgba(5,8,13,.6)}
+/* the story: one beat per screen, so each formation gets its calm */
+html.dim-on .wks__grid{grid-template-columns:minmax(0,1fr);gap:0;max-width:540px}
+html.dim-on .wks__item{min-height:92vh;align-content:center;border-block-start:0;padding-block:0}
+html.dim-on .wks__item::before{position:static;display:block;margin-block-end:4px}
+html.dim-on .wks__p{color:var(--ink)}
+/* the dive: an empty frame between the heading and the screens, where the camera enters one of them */
+html.dim-on .wkg__cloud{margin-block-start:118vh}
+/* the game plays in the stadium itself */
+html.dim-on .kick{background:transparent;box-shadow:inset 0 0 0 1px rgba(140,194,255,.14)}
+html.dim-on .kick__world{display:none}
+/* tech: a calm screen inside the ring of cards */
+html.dim-on .wkt{min-height:100vh;display:grid;align-content:center}
+html.dim-on .wkt__row{background:linear-gradient(to left,rgba(5,8,13,.55),rgba(5,8,13,.15));padding-inline:clamp(16px,2vw,28px);border-radius:14px}
+html.dim-on .wkn__wa{background:rgba(10,14,20,.7);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px)}
+html.dim-on .wkn{min-height:80vh;display:grid;align-content:end}
+/* phones: the hero copy covers most of the screen, so the hero keeps a veil of its own over the 3D (it scrolls away with
+   the hero; the fixed scrim stays light for the chapters), and its muted text takes the soft ink: 4.5:1 or more, measured */
+@media (max-width:900px){
+  html.dim-ready .wkh__scrim{opacity:1;background:linear-gradient(to bottom,rgba(5,8,13,.5) 0%,rgba(5,8,13,.8) 14%,rgba(5,8,13,.82) 100%)}
+  html.dim-on .wkh__copy{--mute:var(--ink-soft)}
+}
+
+/* ══ MediZen's dimension (js/dims/medizen.js, 2026-10-28): a calm, luminous clinic behind the whole page ══
+   html.dim-medizen is set only when the clinic runs (never under reduced motion or without WebGL2). */
+html.dim-medizen{background:#04100E}
+html.dim-medizen body{background:transparent}
+.mzd{position:fixed;inset:0;z-index:-1;pointer-events:none}
+.mzd__cv{position:absolute;inset:0;width:100%;height:100%;display:block;opacity:0;transition:opacity 1.6s ease}
+html.dim-medizen-ready .mzd__cv{opacity:1}
+/* the reading column: a soft veil on the text side (RTL: the right), the clinic stays open on the other */
+.mzd__scrim{position:absolute;inset:0;background:linear-gradient(to left,rgba(3,13,12,.84) 0%,rgba(3,13,12,.66) 27%,rgba(3,13,12,.22) 47%,rgba(3,13,12,0) 60%)}
+html[dir="ltr"] .mzd__scrim{background:linear-gradient(to right,rgba(3,13,12,.84) 0%,rgba(3,13,12,.66) 27%,rgba(3,13,12,.22) 47%,rgba(3,13,12,0) 60%)}
+@media (max-width:900px){ .mzd__scrim{background:linear-gradient(to bottom,rgba(3,13,12,.1),rgba(3,13,12,.2) 34%,rgba(3,13,12,.72) 62%,rgba(3,13,12,.86))} }
+/* hero: the clinic takes over from the poster world and the phone */
+html.dim-medizen .wkh{min-height:100svh}
+html.dim-medizen .wkh__world,html.dim-medizen .wkh__scrim,html.dim-medizen .wkh__glow{transition:opacity 1.2s ease}
+html.dim-medizen-ready .wkh__world,html.dim-medizen-ready .wkh__scrim,html.dim-medizen-ready .wkh__glow{opacity:0}
+html.dim-medizen-ready .wkh__stage{display:none}
+html.dim-medizen .wkh__in{grid-template-columns:minmax(0,.95fr) minmax(0,1.05fr)}
+html.dim-medizen .wkh__copy{text-shadow:0 2px 24px rgba(3,13,12,.7)}
+/* the story: one beat per screen, so each formation gets its calm */
+html.dim-medizen .wks__grid{grid-template-columns:minmax(0,1fr);gap:0;max-width:540px}
+html.dim-medizen .wks__item{min-height:100vh;align-content:center;border-block-start:0;padding-block:0}
+html.dim-medizen .wks__item::before{position:static;display:block;margin-block-end:4px}
+html.dim-medizen .wks__p{color:var(--ink);text-shadow:0 1px 18px rgba(3,13,12,.8)}
+/* the screens: the ring of cards frames the page's own */
+html.dim-medizen .wkg{padding-block:16vh 22vh}
+/* the live demo stands in the room itself, framed by a frosted pane */
+html.dim-medizen .wkx{padding-block:14vh}
+html.dim-medizen .wkx__stage{background:transparent;border-color:rgba(107,214,166,.16)}
+html.dim-medizen .mz{background:transparent}
+/* the footer reads over a veil */
+html.dim-medizen .site-foot{background:linear-gradient(to bottom,rgba(3,13,12,0),rgba(3,13,12,.82) 22%,rgba(3,13,12,.92))}
+/* tech: a calm screen inside the ring of cards */
+html.dim-medizen .wkt{min-height:100vh;display:grid;align-content:center}
+html.dim-medizen .wkt__row{background:rgba(6,22,20,.5);-webkit-backdrop-filter:blur(14px) saturate(1.2);backdrop-filter:blur(14px) saturate(1.2);
+  border:1px solid rgba(107,214,166,.14);padding-inline:clamp(16px,2vw,28px);border-radius:18px}
+html.dim-medizen .wkn{min-height:90vh;display:grid;align-content:end}
+html.dim-medizen .wkn__wa{background:rgba(6,22,20,.62);-webkit-backdrop-filter:blur(14px) saturate(1.2);backdrop-filter:blur(14px) saturate(1.2);border-color:rgba(107,214,166,.18)}
+@media (max-width:900px){
+  html.dim-medizen .wks__item{align-content:end;padding-block-end:10vh}
+  html.dim-medizen .wkh__copy{align-self:end}
+  html.dim-medizen .wkn{min-height:132svh}
+}
+/* phones: the hero copy covers most of the screen, so the hero keeps a veil of its own over the 3D (it scrolls away with
+   the hero; the fixed scrim stays light for the chapters), and its muted text takes the soft ink: 4.5:1 or more, measured */
+@media (max-width:900px){
+  html.dim-medizen-ready .wkh__scrim{opacity:1;background:linear-gradient(to bottom,rgba(3,13,12,.5) 0%,rgba(3,13,12,.8) 14%,rgba(3,13,12,.82) 100%)}
+  html.dim-medizen .wkh__copy{--mute:var(--ink-soft)}
+}
+
+/* ══ Green Room's dimension (js/dims/greenroom.js, 2026-10-28): a snooker hall at night behind the whole page ══
+   html.dim-greenroom is set only when the hall runs (never under reduced motion or without WebGL2). */
+html.dim-greenroom{background:#040605}
+html.dim-greenroom body{background:transparent}
+.gdim{position:fixed;inset:0;z-index:-1;pointer-events:none}
+.gdim__cv{position:absolute;inset:0;width:100%;height:100%;display:block;opacity:0;transition:opacity 1.4s ease}
+html.dim-greenroom-ready .gdim__cv{opacity:1}
+/* the reading side: RTL text on the right, a soft scrim under it; the hall stays open on the left */
+.gdim__scrim{position:absolute;inset:0;background:linear-gradient(to left,rgba(4,6,5,.8) 0%,rgba(4,6,5,.6) 27%,rgba(4,6,5,.2) 48%,rgba(4,6,5,0) 60%)}
+html[dir="ltr"] .gdim__scrim{background:linear-gradient(to right,rgba(4,6,5,.8) 0%,rgba(4,6,5,.6) 27%,rgba(4,6,5,.2) 48%,rgba(4,6,5,0) 60%)}
+@media (max-width:900px){ .gdim__scrim{background:linear-gradient(to bottom,rgba(4,6,5,0) 0%,rgba(4,6,5,.25) 38%,rgba(4,6,5,.72) 70%,rgba(4,6,5,.82))} }
+html.dim-greenroom .wkh{min-height:100svh}
+html.dim-greenroom .wkh__world,html.dim-greenroom .wkh__scrim,html.dim-greenroom .wkh__glow{transition:opacity 1.2s ease}
+html.dim-greenroom-ready .wkh__world,html.dim-greenroom-ready .wkh__scrim,html.dim-greenroom-ready .wkh__glow{opacity:0}
+html.dim-greenroom-ready .wkh__stage{display:none}
+html.dim-greenroom .wkh__in{grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr)}
+html.dim-greenroom .wkh__copy{text-shadow:0 2px 24px rgba(4,6,5,.7)}
+/* the story: one beat per screen, so each chapter of the hall gets its own calm zone */
+html.dim-greenroom .wks__grid{grid-template-columns:minmax(0,1fr);gap:0;max-width:520px}
+html.dim-greenroom .wks__item{min-height:100vh;align-content:center;border-block-start:0;padding-block:0}
+html.dim-greenroom .wks__item::before{position:static;display:block;margin-block-end:4px}
+html.dim-greenroom .wks__p{color:var(--ink);text-shadow:0 1px 18px rgba(4,6,5,.8)}
+html.dim-greenroom .wkg .wk-head{min-height:72vh;display:grid;align-content:center;max-width:560px}
+/* the game over the table seen from above: smoked glass, the felt reads through it; the small text gets the soft ink for contrast */
+html.dim-greenroom .gr{background:linear-gradient(160deg,rgba(255,255,255,.06),rgba(255,255,255,0) 40%),rgba(4,9,6,.42);
+  -webkit-backdrop-filter:blur(2px) saturate(1.1);backdrop-filter:blur(2px) saturate(1.1);box-shadow:inset 0 0 0 1px rgba(var(--app-rgb),.18)}
+html.dim-greenroom .gr__t,html.dim-greenroom .gr__intro p{text-shadow:0 1px 2px rgba(0,0,0,.9),0 0 14px rgba(0,0,0,.7)}
+html.dim-greenroom .gr__t small,html.dim-greenroom .gr__intro p{color:var(--ink-soft)}
+html.dim-greenroom .gr__panel:not(.gr__wide){background:rgba(4,9,6,.5);border-radius:14px;padding:10px 12px}
+html.dim-greenroom .wkx__stage{background:transparent}
+html.dim-greenroom .wkt{min-height:100vh;display:grid;align-content:center}
+html.dim-greenroom .wkt > .wk-in{width:100%}
+html.dim-greenroom .wkt__row{grid-template-columns:minmax(0,1fr);max-width:600px;background:linear-gradient(to left,rgba(4,6,5,.62),rgba(4,6,5,.2));
+  padding-inline:clamp(16px,2vw,28px);border-radius:14px}
+html.dim-greenroom .wkn{min-height:100vh;display:grid;align-content:end}
+html.dim-greenroom .wkn__wa{background:rgba(6,10,8,.72);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px)}
+@media (max-width:900px){
+  html.dim-greenroom .wks__item{min-height:110svh;align-content:end;padding-block-end:12svh}
+  html.dim-greenroom .wkg .wk-head{min-height:60svh;align-content:end}
+  html.dim-greenroom .wkt{align-content:end;padding-block-end:10svh}
+}
+/* phones: the hero copy covers most of the screen, so the hero keeps a veil of its own over the 3D (it scrolls away with
+   the hero; the fixed scrim stays light for the chapters), and its muted text takes the soft ink: 4.5:1 or more, measured */
+@media (max-width:900px){
+  html.dim-greenroom-ready .wkh__scrim{opacity:1;background:linear-gradient(to bottom,rgba(4,6,5,.5) 0%,rgba(4,6,5,.8) 14%,rgba(4,6,5,.82) 100%)}
+  html.dim-greenroom .wkh__copy{--mute:var(--ink-soft)}
+}

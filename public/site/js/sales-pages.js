@@ -36,8 +36,14 @@ if (engine) {
     gsap.ticker.lagSmoothing(0);
   }
 }
-// the page's world behind it (js/worlds): a background of its own, driven by the scroll
-import('./worlds/world.js').then((m) => m.initWorld({ lenis, reduce })).catch((e) => console.info('[world] off', e));
+// the page's place behind it: a 3D dimension on the four sales pages (js/dims, 2026-10-28); without one (reduced
+// motion, calm mode, the light look, no WebGL2, software GL, three not loading, a lost context) its shader world (js/worlds)
+const DIMS = ['services', 'plans', 'check', 'contact'];
+// once: a dimension that fails and also loses its context must not start a second world
+let worldP = null;
+const startWorld = () => (worldP ||= import('./worlds/world.js').then((m) => m.initWorld({ lenis, reduce })).catch((e) => console.info('[world] off', e)));
+(DIMS.includes(page) ? import(`./dims/${page}.js`).then((m) => m.initDim({ lenis, reduce, onLost: startWorld })).catch(() => false) : Promise.resolve(false))
+  .then((dim) => { if (!dim) startWorld(); });
 
 const scrollToEl = (el, offset = -90) => {
   if (lenis) lenis.scrollTo(el, { offset, duration: 1.1 });
@@ -67,8 +73,8 @@ function mountGuide(line, pose = 'waving') {
         ctaSelector: `${DEFAULT_CTA}, .dock, main p, main h1, main h2, main h3` });
       avatarApi = avatar;
       // phones: his head waits in the dock's slot, like the home (main.js), so he never stands on a screen
-      if (matchMedia('(max-width: 720px)').matches) avatar.minimize?.(true);
-      else if (line) setTimeout(() => say(line, pose), 1200);
+      // (avatar.js parks him there itself on coarse pointers and <= 900px, ANSWERS #68)
+      if (!matchMedia('(pointer: coarse), (max-width: 900px)').matches && line) setTimeout(() => say(line, pose), 1200);
     }).catch(() => {});
   };
   ['pointerdown', 'keydown', 'wheel', 'touchstart'].forEach((t) => addEventListener(t, load, { once: true, passive: true }));

@@ -49,7 +49,7 @@ export async function initWorld({ lenis, reduce } = {}) {
   try {
     gl.attachShader(prog, sh(gl.VERTEX_SHADER, VERT));
     // every world gets the crossing: when a new chapter arrives, a band of its light sweeps the screen (u_cut 0..1 while it runs)
-    const CUT = 'if(u_cut>=0.&&u_cut<=1.){vec2 q_=gl_FragCoord.xy/u_res;float y_=u_cut*1.3-.15;float b_=exp(-pow((q_.y-y_)*7.,2.))*(1.-u_cut);'
+    const CUT = 'if(u_cut>=0.&&u_cut<=1.){vec2 q_=gl_FragCoord.xy/u_res;float y_=u_cut*1.3-.15;float b_=exp(-(((q_.y-y_)*7.)*((q_.y-y_)*7.)))*(1.-u_cut);'
       + 'float g_=.6+.4*hash(floor(gl_FragCoord.xy*.5)+u_cut*90.);gl_FragColor.rgb+=u_acc*b_*.32*g_+vec3(b_*.04);gl_FragColor.rgb*=1.+.18*(1.-u_cut)*exp(-u_cut*6.);}';
     gl.attachShader(prog, sh(gl.FRAGMENT_SHADER, HEAD + (W.head || '') + 'void main(){' + W.frag + CUT + '}'));
     gl.linkProgram(prog);

@@ -48,7 +48,8 @@ def norm(s: str) -> str:
     """The comparison form of a string: no markdown, entities decoded, whitespace collapsed."""
     import html
     s = re.sub(r'\*\*|`', '', s)
-    s = html.unescape(s).replace(' ', ' ').replace('‏', '').replace('‎', '')
+    s = html.unescape(s).replace('\u00a0', ' ')
+    s = re.sub(r'\\u(?:200[ef]|206[6-9])|[\u200e\u200f\u2066-\u2069]', '', s)  # direction marks and isolates, also as JS escapes
     return re.sub(r'\s+', ' ', s).strip()
 
 

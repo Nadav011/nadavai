@@ -13,6 +13,9 @@
  * timings follow the Codex pet format played by claude-pet's sprite.ts (MIT, a fork of yBookoff/claude_pet).
  * Motion runs on GSAP's ticker only; no rAF loops or scroll listeners of our own when ScrollTrigger is present.
  * Reduced motion: a still idle frame, no running or tweening, poses shown as a single held frame; the menu works.
+ * Phones (coarse pointer or <= 900px, ANSWERS #68): he waits in the dock as his head and comes out only on a tap,
+ * with the menu open. Any scroll, or the end of a guided stop, folds him back into the dock, so he never walks over
+ * text, chips or cards on a phone. Parking there is not saved (the stored minimise is the visitor's own choice).
  */
 
 const CELL_W = 384, CELL_H = 416, COLS = 8;
@@ -89,6 +92,8 @@ export function initAvatar({
   const rtl = (document.documentElement.dir || getComputedStyle(document.documentElement).direction) === 'rtl';
   const mqReduce = matchMedia('(prefers-reduced-motion: reduce)');
   let reduce = mqReduce.matches;
+  const mqPhone = matchMedia('(pointer: coarse), (max-width: 900px)');
+  let phone = mqPhone.matches;
 
   /* ── DOM ─────────────────────────────────────────────── */
   const el = document.createElement('div');
@@ -372,7 +377,7 @@ export function initAvatar({
     await travel(spot);
     if (my !== seq) return;
     const r = a.getBoundingClientRect();
-    mode = 'anchored';
+    mode = 'anchored'; outAt = performance.now();
     anchor = { target: a, pose, ox: spot.x - r.left, oy: spot.y - r.top };   // rides along with the target
     if (text) say(text);
     await perform(pose);
@@ -393,10 +398,12 @@ export function initAvatar({
     sayTimer = setTimeout(() => sayBox.classList.remove('is-on'), ms || Math.max(2600, text.length * 75));
   }
   function home() {
+    if (phone) { park(); return Promise.resolve(); }
     seq++; mode = 'home'; anchor = null;
     return travel({ x: homeX(), y: homeY() }).then(settle);
   }
   function release() {      // the anchored target left the screen: drop back to the floor
+    if (phone) { park(); return; }
     mode = 'home'; anchor = null;
     pos.x = Math.min(Math.max(pos.x, Math.min(trackMin(), trackMax())), Math.max(trackMin(), trackMax()));
     if (pos.y < 0 || pos.y - box.h > vh) pos.y = pos.y < 0 ? -box.h : vh + box.h;
@@ -456,7 +463,7 @@ export function initAvatar({
   on(menu, 'click', (e) => {
     const it = e.target.closest('.nav-avatar__item');
     if (!it) return;
-    if (it.dataset.act === 'min') { closeMenu(false); minimize(true); head.focus(); return; }
+    if (it.dataset.act === 'min') { closeMenu(false); minimize(true, !phone); head.focus(); return; }
     if (it.classList.contains('nav-avatar__item--wa')) { closeMenu(false); perform('thumbs-up'); return; }
     const t = T[it.dataset.go];
     if (!t) return;
@@ -482,8 +489,20 @@ export function initAvatar({
     head.hidden = !(minimized || ducked);
     if (!minimized) { mode = 'home'; anchor = null; kill(); pos.x = homeX(); pos.y = homeY(); apply(); play('waving', 'once'); }
   }
-  on(xBtn, 'click', () => { minimize(true); head.focus(); });
-  on(head, 'click', () => { if (ducked && !minimized) { duck(false); openMenu(); return; } minimize(false); btn.focus(); });
+  on(xBtn, 'click', () => { minimize(true, !phone); head.focus(); });
+  on(head, 'click', () => {
+    if (ducked && !minimized) { duck(false); openMenu(); return; }
+    if (phone) { minimize(false, false); outAt = performance.now(); openMenu(); return; }   // out of the dock, menu open
+    minimize(false); btn.focus();
+  });
+  /** Phones: back into the dock, without saving it; the focus follows him if it was on him. */
+  let outAt = 0;
+  function park() {
+    if (minimized) return;
+    const had = el.contains(document.activeElement) && document.activeElement !== head;
+    minimize(true, false);
+    if (had) head.focus({ preventScroll: true });
+  }
 
   /* ── scroll: run in the scroll direction, stop and look around ── */
   let lastScroll = -1e9, scrollDir = 1, scrolling = false, overAt = 0, restAt = 0;
@@ -496,6 +515,7 @@ export function initAvatar({
   function tick(_t, dtMs) {
     const dt = Math.min(dtMs || 16, 100);
     const now = performance.now();
+    if (phone && !minimized && mode !== 'guided' && now - lastScroll < 170 && lastScroll > outAt + 450) { park(); stepSprite(dt); return; }
     if (mode === 'anchored' && anchor) {
       if (!anchor.target.isConnected) release();
       else {
@@ -537,6 +557,11 @@ export function initAvatar({
 
   const onReduce = () => { reduce = mqReduce.matches; kill(); P.done?.(false); P.done = null; Object.assign(P, { name: 'idle', mode: 'loop', i: 0, t: 0 }); draw(); };
   on(mqReduce, 'change', onReduce);
+  on(mqPhone, 'change', () => {
+    phone = mqPhone.matches;
+    if (phone) park();
+    else if (minimized && !readMin()) minimize(false, false);   // parked only because of the phone: out again on desktop
+  });
   const onResize = () => {
     measure();
     if (mode === 'home') { kill(); pos.x = Math.min(Math.max(pos.x, Math.min(trackMin(), trackMax())), Math.max(trackMin(), trackMax())); pos.y = homeY(); }
@@ -549,7 +574,7 @@ export function initAvatar({
   measure();
   pos.x = homeX(); pos.y = homeY(); apply();
   (window.requestIdleCallback || ((f) => setTimeout(f, 1500)))(() => { const pre = new Image(); pre.src = urls.extra; });
-  if (readMin()) minimize(true, false);
+  if (readMin() || phone) minimize(true, false);
   requestAnimationFrame(() => el.classList.add('is-ready'));
 
   const api = {

@@ -25,8 +25,15 @@ if (engine) {
   }
 }
 
-// the page's world behind it (js/worlds): a background of its own, driven by the scroll
-import('./worlds/world.js').then((m) => m.initWorld({ lenis, reduce })).catch((e) => console.info('[world] off', e));
+// the page's place behind it: a 3D dimension (js/dims, 2026-10-28); without one (reduced motion, calm mode, the light
+// look, no WebGL2, software GL, three not loading, a lost context) its shader world (js/worlds), as before
+const DIMS = { about: 'about', social: 'social', playground: 'play', branch: 'branch', network: 'network' };
+const dimName = DIMS[document.body.dataset.page];
+// once: a dimension that fails and also loses its context must not start a second world
+let worldP = null;
+const startWorld = () => (worldP ||= import('./worlds/world.js').then((m) => m.initWorld({ lenis, reduce })).catch((e) => console.info('[world] off', e)));
+(dimName ? import(`./dims/${dimName}.js`).then((m) => m.initDim({ lenis, reduce, onLost: startWorld })).catch(() => false) : Promise.resolve(false))
+  .then((dim) => { if (!dim) startWorld(); });
 
 /* ── small helpers shared with the page modules ── */
 export function lazy(el, fn, margin = '600px') {

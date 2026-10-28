@@ -75,6 +75,8 @@ fonts.then(async () => {
     ScrollTrigger.sort();
     ScrollTrigger.refresh();
   } else root.classList.add('past-hero');
+  // the hub of dimensions behind the page after the hero (js/dims/home.js); false keeps the page exactly as it is
+  if (engine && !reduce) import('./dims/home.js').then((m) => m.initDim({ lenis, reduce })).catch(() => false);
 
   if (hash && hash.length > 1) {
     const t = document.querySelector(hash);
@@ -83,7 +85,7 @@ fonts.then(async () => {
 
 
   // the avatar guide: loaded on the first interaction or when the browser is idle (its sheets are heavy).
-  // On phones it starts folded into the dock (its head sits in the dock's last slot).
+  // On phones (coarse pointer or <= 900px) he waits folded into the dock (his head in its last slot) until tapped.
   if (engine && !reduce) {
     let started = false;
     const load = () => {
@@ -94,7 +96,7 @@ fonts.then(async () => {
         root.classList.add('has-avatar');
         window.__avatar = initAvatar({ gsap, ScrollTrigger, lenis, atlasUrl: '/site/assets/avatar/spritesheet.webp', extraUrl: '/site/assets/avatar/site-extra.webp',
           ctaSelector: `${DEFAULT_CTA || 'a[href], button'}, .dock, .hud, .ck__field, .ck__card, .chat, .pl, .phone, .cmp, .night__body, .dial, .lv3__card, .strip, .tr__count, main h2` });
-        if (mobile) avatar?.minimize?.(true);
+        // phones: avatar.js itself keeps him in the dock until a tap (ANSWERS #68)
       }).catch(() => {});
     };
     ['pointerdown', 'keydown', 'wheel', 'touchstart'].forEach((t) => addEventListener(t, load, { passive: true, once: true }));

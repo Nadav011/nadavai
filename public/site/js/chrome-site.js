@@ -7,7 +7,7 @@
 
 // ── review looks: A "לילה" (the site as designed), B "יום" ──
 // ?look=a|b (remembered in localStorage nadav-look), else the stored choice. Look A loads and sets nothing.
-// B sets html[data-look] and loads css/looks.css; a two-dot switcher (hidden with ?looks=0) for live review.
+// B sets html[data-look] and loads css/looks.css; a two-dot switcher for live review, only with ?look= or ?review.
 // window.__look = { id, ready } and a 'look:change' event let canvas and WebGL code re-read the --lk-* colours.
 const LOOK_SCOPES = { 'site.css': 'site', 'chrome.css': 'chrome', 'home.css': 'home', 'sales.css': 'sales', 'story.css': 'story',
   'work.css': 'work', 'offer.css': 'offer', 'bio.css': 'bio', 'avatar.css': 'avatar' };
@@ -59,12 +59,13 @@ function initLooks() {
   };
   if (id !== 'a') apply(id);
   window.__look = state;
-  // The switcher shows by default while the looks are under review (artifact links cannot carry a query); ?looks=0 hides it.
-  if (q.get('looks') !== '0') {
+  // The switcher is a review tool: it shows only with ?look= or ?review in the URL (ANSWERS #68: it covered the
+  // services jump bar and page content for visitors); ?looks=0 still hides it. The stored look applies either way.
+  if ((q.has('look') || q.has('review')) && q.get('looks') !== '0') {
     const mount = () => {
       const st = document.createElement('style');
-      st.textContent = '.looks{display:flex;align-items:center}@media (max-width:900px){.nav > .looks{display:none}}.sheet .looks{margin-block-start:12px}'
-        + '.looks button{display:grid;place-items:center;width:44px;height:44px;padding:0;border:0;border-radius:50%;background:none;cursor:pointer}'
+      st.textContent = '.looks{position:fixed;z-index:70;inset-block-start:calc(var(--nav,68px) + 10px);inset-inline-start:50%;translate:50% 0;display:flex;gap:2px;padding:3px;border-radius:999px;background:rgba(128,128,128,.22);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}'
+        + '[dir="ltr"] .looks{translate:-50% 0}.looks button{display:grid;place-items:center;width:32px;height:32px;padding:0;border:0;border-radius:50%;background:none;cursor:pointer}'
         + '.looks i{width:14px;height:14px;border-radius:50%;box-shadow:0 0 0 1px rgba(128,128,128,.6);transition:scale .2s ease}'
         + '.looks button[aria-pressed="true"] i{scale:1.25;box-shadow:0 0 0 2px #fff,0 0 0 3.5px #111}.looks button:focus-visible{outline:2px solid #fff;outline-offset:1px;box-shadow:0 0 0 5px #111}';
       document.head.appendChild(st);
@@ -80,18 +81,12 @@ function initLooks() {
         b.addEventListener('click', () => {
           apply(k);
           try { localStorage.setItem('nadav-look', k); } catch { /* this page only */ }
-          document.querySelectorAll('.looks button').forEach((x) => x.setAttribute('aria-pressed', String(x.dataset.look === k)));
+          bar.querySelectorAll('button').forEach((x) => x.setAttribute('aria-pressed', String(x.dataset.look === k)));
           try { const u = new URL(location.href); u.searchParams.set('look', k); history.replaceState(history.state, '', u); } catch { /* opaque-origin frame */ }
         });
         bar.appendChild(b);
       });
-      const nav = document.getElementById('nav'), sheet = document.querySelector('#navSheet nav');
-      if (nav) nav.insertBefore(bar, document.getElementById('calm')); else document.body.appendChild(bar);
-      if (sheet) {
-        const copy = bar.cloneNode(true);
-        copy.addEventListener('click', (e) => { const t = e.target.closest('button[data-look]'); if (t) bar.querySelector(`[data-look="${t.dataset.look}"]`).click(); });
-        sheet.appendChild(copy);
-      }
+      document.body.appendChild(bar);
     };
     if (document.body) mount(); else addEventListener('DOMContentLoaded', mount, { once: true });
   }

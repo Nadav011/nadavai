@@ -53,6 +53,17 @@
     inset-block-end:calc(22px + env(safe-area-inset-bottom,0px))!important;translate:none!important;inline-size:52px!important;block-size:52px!important}
   html.has-avatar .nav-avatar{--av-safe:84px}
 }
+/* tablets and touch screens wider than a phone: he waits in the desktop dock's last slot too (ANSWERS #68) */
+@media (min-width:721px) and (max-width:900px), (min-width:721px) and (pointer:coarse){
+  html.has-avatar .dock__slot{display:block;flex:0 0 48px;block-size:48px}
+  html.has-avatar .nav-avatar .nav-avatar__head{inset-inline-start:auto!important;inset-inline-end:calc(var(--gut) + 10px)!important;inset-block-start:auto!important;
+    inset-block-end:calc(26px + env(safe-area-inset-bottom,0px))!important;translate:none!important;inline-size:46px!important;block-size:46px!important}
+}
+/* the head waits in the dock, so it shows and hides with the dock (after the opening screen) */
+@media (max-width:900px), (pointer:coarse){
+  html.has-avatar .nav-avatar .nav-avatar__head{transition:opacity .45s ease,visibility .45s,scale .25s}
+  html.has-avatar:not(.past-hero) .nav-avatar .nav-avatar__head{opacity:0;visibility:hidden;pointer-events:none}
+}
 /* the footer always paints above page backdrops (a fixed sky, a world image) */
 .site-foot{position:relative;z-index:1}
 /* the dock and the chapter chip never cover the last footer links on desktop either */

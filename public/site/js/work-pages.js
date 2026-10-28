@@ -29,6 +29,13 @@ if (engine) {
   }
 }
 
+/* the page's dimension (js/dims) when it has one, else its shader world (js/worlds); the world also takes over
+   when the dimension loses its GPU context. dimReady says whether the dimension runs (the hero's 3D phone waits on it). */
+const startWorld = () => import('./worlds/world.js').then((m) => m.initWorld({ lenis, reduce })).catch((e) => console.info('[world] off', e));
+const DIMS = { sporchat: './dims/sporchat.js', medizen: './dims/medizen.js', greenroom: './dims/greenroom.js', index: './dims/work.js' };
+const dimReady = DIMS[page] ? import(DIMS[page]).then((m) => m.initDim({ lenis, reduce, onLost: startWorld })).catch(() => false) : Promise.resolve(false);
+dimReady.then((dim) => { if (!dim) startWorld(); });
+
 /* the avatar is optional: a live handle that no-ops until the module is mounted */
 const avatar = {
   ref: null,
@@ -53,7 +60,11 @@ function initHero() {
   const start = () => import('./games/phone3d.js')
     .then((m) => m.mountPhone(stage, { shots, video: stage.dataset.video || '', accent: getComputedStyle(document.body).getPropertyValue('--app').trim() || '#E8913C', hero }))
     .catch((e) => console.warn('[work] 3D phone unavailable, the poster stays', e?.message));
-  ('requestIdleCallback' in window) ? requestIdleCallback(start, { timeout: 900 }) : setTimeout(start, 200);
+  // after the dimension decides: it removes the stage when it runs, and gives it back when it falls back
+  dimReady.then((dim) => {
+    if (dim || !stage.isConnected) return;
+    ('requestIdleCallback' in window) ? requestIdleCallback(start, { timeout: 900 }) : setTimeout(start, 200);
+  });
 }
 
 /* ── gallery: cards that open ─────────────────────────────────── */
@@ -145,8 +156,6 @@ function initGallery() {
 }
 
 /* ── games: load each one when it comes near ───────────────── */
-// the page's world behind it (js/worlds): a background of its own, driven by the scroll; every work page, the index too
-import('./worlds/world.js').then((m) => m.initWorld({ lenis, reduce })).catch((e) => console.info('[world] off', e));
 
 function initGames() {
   const els = [...document.querySelectorAll('[data-game]')];
@@ -240,7 +249,7 @@ function initIndex() {
     acts.innerHTML = '';
     if (c.dataset.href) { const a = document.createElement('a'); a.className = 'btn btn--sm'; a.href = c.dataset.href; a.target = '_blank'; a.rel = 'noopener'; a.textContent = c.dataset.hrefLabel || __t('work.zoom.open'); acts.appendChild(a); }
     const wa = document.createElement('a'); wa.className = 'btn btn--sm btn--ghost'; wa.target = '_blank'; wa.rel = 'noopener';
-    wa.href = 'https://wa.me/972504401760?text=' + encodeURIComponent(__t('wa.proto.generic', { project: hEl.textContent }));
+    wa.href = 'https://wa.me/972504401760?text=' + encodeURIComponent(__t('wa.project', { project: hEl.textContent }));
     wa.textContent = __t('services.block.cta'); acts.appendChild(wa);
     const T = tgt(); place(T);
     const r = c.getBoundingClientRect(); from = { x: r.left, y: r.top, w: r.width, h: r.height };

@@ -22,7 +22,7 @@ Draft for Nadav's approval, in the deck's table format, so the design session ca
 | `home.hero.ticker.z` | סגירת קופה | Register close | שורת הטיקר בהירו, ליד Z. זהה לחלק השני של home.hero.cloud.z.label ("Z · סגירת קופה") |
 | `home.hero.ticker.network` | סניפים, ביקורות ומשימות | Branches, audits and tasks | שורת הטיקר בהירו, ליד "רשת המקסיקני". הנוסח המקוצר של home.hero.cloud.network.line |
 | `home.hero.ticker.neon` | משחק תלת-ממד בדפדפן | A 3D browser game | שורת הטיקר בהירו, ליד Neon Alley |
-| `home.hero.ticker.pet` | מראה מה הסוכנים שלי עושים | Shows what my agents are doing | שורת הטיקר בהירו, ליד "חיית המחמד". הנוסח המקוצר של home.hero.cloud.pet.line |
+| `home.hero.ticker.pet` | עובד בשבילי על המחשב | Works for me on the computer | שורת הטיקר בהירו, ליד "נדב 2.0". הנוסח המקוצר של home.hero.cloud.pet.line. הנוסח הקודם היה "מראה מה הסוכנים שלי עושים" |
 | `home.hud.value` | מה זה נותן | What it does | שם הסעיף בתצוגת ההתקדמות של העמוד (data-name של סעיף 02). הנוסח המקוצר של home.value.eyebrow |
 | `home.value.whatsapp.mockHeader.title` | הודעות | Messages | תוכן מדומה בתוך מסך. כותרת מסך הוואטסאפ בצד "לפני". חצי ראשון של home.value.whatsapp.mockHeader |
 | `home.value.whatsapp.mockHeader.sub` | שיחות שלא נקראו | Unread | תוכן מדומה בתוך מסך. חצי שני של home.value.whatsapp.mockHeader |
@@ -40,7 +40,7 @@ Draft for Nadav's approval, in the deck's table format, so the design session ca
 | `home.live.hint.proto` | רחפו או הקישו על טלפון. | Hover or tap a phone. | אותו אלמנט כמו home.live.hint, עם נקודה בסוף. מוצג במכשיר עם עכבר |
 | `home.live.hint.touch.proto` | הקישו על טלפון. | Tap a phone. | אותו אלמנט כמו home.live.hint.touch, עם נקודה בסוף. מוצג במכשיר מגע |
 | `home.live.sporchat.desc` | צ'אט חי לכל משחק כדורגל. CTO. ב-App Store וב-Google Play. | A live chat for every football match. CTO. On the App Store and Google Play. | תיאור נסתר (sr-only) של הטלפון, מורכב מ-line, role ו-status של home.live.sporchat. הטענה על Google Play פתוחה (COPY-GAP פריט 13) |
-| `home.live.medizen.desc` | ניהול קליניקות, עם בוט בוואטסאפ שקובע תורים. Co-Founder & CTO. עובד בקליניקות. | Clinic management, with a WhatsApp bot that books appointments. Co-Founder & CTO. Running in clinics. | תיאור נסתר (sr-only) של הטלפון, מורכב מ-line, role ו-status של home.live.medizen. בעברית "בוט בוואטסאפ" מול "בוט לוואטסאפ" במונחון (COPY-GAP פריט 5) |
+| `home.live.medizen.desc` | ניהול קליניקות, עם בוט לוואטסאפ שקובע תורים. Co-Founder & CTO. עובד בקליניקות. | Clinic management, with a WhatsApp bot that books appointments. Co-Founder & CTO. Running in clinics. | תיאור נסתר (sr-only) של הטלפון, מורכב מ-line, role ו-status של home.live.medizen. הנוסח עודכן ל"בוט לוואטסאפ", כמו במונחון (COPY-GAP פריט 5) |
 | `home.live.greenroom.desc` | מועדון סנוקר שעובד בלי אף אחד בדלפק. בניתי את כל המערכת. ב-App Store וב-Google Play. | A snooker club that runs with nobody at the desk. I built the whole system. On the App Store and Google Play. | תיאור נסתר (sr-only) של הטלפון, מורכב מ-line, role ו-status של home.live.greenroom. הטענה על Google Play פתוחה (COPY-GAP פריט 13) |
 | `home.branch.dial.valuetext.start` | 08:00, משמרות | 08:00, Shifts | aria-valuetext ההתחלתי של חוגת היום בסניף. ה-JS מחליף אותו ב-home.branch.dial.valuetext ({time}, {system}) בכל תזוזה, ובשעון של 24 שעות |
 | `home.plans.partner.inc1` | שעות פיתוח קבועות כל חודש | Fixed development hours every month | פריט 1 בכרטיס שותף טכנולוגי, מתוך home.plans.partner.includes. גם ב-/plans |
@@ -85,16 +85,11 @@ The first nine strings of the service cards and the build step are the same Hebr
 | `work.more.flyers.kicker` | קריאייטיב · עסקים | Creative · Businesses | data-k של כרטיס פלאיירים ומיתוג: הכותרת הקטנה בחלון ההגדלה |
 | `work.more.flyers.long` | פלאיירים, לוגואים, ערכות פוסטרים ותוכן לרשתות לעסקים מקומיים: Asian Bar, ברסלב פרויקטים, חשמלכה ועוד. חלק מהם נוצרו במערכת התוכן שבניתי, כדי שהעסק יקבל עיצוב חדש בכל שבוע בלי מעצב. | Flyers, logos, poster kits and social content for local businesses: Asian Bar, Breslev Projects, Hashmalka and more. Some of it came out of the content system I built, so a business gets fresh designs every week without a designer. | data-long של כרטיס פלאיירים ומיתוג. שמות לקוחות מחכים להסכמה (COPY-GAP פריט 14) |
 | `work.tag.branding` | מיתוג | Branding | תג בכרטיס פלאיירים ומיתוג. גם כותרת קטנה ברשימת "מה אני עושה" בדף סושיאל (social.what.brand הוא המחרוזת השלמה) |
-| `work.more.villa.kicker` | הדמיות תלת-ממד | 3D renderings | data-k של כרטיס הדמיות וילה: הכותרת הקטנה בחלון ההגדלה |
-| `work.more.villa.note` | ההדמיות נוצרו ב-AI. המצגות עצמן נבנו בקוד. | The renderings are AI-generated. The presentations themselves are built in code. | data-note של כרטיס הדמיות וילה: הערה בחלון ההגדלה |
-| `work.more.villa.long` | מצגות נדל״ן שגוללים בהן: נקודות חמות על הדמיה אווירית של מתחם, ובניין שמתפרק ונבנה מחדש בזמן הגלילה. נבנו כדמו לאדריכלים ויזמים. | Real-estate presentations you scroll through: hotspots on an aerial rendering of a complex, and a building that comes apart and rebuilds itself as you scroll. Built as a demo for architects and developers. | data-long של כרטיס הדמיות וילה |
-| `work.tag.threeD` | תלת-ממד | 3D | תג בכרטיס הדמיות וילה |
-| `work.tag.scroll` | גלילה | Scroll | תג בכרטיס הדמיות וילה |
 | `work.more.autocad.kicker` | כלי · אדריכלות | Tool · Architecture | data-k של כרטיס מחולל תוכניות AutoCAD: הכותרת הקטנה בחלון ההגדלה |
 | `work.more.autocad.long` | כלי שממלא תוכנית DXF לפי מפרט: חדרים, מידות ותוויות, ישר לתוך AutoCAD. | A tool that fills in a DXF plan from a spec: rooms, dimensions and labels, straight into AutoCAD. | data-long של כרטיס מחולל תוכניות AutoCAD |
 | `work.more.pet.kicker` | כלי · קוד פתוח | Tool · Open source | data-k של כרטיס חיית המחמד: הכותרת הקטנה בחלון ההגדלה |
 | `work.more.pet.note` | מבוסס על פרויקט קוד פתוח (MIT), עם הדמות שלי ושינויים משלי. | Based on an open-source project (MIT), with my own character and my own changes. | data-note של כרטיס חיית המחמד. הקרדיט ל-claude_pet של bookoff נמצא ב-play.pet.credit |
-| `work.more.pet.long` | חיית מחמד לשולחן העבודה שמראה מה סוכן הקוד עושה עכשיו: עובד, מחכה לאישור, תקוע או סיים. יש לה צ'אט מהיר והכתבה בעברית. אחד הדברים שהכי כיף לי לבנות. | A desktop pet that shows what the coding agent is doing right now: working, waiting for approval, stuck or done. It has a quick chat and dictation in Hebrew. One of my favourite things to build. | data-long של כרטיס חיית המחמד |
+| `work.more.pet.long` | עובד בשבילי על המחשב ועוקב אחרי כל סשן של הסוכנים: מה רץ, מה מחכה לאישור, מה נתקע ומה הסתיים. כשמשהו צריך אותי, הוא מתריע. יש לו צ'אט מהיר והכתבה בעברית. אחד הדברים שהכי כיף לי לבנות. | Works for me on the computer and follows every agent session: what's running, what's waiting for approval, what's stuck and what's done. When something needs me, it alerts me. It has a quick chat and dictation in Hebrew. One of my favourite things to build. | data-long של כרטיס נדב 2.0: הטקסט בחלון ההגדלה. בלשון זכר בעברית (החלטה 10). הנוסח הקודם דיבר על "חיית מחמד לשולחן העבודה" |
 | `work.list.hatum.name` | חתום בנשיקה דיגיטל | Hatum BeNeshika Digital | שם הלקוח ברשימת "ועוד, בקצרה", בתעתיק כמו ב-work.more.hatum |
 | `work.zoom.close` | סגירה | Close | aria-label של כפתור הסגירה בחלון ההגדלה. אותה מילה בדף הסניף שלי היא תווית שעה: branch.story.2300.part |
 
@@ -107,7 +102,7 @@ The first nine strings of the service cards and the build step are the same Hebr
 | `sporchat.screens.room.cap.proto` | חדר משחק חי, עם צ'אט ומדדי לחץ | A live match room, with chat and pressure meters | כיתוב המסך בצופה (data-cap). אותו אלמנט כמו sporchat.screens.room (תווית · כיתוב) בנוסח אחר |
 | `sporchat.screens.room.label` | חדר משחק | Match room | תווית קצרה מתחת לצילום המסך |
 | `sporchat.screens.match.cap.proto` | דף המשחק: לפני שריקת הפתיחה, עם ניחוש | The match page before kickoff, with a prediction | כיתוב המסך בצופה (data-cap). אותו אלמנט כמו sporchat.screens.match בנוסח אחר |
-| `sporchat.screens.arena.cap.proto` | המגרש: ניחושים פתוחים, רצף ונקודות | The pitch, with open predictions, streaks and points | כיתוב המסך בצופה (data-cap). אותו אלמנט כמו sporchat.screens.arena בנוסח אחר |
+| `sporchat.screens.arena.cap.proto` | ארנה: ניחושים פתוחים, רצף ונקודות | The Arena, with open predictions, streaks and points | כיתוב המסך בצופה (data-cap). אותו אלמנט כמו sporchat.screens.arena (תווית · כיתוב) בנוסח אחר. "ארנה" כמו בחפיסה (החלטה 18) |
 | `sporchat.screens.chats.cap` | צ'אטים: המשחק הגדול, חי עכשיו | The chat list, with the big match live right now | כיתוב המסך בצופה (data-cap) |
 | `sporchat.screens.feed.cap.proto` | פיד: תוצאות חיות ופרשן ה-AI | The feed, with live scores and the AI commentator | כיתוב המסך בצופה (data-cap). אותו אלמנט כמו sporchat.screens.feed בנוסח אחר |
 | `sporchat.screens.feed.label` | פיד | Feed | תווית קצרה מתחת לצילום המסך |
@@ -118,6 +113,10 @@ The first nine strings of the service cards and the build step are the same Hebr
 | `sporchat.try.hud.goals` | שערים 0 | Goals 0 | כל טקסט הכדור בטלפון הבועט, עם המונה בתוך <b id="kickGoals"> שה-JS (sporchat-kick.js) מעדכן. sporchat.try.score הוא "שערים: {n}". שימו לב: באנגלית ההודעה היא טקסט בלי תגיות, והמונה לא יימצא |
 | `work.tech.label` | התפקיד | Role | תווית מעל כרטיס התפקיד בדפי SporChat ו-MediZen. case.role הוא "התפקיד שלי" (כותרת אחרת) |
 | `work.nav.all` | כל העבודות | All work | קישור בסוף כל דף פרויקט (SporChat, MediZen, Green Room). case.back הוא "לכל העבודות" |
+| `sporchat.pk.keys.proto` | מקלדת (Tab לכדור): ←→ כיוון · ↑↓ כוח · C סיבוב · P פננקה · רווח בעיטה | Keyboard (Tab to the ball): ←→ aim · ↑↓ power · C curl · P panenka · Space shoot | כל טקסט הרמז מתחת למשחק: "מקלדת" ב-<b> והמקשים ב-<kbd>. אותו אלמנט כמו sporchat.pk.keys, אבל כאן החצים צמודים (בלי רווח בין שני ה-<kbd>), ולכן השורה בדק לא מתאימה. באנגלית נשארים אותם סימנים (←→ ↑↓ C P), כדי שהממיר ישים את ה-<kbd> במקומם |
+| `global.key.space` | רווח | Space | שם מקש בתוך <kbd> ברמזי המקלדת של SporChat ו-Green Room. שורה נפרדת כדי שהממיר ישים את ה-<kbd> גם באנגלית (הוא מחפש את שם המקש בדק) |
+| `sporchat.dims.led.room` | חדר לכל משחק | A room for every match | תוכן מדומה בתוך מסך. כיתוב בשלט הלד בחדר התלת-ממדי, לצד SporChat ו-LIVE |
+| `sporchat.dims.led.commentator` | פרשן AI | AI commentator | תוכן מדומה בתוך מסך. כיתוב בשלט הלד בחדר התלת-ממדי |
 
 ## work-medizen
 
@@ -135,6 +134,28 @@ The first nine strings of the service cards and the build step are the same Hebr
 | `medizen.screens.homeDesktop.cap` | הדמו במחשב | The demo on a computer | כיתוב המסך בצופה (data-cap) |
 | `medizen.screens.homeDesktop.label` | במחשב | On a computer | תווית קצרה מתחת לצילום המסך |
 | `medizen.next.label` | הפרויקט הבא · 03 / 03 | Next project · 03 / 03 | תווית הניווט לפרויקט הבא. המספר הוא מקום הפרויקט בסדרת שלושת דפי הפרויקט |
+| `medizen.dims.invoice.title` | חשבונית מס 1043 | Tax invoice 1043 | תוכן מדומה בתוך מסך. חשבונית על השולחן בחדר התלת-ממדי (נייר, ממולא חלקית) |
+| `medizen.dims.invoice.patient` | קליניקה · מטופל: ______ | Clinic · Patient: ______ | תוכן מדומה בתוך מסך. שורת הפרטים בחשבונית. הקווים התחתונים הם שדה ריק |
+| `medizen.dims.invoice.total` | סה"כ ₪ ____ | Total ₪ ____ | תוכן מדומה בתוך מסך. שורת הסכום בחשבונית. הקווים התחתונים הם שדה ריק |
+| `medizen.dims.invoice.paid` | שולם? | Paid? | תוכן מדומה בתוך מסך. חותמת בחשבונית |
+| `medizen.dims.form.title` | טופס קליטה | Intake form | תוכן מדומה בתוך מסך. כותרת טופס הקליטה בחדר התלת-ממדי |
+| `medizen.dims.form.name` | שם מלא | Full name | תוכן מדומה בתוך מסך. שדה בטופס הקליטה |
+| `medizen.dims.form.id` | תעודת זהות | ID number | תוכן מדומה בתוך מסך. שדה בטופס הקליטה |
+| `medizen.dims.form.phone` | טלפון | Phone | תוכן מדומה בתוך מסך. שדה בטופס הקליטה |
+| `medizen.dims.form.allergies` | רגישויות | Allergies | תוכן מדומה בתוך מסך. שדה בטופס הקליטה |
+| `medizen.dims.form.meds` | תרופות | Medications | תוכן מדומה בתוך מסך. שדה בטופס הקליטה |
+| `medizen.dims.form.signature` | חתימה | Signature | תוכן מדומה בתוך מסך. שדה בטופס הקליטה |
+| `medizen.dims.calendar.title` | יומן · שבוע 43 | Calendar · Week 43 | תוכן מדומה בתוך מסך. כותרת יומן הקיר בחדר התלת-ממדי |
+| `medizen.desk.name.itay` | איתי | Itay | תוכן מדומה בתוך מסך. שם מומצא של מטופל במשחק המזכירה, מתוך medizen.desk.names. באנגלית אותו שם בתעתיק, כמו ב-medizen.desk.names |
+| `medizen.desk.name.shira` | שירה | Shira | תוכן מדומה בתוך מסך. שם מומצא של מטופל במשחק המזכירה, מתוך medizen.desk.names. באנגלית אותו שם בתעתיק, כמו ב-medizen.desk.names |
+| `medizen.desk.name.daniel` | דניאל | Daniel | תוכן מדומה בתוך מסך. שם מומצא של מטופל במשחק המזכירה, מתוך medizen.desk.names. באנגלית אותו שם בתעתיק, כמו ב-medizen.desk.names |
+| `medizen.desk.name.michal` | מיכל | Michal | תוכן מדומה בתוך מסך. שם מומצא של מטופל במשחק המזכירה, מתוך medizen.desk.names. באנגלית אותו שם בתעתיק, כמו ב-medizen.desk.names |
+| `medizen.desk.name.tamar` | תמר | Tamar | תוכן מדומה בתוך מסך. שם מומצא של מטופל במשחק המזכירה, מתוך medizen.desk.names. באנגלית אותו שם בתעתיק, כמו ב-medizen.desk.names |
+| `medizen.desk.name.yonatan` | יונתן | Yonatan | תוכן מדומה בתוך מסך. שם מומצא של מטופל במשחק המזכירה, מתוך medizen.desk.names. באנגלית אותו שם בתעתיק, כמו ב-medizen.desk.names |
+| `medizen.desk.name.roni` | רוני | Roni | תוכן מדומה בתוך מסך. שם מומצא של מטופל במשחק המזכירה, מתוך medizen.desk.names. באנגלית אותו שם בתעתיק, כמו ב-medizen.desk.names |
+| `medizen.desk.name.lior` | ליאור | Lior | תוכן מדומה בתוך מסך. שם מומצא של מטופל במשחק המזכירה, מתוך medizen.desk.names. באנגלית אותו שם בתעתיק, כמו ב-medizen.desk.names |
+| `medizen.desk.name.hadar` | הדר | Hadar | תוכן מדומה בתוך מסך. שם מומצא של מטופל במשחק המזכירה, מתוך medizen.desk.names. באנגלית אותו שם בתעתיק, כמו ב-medizen.desk.names |
+| `medizen.desk.name.ori` | אורי | Ori | תוכן מדומה בתוך מסך. שם מומצא של מטופל במשחק המזכירה, מתוך medizen.desk.names. באנגלית אותו שם בתעתיק, כמו ב-medizen.desk.names |
 
 ## work-green-room
 
@@ -150,10 +171,9 @@ The first nine strings of the service cards and the build step are the same Hebr
 | `greenroom.screens.content.cap` | פוסט שמערכת התוכן הכינה ותזמנה | A post the content system prepared and scheduled | כיתוב המסך בצופה (data-cap) |
 | `greenroom.screens.post.cap` | עוד פוסט מאותה מערכת | Another post from the same system | כיתוב המסך בצופה (data-cap) |
 | `greenroom.screens.post.label` | פוסט | Post | תווית קצרה מתחת לצילום המסך |
-| `greenroom.try.wheel.hub` | סובבו | Spin | הכפתור במרכז הגלגל. greenroom.try.spin הוא "לסובב" |
-| `greenroom.try.video.title` | סרטון הפתיחה | Intro video | כותרת קטנה מעל הסרטון |
-| `greenroom.try.table.roleDesc` | שולחן סנוקר | Snooker table | aria-roledescription של קנבס שולחן הסנוקר |
-| `greenroom.try.table.keys` | חצים: כיוון וכוח · Enter: מכה | Arrows: aim and power · Enter: shoot | מקרא המקשים מתחת לשולחן. greenroom.try.table.aria הוא המשפט המלא של קוראי המסך |
+| `greenroom.clear.keys.proto` | מקלדת (Tab לכדור הלבן): ←→ כיוון (Shift לדיוק) · ↑↓ כוח · רווח מכה | Keyboard (Tab to the white ball): ←→ aim (Shift for fine) · ↑↓ power · Space strike | כל טקסט הרמז מתחת למשחק: "מקלדת" ב-<b> והמקשים ב-<kbd>. אותו אלמנט כמו greenroom.clear.keys, אבל כאן החצים צמודים (בלי רווח בין שני ה-<kbd>). באנגלית נשארים אותם סימנים (←→ ↑↓ Shift), כדי שהממיר ישים את ה-<kbd> במקומם |
+| `greenroom.dims.sign.closed` | הדלפק סגור | Desk closed | תוכן מדומה בתוך מסך. כרטיס שולחני על הדלפק בחדר התלת-ממדי, שורה גדולה |
+| `greenroom.dims.sign.book` | הזמנה באפליקציה | Book in the app | תוכן מדומה בתוך מסך. כרטיס שולחני על הדלפק בחדר התלת-ממדי, השורה הקטנה |
 
 ## my-branch
 
@@ -273,7 +293,6 @@ Every Hebrew string listed for `/plans` is a plan-card item that is also on the 
 
 | id | עברית | English | הערה |
 |---|---|---|---|
-| `privacy.controller.body.full` | NadavAI, בית התוכנה של נדב כהן. ישות משפטית: [ימולא לפני ההשקה]. פנייה: hello@nadavc.ai. | NadavAI, Nadav Cohen's software house. Legal entity: [To be filled in before launch]. Contact: hello@nadavc.ai. | כל הפסקה: שער ההשקה ב-<span class="tbd"> וכתובת המייל ב-<a href="mailto:...">. שער השקה. שימו לב: באנגלית ההודעה היא טקסט בלי תגיות, והקישור למייל ייעלם. privacy.controller.body הוא הנוסח עם TBD |
 | `privacy.changes.body.full` | אם משהו כאן ישתנה, אעדכן את העמוד ואת התאריך. עדכון אחרון: [ימולא לפני ההשקה]. | If anything here changes, I'll update this page and its date. Last updated: [To be filled in before launch]. | כל הפסקה, עם שער ההשקה בתוך <span class="tbd"> והנקודה אחריו. שער השקה. privacy.changes.body הוא הנוסח עם TBD |
 
 ## JS modules
@@ -303,10 +322,8 @@ Every Hebrew string listed for `/plans` is a plan-card item that is also on the 
 | `check.sample.services.automate2.title` | אישור ותזכורת ללקוח בוואטסאפ. | A confirmation and a reminder to the customer on WhatsApp. | כותרת של פריט ב"מה הייתי הופך לאוטומטי קודם" (check.result.automate.h) בדוח הדוגמה, חצי ראשון של check.sample.services.automate2. ה-JS מציג כותרת וגוף בנפרד. |
 | `check.sample.services.automate2.body` | הלקוח מקבל אישור כשהעבודה נקבעת, ותזכורת יום לפני. | The customer gets a confirmation when the job is set, and a reminder the day before. | גוף של פריט ב"מה הייתי הופך לאוטומטי קודם" (check.result.automate.h) בדוח הדוגמה, חצי שני של check.sample.services.automate2. ה-JS מציג כותרת וגוף בנפרד. |
 | `check.sample.services.automate3.body` | בסוף כל יום מגיעה הודעה עם מה שבוצע ומה מחכה למחר. | At the end of every day a message arrives with what was done and what's waiting for tomorrow. | גוף של פריט ב"מה הייתי הופך לאוטומטי קודם" (check.result.automate.h) בדוח הדוגמה, חצי שני של check.sample.services.automate3. ה-JS מציג כותרת וגוף בנפרד. |
-| `greenroom.try.wheel.seg5` | עוד סיבוב | Spin again | משבצת בגלגל הפרסים. greenroom.try.again הוא הכפתור "לסובב שוב" |
-| `greenroom.try.wheel.result.html` | נעצר על <b></b> · המחשה, בלי פרסים | Landed on <b></b> · illustration, no prizes | מחרוזת JS עם תגית: ה-JS מכניס את שם המשבצת לתוך ה-<b>. אותו נוסח כמו greenroom.try.wheel.result ({prize}), במבנה שבו הממיר מוצא אותו |
-| `global.newWindow.html` | <span class="sr"> (נפתח בחלון חדש)</span> | <span class="sr"> (opens in a new window)</span> | מחרוזת JS עם תגית (טקסט לקוראי מסך אחרי קישור חיצוני). אותו נוסח כמו global.newWindow |
-| `check.report.done.html` | <p class="saved__ok" id="ckrReportDone">תודה. הדיווח הגיע אליי.</p> | <p class="saved__ok" id="ckrReportDone">Thanks. Your report reached me.</p> | מחרוזת JS עם תגית: אישור אחרי שליחת דיווח על דוח. אותו נוסח כמו check.report.done |
-| `global.illustration.html` | <span class="st-ill">המחשה</span> | <span class="st-ill">Illustration</span> | מחרוזת JS עם תגית: תג "המחשה" בכיתוב תמונה בדפי הסיפור. אותו נוסח כמו global.illustration |
 | `work.filter.count` | {n} עבודות | {n} projects | {n} הוא מספר העבודות שמוצגות אחרי הסינון (ב-JS: ${shown}). בעברית אותה צורה לכל מספר, כולל 1; באנגלית 1 דורש "project" |
 | `work.zoom.open` | לפתוח | Open | תווית ברירת המחדל של כפתור הקישור בחלון ההגדלה, כשלכרטיס אין data-href-label |
+| `medizen.desk.end.p.proto` | טיפלתם ב-{mine} בקשות, הבוט ב-{bots}.{best} | You handled {mine} requests, the bot {bots}. {best} | שורת הסיכום של משחק המזכירה. אותו אלמנט כמו medizen.desk.end.p, עם מציין שלישי: ב-JS אחרי הנקודה בא ${isBest ? " שיא חדש." : ""}, והממיר מתאים תבנית רק כשהיא מכסה את כל הטקסט. {best} = medizen.desk.end.best.new או ריק. באנגלית יש רווח לפני {best}, כי ה-JS לא מוסיף אחד |
+| `greenroom.clear.end.p.clear.proto` | {points} מהכדורים ועוד {bonus} שניות שנשארו.{best} | {points} from the balls and {bonus} for the seconds left. {best} | שורת הסיכום של "לנקות את הצבעוניים" כשהשולחן נקי. אותו אלמנט כמו greenroom.clear.end.p.clear, עם מציין שלישי {best} לסוף המותנה (greenroom.clear.end.best.new או ריק). {points} = נקודות הכדורים, {bonus} = שניות שנשארו. באנגלית יש רווח לפני {best} |
+| `sporchat.pk.live.shot.proto` | בעיטה {shot}: {result}. {goals} מתוך {total}. | Shot {shot}: {result}. {goals} out of {total}. | הודעת aria-live אחרי בעיטה. אותו אלמנט כמו sporchat.pk.live.shot, אבל שם {n} מופיע פעמיים והממיר לא מצליח לבנות ממנו תבנית (שם קבוצה כפול). כאן {shot} ו-{total} הם שניהם מספר הבעיטה, ו-{result} אחת משורות sporchat.pk.say.* |
