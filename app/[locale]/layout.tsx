@@ -420,7 +420,7 @@ export default async function LocaleLayout({
                 operatingSystem: "Web",
                 description: "AI infrastructure command center — 32 pages, real-time monitoring, PWA, deployed on Cloudflare Pages.",
                 author: { "@type": "Person", "@id": "https://nadavc.ai/#person", name: "Nadav Cohen" },
-                url: "https://dashboard.nadavc.ai",
+                url: "https://github.com/Nadav011/apex-dashboard",
                 offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
               },
               {

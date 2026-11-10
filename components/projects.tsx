@@ -200,7 +200,7 @@ export function Projects() {
       color: "oklch(0.81 0.17 193)",
       metrics: { pages: "32", agents: "52" },
       github: "https://github.com/Nadav011/apex-dashboard",
-      demo: "https://dashboard.nadavc.ai",
+      demo: "",
     },
     {
       title: "APEX CLI",
