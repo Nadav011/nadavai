@@ -16,10 +16,9 @@ export default function robots(): MetadataRoute.Robots {
       { userAgent: "PerplexityBot", allow: "/" },
       { userAgent: "Perplexity-User", allow: "/" },
       { userAgent: "Google-Extended", allow: "/" },
-      // Block training-only crawlers (opt out of training, keep search visibility)
-      { userAgent: "GPTBot", disallow: "/" },
-      { userAgent: "ClaudeBot", disallow: "/" },
-      { userAgent: "CCBot", disallow: "/" },
+      // Training crawlers (GPTBot, ClaudeBot, CCBot) are no longer disallowed: this is a
+      // marketing site and the owner chose on 2026-11-10 to open it to them. They fall
+      // under the "*" group above.
     ],
     sitemap: "https://nadavc.ai/sitemap.xml",
     host: "https://nadavc.ai",
